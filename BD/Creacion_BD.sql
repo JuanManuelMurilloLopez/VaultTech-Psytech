@@ -12,12 +12,13 @@ CREATE TABLE Privilegios(
 CREATE TABLE Roles(
 	-- uuid()
     Id_rol VARCHAR(36) PRIMARY KEY not NULL,
-    Nombre_roL VARCHAR(50)
+    Nombre_rol VARCHAR(50)
 );
 
 CREATE TABLE Roles_Privilegios(
-	Id_rol VARCHAR(36) PRIMARY KEY not NULL,
-    Id_privilegios VARCHAR(36) PRIMARY KEY not NULL,
+	Id_rol VARCHAR(36) not NULL,
+    Id_privilegio VARCHAR(36) not NULL,
+    PRIMARY KEY (Id_rol, Id_privilegio), -- Llave primaria compuesta
     FOREIGN KEY (Id_rol) REFERENCES Roles(Id_rol),
     FOREIGN KEY (Id_privilegio) REFERENCES Roles(Id_privilegio)
 );
@@ -45,17 +46,12 @@ CREATE TABLE Estados(
     Nombre_estado VARCHAR(50)
 );
 
-CREATE TABLE PreguntasFormatoEntrevista(
-    Id_preguntaFormatoEntrevista VARCHAR(36) PRIMARY KEY not NULL,
-    Nombre_preguntaFormatoEntrevista VARCHAR(255)
-);
-
 CREATE TABLE Aspirantes(
     Id_aspirante VARCHAR(36) PRIMARY KEY not NULL,
     Id_usuario VARCHAR(36), -- Herencia de Usuario
     Institucion_procedencia VARCHAR(50),
     Id_pais VARCHAR(36),
-    Id_estado VARHAR(36),
+    Id_estado VARCHAR(36),
     Cv VARCHAR(100),
     Kardex VARCHAR(100),
     FOREIGN KEY (Id_usuario) REFERENCES Usuarios(Id_usuario),
@@ -63,12 +59,18 @@ CREATE TABLE Aspirantes(
     FOREIGN KEY (Id_estado) REFERENCES Estados(Id_estado)
 );
 
+CREATE TABLE PreguntasFormatoEntrevista(
+    Id_preguntaFormatoEntrevista VARCHAR(36) PRIMARY KEY not NULL,
+    Nombre_preguntaFormatoEntrevista VARCHAR(255)
+);
+
 CREATE TABLE Aspirantes_PreguntasFormatoEntrevista(
-    Id_aspirante VARCHAR(36) PRIMARY KEY,
-    Id_preguntaFormatoEntrevista VARCHAR(36) PRIMARY KEY,
+    Id_aspirante VARCHAR(36) not NULL,
+    Id_preguntaFormatoEntrevista VARCHAR(36) not NULL,
+    PRIMARY KEY (Id_aspirante, Id_preguntaFormatoEntrevista),
     Respuesta_aspirante VARCHAR(36),
-    FOREIGN KEY Id_aspirante REFERENCES Aspirantes(Id_aspirante),
-    FOREIGN KEY Id_preguntaFormatoEntrevista REFERENCES PreguntasFormatoEntrevista(Id_preguntaFormatoEntrevista)
+    FOREIGN KEY (Id_aspirante) REFERENCES Aspirantes(Id_aspirante),
+    FOREIGN KEY (Id_preguntaFormatoEntrevista) REFERENCES PreguntasFormatoEntrevista(Id_preguntaFormatoEntrevista)
 );
 
 CREATE TABLE Generos(
@@ -89,11 +91,12 @@ CREATE TABLE Familiares(
     Id_genero VARCHAR(36),
     Id_estadoCivil VARCHAR(36),
     Edad_familiar INT,
-    FOREIGN KEY (Id_genero) REFERENCES Generos(Id_genero)
-    FOREIGN KEY (Id_estadoCivil) REFERENCES EstadoCivil(Id_estadoCivil)
+    Hijo_de VARCHAR(36), -- Se mantiene la referencia a otro familiar
+
+    FOREIGN KEY (Id_genero) REFERENCES Generos(Id_genero),
+    FOREIGN KEY (Id_estadoCivil) REFERENCES EstadoCivil(Id_estadoCivil),
     FOREIGN KEY (Id_aspirante) REFERENCES Aspirantes(Id_aspirante),
-    Hijo_de VARCHAR(36), -- ¿Sí se pondría así para referenciar a otro registro de la misma tabla?
-    FOREIGN KEY (Hijo_de) REFERENCES Familiares(Id_familiar)
+    FOREIGN KEY (Hijo_de) REFERENCES Familiares(Id_familiar) -- Relación recursiva
 );
 
 CREATE TABLE TipoInstitucion(
@@ -106,16 +109,16 @@ CREATE TABLE Institucion(
     Nombre_institucion VARCHAR(100),
     Estatus_institucion BOOLEAN,
     Id_tipoInstitucion VARCHAR(36),
-    FOREIGN KEY Id_tipoInstitucion REFERENCES TipoInstitucion(Id_tipoInstitucion)
+    FOREIGN KEY (Id_tipoInstitucion) REFERENCES TipoInstitucion(Id_tipoInstitucion)
 );
 
 CREATE TABLE NivelAcademico(
-    Id_nivelAcademico VARCHAR(36),
+    Id_nivelAcademico VARCHAR(36) PRIMARY KEY not NULL,
     Nombre_nivelAcademico VARCHAR(50)
 );
 
 CREATE TABLE Grupos(
-    Id_grupo VARCHAR(36),
+    Id_grupo VARCHAR(36) PRIMARY KEY not NULL,
     Nombre_grupo VARCHAR(100),
     Estatus_grupo BOOLEAN,
     Ciclo_escolar VARCHAR(50),
@@ -123,15 +126,15 @@ CREATE TABLE Grupos(
     Carrera VARCHAR(100),
     Id_institucion VARCHAR(36),
     Id_nivelAcademico VARCHAR(36),
-    FOREIGN KEY Id_institucion REFERENCES Institucion(Id_institucion),
-    FOREIGN KEY Id_nivelAcademico REFERENCES NivelAcademico(Id_nivelAcademico)
+    FOREIGN KEY (Id_institucion) REFERENCES Institucion(Id_institucion),
+    FOREIGN KEY (Id_nivelAcademico) REFERENCES NivelAcademico(Id_nivelAcademico)
 );
 
 CREATE TABLE Grupos_Aspirantes(
-    Id_grupo VARCHAR(36) PRIMARY KEY not NULL, -- ¿También se debe de colocar el not NULL aunque ya esté definido en la PK?
+    Id_grupo VARCHAR(36) PRIMARY KEY not NULL,
     Id_aspirante VARCHAR(36),
     Fecha_asignacion DATE,
     Fecha_limite DATE,
-    FOREIGN KEY Id_grupo REFERENCES Grupos(Id_grupo),
-    FOREIGN KEY Id_aspirante REFERENCES Aspirantes(Id_aspirante)
+    FOREIGN KEY (Id_grupo) REFERENCES Grupos(Id_grupo),
+    FOREIGN KEY (Id_aspirante) REFERENCES Aspirantes(Id_aspirante)
 );
