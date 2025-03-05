@@ -1,6 +1,7 @@
 //Rutas del portal de los Psicologos
 exports.get_principal_psicologos = (request, response, next) => {
-    response.send('Pagina Principal Psicologos');
+    console.log('Pagina Principal Psicologos');
+    response.render('principalPsicologo.ejs');
 };
 
 exports.get_catalogo_instituciones = (request, response, next) => {
