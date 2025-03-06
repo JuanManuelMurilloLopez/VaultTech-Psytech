@@ -3,7 +3,7 @@ const router = express.Router();
 
 const path = require('path');
 
-const controller = require('../controllers/controller-aspirante');
+const controller = require('../controllers/aspirante.controller');
 
 //Rutas del portal de los Aspirantes
 router.get('/mis-pruebas', controller.get_mis_pruebas);
