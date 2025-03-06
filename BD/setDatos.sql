@@ -91,8 +91,6 @@ VALUES
 ('f4b', 'b2c3d4e5-f6g7-8h9i-0j1k-2l3m4n5o6p7', 'Valeria Gómez', TRUE, '401', '501', 3, 'f2c'), -- Hija de la hermana del aspirante
 ('f4c', 'c3d4e5f6-g7h8-9i0j-1k2l-3m4n5o6p7q8', 'Andrés Ramírez', TRUE, '401', '501', 2, 'f3e'); -- Hijo de la hermana del aspirante
 
-('f4d', 'c3d4e5f6-g7h8-9i0j-1k2l-3m4n5o6p7q8', 'Josue Ramírez', TRUE, '401', '501', 2, 'c3d4e5f6-g7h8-9i0j-1k2l-3m4n5o6p7q8'); -- Hijo del aspirante
-
 -- Datos para la tabla TipoInstitucion
 INSERT INTO TipoInstitucion (Id_tipoInstitucion, Nombre_tipoInstitucion) VALUES
 ('701', 'Educativa');
@@ -113,3 +111,35 @@ INSERT INTO Grupos (Id_grupo, Nombre_grupo, Estatus_grupo, Ciclo_escolar, Anio_g
 INSERT INTO Grupos_Aspirantes (Id_grupo, Id_aspirante, Fecha_asignacion, Fecha_limite) VALUES
 ('1001', 'a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6', '2025-01-10', '2025-06-30');
 
+-- Datos para la tabla DatosPersonales
+INSERT INTO DatosPersonales (Id_datosPersonales, Nombre_usuario, Apellido_paterno, Apellido_materno, Edad_datosPersonales, Id_genero, Id_nivelAcademico, Puesto_solicitado)
+VALUES 
+('1a2b3c4d-0001', 'Carlos', 'Gómez', 'López', 25, '401', '901', 'Ingeniero de Software'),
+('1a2b3c4d-0002', 'Ana', 'Martínez', 'Sánchez', 28, '401', '901', 'Analista de Datos'),
+('1a2b3c4d-0003', 'Luis', 'Hernández', 'Ruiz', 30, '401', '901', 'Desarrollador Backend');
+
+INSERT INTO Prueba (Id_prueba, Nombre, Descripción, Id_datosPersonales)
+VALUES 
+('2a3b4c5d-0001', 'Prueba Otis', 'Evaluación de razonamiento lógico y verbal.', '1a2b3c4d-0001');
+
+-- Insertar datos en la tabla PruebaOtis
+INSERT INTO PruebaOtis (Id_prueba, Tiempo) VALUES
+('2a3b4c5d-0001', 30);
+
+-- Insertar datos en la tabla Pregunta
+INSERT INTO Pregunta (Id_pregunta, Id_prueba, Numero_pregunta, Pregunta) VALUES
+('q1', '2a3b4c5d-0001', 1, '¿Cuál es el resultado de 5 + 7?'),
+('q2', '2a3b4c5d-0001', 2, 'Si un tren viaja a 80 km/h, ¿cuánto recorrerá en 3 horas?');
+
+-- Insertar datos en la tabla Opciones
+INSERT INTO Opciones (Id_opcion, Id_pregunta, Numero_opcion, Descripcion_opcion, Es_correcta) VALUES
+('o1', 'q1', 1, '10', 'FALSE'),
+('o2', 'q1', 2, '12', 'TRUE'),
+('o3', 'q1', 3, '15', 'FALSE'),
+('o4', 'q2', 1, '160 km', 'FALSE'),
+('o5', 'q2', 2, '240 km', 'TRUE');
+
+-- Insertar datos en la tabla RespuestaAspirante
+INSERT INTO RespuestaAspirante (Id_respuesta, Id_aspirante, Id_prueba, Id_pregunta, Id_opcion, Respuesta_abierta, Tiempo_respuesta) VALUES
+('r1', 'a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6', '2a3b4c5d-0001', 'q1', 'o2', NULL, 30),
+('r2', 'a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6', '2a3b4c5d-0001', 'q2', 'o5', NULL, 45);

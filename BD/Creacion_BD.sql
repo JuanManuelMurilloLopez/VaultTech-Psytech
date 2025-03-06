@@ -174,7 +174,7 @@ CREATE TABLE PruebaOtis(
     FOREIGN KEY (Id_prueba) REFERENCES Prueba(Id_prueba)
 );
 
-CREATE TABLE Pregunta (
+CREATE TABLE PreguntasOtis (
     Id_pregunta VARCHAR(36) PRIMARY KEY not NULL, 
     Id_prueba VARCHAR(36),
     Numero_pregunta INT,
@@ -182,7 +182,7 @@ CREATE TABLE Pregunta (
     FOREIGN KEY (Id_prueba) REFERENCES Prueba(Id_prueba)
 );
 
-CREATE TABLE Opciones (
+CREATE TABLE OpcionesPreguntasOtis (
     Id_opcion VARCHAR(36) PRIMARY KEY,
     Id_pregunta VARCHAR(36),
     Numero_opcion INT,
