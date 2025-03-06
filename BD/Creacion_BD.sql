@@ -138,3 +138,61 @@ CREATE TABLE Grupos_Aspirantes(
     FOREIGN KEY (Id_grupo) REFERENCES Grupos(Id_grupo),
     FOREIGN KEY (Id_aspirante) REFERENCES Aspirantes(Id_aspirante)
 );
+
+CREATE TABLE DatosPersonales(
+    Id_datosPersonales VARCHAR(36) PRIMARY KEY not NULL,
+    Nombre_usuario VARCHAR(50),
+    Apellido_paterno VARCHAR(50),
+    Apellido_materno VARCHAR(50),
+    Edad_datosPersonales INT,
+    Id_genero VARCHAR(36),
+    Id_nivelAcademico VARCHAR(36),
+    Puesto_solicitado VARCHAR(50),
+    FOREIGN KEY (Id_genero) REFERENCES Generos(Id_genero),
+    FOREIGN KEY (Id_nivelAcademico) REFERENCES NivelAcademico(Id_nivelAcademico)
+);
+
+CREATE TABLE Prueba (
+    Id_prueba VARCHAR(36) PRIMARY KEY not NULL,
+    Nombre VARCHAR(100),
+    Descripcion VARCHAR(255),
+    Id_datosPersonales VARCHAR(36),
+    FOREIGN KEY (Id_datosPersonales) REFERENCES DatosPersonales(Id_datosPersonales)
+);
+
+CREATE TABLE PruebaOtis(
+    Id_prueba VARCHAR(36) PRIMARY KEY not NULL,
+    Tiempo INT, -- Minutos
+    FOREIGN KEY (Id_prueba) REFERENCES Prueba(Id_prueba)
+);
+
+CREATE TABLE Pregunta (
+    Id_pregunta VARCHAR(36) PRIMARY KEY not NULL, 
+    Id_prueba VARCHAR(36),
+    Numero_pregunta INT,
+    Pregunta VARCHAR(255),
+    FOREIGN KEY (Id_prueba) REFERENCES Prueba(Id_prueba)
+);
+
+CREATE TABLE Opciones (
+    Id_opcion VARCHAR(36) PRIMARY KEY,
+    Id_pregunta VARCHAR(36),
+    Numero_opcion INT,
+    Descripcion_opcion TEXT,
+    Es_correcta VARCHAR(255),
+    FOREIGN KEY (Id_pregunta) REFERENCES Pregunta(Id_pregunta)
+);
+
+CREATE TABLE RespuestaAspirante (
+    Id_respuesta VARCHAR(36) PRIMARY KEY not NULL,
+    Id_aspirante VARCHAR(36),
+    Id_prueba VARCHAR(36),
+    Id_pregunta VARCHAR(36),
+    Id_opcion VARCHAR(36),  -- Solo si es opción múltiple
+    Respuesta_abierta VARCHAR(255),  -- Solo si es pregunta abierta
+    Tiempo_respuesta INT,  -- En segundos
+    FOREIGN KEY (Id_aspirante) REFERENCES Aspirantes(Id_aspirante),
+    FOREIGN KEY (Id_prueba) REFERENCES Prueba(Id_prueba),
+    FOREIGN KEY (Id_pregunta) REFERENCES Pregunta(Id_pregunta),
+    FOREIGN KEY (Id_opcion) REFERENCES Opciones(Id_opcion)
+);
