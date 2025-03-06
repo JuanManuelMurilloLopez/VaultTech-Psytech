@@ -4,7 +4,7 @@ exports.get_mis_pruebas = (request, response, next) => {
 };
 
 exports.get_pruebas_pendientes = (request, response, next) => {
-    response.send('Pruebas Pendientes');
+    response.render('Aspirantes/pruebasPendientes');
 };
 
 exports.get_pruebas_completadas = (request, response, next) => {
