@@ -151,7 +151,7 @@ CREATE TABLE DatosPersonales(
 );
 
 CREATE TABLE Pruebas(
-    Id_pruebas VARCHAR(36) PRIMARY KEY not NULL,
+    Id_prueba VARCHAR(36) PRIMARY KEY not NULL,
     Nombre VARCHAR(100),
     Descripcion VARCHAR(255),
     Id_datosPersonales VARCHAR(36),
@@ -165,42 +165,43 @@ CREATE TABLE Grupos_Prueba(
     fecha_limite DATE,
     PRIMARY KEY (Id_grupo, Id_prueba),
     FOREIGN KEY Id_grupo REFERENCES Grupos(Id_grupo),
-    FOREIGN KEY Id_prueba REFERENCES Pruebas(Id_pruebas)
+    FOREIGN KEY Id_prueba REFERENCES Pruebas(Id_prueba)
 );
 
 CREATE TABLE PruebaOtis(
-    Id_prueba VARCHAR(36) PRIMARY KEY not NULL,
+    Id_pruebaOtis VARCHAR(36) PRIMARY KEY not NULL,
+    Id_prueba VARCHAR(36),
     Tiempo INT, -- Minutos
     FOREIGN KEY (Id_prueba) REFERENCES Prueba(Id_prueba)
 );
 
 CREATE TABLE PreguntasOtis (
-    Id_pregunta VARCHAR(36) PRIMARY KEY not NULL, 
-    Id_prueba VARCHAR(36),
+    Id_preguntaOtis VARCHAR(36) PRIMARY KEY not NULL, 
+    Id_pruebaOtis VARCHAR(36),
     Numero_pregunta INT,
     Pregunta VARCHAR(255),
-    FOREIGN KEY (Id_prueba) REFERENCES Prueba(Id_prueba)
+    FOREIGN KEY (Id_pruebaOtis) REFERENCES Prueba(Id_pruebaOtis)
 );
 
 CREATE TABLE OpcionesPreguntasOtis (
     Id_opcion VARCHAR(36) PRIMARY KEY,
-    Id_pregunta VARCHAR(36),
+    Id_preguntaOtis VARCHAR(36),
     Numero_opcion INT,
     Descripcion_opcion TEXT,
     Es_correcta VARCHAR(255),
-    FOREIGN KEY (Id_pregunta) REFERENCES Pregunta(Id_pregunta)
+    FOREIGN KEY (Id_preguntaOtis) REFERENCES Pregunta(Id_preguntaOtis)
 );
 
-CREATE TABLE RespuestaAspirante (
-    Id_respuesta VARCHAR(36) PRIMARY KEY not NULL,
+CREATE TABLE RespuestaOtis_Aspirante (
+    Id_respuestaOtis VARCHAR(36) PRIMARY KEY not NULL,
     Id_aspirante VARCHAR(36),
-    Id_prueba VARCHAR(36),
-    Id_pregunta VARCHAR(36),
+    Id_pruebaOtis VARCHAR(36),
+    Id_preguntaOtis VARCHAR(36),
     Id_opcion VARCHAR(36),  -- Solo si es opción múltiple
     Respuesta_abierta VARCHAR(5),  -- Solo si es pregunta abierta
     Tiempo_respuesta INT,  -- En segundos
     FOREIGN KEY (Id_aspirante) REFERENCES Aspirantes(Id_aspirante),
-    FOREIGN KEY (Id_prueba) REFERENCES Prueba(Id_prueba),
-    FOREIGN KEY (Id_pregunta) REFERENCES Pregunta(Id_pregunta),
+    FOREIGN KEY (Id_pruebaOtis) REFERENCES Prueba(Id_pruebaOtis),
+    FOREIGN KEY (Id_preguntaOtis) REFERENCES Pregunta(Id_preguntaOtis),
     FOREIGN KEY (Id_opcion) REFERENCES Opciones(Id_opcion)
 );
