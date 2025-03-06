@@ -69,5 +69,6 @@ exports.get_analisis_colores = (request, response, next) => {
 };
 
 exports.get_catalogo_pruebas = (request, response, next) => {
-    response.send('Catalogo de pruebas');
+    console.log('Catalogo pruebas');
+    response.render('Psicologos/catalogoPruebas')
 };
