@@ -4,7 +4,7 @@ exports.get_psicologos_registrados = (request, response, next) => {
 };
 
 exports.get_registrar_psicologos = (request, response, next) => {
-    response.send('Registrar Nuevos Psicologos');
+    response.render('Coordinadores/registrarPsicologo');
 };
 
 exports.get_editar_psicologos = (request, response, next) => {
