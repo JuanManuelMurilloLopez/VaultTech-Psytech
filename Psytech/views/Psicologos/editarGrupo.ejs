@@ -1,10 +1,11 @@
+<%- include('../includes/_navsidePsicologo.ejs') %>
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar Grupos</title>
+    <title>Editar Grupos</title>
 
     <!-- Bootstrap CSS -->
     <link href=
@@ -13,7 +14,7 @@
 </head>
 
 <body class="bg-light">
-    <h1 class="text-center mt-5">REGISTRAR NUEVO GRUPO</h1>
+    <h1 class="text-center mt-5">EDITAR GRUPO</h1>
     
     <!-- Campo Nombre -->
     <div class="mb-3">
@@ -58,6 +59,11 @@
             </ul>
           </div>
     </div>
+
+    <!-- Estatus -->
+    <h3>Estatus: </h3>
+    <span class="badge text-bg-info">Activa</span>
+    <span class="badge text-bg-danger">Desactivar</span>
 
     <h4>Asignar pruebas</h4>
     <p>Selecciona las pruebas que quieres asignar al grupo</p>

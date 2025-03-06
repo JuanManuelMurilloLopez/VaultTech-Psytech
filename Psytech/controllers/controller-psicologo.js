@@ -1,47 +1,47 @@
 //Rutas del portal de los Psicologos
 exports.get_principal_psicologos = (request, response, next) => {
     console.log('Pagina Principal Psicologos');
-    response.render('principalPsicologo.ejs');
+    response.render('Psicologos/principal');
 };
 
 exports.get_catalogo_instituciones = (request, response, next) => {
     console.log('Catalogo de Instituciones');
-    response.render('catalogoInstituciones')
+    response.render('Psicologos/catalogoInstituciones')
 };
 
 exports.get_registrar_institucion = (request, response, next) => {
     console.log('Registrar Instituciones');
-    response.render('registrarInstitucion')
+    response.render('Psicologos/registrarInstitucion')
 };
 
 exports.get_editar_institucion = (request, response, next) => {
     console.log('Editar Instituciones');
-    response.render('editarInstitucion')
+    response.render('Psicologos/editarInstitucion')
 };
 
 exports.get_grupos = (request, response, next) => {
     console.log('Grupos por Institucion');
-    response.render('gruposInstitucion')
+    response.render('Psicologos/gruposInstitucion')
 };
 
 exports.get_registrar_grupo = (request, response, next) => {
     console.log('Registrar Nuevo Grupo');
-    response.render('registrarGrupo')
+    response.render('Psicologos/registrarGrupo')
 };
 
 exports.get_editar_grupo = (request, response, next) => {
     console.log('Editar Grupo');
-    response.render('editarGrupo')
+    response.render('Psicologos/editarGrupo')
 };
 
 exports.get_aspirantes = (request, response, next) => {
     console.log('Aspirantes por Grupos');
-    response.render('aspirantesGrupo')
+    response.render('Psicologos/aspirantesGrupo')
 };
 
 exports.get_importar_aspirantes = (request, response, next) => {
     console.log('Importar Aspirantes');
-    response.render('importarAspirante')
+    response.render('Psicologos/importarAspirantes')
 };
 
 exports.get_registrar_aspirantes = (request, response, next) => {

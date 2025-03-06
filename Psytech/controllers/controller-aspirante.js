@@ -1,6 +1,6 @@
 //Rutas del portal de los Aspirantes
 exports.get_mis_pruebas = (request, response, next) => {
-    response.render('MisPruebasAspirante.ejs');
+    response.render('Aspirantes/misPruebas');
 };
 
 exports.get_pruebas_pendientes = (request, response, next) => {
@@ -20,7 +20,7 @@ exports.get_formato_entrevista = (request, response, next) => {
 };
 
 exports.get_intrucciones_otis = (request, response, next) => {
-    response.render('InstruccionesPruebaOtis');
+    response.render('Aspirantes/instruccionesOtis');
 };
 
 exports.get_intrucciones_colores = (request, response, next) => {
