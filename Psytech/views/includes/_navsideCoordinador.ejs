@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<body>
+    <h3>Nav side</h3>
+    <aside>
+        <ul>
+            <li onclick="navigateTo('/coordinador/psicologos-registrados')"
+            >Psicologos</li>
+            <li onclick="navigateTo('/coordinador/coordinadores-registrados')"
+            >Coordinadores</li>
+        </ul>
+    </aside>
+
+    <script>
+        function navigateTo(route) {
+            window.location.href = route;
+        }
+    </script>
+</body>
+</html>

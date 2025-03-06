@@ -1,6 +1,6 @@
 //Rutas de registros de Psicologos y Coordinadores
 exports.get_psicologos_registrados = (request, response, next) => {
-    response.send('Psicologos Registrados');
+    response.render('Coordinadores/listaPsicologos');
 };
 
 exports.get_registrar_psicologos = (request, response, next) => {
@@ -8,7 +8,7 @@ exports.get_registrar_psicologos = (request, response, next) => {
 };
 
 exports.get_editar_psicologos = (request, response, next) => {
-    response.send('Editar Psicologos');
+    response.render('Coordinadores/editarPsicologo');
 };
 
 exports.get_coordinadores_registrados = (request, response, next) => {
