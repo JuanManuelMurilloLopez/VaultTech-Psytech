@@ -37,4 +37,6 @@ router.get('/analisis-otis', controller.get_analisis_otis);
 
 router.get('/analisis-colores', controller.get_analisis_colores);
 
+router.get('/respuestas-otis', controller.get_respuestas_otis);
+
 module.exports = router;
