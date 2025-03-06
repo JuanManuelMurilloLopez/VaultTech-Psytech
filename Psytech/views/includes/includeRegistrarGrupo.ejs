@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Grupos</title>
+
+    <!-- Bootstrap CSS -->
+    <link href=
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+    rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <h1 class="text-center mt-5">REGISTRAR NUEVO GRUPO</h1>
+    
+    <!-- Campo Nombre -->
+    <div class="mb-3">
+        <h4>Nombre</h4>
+        <label for="nombre" class="form-label"></label>
+        <input type="text" id="nombre" name="nombre" 
+        class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <h4>Carrera / Postgrado</h4>
+        <label for="carrera" class="form-label"></label>
+        <input type="text" id="carrera" name="carrera" 
+        class="form-control" required>
+    </div>
+    
+    <!-- Campo Año -->
+    <div class="mb-3">
+        <h4>Año / Generación</h4>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" 
+            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">2021</a></li>
+              <li><a class="dropdown-item" href="#">2022</a></li>
+              <li><a class="dropdown-item" href="#">2023</a></li>
+            </ul>
+          </div>
+    </div>
+
+    <!-- Semestre -->
+    <div class="mb-3">
+        <h4>Semestre</h4>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" 
+            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Feb / Jun</a></li>
+              <li><a class="dropdown-item" href="#">Ago / Dic</a></li>
+            </ul>
+          </div>
+    </div>
+
+    <h4>Asignar pruebas</h4>
+    <p>Selecciona las pruebas que quieres asignar al grupo</p>
+
+    <!-- Checkbox de pruebas-->
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="Otis">
+        <label class="form-check-label" for="Otis">
+          Otis
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="Terman">
+        <label class="form-check-label" for="Terman">
+          Terman
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="Luscher">
+        <label class="form-check-label" for="Luscher">
+          Luscher
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="16_PF">
+        <label class="form-check-label" for="16_PF">
+          16 PF
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="Kostick">
+        <label class="form-check-label" for="Kostick">
+          Kostick
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="Hartman">
+        <label class="form-check-label" for="Hartman">
+          Hartman
+        </label>
+    </div>
+
+    <!-- Botones de navegación "Regresar y Guardar" -->
+    <button type="button" class="btn btn-primary"
+    onclick="window.location.href=
+    '/psicologo/grupos'"
+    >Regresar</button>
+
+    <button type="button" class="btn btn-primary">Guardar</button>
+
+    <!-- Bootstrap JS -->
+    <script src=
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+</body>

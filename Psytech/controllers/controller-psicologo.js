@@ -5,35 +5,43 @@ exports.get_principal_psicologos = (request, response, next) => {
 };
 
 exports.get_catalogo_instituciones = (request, response, next) => {
-    response.send('Catalogo de Instituciones');
+    console.log('Catalogo de Instituciones');
+    response.render('catalogoInstituciones')
 };
 
 exports.get_registrar_institucion = (request, response, next) => {
-    response.send('Registrar Instituciones');
+    console.log('Registrar Instituciones');
+    response.render('registrarInstitucion')
 };
 
 exports.get_editar_institucion = (request, response, next) => {
-    response.send('Editar Instituciones');
+    console.log('Editar Instituciones');
+    response.render('editarInstitucion')
 };
 
 exports.get_grupos = (request, response, next) => {
-    response.send('Grupos por Institucion');
+    console.log('Grupos por Institucion');
+    response.render('gruposInstitucion')
 };
 
 exports.get_registrar_grupo = (request, response, next) => {
-    response.send('Registrar Nuevo Grupo');
+    console.log('Registrar Nuevo Grupo');
+    response.render('registrarGrupo')
 };
 
 exports.get_editar_grupo = (request, response, next) => {
-    response.send('Editar Grupo');
+    console.log('Editar Grupo');
+    response.render('editarGrupo')
 };
 
 exports.get_aspirantes = (request, response, next) => {
-    response.send('Aspirantes por Grupos');
+    console.log('Aspirantes por Grupos');
+    response.render('aspirantesGrupo')
 };
 
 exports.get_importar_aspirantes = (request, response, next) => {
-    response.send('Importar Aspirantes');
+    console.log('Importar Aspirantes');
+    response.render('importarAspirante')
 };
 
 exports.get_registrar_aspirantes = (request, response, next) => {

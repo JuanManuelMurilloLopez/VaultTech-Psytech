@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aspirantes por Grupo</title>
+
+    <!-- Bootstrap CSS -->
+    <link href=
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+    rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <h1 class="text-center mt-5">NOMBRE DEL GRUPO</h1>
+    <h3>Información del grupo</h3>
+    <h4>Carrera: Ingeniería en Tecnologías Computacionales</h4>
+    <h4>Año de Generación: 2025</h4>
+    <h4>Semestre: Feb - Jun</h4>
+
+    <h1 class="text-center mt-5">ASPIRANTES</h1>
+
+    <!-- Campo Buscar -->
+    <div class="mb-3">
+        <label for="buscar" class="form-label">Buscar</label>
+        <input type="text" id="buscar" name="buscar" 
+        class="form-control" required>
+    </div>
+    
+    <!-- Lista Aspirantes-->
+    <div class="list-group">
+        <a href="#" class="list-group-item list-group-item-action">Nombre del Aspirante</a>
+        <a href="#" class="list-group-item list-group-item-action">Nombre del Aspirante</a>
+        <a href="#" class="list-group-item list-group-item-action">Nombre del Aspirante</a>
+      </div>
+
+
+    <!-- Botones de navegación "Importr y Registrar, Regresar" -->
+    <button type="button" class="btn btn-primary"
+    onclick="window.location.href=
+    '/psicologo/importar-aspirantes'"
+    >Importar Aspirante</button>
+
+    <button type="button" class="btn btn-primary"
+    onclick="window.location.href=
+    '/psicologo/registrar-aspirantes'"
+    >Registrar Aspirante</button>
+
+    <button type="button" class="btn btn-secondary"
+    onclick="window.location.href=
+    '/psicologo/grupos'"
+    >Regresar</button>
+
+    <!-- Infromación -->
+    <h2>Nombre 1 Nombre 2</h2>
+    <h2>Apellido 1 Apellido 2</h2>
+
+    <h3>Datos personales</h3>
+    <button type="button" class="btn btn-danger"
+    onclick="window.location.href=
+    '/psicologo/editar-aspirantes'"
+    >Editar</button>
+
+    <!-- Estatus -->
+    <h3>Estatus: </h3>
+    <span class="badge text-bg-info">Activa</span>
+    <h4>Institución de procedencia: Tecnológico de Monterrey</h4>
+    <h4>Correo electrónico: a01711870@tec.mx</h4>
+    <h4>Número telefónico: 442 457 6724</h4>
+    <h4>Lugar de origen: Querétaro, Querétaro</h4>
+
+    <!-- Documentacion -->
+    <h3>Documentación</h3>
+    <p>CV.pdf</p>
+    <button type="button" class="btn btn-primary">Descargar</button>
+    <p>Kardex.pdf</p>
+    <button type="button" class="btn btn-primary">Descargar</button>
+
+    <!-- Entrevista -->
+    <h3>Entrevista Individual</h3>
+    <p>Entrevista</p>
+    <button type="button" class="btn btn-primary">Ver</button>
+
+    <!-- Pruebas -->
+    <h3>Pruebas</h3>
+    <p>Prueba Otis</p>
+    <p>Prueba Hartman</p>
+    <p>Prueba Terman</p>
+
+    <!-- Bootstrap JS -->
+    <script src=
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+</body>
