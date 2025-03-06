@@ -112,3 +112,4 @@ INSERT INTO Grupos (Id_grupo, Nombre_grupo, Estatus_grupo, Ciclo_escolar, Anio_g
 -- Datos para la tabla Grupos_Aspirantes
 INSERT INTO Grupos_Aspirantes (Id_grupo, Id_aspirante, Fecha_asignacion, Fecha_limite) VALUES
 ('1001', 'a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6', '2025-01-10', '2025-06-30');
+
