@@ -40,140 +40,29 @@ INSERT INTO Roles (Id_rol, Nombre_rol) VALUES
 (uuid(), 'Aspirante');
 
 -- Datos para la tabla Roles_Privilegios
-INSERT INTO Roles_Privilegios (Id_rol, Id_privilegio) VALUES
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Autenticación')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Coordinador'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Autenticación')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Aspirante'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Autenticación')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Consultar TyC')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Coordinador'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Consultar TyC')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Aspirante'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Consultar TyC')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Registrar instituciones')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Consultar información de instituciones')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Editar instituciones')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Desactivar instituciones')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Registrar grupos')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Consultar información de grupos')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Editar grupos')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Desactivar grupos')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Añadir aspirantes')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Consultar información de aspirantes')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Editar aspirantes')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Desactivar aspirantes')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Consultar respuestas')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Consultar análisis')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Consultar documentación')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Psicologo'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Consultar información de pruebas')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Aspirante'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Consultar pruebas')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Aspirante'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Realizar pruebas')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Aspirante'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Subir archivo')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Aspirante'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Contestar formato de entrevista')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Coordinador'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Consultar psicólogos')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Coordinador'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Consultar coordinadores')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Coordinador'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Registrar psicólogo')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Coordinador'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Registrar coordinador')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Coordinador'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Editar psicólogo')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Coordinador'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Editar coordinador')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Coordinador'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Desactivar psicólogo')
-),
-(
-    (SELECT Id_rol FROM Roles WHERE Nombre_rol = 'Coordinador'),
-    (SELECT Id_privilegio FROM Privilegios WHERE Nombre_privilegio = 'Desactivar coordinador')
+INSERT INTO Roles_Privilegios (Id_rol, Id_privilegio)
+SELECT r.Id_rol, p.Id_privilegio
+FROM Roles r
+JOIN Privilegios p ON (
+    (r.Nombre_rol = 'Psicologo' AND p.Nombre_privilegio IN (
+        'Autenticación', 'Consultar TyC', 'Registrar instituciones', 
+        'Consultar información de instituciones', 'Editar instituciones', 
+        'Desactivar instituciones', 'Registrar grupos', 'Consultar información de grupos', 
+        'Editar grupos', 'Desactivar grupos', 'Añadir aspirantes', 
+        'Consultar información de aspirantes', 'Editar aspirantes', 
+        'Desactivar aspirantes', 'Consultar respuestas', 'Consultar análisis', 
+        'Consultar documentación', 'Consultar información de pruebas'
+    ))
+    OR
+    (r.Nombre_rol = 'Coordinador' AND p.Nombre_privilegio IN (
+        'Autenticación', 'Consultar TyC', 'Consultar psicólogos', 
+        'Consultar coordinadores', 'Registrar psicólogo', 'Registrar coordinador', 
+        'Editar psicólogo', 'Editar coordinador', 'Desactivar psicólogo', 
+        'Desactivar coordinador'
+    ))
+    OR
+    (r.Nombre_rol = 'Aspirante' AND p.Nombre_privilegio IN (
+        'Autenticación', 'Consultar TyC', 'Consultar pruebas', 
+        'Realizar pruebas', 'Subir archivos', 'Contestar formato de entrevista'
+    ))
 );
