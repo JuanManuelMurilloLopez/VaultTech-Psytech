@@ -20,7 +20,7 @@ CREATE TABLE Roles_Privilegios(
     Id_privilegio VARCHAR(36) not NULL,
     PRIMARY KEY (Id_rol, Id_privilegio), -- Llave primaria compuesta
     FOREIGN KEY (Id_rol) REFERENCES Roles(Id_rol),
-    FOREIGN KEY (Id_privilegio) REFERENCES Roles(Id_privilegio)
+    FOREIGN KEY (Id_privilegio) REFERENCES Privilegios(Id_privilegio)
 );
 
 CREATE TABLE Usuarios(
@@ -133,8 +133,6 @@ CREATE TABLE Grupos(
 CREATE TABLE Grupos_Aspirantes(
     Id_grupo VARCHAR(36) PRIMARY KEY not NULL,
     Id_aspirante VARCHAR(36),
-    Fecha_asignacion DATE,
-    Fecha_limite DATE,
     FOREIGN KEY (Id_grupo) REFERENCES Grupos(Id_grupo),
     FOREIGN KEY (Id_aspirante) REFERENCES Aspirantes(Id_aspirante)
 );
@@ -152,12 +150,22 @@ CREATE TABLE DatosPersonales(
     FOREIGN KEY (Id_nivelAcademico) REFERENCES NivelAcademico(Id_nivelAcademico)
 );
 
-CREATE TABLE Prueba (
-    Id_prueba VARCHAR(36) PRIMARY KEY not NULL,
+CREATE TABLE Pruebas(
+    Id_pruebas VARCHAR(36) PRIMARY KEY not NULL,
     Nombre VARCHAR(100),
     Descripcion VARCHAR(255),
     Id_datosPersonales VARCHAR(36),
     FOREIGN KEY (Id_datosPersonales) REFERENCES DatosPersonales(Id_datosPersonales)
+);
+
+CREATE TABLE Grupos_Prueba(
+    Id_grupo VARCHAR(36),
+    Id_prueba VARCHAR(36),
+    fecha_asignacion DATE,
+    fecha_limite DATE,
+    PRIMARY KEY (Id_grupo, Id_prueba),
+    FOREIGN KEY Id_grupo REFERENCES Grupos(Id_grupo),
+    FOREIGN KEY Id_prueba REFERENCES Pruebas(Id_pruebas)
 );
 
 CREATE TABLE PruebaOtis(
@@ -189,7 +197,7 @@ CREATE TABLE RespuestaAspirante (
     Id_prueba VARCHAR(36),
     Id_pregunta VARCHAR(36),
     Id_opcion VARCHAR(36),  -- Solo si es opción múltiple
-    Respuesta_abierta VARCHAR(255),  -- Solo si es pregunta abierta
+    Respuesta_abierta VARCHAR(5),  -- Solo si es pregunta abierta
     Tiempo_respuesta INT,  -- En segundos
     FOREIGN KEY (Id_aspirante) REFERENCES Aspirantes(Id_aspirante),
     FOREIGN KEY (Id_prueba) REFERENCES Prueba(Id_prueba),
