@@ -45,12 +45,13 @@ exports.get_importar_aspirantes = (request, response, next) => {
 };
 
 exports.get_registrar_aspirantes = (request, response, next) => {
-    console.log('Registrar Aspirantes');
+    console.log('Registrar Aspirante');
     response.render('Psicologos/registrarAspirante')
 };
 
 exports.get_editar_aspirantes = (request, response, next) => {
-    response.send('Editar Aspirantes');
+    console.log('Editar Aspirante');
+    response.render('Psicologos/editarAspirante')
 };
 
 exports.get_catalogo_pruebas = (request, response, next) => {
