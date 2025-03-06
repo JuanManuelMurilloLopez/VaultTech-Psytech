@@ -12,13 +12,13 @@ exports.get_editar_psicologos = (request, response, next) => {
 };
 
 exports.get_coordinadores_registrados = (request, response, next) => {
-    response.send('Coordinadores Registrados');
+    response.render('Coordinadores/listaCoordinadores');
 };
 
 exports.get_registrar_coordinador = (request, response, next) => {
-    response.send('Registrar Nuevos Coordinadores');
+    response.render('Coordinadores/registrarCoordinador');
 };
 
 exports.get_editar_coordinador = (request, response, next) => {
-    response.send('Editar Coordinadores');
+    response.render('Coordinadores/editarCoordinador');
 };
