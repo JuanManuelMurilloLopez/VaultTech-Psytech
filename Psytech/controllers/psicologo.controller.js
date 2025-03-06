@@ -52,8 +52,14 @@ exports.get_editar_aspirantes = (request, response, next) => {
     response.send('Editar Aspirantes');
 };
 
+exports.get_catalogo_pruebas = (request, response, next) => {
+    console.log('Catalogo pruebas');
+    response.render('Psicologos/catalogoPruebas')
+};
+
 exports.get_prueba_otis = (request, response, next) => {
-    response.send('Prueba Otis');
+    console.log('Prueba OTIS');
+    response.render('Psicologos/infoPruebaOtis')
 };
 
 exports.get_prueba_colores = (request, response, next) => {
@@ -66,9 +72,4 @@ exports.get_analisis_otis = (request, response, next) => {
 
 exports.get_analisis_colores = (request, response, next) => {
     response.send('Analisis Colores');
-};
-
-exports.get_catalogo_pruebas = (request, response, next) => {
-    console.log('Catalogo pruebas');
-    response.render('Psicologos/catalogoPruebas')
 };
