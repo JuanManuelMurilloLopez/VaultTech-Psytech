@@ -14,81 +14,147 @@
 </head>
 
 <body class="bg-light">
-    <h1 class="text-center mt-5">NOMBRE DEL GRUPO</h1>
-    <h3>Información del grupo</h3>
-    <h4>Carrera: Ingeniería en Tecnologías Computacionales</h4>
-    <h4>Año de Generación: 2025</h4>
-    <h4>Semestre: Feb - Jun</h4>
+    <div class="container">
+        <!-- Boton cerrar sesión -->
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="button" class="btn btn-secondary">Cerrar Sesión</button>
+        </div>
 
-    <h1 class="text-center mt-5">ASPIRANTES</h1>
+        <h2 class="text-center">NOMBRE DEL GRUPO</h2>
+        <h4>Información del grupo</h4>
+        <p>Carrera: Ingeniería en Tecnologías Computacionales</p>
+        <p>Año de Generación: 2025</p>
+        <p>Semestre: Feb - Jun</p>
 
-    <!-- Campo Buscar -->
-    <div class="mb-3">
-        <label for="buscar" class="form-label">Buscar</label>
-        <input type="text" id="buscar" name="buscar" 
-        class="form-control" required>
+        <h1 class="text-center">ASPIRANTES</h1>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Campo Buscar -->
+                        <div class="form-floating mb-3">
+                            <input type="" class="form-control" id="" placeholder="">
+                            <label for="">Buscar</label>
+                        </div>
+
+                        <br>
+
+                        <!-- Lista Aspirantes-->
+                        <div class="list-group">
+                            <a href="#" class="list-group-item list-group-item-action">Nombre del Aspirante</a>
+                            <a href="#" class="list-group-item list-group-item-action">Nombre del Aspirante</a>
+                            <a href="#" class="list-group-item list-group-item-action">Nombre del Aspirante</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        
+        <!-- Botones de navegación "Importr y Registrar, Regresar" -->
+        <button type="button" class="btn btn-primary"
+        onclick="window.location.href=
+        '/psicologo/importar-aspirantes'"
+        >Importar Aspirante</button>
+
+        <button type="button" class="btn btn-primary"
+        onclick="window.location.href=
+        '/psicologo/registrar-aspirantes'"
+        >Registrar Aspirante</button>
+
+        <br>
+        <p></p>
+        <button type="button" class="btn btn-secondary"
+        onclick="window.location.href=
+        '/psicologo/grupos'"
+        >Regresar</button>
+
+        <!-- Infromación -->
+        <div class="container d-flex justify-content-center">
+            <div class="col-md-3 text-justify">
+                <h2>Nombre 1 Nombre 2</h2>
+                <h2>Apellido 1 Apellido 2</h2>
+                <h3>Datos personales</h3>
+                <button type="button" class="btn btn-danger"
+                onclick="window.location.href=
+                '/psicologo/editar-aspirantes'"
+                >Editar</button>
+            </div>
+        </div>
+
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <!-- Estatus -->
+            <h3>Estatus: </h3>
+            <span class="badge text-bg-info">Activa</span>
+        </div>
+        
+        <div class="container d-flex justify-content-center">
+            <div class="col-md-3 text-justify">
+                <p>Institución de procedencia: Tecnológico de Monterrey</p>
+                <p>Correo electrónico: a01711870@tec.mx</p>
+                <p>Número telefónico: 442 457 6724</p>
+                <p>Lugar de origen: Querétaro, Querétaro</p>
+         
+
+                <!-- Documentacion -->
+                <h3>Documentación</h3>
+                <p>CV.pdf</p>
+                <button type="button" class="btn btn-primary">Descargar</button>
+                <p>Kardex.pdf</p>
+                <button type="button" class="btn btn-primary">Descargar</button>
+
+                <!-- Entrevista -->
+                <h3>Entrevista Individual</h3>
+                <p>Entrevista</p>
+                <button type="button" class="btn btn-primary">Ver</button>
+
+            </div>
+        </div>
+
+
+        <!-- Pruebas -->
+
+        <div class="row g-4">
+
+
+            <!-- Tarjeta 1: Prueba Otis -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Prueba Otis</h5>
+                        <span class="badge rounded-pill text-bg-success">Completada</span>
+                        <p class="card-text">Calificaacion 30/100</p>
+                        <p><strong>Tiempo respondido: </strong> 1h</p>
+                        <div class="d-flex justify-content-between">
+                            <a href="/psicologo/analisis-otis" class="btn btn-primary">Ver Resultados</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 6: Prueba Hartman -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Prueba Hartman</h5>
+                        <span class="badge rounded-pill text-bg-info">Pendiente</span>
+                        <p class="card-text">Fecha Limite: 20/02/2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 2: Prueba Terman -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Prueba Terman</h5>
+                        <span class="badge rounded-pill text-bg-danger">Vencida</span>
+                    </div>
+                </div>
+            </div>
     </div>
-    
-    <!-- Lista Aspirantes-->
-    <div class="list-group">
-        <a href="#" class="list-group-item list-group-item-action">Nombre del Aspirante</a>
-        <a href="#" class="list-group-item list-group-item-action">Nombre del Aspirante</a>
-        <a href="#" class="list-group-item list-group-item-action">Nombre del Aspirante</a>
-    </div>
-
-
-    <!-- Botones de navegación "Importr y Registrar, Regresar" -->
-    <button type="button" class="btn btn-primary"
-    onclick="window.location.href=
-    '/psicologo/importar-aspirantes'"
-    >Importar Aspirante</button>
-
-    <button type="button" class="btn btn-primary"
-    onclick="window.location.href=
-    '/psicologo/registrar-aspirantes'"
-    >Registrar Aspirante</button>
-
-    <button type="button" class="btn btn-secondary"
-    onclick="window.location.href=
-    '/psicologo/grupos'"
-    >Regresar</button>
-
-    <!-- Infromación -->
-    <h2>Nombre 1 Nombre 2</h2>
-    <h2>Apellido 1 Apellido 2</h2>
-
-    <h3>Datos personales</h3>
-    <button type="button" class="btn btn-danger"
-    onclick="window.location.href=
-    '/psicologo/editar-aspirantes'"
-    >Editar</button>
-
-    <!-- Estatus -->
-    <h3>Estatus: </h3>
-    <span class="badge text-bg-info">Activa</span>
-    <h4>Institución de procedencia: Tecnológico de Monterrey</h4>
-    <h4>Correo electrónico: a01711870@tec.mx</h4>
-    <h4>Número telefónico: 442 457 6724</h4>
-    <h4>Lugar de origen: Querétaro, Querétaro</h4>
-
-    <!-- Documentacion -->
-    <h3>Documentación</h3>
-    <p>CV.pdf</p>
-    <button type="button" class="btn btn-primary">Descargar</button>
-    <p>Kardex.pdf</p>
-    <button type="button" class="btn btn-primary">Descargar</button>
-
-    <!-- Entrevista -->
-    <h3>Entrevista Individual</h3>
-    <p>Entrevista</p>
-    <button type="button" class="btn btn-primary">Ver</button>
-
-    <!-- Pruebas -->
-    <h3>Pruebas</h3>
-    <p>Prueba Otis</p>
-    <p>Prueba Hartman</p>
-    <p>Prueba Terman</p>
-
     <!-- Bootstrap JS -->
     <script src=
     "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

@@ -14,23 +14,51 @@
 </head>
 
 <body class="bg-light">
-    <h1 class="text-center mt-5">IMPORTAR NUEVO ASPIRANTE</h1>
-    
-    <p>Instrucciones blah blah blah</p>
+    <div class="container">
+        <!-- Boton cerrar sesión -->
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="button" class="btn btn-secondary">Cerrar Sesión</button>
+        </div>
+        
+        <h1 class="text-center mt-5">IMPORTAR NUEVO ASPIRANTE</h1>
+        
+        <p>Instrucciones</p>
 
-    <!-- Archivo -->
-    <h3>Cargar archivo</h3>
-    <p>Solo archivos .cvs con menos de 500 kb</p>
-    <h4>Arrastra para subir</h4>
-    <p>Suelta en este área tu contenido para que se pueda subir</p>
-    <br>
-    <p>Aspirante.cvs</p>
-    <p>Subiendo (65%)</p>
-    <button type="button" class="btn btn-danger">Eliminar</button>
-    <br>
-    <button type="button" class="btn btn-primary">Subir Archivos</button>
+        <!-- Archivo -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Cargar archivo</h3>
+                    <p>Solo archivos .cvs con menos de 500 kb</p>
+                </div>
+                <div class="card-body text-center">
+                    <h4>Arrastra para subir</h4>
+                    <p>Suelta en este área tu contenido para que se pueda subir</p>
+                    
+                </div>
+                <div class="card-body">
+                <br>
+                    <h4>Aspirante.cvs</h4>
+                    <p>Subiendo (65%)</p>
+                    <button type="button" class="btn btn-danger">Eliminar</button>
+                </div>
+            </div>
+        
+        <p></p>
+        <button type="button" class="btn btn-primary">Subir Archivos</button>
+        <p></p>
+        <button type="button" class="btn btn-primary"
+        onclick="confirm('¿Está seguro de guardar los cambios?'),
+        window.location.href=
+        '/psicologo/aspirantes'"
+        >Guardar Aspirante</button>
 
-    <button type="button" class="btn btn-primary">Guardar aspirante</button>
+        <p></p>
+        <!-- Botones de navegación Grupo, Edicion, Regresar" -->
+        <button type="button" class="btn btn-secondary"
+        onclick="window.location.href=
+        '/psicologo/aspirantes'">Regresar</button>
+        <br>
+    </div>
 
     <!-- Bootstrap JS -->
     <script src=
