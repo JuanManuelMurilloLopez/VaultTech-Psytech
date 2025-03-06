@@ -3,6 +3,10 @@
  * ¿Tenemos que añadir una tabla con las Ladas para los teléfonos?
 */
 
+CREATE DATABASE psytech;
+
+USE psytech;
+
 CREATE TABLE Privilegios(
 	-- uuid()
     Id_privilegio VARCHAR(36) PRIMARY KEY  not NULL, -- El UUID se guarda en un VARCHAR(36)
@@ -158,21 +162,21 @@ CREATE TABLE Pruebas(
     FOREIGN KEY (Id_datosPersonales) REFERENCES DatosPersonales(Id_datosPersonales)
 );
 
-CREATE TABLE Grupos_Prueba(
+CREATE TABLE Grupos_Pruebas(
     Id_grupo VARCHAR(36),
     Id_prueba VARCHAR(36),
     fecha_asignacion DATE,
     fecha_limite DATE,
     PRIMARY KEY (Id_grupo, Id_prueba),
-    FOREIGN KEY Id_grupo REFERENCES Grupos(Id_grupo),
-    FOREIGN KEY Id_prueba REFERENCES Pruebas(Id_prueba)
+    FOREIGN KEY (Id_grupo) REFERENCES Grupos(Id_grupo),
+    FOREIGN KEY (Id_prueba) REFERENCES Pruebas(Id_prueba)
 );
 
 CREATE TABLE PruebaOtis(
     Id_pruebaOtis VARCHAR(36) PRIMARY KEY not NULL,
     Id_prueba VARCHAR(36),
     Tiempo INT, -- Minutos
-    FOREIGN KEY (Id_prueba) REFERENCES Prueba(Id_prueba)
+    FOREIGN KEY (Id_prueba) REFERENCES Pruebas(Id_prueba)
 );
 
 CREATE TABLE PreguntasOtis (
@@ -180,16 +184,16 @@ CREATE TABLE PreguntasOtis (
     Id_pruebaOtis VARCHAR(36),
     Numero_pregunta INT,
     Pregunta VARCHAR(255),
-    FOREIGN KEY (Id_pruebaOtis) REFERENCES Prueba(Id_pruebaOtis)
+    FOREIGN KEY (Id_pruebaOtis) REFERENCES PruebaOtis(Id_pruebaOtis)
 );
 
 CREATE TABLE OpcionesPreguntasOtis (
-    Id_opcion VARCHAR(36) PRIMARY KEY,
+    Id_opcionPreguntaOtis VARCHAR(36) PRIMARY KEY,
     Id_preguntaOtis VARCHAR(36),
     Numero_opcion INT,
     Descripcion_opcion TEXT,
-    Es_correcta VARCHAR(255),
-    FOREIGN KEY (Id_preguntaOtis) REFERENCES Pregunta(Id_preguntaOtis)
+    Es_correcta BOOLEAN,
+    FOREIGN KEY (Id_preguntaOtis) REFERENCES PreguntasOtis(Id_preguntaOtis)
 );
 
 CREATE TABLE RespuestaOtis_Aspirante (
@@ -197,11 +201,11 @@ CREATE TABLE RespuestaOtis_Aspirante (
     Id_aspirante VARCHAR(36),
     Id_pruebaOtis VARCHAR(36),
     Id_preguntaOtis VARCHAR(36),
-    Id_opcion VARCHAR(36),  -- Solo si es opción múltiple
+    Id_opcionPreguntaOtis VARCHAR(36),  -- Solo si es opción múltiple
     Respuesta_abierta VARCHAR(5),  -- Solo si es pregunta abierta
     Tiempo_respuesta INT,  -- En segundos
     FOREIGN KEY (Id_aspirante) REFERENCES Aspirantes(Id_aspirante),
-    FOREIGN KEY (Id_pruebaOtis) REFERENCES Prueba(Id_pruebaOtis),
-    FOREIGN KEY (Id_preguntaOtis) REFERENCES Pregunta(Id_preguntaOtis),
-    FOREIGN KEY (Id_opcion) REFERENCES Opciones(Id_opcion)
+    FOREIGN KEY (Id_pruebaOtis) REFERENCES PruebaOtis(Id_pruebaOtis),
+    FOREIGN KEY (Id_preguntaOtis) REFERENCES PreguntasOtis(Id_preguntaOtis),
+    FOREIGN KEY (Id_opcionPreguntaOtis) REFERENCES OpcionesPreguntasOtis(Id_opcionPreguntaOtis)
 );
