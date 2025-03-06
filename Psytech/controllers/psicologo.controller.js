@@ -45,7 +45,8 @@ exports.get_importar_aspirantes = (request, response, next) => {
 };
 
 exports.get_registrar_aspirantes = (request, response, next) => {
-    response.send('Registrar Aspirantes');
+    console.log('Registrar Aspirantes');
+    response.render('Psicologos/registrarAspirante')
 };
 
 exports.get_editar_aspirantes = (request, response, next) => {
