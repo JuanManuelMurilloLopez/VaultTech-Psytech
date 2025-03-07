@@ -28,7 +28,7 @@ exports.get_intrucciones_colores = (request, response, next) => {
 };
 
 exports.get_prueba_otis = (request, response, next) => {
-    response.send('Prueba Otis');
+    response.render('Aspirantes/pruebaOtis');
 };
 
 exports.get_prueba_colores = (request, response, next) => {
