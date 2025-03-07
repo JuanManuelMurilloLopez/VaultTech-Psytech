@@ -56,8 +56,8 @@ CREATE TABLE Aspirantes(
     Institucion_procedencia VARCHAR(50),
     Id_pais VARCHAR(36),
     Id_estado VARCHAR(36),
-    Cv VARCHAR(100),
-    Kardex VARCHAR(100),
+    Cv VARCHAR(255),
+    Kardex VARCHAR(255),
     FOREIGN KEY (Id_usuario) REFERENCES Usuarios(Id_usuario),
     FOREIGN KEY (Id_pais) REFERENCES Paises(Id_pais),
     FOREIGN KEY (Id_estado) REFERENCES Estados(Id_estado)
@@ -208,4 +208,22 @@ CREATE TABLE RespuestaOtis_Aspirante (
     FOREIGN KEY (Id_pruebaOtis) REFERENCES PruebaOtis(Id_pruebaOtis),
     FOREIGN KEY (Id_preguntaOtis) REFERENCES PreguntasOtis(Id_preguntaOtis),
     FOREIGN KEY (Id_opcionPreguntaOtis) REFERENCES OpcionesPreguntasOtis(Id_opcionPreguntaOtis)
+);
+
+CREATE TABLE Colores(
+    Id_color VARCHAR(36) PRIMARY KEY not NULL,
+    Nombre_color VARCHAR(50),
+    Numero_color INT,
+    Significado VARCHAR(50),
+    Hex_color VARCHAR(7)
+);
+
+CREATE TABLE SeleccionesColores(
+    Id_seleccionColores VARCHAR(36) PRIMARY KEY not NULL,
+    Id_prueba VARCHAR(36),
+    Id_color VARCHAR(36),
+    Posicion INT CHECK (Posicion <= 7 AND Posicion >= 0),
+    Face INT CHECK (Face = 1 OR Face = 2),
+    FOREIGN KEY (Id_prueba) REFERENCES Pruebas(Id_prueba),
+    FOREIGN KEY (Id_color) REFERENCES Colores(Id_color)
 );
