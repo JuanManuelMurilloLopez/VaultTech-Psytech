@@ -1,0 +1,22 @@
+INSERT INTO PreguntasOtis (Id_preguntaOtis, Id_pruebaOtis, Numero_pregunta, Pregunta)
+VALUES
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 1, '¿Cuál es el siguiente número en la secuencia: 2, 4, 6, 8, ...?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 2, 'Si todos los gatos son animales, y todos los animales son seres vivos, ¿los gatos son seres vivos?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 3, '¿Qué figura completa una serie de figuras geométricas: círculo, triángulo, cuadrado, ...?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 4, 'Si una vela se apaga al final de un minuto, ¿cuánto tiempo duraría una vela igual que se apaga en 2 minutos?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 5, 'Si dos lápices cuestan 3 dólares, ¿cuánto costarán 6 lápices?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 6, 'Si un reloj marca las 3:15, ¿cuántos minutos faltan para las 4:00?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 7, 'Si un tren viaja a 60 km/h, ¿cuánto tiempo tomará para recorrer 180 km?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 8, 'Si A es mayor que B, y B es mayor que C, ¿quién es el más grande entre A, B y C?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 9, 'En una carrera, adelantas al segundo lugar, ¿en qué posición estás ahora?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 10, 'Si un libro tiene 300 páginas y se ha leído 150 páginas, ¿qué porcentaje del libro se ha leído?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 11, '¿Cuál es el siguiente número en la secuencia: 5, 10, 20, 40, ...?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 12, 'Si un triángulo tiene un ángulo de 90 grados, ¿qué tipo de triángulo es?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 13, 'En una serie de colores: rojo, azul, verde, amarillo, ¿qué color sigue?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 14, '¿Qué número sigue en la secuencia: 1, 3, 6, 10, 15, ...?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 15, 'Si tienes 3 manzanas y das 2 a tu amigo, ¿cuántas manzanas te quedan?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 16, 'Si 5 personas pueden construir una casa en 10 días, ¿cuántas personas necesitan para construirla en 5 días?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 17, 'Si una cuerda mide 20 metros y se corta en 4 partes iguales, ¿cuál es la longitud de cada parte?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 18, 'En una bolsa hay 3 bolas rojas y 2 bolas azules, ¿cuál es la probabilidad de sacar una bola roja?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 19, 'Si una letra está en la cuarta posición en la palabra "pelota", ¿qué letra es?'),
+(UUID(), (SELECT Id_pruebaOtis FROM PruebaOtis WHERE Id_prueba = (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS')), 20, 'Si la palabra "sol" se escribe al revés, ¿qué palabra resulta?');
