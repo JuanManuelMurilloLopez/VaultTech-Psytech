@@ -136,8 +136,9 @@ CREATE TABLE Grupos(
 );
 
 CREATE TABLE Grupos_Aspirantes(
-    Id_grupo VARCHAR(36) PRIMARY KEY not NULL,
+    Id_grupo VARCHAR(36),
     Id_aspirante VARCHAR(36),
+    PRIMARY KEY (Id_grupo, Id_aspirante),
     FOREIGN KEY (Id_grupo) REFERENCES Grupos(Id_grupo),
     FOREIGN KEY (Id_aspirante) REFERENCES Aspirantes(Id_aspirante)
 );
