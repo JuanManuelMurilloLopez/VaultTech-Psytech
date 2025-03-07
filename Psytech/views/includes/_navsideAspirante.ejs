@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+    
+<body>
+
+    <h3>Nav Side</h3>
+
+    <aside>
+        <h3>Pruebas</h3>
+        <ul>
+            <li onclick="navigateTo('/aspirante/mis-pruebas')">Todas mis pruebas</li>
+            <li onclick="navigateTo('/aspirante/pruebas-pendientes')">Pruebas pendientes</li>
+            <li onclick="navigateTo('/aspirante/pruebas-completadas')">Pruebas completadas</li>
+        </ul>
+
+        <h3>Documentos</h3>
+        <ul>
+            <li onclick="navigateTo('/aspirante/subir-documentos')">Subir documentos</li>
+            <li onclick="navigateTo('/aspirante/formato-entrevista')">Formato de entrevista</li>
+        </ul>
+    </aside>
+
+    <script>
+        function navigateTo(route) {
+            window.location.href = route;
+        }
+    </script>
+
+</body>
+</html>
