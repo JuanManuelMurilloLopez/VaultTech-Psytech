@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const path = require('path');
-const controller = require('../controllers/controller-psicologo');
+const controller = require('../controllers/psicologo.controller');
 
 //Rutas del portal de los Psicologos
 router.get('/principal', controller.get_principal_psicologos);
