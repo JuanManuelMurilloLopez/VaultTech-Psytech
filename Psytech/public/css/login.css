@@ -1,0 +1,15 @@
+:root{
+    --primary: #95B6BC;
+    --secondary: #294969;
+    --font-primary: #000;
+    --font-secondary: #fff;
+}
+
+body{
+    background: #95B6BC;
+}
+
+.btn-color{
+    background: var(--primary);
+    color: var(--font-primary);
+}
