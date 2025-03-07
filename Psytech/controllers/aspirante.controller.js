@@ -12,7 +12,7 @@ exports.get_pruebas_completadas = (request, response, next) => {
 };
 
 exports.get_subir_documentos = (request, response, next) => {
-    response.send('Subir Documentos');
+    response.render('Aspirantes/subirDocumentos');
 };
 
 exports.get_formato_entrevista = (request, response, next) => {
