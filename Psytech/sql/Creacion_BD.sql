@@ -227,9 +227,11 @@ CREATE TABLE Colores(
 CREATE TABLE SeleccionesColores(
     Id_seleccionColores VARCHAR(36) PRIMARY KEY not NULL,
     Id_prueba VARCHAR(36),
+    Id_aspirante VARCHAR(36),
     Id_color VARCHAR(36),
     Posicion INT CHECK (Posicion <= 7 AND Posicion >= 0),
     Face INT CHECK (Face = 1 OR Face = 2),
     FOREIGN KEY (Id_prueba) REFERENCES Pruebas(Id_prueba),
+    FOREIGN KEY (Id_aspirante) REFERENCES Aspirantes(Id_aspirante),
     FOREIGN KEY (Id_color) REFERENCES Colores(Id_color)
 );
