@@ -53,7 +53,7 @@ CREATE TABLE Aspirantes(
     Id_pais VARCHAR(36),
     Id_estado VARCHAR(36),
     Cv VARCHAR(100),
-    Kardex VARCHAR(100),
+    Kardex VARCHAR(100), -- Aumerntar
     FOREIGN KEY (Id_usuario) REFERENCES Usuarios(Id_usuario),
     FOREIGN KEY (Id_pais) REFERENCES Paises(Id_pais),
     FOREIGN KEY (Id_estado) REFERENCES Estados(Id_estado)
@@ -188,7 +188,7 @@ CREATE TABLE OpcionesPreguntasOtis (
     Id_preguntaOtis VARCHAR(36),
     Numero_opcion INT,
     Descripcion_opcion TEXT,
-    Es_correcta VARCHAR(255),
+    Es_correcta BOOLEAN,
     FOREIGN KEY (Id_preguntaOtis) REFERENCES Pregunta(Id_preguntaOtis)
 );
 
