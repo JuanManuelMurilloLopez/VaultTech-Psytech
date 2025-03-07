@@ -1,17 +1,15 @@
 :root{
     --primary: #95B6BC;
-    --secondary: #294969;
     --font-primary: #000;
-    --font-secondary: #fff;
     --primary-hover: #7BA1A8;
 }
 
-.btn-color{
+.btn-color--primary{
     background: var(--primary);
     color: var(--font-primary);
 }
 
-.btn-color:hover{
+.btn-color--primary:hover{
     background: var(--primary-hover);
     color: var(--font-primary);
 }
