@@ -143,6 +143,12 @@ CREATE TABLE Grupos_Aspirantes(
     FOREIGN KEY (Id_aspirante) REFERENCES Aspirantes(Id_aspirante)
 );
 
+CREATE TABLE Pruebas(
+    Id_prueba VARCHAR(36) PRIMARY KEY not NULL,
+    Nombre VARCHAR(100),
+    Descripcion VARCHAR(255)
+);
+
 CREATE TABLE DatosPersonales(
     Id_datosPersonales VARCHAR(36) PRIMARY KEY not NULL,
     Nombre_usuario VARCHAR(50),
@@ -152,17 +158,15 @@ CREATE TABLE DatosPersonales(
     Id_genero VARCHAR(36),
     Id_nivelAcademico VARCHAR(36),
     Puesto_solicitado VARCHAR(50),
+    Id_prueba VARCHAR(36),
+    Id_aspirante VARCHAR(36),
     FOREIGN KEY (Id_genero) REFERENCES Generos(Id_genero),
-    FOREIGN KEY (Id_nivelAcademico) REFERENCES NivelAcademico(Id_nivelAcademico)
+    FOREIGN KEY (Id_nivelAcademico) REFERENCES NivelAcademico(Id_nivelAcademico),
+    FOREIGN KEY (Id_prueba) REFERENCES Pruebas(Id_prueba),
+    FOREIGN KEY (Id_aspirante) REFERENCES Aspirantes(Id_aspirante)
 );
 
-CREATE TABLE Pruebas(
-    Id_prueba VARCHAR(36) PRIMARY KEY not NULL,
-    Nombre VARCHAR(100),
-    Descripcion VARCHAR(255),
-    Id_datosPersonales VARCHAR(36),
-    FOREIGN KEY (Id_datosPersonales) REFERENCES DatosPersonales(Id_datosPersonales)
-);
+
 
 CREATE TABLE Grupos_Pruebas(
     Id_grupo VARCHAR(36),
