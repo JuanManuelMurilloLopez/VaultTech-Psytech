@@ -4,19 +4,19 @@ exports.get_mis_pruebas = (request, response, next) => {
 };
 
 exports.get_pruebas_pendientes = (request, response, next) => {
-    response.send('Pruebas Pendientes');
+    response.render('Aspirantes/pruebasPendientes');
 };
 
 exports.get_pruebas_completadas = (request, response, next) => {
-    response.send('Pruebas Completadas');
+    response.render('Aspirantes/pruebasCompletadas');
 };
 
 exports.get_subir_documentos = (request, response, next) => {
-    response.send('Subir Documentos');
+    response.render('Aspirantes/subirDocumentos');
 };
 
 exports.get_formato_entrevista = (request, response, next) => {
-    response.send('Formato de Entrevista');
+    response.render('Aspirantes/formatoDeEntrevista');
 };
 
 exports.get_intrucciones_otis = (request, response, next) => {
@@ -28,7 +28,7 @@ exports.get_intrucciones_colores = (request, response, next) => {
 };
 
 exports.get_prueba_otis = (request, response, next) => {
-    response.send('Prueba Otis');
+    response.render('Aspirantes/pruebaOtis');
 };
 
 exports.get_prueba_colores = (request, response, next) => {
