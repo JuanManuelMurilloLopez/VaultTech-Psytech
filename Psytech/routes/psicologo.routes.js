@@ -27,6 +27,8 @@ router.get('/registrar-aspirantes', controller.get_registrar_aspirantes);
 
 router.get('/editar-aspirantes', controller.get_editar_aspirantes);
 
+router.get('/catalogo-pruebas', controller.get_catalogo_pruebas);
+
 router.get('/prueba-otis', controller.get_prueba_otis);
 
 router.get('/prueba-colores', controller.get_prueba_colores);
@@ -35,6 +37,6 @@ router.get('/analisis-otis', controller.get_analisis_otis);
 
 router.get('/analisis-colores', controller.get_analisis_colores);
 
-router.get('/catalogo-pruebas', controller.get_catalogo_pruebas);
+router.get('/respuestas-otis', controller.get_respuestas_otis);
 
 module.exports = router;
