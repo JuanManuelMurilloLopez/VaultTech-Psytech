@@ -16,7 +16,7 @@ exports.get_subir_documentos = (request, response, next) => {
 };
 
 exports.get_formato_entrevista = (request, response, next) => {
-    response.send('Formato de Entrevista');
+    response.render('Aspirantes/formatoDeEntrevista');
 };
 
 exports.get_intrucciones_otis = (request, response, next) => {
