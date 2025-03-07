@@ -36,7 +36,8 @@ CREATE TABLE Usuarios(
     Apellido_paterno VARCHAR(50),
     Apellido_materno VARCHAR(50),
     Correo VARCHAR(50),
-    Numero_telefono VARCHAR(17), -- Ej. "(+052) 4421569563"
+    Lada VARCHAR(4),
+    Numero_telefono VARCHAR(10), -- Ej. "4421569563"
     Id_rol VARCHAR(36),
     FOREIGN KEY (Id_rol) REFERENCES Roles(Id_rol)
 );
