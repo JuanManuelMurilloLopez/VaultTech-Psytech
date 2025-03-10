@@ -1,0 +1,25 @@
+{
+  "name": "psytech",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JuanManuelMurilloLopez/VaultTech-Psytech.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JuanManuelMurilloLopez/VaultTech-Psytech/issues"
+  },
+  "homepage": "https://github.com/JuanManuelMurilloLopez/VaultTech-Psytech#readme",
+  "description": "",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "nodemon": "^3.1.9"
+  }
+}

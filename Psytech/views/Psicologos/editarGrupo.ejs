@@ -1,0 +1,129 @@
+<%- include('../includes/_navsidePsicologo.ejs') %>
+<%- include('../includes/_buttonCerrarSesion.ejs') %>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Grupos</title>
+    <!-- Bootstrap CSS -->
+    <link href=
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+    <!-- Link css -->
+    <link rel="stylesheet" href="/css/psicologos/editarGrupo.css">
+</head>
+
+<body class="bg-light">
+  <div class="container">
+
+    <h1 class="text-center">EDITAR GRUPO</h1>
+
+    <!-- Campo Nombre -->
+    <div class="form-floating mb-3">
+      <input type="" class="form-control" id="" placeholder="">
+      <label for="">Nombre</label>
+    </div>
+
+    <!-- Campo Carrera -->
+    <div class="form-floating mb-3">
+      <input type="" class="form-control" id="" placeholder="">
+      <label for="">Carrera / Postgrado</label>
+    </div>
+
+
+    <!-- Campo Año -->
+    <select class="form-select" aria-label="Default select example">
+      <option selected>Año / Generación</option>
+      <option value="1">2021</option>
+      <option value="2">2022</option>
+      <option value="3">2023</option>
+    </select>
+
+
+    <br>
+
+
+    <!-- Campo Semestre -->
+    <select class="form-select" aria-label="Default select example">
+      <option selected>Semestre</option>
+      <option value="1">Feb / Jun</option>
+      <option value="2">Ago / Dic</option>
+    </select>
+   
+   
+    <br>
+    <h3>Estatus: </h3>
+    <button type="button" class="btn btn-info">Activa</button>
+    <button type="button" class="btn btn-danger">Desactivar</button>
+    <p></p>
+
+
+    <h4>Asignar pruebas</h4>
+    <p>Selecciona las pruebas que quieres asignar al grupo</p>
+
+
+    <!-- Checkbox de pruebas-->
+    <div class="form-check-inline">
+        <input class="form-check-input" type="checkbox" value="" id="Otis">
+        <label class="form-check-label" for="Otis">
+          Otis
+        </label>
+    </div>
+    <div class="form-check-inline">
+        <input class="form-check-input" type="checkbox" value="" id="Terman">
+        <label class="form-check-label" for="Terman">
+          Terman
+        </label>
+    </div>
+    <div class="form-check-inline">
+        <input class="form-check-input" type="checkbox" value="" id="Luscher">
+        <label class="form-check-label" for="Luscher">
+          Luscher
+        </label>
+    </div>
+    <div class="form-check-inline">
+        <input class="form-check-input" type="checkbox" value="" id="16_PF">
+        <label class="form-check-label" for="16_PF">
+          16 PF
+        </label>
+    </div>
+    <div class="form-check-inline">
+        <input class="form-check-input" type="checkbox" value="" id="Kostick">
+        <label class="form-check-label" for="Kostick">
+          Kostick
+        </label>
+    </div>
+    <div class="form-check-inline">
+        <input class="form-check-input" type="checkbox" value="" id="Hartman">
+        <label class="form-check-label" for="Hartman">
+          Hartman
+        </label>
+    </div>
+
+
+    <br>
+    <p></p>
+
+
+    <!-- Botones de navegación "Regresar y Guardar" -->
+    <button type="button" class="btn btn-color--third"
+    onclick="window.location.href=
+    '/psicologo/grupos'"
+    >Regresar</button>
+
+
+    <button type="button" class="btn btn-color--secondary"
+    onclick="confirm('¿Está seguro de guardar los cambios?'),
+    window.location.href=
+    '/psicologo/grupos'"
+    >Guardar</button>
+  </div>
+
+
+    <!-- Bootstrap JS -->
+    <script src=
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+</body>

@@ -1,0 +1,15 @@
+:root{
+    --primary: #95B6BC;
+    --font-primary: #000;
+    --primary-hover: #7BA1A8;
+}
+
+.btn-color--primary{
+    background: var(--primary);
+    color: var(--font-primary);
+}
+
+.btn-color--primary:hover{
+    background: var(--primary-hover);
+    color: var(--font-primary);
+}
