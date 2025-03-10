@@ -85,9 +85,9 @@ INSERT INTO Grupos_Pruebas (Id_grupo, Id_prueba, fecha_asignacion, fecha_limite)
     ((SELECT Id_grupo FROM Grupos WHERE Nombre_grupo = 'G2_II'), (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS'), '2025-03-07', '2025-03-14'),
     ((SELECT Id_grupo FROM Grupos WHERE Nombre_grupo = 'G3_DERE'), (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS'), '2025-03-07', '2025-03-14'),
     ((SELECT Id_grupo FROM Grupos WHERE Nombre_grupo = 'G4_ARQ'), (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS'), '2025-03-07', '2025-03-14'),
-    ((SELECT Id_grupo FROM Grupos WHERE Nombre_grupo = 'G5_MED'), (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'LUSCHER'), '2025-03-07', '2025-03-14'),
-    ((SELECT Id_grupo FROM Grupos WHERE Nombre_grupo = 'G6_CON'), (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'LUSCHER'), '2025-03-07', '2025-03-14'),
-    ((SELECT Id_grupo FROM Grupos WHERE Nombre_grupo = 'G7_PSI'), (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'LUSCHER'), '2025-03-07', '2025-03-14'),
+    ((SELECT Id_grupo FROM Grupos WHERE Nombre_grupo = 'G5_MED'), (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'COLORES DE LUSCHER'), '2025-03-07', '2025-03-14'),
+    ((SELECT Id_grupo FROM Grupos WHERE Nombre_grupo = 'G6_CON'), (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'COLORES DE LUSCHER'), '2025-03-07', '2025-03-14'),
+    ((SELECT Id_grupo FROM Grupos WHERE Nombre_grupo = 'G7_PSI'), (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'COLORES DE LUSCHER'), '2025-03-07', '2025-03-14'),
     ((SELECT Id_grupo FROM Grupos WHERE Nombre_grupo = 'G8_IE'), (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS'), '2025-03-07', '2025-03-14'),
-    ((SELECT Id_grupo FROM Grupos WHERE Nombre_grupo = 'G9_NI'), (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'LUSCHER'), '2025-03-07', '2025-03-14'),
+    ((SELECT Id_grupo FROM Grupos WHERE Nombre_grupo = 'G9_NI'), (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'COLORES DE LUSCHER'), '2025-03-07', '2025-03-14'),
     ((SELECT Id_grupo FROM Grupos WHERE Nombre_grupo = 'G10_CC'), (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS'), '2025-03-07', '2025-03-14');
