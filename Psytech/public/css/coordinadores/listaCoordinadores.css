@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
 :root{
     --primary: #95B6BC;
     --secondary: #294969;
@@ -9,6 +12,123 @@
     --third-hover:#B1B1B1;
 }
 
+body{
+    font-family: "Lato", sans-serif;
+}
+
+.main{
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    transition: all 0.35s ease-in-out;
+    display: flex;
+    flex-direction: row;
+}
+
+/* Estilos de Navside */
+
+a{
+    text-decoration: none;
+}
+
+li{
+    list-style: none;
+}
+
+.wrapper{
+    display: flex;
+}
+
+#sidebar{
+    width: 90px;
+    min-width: 90px;
+    z-index: 1000;
+    transition: all 0.25s ease-in-out;
+    background-color: var(--primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    margin: 10px;
+    border-radius: 20px;
+}
+
+#sidebar.expand{
+    width: 260px;
+    min-width: 260px;
+}
+
+.toggle-btn {
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    width: 220px;
+    transition: opacity 0.25s ease-in-out;
+}
+
+.small-logo {
+    width: 70px;
+    transition: opacity 0.25s ease-in-out;
+}
+
+.logo-visible {
+    display: none;
+}
+
+.logo-hidden {
+    display: block;
+}
+
+#sidebar.expand .logo {
+    display: block;
+}
+
+#sidebar.expand .small-logo {
+    display: none;
+}
+
+#sidebar:not(.expand) .logo,
+#sidebar:not(.expand) a.sidebar-link span{
+    display: none;
+}
+
+#sidebar:not(.expand) .small-logo {
+    display: block;
+}
+
+.sidebar-nav{
+    padding: 2rem 0;
+    flex: 1 1 auto;
+}
+
+a.sidebar-link{
+    padding: 1.75rem .625rem;
+    color: #000;
+    display: block;
+    white-space: nowrap;
+}
+
+.sidebar-item{
+    position: relative;
+}
+
+.psic-icon{
+    width: 40px;
+}
+
+.coord-icon{
+    width: 40px;
+}
+
+/* Estilos de lista coordinadores */
 .btn-color--primary{
     background: var(--primary);
     color: var(--font-primary);

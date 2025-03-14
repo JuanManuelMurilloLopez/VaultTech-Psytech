@@ -1,20 +1,27 @@
-<!DOCTYPE html>
-<html lang="es">
-<body>
-    <h3>Nav side</h3>
-    <aside>
-        <ul>
-            <li onclick="navigateTo('/coordinador/psicologos-registrados')"
-            >Psicologos</li>
-            <li onclick="navigateTo('/coordinador/coordinadores-registrados')"
-            >Coordinadores</li>
+<div class="wrapper">
+    <aside id="sidebar">
+        <div class="d-flex justify-content-between p-4">
+            <button class="toggle-btn border-0 " id="toggle-btn">
+                <img class="logo logo-hidden" id="logoCompleto" src="/images/logoCompleto.png" alt="Logo PSICODX">
+                <img class="small-logo logo-visible" id="logoIndividual" src="/images/logoIndividual.png" alt="Logo PSICODX">
+            </button>
+        </div>
+        <ul class="sidebar-nav">
+            <li class="sidebar-item">
+                <a href="/coordinador/psicologos-registrados" class="sidebar-link">
+                    <img class="psic-icon" src="/images/psicologo.svg" alt="psicologo icon">
+                    <span>Psicologos</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="/coordinador/coordinadores-registrados" class="sidebar-link">
+                    <img class="coord-icon" src="/images/coordinador.svg" alt="coordinador icon">
+                    <span>Coordinadores</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+
+            </li>
         </ul>
     </aside>
-
-    <script>
-        function navigateTo(route) {
-            window.location.href = route;
-        }
-    </script>
-</body>
-</html>
+</div>
