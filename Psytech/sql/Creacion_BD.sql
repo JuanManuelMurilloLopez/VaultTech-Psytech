@@ -7,56 +7,59 @@ CREATE DATABASE psytech;
 
 USE psytech;
 
+-- Tablas con UUID
 CREATE TABLE privilegios(
-	-- uuid()
-    idPrivilegio VARCHAR(36) PRIMARY KEY  not NULL, -- El UUID se guarda en un VARCHAR(36)
+    idPrivilegio VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
     nombrePrivilegio VARCHAR(50)
 );
 
+
 CREATE TABLE roles(
-	-- uuid()
-    idRol VARCHAR(36) PRIMARY KEY not NULL,
+    idRol VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
     nombreRol VARCHAR(50)
 );
 
 CREATE TABLE rolesPrivilegios(
-	idRol VARCHAR(36) not NULL,
-    idPrivilegio VARCHAR(36) not NULL,
-    PRIMARY KEY (idRol, idPrivilegio), -- Llave primaria compuesta
+    idRol VARCHAR(36) NOT NULL, -- UUID
+    idPrivilegio VARCHAR(36) NOT NULL, -- UUID
+    PRIMARY KEY (idRol, idPrivilegio),
     FOREIGN KEY (idRol) REFERENCES roles(idRol),
     FOREIGN KEY (idPrivilegio) REFERENCES privilegios(idPrivilegio)
 );
 
 CREATE TABLE usuarios(
-	idUsuario VARCHAR(36) PRIMARY KEY not NULL,
+    idUsuario VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
     usuario VARCHAR(50),
-    contrasenia VARCHAR(60), -- Revisar cuánto espacio ocupa la cadena después del cifrado
+    contrasenia VARCHAR(60),
     estatusUsuario BOOLEAN,
     nombreUsuario VARCHAR(50),
     apellidoPaterno VARCHAR(50),
     apellidoMaterno VARCHAR(50),
     correo VARCHAR(50),
     lada VARCHAR(4),
-    numeroTelefono VARCHAR(10), -- Ej. "4421569563"
-    idRol VARCHAR(36),
+    numeroTelefono VARCHAR(10),
+    idRol VARCHAR(36), -- UUID
     FOREIGN KEY (idRol) REFERENCES roles(idRol)
 );
 
+-- Tablas con INT AUTO_INCREMENT
 CREATE TABLE paises(
-    idPais VARCHAR(36) PRIMARY KEY not NULL,
+    idPais INT AUTO_INCREMENT PRIMARY KEY, -- INT AUTO_INCREMENT
     nombrePais VARCHAR(50)
 );
+
 CREATE TABLE estados(
-    idEstado VARCHAR(36) PRIMARY KEY not NULL,
+    idEstado INT AUTO_INCREMENT PRIMARY KEY, -- INT AUTO_INCREMENT
     nombreEstado VARCHAR(50)
 );
 
+-- Tablas con UUID
 CREATE TABLE aspirantes(
-    idAspirante VARCHAR(36) PRIMARY KEY not NULL,
-    idUsuario VARCHAR(36), -- Herencia de Usuario
+    idAspirante VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
+    idUsuario VARCHAR(36), -- UUID
     institucionProcedencia VARCHAR(50),
-    idPais VARCHAR(36),
-    idEstado VARCHAR(36),
+    idPais INT, -- INT AUTO_INCREMENT
+    idEstado INT, -- INT AUTO_INCREMENT
     cv VARCHAR(255),
     kardex VARCHAR(255),
     FOREIGN KEY (idUsuario) REFERENCES usuarios(idUsuario),
@@ -65,72 +68,76 @@ CREATE TABLE aspirantes(
 );
 
 CREATE TABLE preguntasFormatoEntrevista(
-    idPreguntaFormatoEntrevista VARCHAR(36) PRIMARY KEY not NULL,
+    idPreguntaFormatoEntrevista VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
     nombrePreguntaFormatoEntrevista VARCHAR(255)
 );
 
 CREATE TABLE aspirantesPreguntasFormatoEntrevista(
-    idAspirante VARCHAR(36) not NULL,
-    idPreguntaFormatoEntrevista VARCHAR(36) not NULL,
+    idAspirante VARCHAR(36) NOT NULL, -- UUID
+    idPreguntaFormatoEntrevista VARCHAR(36) NOT NULL, -- UUID
     PRIMARY KEY (idAspirante, idPreguntaFormatoEntrevista),
     respuestaAspirante VARCHAR(36),
     FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante),
     FOREIGN KEY (idPreguntaFormatoEntrevista) REFERENCES preguntasFormatoEntrevista(idPreguntaFormatoEntrevista)
 );
 
+-- Tablas con INT AUTO_INCREMENT
 CREATE TABLE generos(
-    idGenero VARCHAR(36) PRIMARY KEY not NULL,
+    idGenero INT AUTO_INCREMENT PRIMARY KEY, -- INT AUTO_INCREMENT
     nombreGenero VARCHAR(50)
 );
 
 CREATE TABLE estadoCivil(
-    idEstadoCivil VARCHAR(36) PRIMARY KEY not NULL,
+    idEstadoCivil INT AUTO_INCREMENT PRIMARY KEY, -- INT AUTO_INCREMENT
     nombreEstadoCivil VARCHAR(50)
 );
 
+-- Tablas con UUID
 CREATE TABLE familiares(
-    idFamiliar VARCHAR(36) PRIMARY KEY not NULL,
-    idAspirante VARCHAR(36),
+    idFamiliar VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
+    idAspirante VARCHAR(36), -- UUID
     nombreFamiliar VARCHAR(255),
     estadoDeVida BOOLEAN,
-    idGenero VARCHAR(36),
-    idEstadoCivil VARCHAR(36),
+    idGenero INT, -- INT AUTO_INCREMENT
+    idEstadoCivil INT, -- INT AUTO_INCREMENT
     edadFamiliar INT,
-    hijoDe VARCHAR(36), -- Se mantiene la referencia a otro familiar
-
+    hijoDe VARCHAR(36), -- UUID
     FOREIGN KEY (idGenero) REFERENCES generos(idGenero),
     FOREIGN KEY (idEstadoCivil) REFERENCES estadoCivil(idEstadoCivil),
     FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante),
-    FOREIGN KEY (hijoDe) REFERENCES familiares(idFamiliar) -- Relación recursiva
+    FOREIGN KEY (hijoDe) REFERENCES familiares(idFamiliar)
 );
 
 CREATE TABLE tipoInstitucion(
-    idTipoInstitucion VARCHAR(36) PRIMARY KEY not NULL,
+    idTipoInstitucion INT AUTO_INCREMENT PRIMARY KEY, -- INT AUTO_INCREMENT
     nombreTipoInstitucion VARCHAR(50)
 );
 
+
+-- Tablas con UUID
 CREATE TABLE institucion(
-    idInstitucion VARCHAR(36) PRIMARY KEY not NULL,
+    idInstitucion VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
     nombreInstitucion VARCHAR(100),
     estatusInstitucion BOOLEAN,
-    idTipoInstitucion VARCHAR(36),
+    idTipoInstitucion INT, -- INT AUTO_INCREMENT
     FOREIGN KEY (idTipoInstitucion) REFERENCES tipoInstitucion(idTipoInstitucion)
 );
 
 CREATE TABLE nivelAcademico(
-    idNivelAcademico VARCHAR(36) PRIMARY KEY not NULL,
+    idNivelAcademico INT AUTO_INCREMENT PRIMARY KEY, -- INT AUTO_INCREMENT
     nombreNivelAcademico VARCHAR(50)
 );
 
+-- Tablas con UUID
 CREATE TABLE grupos(
-    idGrupo VARCHAR(36) PRIMARY KEY not NULL,
+    idGrupo VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
     nombreGrupo VARCHAR(100),
     estatusGrupo BOOLEAN,
     cicloEscolar VARCHAR(50),
     anioGeneracion INT,
     carrera VARCHAR(100),
-    idInstitucion VARCHAR(36),
-    idNivelAcademico VARCHAR(36),
+    idInstitucion VARCHAR(36), -- UUID
+    idNivelAcademico INT, -- INT AUTO_INCREMENT
     FOREIGN KEY (idInstitucion) REFERENCES institucion(idInstitucion),
     FOREIGN KEY (idNivelAcademico) REFERENCES nivelAcademico(idNivelAcademico)
 );
@@ -149,14 +156,15 @@ CREATE TABLE pruebas(
     descripcion VARCHAR(255)
 );
 
+-- Tablas con UUID
 CREATE TABLE datosPersonales(
-    idDatosPersonales VARCHAR(36) PRIMARY KEY not NULL,
+    idDatosPersonales VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
     nombreUsuario VARCHAR(50),
     apellidoPaterno VARCHAR(50),
     apellidoMaterno VARCHAR(50),
     edadDatosPersonales INT,
-    idGenero VARCHAR(36),
-    idNivelAcademico VARCHAR(36),
+    idGenero INT,
+    idNivelAcademico INT,
     puestoSolicitado VARCHAR(50),
     idPrueba VARCHAR(36),
     idAspirante VARCHAR(36),
@@ -215,7 +223,7 @@ CREATE TABLE respuestaOtisAspirante (
 );
 
 CREATE TABLE colores(
-    idColor VARCHAR(36) PRIMARY KEY not NULL,
+    idColor INT AUTO_INCREMENT PRIMARY KEY, -- INT AUTO_INCREMENT
     nombreColor VARCHAR(50),
     numeroColor INT,
     significado VARCHAR(50),
@@ -223,10 +231,10 @@ CREATE TABLE colores(
 );
 
 CREATE TABLE seleccionesColores(
-    idSeleccionColores VARCHAR(36) PRIMARY KEY not NULL,
-    idPrueba VARCHAR(36),
-    idAspirante VARCHAR(36),
-    idColor VARCHAR(36),
+    idSeleccionColores VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
+    idPrueba VARCHAR(36), -- UUID
+    idAspirante VARCHAR(36), -- UUID
+    idColor INT, -- INT AUTO_INCREMENT
     posicion INT CHECK (posicion <= 7 AND posicion >= 0),
     fase INT CHECK (fase = 1 OR fase = 2),
     FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba),
