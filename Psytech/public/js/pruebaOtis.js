@@ -1,4 +1,11 @@
 const preguntasCj = document.querySelector(".preguntasCaja");
+const contadorTiempo = preguntasCj.querySelector(".Temporizador .tiempoNumeroSec");
+const respEnviadas = document.querySelector(".enviadasCaja");
+
+let pregAcum = 0;
+let pregNum = 1;
+let contTiempo;
+let valorTemporizador = 1800; //Segundos de 30 min
 
 document.body.addEventListener("click", (event) => {
     if (event.target.classList.contains("btnDatosContinuar")) {
@@ -9,13 +16,11 @@ document.body.addEventListener("click", (event) => {
         if (preguntasCj) preguntasCj.classList.add("activeQuiz");
         ensenarPregunta(0);
         pregContador(1);
+        empezarTemporizador(valorTemporizador);
     }
     
 });
 
-
-let pregAcum = 0;
-let pregNum = 1;
 
 
 document.body.addEventListener("click", (event) => {
@@ -77,6 +82,26 @@ function optionSelected(respuesta){
 
 }
 
+function empezarTemporizador(tiempo){
+    contTiempo = setInterval(timer, 1000);
+    function timer(){
+        let minutos = Math.floor(tiempo / 60);
+        let segundos = tiempo % 60;
+
+        minutos = minutos < 10 ? "0" + minutos : minutos;
+        segundos = segundos < 10 ? "0" + segundos : segundos;
+
+        contadorTiempo.textContent = `${minutos}:${segundos}`;
+
+        tiempo --;
+
+        if (tiempo < 0){
+            clearInterval(contTiempo);
+            contadorTiempo.textContent = "00:00";
+        }
+    }
+}
+
 
 function pregContador(index){
     const progresoAcum = preguntasCj.querySelector(".pregProgreso");
@@ -84,7 +109,7 @@ function pregContador(index){
     progresoAcum.innerHTML = progresoTexto; 
 }
 
-const contadorTiempo = preguntasCj.querySelector(".tiempoNumeroSec");
+
 
 
 
