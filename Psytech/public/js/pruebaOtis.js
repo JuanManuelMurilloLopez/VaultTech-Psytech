@@ -80,9 +80,11 @@ function optionSelected(respuesta){
 
 function pregContador(index){
     const progresoAcum = preguntasCj.querySelector(".pregProgreso");
-    let progresoTexto = '<span><p>'+ index + '</p>de<p>' + preguntas.length + '</p>Preguntas</span>';
+    let progresoTexto = '<span style="display: inline;">' + index + ' de ' + preguntas.length + ' Preguntas</span>';
     progresoAcum.innerHTML = progresoTexto; 
 }
 
 const contadorTiempo = preguntasCj.querySelector(".tiempoNumeroSec");
+
+
 
