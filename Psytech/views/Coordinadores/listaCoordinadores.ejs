@@ -1,4 +1,3 @@
-<%- include('../includes/_buttonCerrarSesion.ejs') %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,6 +10,8 @@
     <link rel="stylesheet" href="/css/coordinadores/listaCoordinadores.css">
     <!-- CSS navside -->
     <link rel="stylesheet" href="/css/includeCss/_navsideCoordinador.css">
+    <!-- CSS cerrar sesión -->
+    <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 </head>
 <body>
 
@@ -20,6 +21,10 @@
         <%- include('../includes/_navsideCoordinador.ejs') %>
 
         <div class="container">
+
+            <!-- Boton de cerrar sesión -->
+            <%- include('../includes/_buttonCerrarSesion.ejs') %>
+
             <div>
                 <h1 class="text-container">COORDINADORES REGISTRADOS</h1>
             </div>
