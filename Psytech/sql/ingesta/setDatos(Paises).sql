@@ -1,4 +1,4 @@
-INSERT INTO Paises (Id_pais, Nombre_pais) VALUES
+INSERT INTO paises (idPais, nombrePais) VALUES
 (UUID(), 'Argentina'),
 (UUID(), 'Brasil'),
 (UUID(), 'Canadá'),

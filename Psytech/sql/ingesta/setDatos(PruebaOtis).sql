@@ -1,3 +1,3 @@
-INSERT INTO PruebaOtis (Id_pruebaOtis, Id_prueba, Tiempo) 
+INSERT INTO pruebaOtis (idPruebaOtis, idPrueba, tiempo) 
 VALUES 
-(UUID(), (SELECT Id_prueba FROM Pruebas WHERE Nombre = 'OTIS'), 30);
+(UUID(), (SELECT idPrueba FROM pruebas WHERE nombre = 'OTIS'), 30);

@@ -1,4 +1,4 @@
-INSERT INTO Generos (Id_genero, Nombre_genero) VALUES
+INSERT INTO generos (idGenero, nombreGenero) VALUES
 (uuid(), 'Femenino'),
 (uuid(), 'Masculino'),
 (uuid(), 'Otro');

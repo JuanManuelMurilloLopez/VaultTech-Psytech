@@ -1,4 +1,4 @@
-INSERT INTO EstadoCivil (Id_estadoCivil, Nombre_estadoCivil) VALUES
+INSERT INTO estadoCivil (idEstadoCivil, nombreEstadoCivil) VALUES
 (uuid(), 'Soltero'),
 (uuid(), 'Casado'),
 (uuid(), 'Divorciado'),

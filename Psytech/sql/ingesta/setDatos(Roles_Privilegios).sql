@@ -1,6 +1,6 @@
 USE psytech;
 -- Datos para la tabla Privilegios
-INSERT INTO Privilegios (Id_privilegio, Nombre_privilegio) VALUES
+INSERT INTO privilegios (idPrivilegio, nombrePrivilegio) VALUES
 (uuid(), 'Autenticación'), -- Todos
 (uuid(), 'Consultar TyC'),
 (uuid(), 'Registrar instituciones'), -- Psicólogos
@@ -34,17 +34,17 @@ INSERT INTO Privilegios (Id_privilegio, Nombre_privilegio) VALUES
 
 
 -- Datos para la tabla Roles
-INSERT INTO Roles (Id_rol, Nombre_rol) VALUES
+INSERT INTO roles (idRol, nombreRol) VALUES
 (uuid(), 'Psicologo'),
 (uuid(), 'Coordinador'),
 (uuid(), 'Aspirante');
 
 -- Datos para la tabla Roles_Privilegios
-INSERT INTO Roles_Privilegios (Id_rol, Id_privilegio)
-SELECT r.Id_rol, p.Id_privilegio
-FROM Roles r
-JOIN Privilegios p ON (
-    (r.Nombre_rol = 'Psicologo' AND p.Nombre_privilegio IN (
+INSERT INTO rolesPrivilegios (idRol, idPrivilegio)
+SELECT r.idRol, p.idPrivilegio
+FROM roles r
+JOIN privilegios p ON (
+    (r.nombreRol = 'Psicologo' AND p.nombrePrivilegio IN (
         'Autenticación', 'Consultar TyC', 'Registrar instituciones', 
         'Consultar información de instituciones', 'Editar instituciones', 
         'Desactivar instituciones', 'Registrar grupos', 'Consultar información de grupos', 
@@ -54,14 +54,14 @@ JOIN Privilegios p ON (
         'Consultar documentación', 'Consultar información de pruebas'
     ))
     OR
-    (r.Nombre_rol = 'Coordinador' AND p.Nombre_privilegio IN (
+    (r.nombreRol = 'Coordinador' AND p.nombrePrivilegio IN (
         'Autenticación', 'Consultar TyC', 'Consultar psicólogos', 
         'Consultar coordinadores', 'Registrar psicólogo', 'Registrar coordinador', 
         'Editar psicólogo', 'Editar coordinador', 'Desactivar psicólogo', 
         'Desactivar coordinador'
     ))
     OR
-    (r.Nombre_rol = 'Aspirante' AND p.Nombre_privilegio IN (
+    (r.nombreRol = 'Aspirante' AND p.nombrePrivilegio IN (
         'Autenticación', 'Consultar TyC', 'Consultar pruebas', 
         'Realizar pruebas', 'Subir archivos', 'Contestar formato de entrevista'
     ))

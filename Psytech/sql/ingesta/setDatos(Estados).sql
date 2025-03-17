@@ -1,4 +1,4 @@
-INSERT INTO Estados (Id_estado, Nombre_estado) VALUES
+INSERT INTO estados (idEstado, nombreEstado) VALUES
 (UUID(), 'Aguascalientes'),
 (UUID(), 'Baja California'),
 (UUID(), 'Baja California Sur'),

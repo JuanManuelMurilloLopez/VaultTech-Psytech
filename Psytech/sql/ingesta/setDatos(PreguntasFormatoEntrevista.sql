@@ -1,4 +1,4 @@
-INSERT INTO PreguntasFormatoEntrevista VALUES 
+INSERT INTO preguntasFormatoEntrevista VALUES 
 (UUID(), 'Nombre'),
 (UUID(), 'Fecha de Nacimiento'),
 (UUID(), 'Edad (Años cumplidos)'),

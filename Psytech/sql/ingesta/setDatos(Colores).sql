@@ -1,4 +1,4 @@
-INSERT INTO Colores VALUES
+INSERT INTO colores VALUES
 (uuid(), 'Azul', 1, 'Paciencia', '#00008B'),
 (uuid(), 'Verde', 2, 'Productividad', '#008B8B'),
 (uuid(), 'Rojo', 3, 'Agresividad', '#FF4500'),
