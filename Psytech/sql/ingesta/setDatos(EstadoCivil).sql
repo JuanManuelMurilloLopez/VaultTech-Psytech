@@ -1,5 +1,6 @@
-INSERT INTO estadoCivil (idEstadoCivil, nombreEstadoCivil) VALUES
-(uuid(), 'Soltero'),
-(uuid(), 'Casado'),
-(uuid(), 'Divorciado'),
-(uuid(), 'Viudo');
+INSERT INTO estadoCivil (nombreEstadoCivil) VALUES
+('Soltero'),
+('Casado'),
+('Divorciado'),
+('Unión libre'),
+('Viudo');

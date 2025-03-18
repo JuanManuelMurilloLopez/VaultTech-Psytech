@@ -1,4 +1,4 @@
-INSERT INTO nivelAcademico VALUES
-(uuid(), 'Maestría'),
-(uuid(), 'Doctorado'),
-(uuid(), 'Licenciatura');
+INSERT INTO nivelAcademico (nombreNivelAcademico) VALUES
+('Maestría'),
+('Doctorado'),
+('Licenciatura');

@@ -1,3 +1,3 @@
-INSERT INTO tipoInstitucion VALUES
-(uuid(), 'Educativa Pública'),
-(uuid(), 'Educativa Privada');
+INSERT INTO tipoInstitucion (nombreTipoInstitucion) VALUES
+('Educativa Pública'),
+('Educativa Privada');

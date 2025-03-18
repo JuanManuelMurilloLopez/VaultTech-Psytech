@@ -1,4 +1,5 @@
 INSERT INTO usuarios (idUsuario, usuario, contrasenia, estatusUsuario, nombreUsuario, apellidoPaterno, apellidoMaterno, correo, lada, numeroTelefono, idRol) VALUES
+-- Inserción de usuarios con rol de Aspirante
 (UUID(), 'juanlópez39', 'McefsmXGgP2ZrqwRG1wvpcPek67NCQOxSc8pdOYWkHta0Q3M0Z5NushCSUxD', TRUE, 'Juan', 'López', 'Gómez', 'juanlópez39@example.com', '+052', '8688240731', (SELECT idRol FROM roles WHERE nombreRol = 'Aspirante')),
 (UUID(), 'maríapérez76', '3Nki7cGfHUB9I9VC31MeshW351aV166R4DyrTtyRGOQcnnJvpuBlRq3LWK1r', TRUE, 'María', 'Pérez', 'García', 'maríapérez76@example.com', '+052', '7339866096', (SELECT idRol FROM roles WHERE nombreRol = 'Aspirante')),
 (UUID(), 'carlosrodríguez58', 'z7j5N3K2eTuucYWw2IqpAmyuKvZaFgufAPykTbnKIIbGtk1Epsfd2VO5bjRl', TRUE, 'Carlos', 'Rodríguez', 'Torres', 'carlosrodríguez58@example.com', '+052', '1232866055', (SELECT idRol FROM roles WHERE nombreRol = 'Aspirante')),
@@ -18,4 +19,15 @@ INSERT INTO usuarios (idUsuario, usuario, contrasenia, estatusUsuario, nombreUsu
 (UUID(), 'manuelramírez62', '5NEO75pRCV9FyRmJlGVm6E0W1zlhUeqFJTRDCJBrHc5kjZrmFQQlKiyc2xZc', TRUE, 'Manuel', 'Ramírez', 'Pérez', 'manuelramírez62@example.com', '+052', '7483075221', (SELECT idRol FROM roles WHERE nombreRol = 'Aspirante')),
 (UUID(), 'valeriagómez68', 'tZtOMggc1XvDAP9Nbe3Hj21yxb7woAYYXwTOj9F6j5l7RkwMMnfy3p7OSHXG', TRUE, 'Valeria', 'Gómez', 'Pérez', 'valeriagómez68@example.com', '+052', '2076085744', (SELECT idRol FROM roles WHERE nombreRol = 'Aspirante')),
 (UUID(), 'raúlgarcía25', 'a7BIBVujGFl5E1GsknKwTwU3a1iAQojaNsNYkN9wrrbCbBbdK0MJ9zQNODTj', TRUE, 'Raúl', 'García', 'Martínez', 'raúlgarcía25@example.com', '+052', '8917364420', (SELECT idRol FROM roles WHERE nombreRol = 'Aspirante')),
-(UUID(), 'isabelfernández54', 'pyZuuT8mYW228Sjua5QrWHY88Y03BILzxPLJT6oOP6dLoySLdIbbcH4GVSaT', TRUE, 'Isabel', 'Fernández', 'Gómez', 'isabelfernández54@example.com', '+052', '3622108394', (SELECT idRol FROM roles WHERE nombreRol = 'Aspirante'));
+(UUID(), 'isabelfernández54', 'pyZuuT8mYW228Sjua5QrWHY88Y03BILzxPLJT6oOP6dLoySLdIbbcH4GVSaT', TRUE, 'Isabel', 'Fernández', 'Gómez', 'isabelfernández54@example.com', '+052', '3622108394', (SELECT idRol FROM roles WHERE nombreRol = 'Aspirante')),
+-- Inserción de usuarios con rol de Psicólogo
+(UUID(), 'carmensanchez43', 'pF8kLm2qYzHx7tV3wR9sBnUj5Gc6Eh4TyA1DfX8zPo0KiL7mN3bV5cX9', TRUE, 'Carmen', 'Sánchez', 'Gutiérrez', 'carmensanchez43@example.com', '+052', '5551234567', (SELECT idRol FROM roles WHERE nombreRol = 'Psicologo')),
+(UUID(), 'robertomendez78', 'aQ2wS3eD4rF5tG6yH7uJ8iK9oL0pM1nB2vC3xZ4lK5jH6gF7', TRUE, 'Roberto', 'Méndez', 'Jiménez', 'robertomendez78@example.com', '+052', '5552345678', (SELECT idRol FROM roles WHERE nombreRol = 'Psicologo')),
+(UUID(), 'alexisruiz67', 'zX1cV2bN3mA4sD5fG6hJ7kL8pO9iU0yT1rE2wQ3', TRUE, 'Alexis', 'Ruiz', 'Vázquez', 'alexisruiz67@example.com', '+052', '5553456789', (SELECT idRol FROM roles WHERE nombreRol = 'Psicologo')),
+(UUID(), 'patriciaortiz22', 'qW2eR3tY4uI5oP6aS7dF8gH9jK0lZ1xC2vB3nM4', TRUE, 'Patricia', 'Ortiz', 'Morales', 'patriciaortiz22@example.com', '+052', '5554567890', (SELECT idRol FROM roles WHERE nombreRol = 'Psicologo')),
+(UUID(), 'eduardocastro91', 'mN2bV3cX4zL5kJ6hG7fD8sA9pO0iU1yT2rE3wQ4', TRUE, 'Eduardo', 'Castro', 'Ríos', 'eduardocastro91@example.com', '+052', '5555678901', (SELECT idRol FROM roles WHERE nombreRol = 'Psicologo')),
+-- Inserción de usuarios con rol de Coordinador
+(UUID(), 'marianafuentes36', 'lK9jH8gF7dS6aP5oI4uY3tR2eW1qZ0xC9vB8nM7', TRUE, 'Mariana', 'Fuentes', 'Téllez', 'marianafuentes36@example.com', '+052', '5556789012', (SELECT idRol FROM roles WHERE nombreRol = 'Coordinador')),
+(UUID(), 'danielbustamante47', 'bN3mV4cX5zL6kJ7hG8fD9sA0pO1iU2yT3rE4wQ5', TRUE, 'Daniel', 'Bustamante', 'López', 'danielbustamante47@example.com', '+052', '5557890123', (SELECT idRol FROM roles WHERE nombreRol = 'Coordinador')),
+(UUID(), 'gloriaescobar63', 'tY4uI5oP6aS7dF8gH9jK0lZ1xC2vB3nM4bV5cX6', TRUE, 'Gloria', 'Escobar', 'Miranda', 'gloriaescobar63@example.com', '+052', '5558901234', (SELECT idRol FROM roles WHERE nombreRol = 'Coordinador')),
+(UUID(), 'hectorcardenas19', 'eD3rF4tG5yH6uJ7iK8oL9pM0nB1vC2xZ3lK4jH5', TRUE, 'Héctor', 'Cárdenas', 'Reyes', 'hectorcardenas19@example.com', '+052', '5559012345', (SELECT idRol FROM roles WHERE nombreRol = 'Coordinador'));

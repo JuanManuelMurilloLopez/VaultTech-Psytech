@@ -153,23 +153,21 @@ CREATE TABLE gruposAspirantes(
 CREATE TABLE pruebas(
     idPrueba VARCHAR(36) PRIMARY KEY not NULL,
     nombre VARCHAR(100),
-    descripcion VARCHAR(255)
+    descripcion VARCHAR(255),
+    instrucciones VARCHAR(255),
+    tiempo INT
 );
 
 -- Tablas con UUID
 CREATE TABLE datosPersonales(
     idDatosPersonales VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
-    nombreUsuario VARCHAR(50),
+    nombre VARCHAR(50),
     apellidoPaterno VARCHAR(50),
     apellidoMaterno VARCHAR(50),
-    edadDatosPersonales INT,
-    idGenero INT,
-    idNivelAcademico INT,
     puestoSolicitado VARCHAR(50),
+    fecha DATE,
     idPrueba VARCHAR(36),
     idAspirante VARCHAR(36),
-    FOREIGN KEY (idGenero) REFERENCES generos(idGenero),
-    FOREIGN KEY (idNivelAcademico) REFERENCES nivelAcademico(idNivelAcademico),
     FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba),
     FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante)
 );
@@ -184,19 +182,29 @@ CREATE TABLE gruposPruebas(
     FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
 );
 
-CREATE TABLE pruebaOtis(
-    idPruebaOtis VARCHAR(36) PRIMARY KEY not NULL,
+CREATE TABLE estatusPrueba(
+    idEstatus INT AUTO_INCREMENT PRIMARY KEY, -- INT AUTO_INCREMENT
+    nombreEstatus VARCHAR(20)
+);
+
+CREATE TABLE aspirantesGruposPruebas(
+    idGrupo VARCHAR(36),
     idPrueba VARCHAR(36),
-    tiempo INT, -- Minutos
-    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
+    idAspirante VARCHAR(36),
+    idEstatus INT,
+    PRIMARY KEY (idGrupo, idPrueba, idAspirante, idEstatus),
+    FOREIGN KEY (idGrupo) REFERENCES grupos(idGrupo),
+    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba),
+    FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante),
+    FOREIGN KEY (idEstatus) REFERENCES estatusPrueba(idEstatus)
 );
 
 CREATE TABLE preguntasOtis (
     idPreguntaOtis VARCHAR(36) PRIMARY KEY not NULL, 
-    idPruebaOtis VARCHAR(36),
+    idPrueba VARCHAR(36),
     numeroPregunta INT,
     pregunta VARCHAR(255),
-    FOREIGN KEY (idPruebaOtis) REFERENCES pruebaOtis(idPruebaOtis)
+    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
 );
 
 CREATE TABLE opcionesPreguntasOtis (
@@ -211,15 +219,15 @@ CREATE TABLE opcionesPreguntasOtis (
 CREATE TABLE respuestaOtisAspirante (
     idRespuestaOtis VARCHAR(36) PRIMARY KEY not NULL,
     idAspirante VARCHAR(36),
-    idPruebaOtis VARCHAR(36),
     idPreguntaOtis VARCHAR(36),
     idOpcionPreguntaOtis VARCHAR(36),  -- Solo si es opción múltiple
+    idPrueba VARCHAR(36),
     respuestaAbierta VARCHAR(5),  -- Solo si es pregunta abierta
     tiempoRespuesta INT,  -- En segundos
     FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante),
-    FOREIGN KEY (idPruebaOtis) REFERENCES pruebaOtis(idPruebaOtis),
-    FOREIGN KEY (idPreguntaOtis) REFERENCES preguntasOtis(id_PreguntaOtis),
-    FOREIGN KEY (idOpcionPreguntaOtis) REFERENCES opcionesPreguntasOtis(idOpcionPreguntaOtis)
+    FOREIGN KEY (idPreguntaOtis) REFERENCES preguntasOtis(idPreguntaOtis),
+    FOREIGN KEY (idOpcionPreguntaOtis) REFERENCES opcionesPreguntasOtis(idOpcionPreguntaOtis),
+    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
 );
 
 CREATE TABLE colores(
