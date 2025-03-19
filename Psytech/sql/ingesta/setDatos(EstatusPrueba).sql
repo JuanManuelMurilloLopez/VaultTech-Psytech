@@ -1,5 +1,5 @@
 INSERT INTO estatusPrueba (nombreEstatus) VALUES
-('Completada'),
-('Pendiente'),
-('En progreso'),
-('Vencida');
+('Completada'), -- 1
+('Pendiente'), -- 2
+('En progreso'), -- 3
+('Vencida'); -- 4

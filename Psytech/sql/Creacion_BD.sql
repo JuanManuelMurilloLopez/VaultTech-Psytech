@@ -259,7 +259,7 @@ CREATE TABLE opcionesKostick(
     FOREIGN KEY (idPreguntaKostick) REFERENCES preguntasKostick(idPreguntaKostick)
 );
 
-CREATE TABLE respuestasKostickAspirante ( -- agregar grupo :(
+CREATE TABLE respuestasKostickAspirante (
     idRespuestaKostick VARCHAR(36) PRIMARY KEY not NULL,
     idAspirante VARCHAR(36),
     idGrupo VARCHAR(36),
@@ -290,7 +290,7 @@ CREATE TABLE opciones16PF(
     FOREIGN KEY (idPregunta16PF) REFERENCES preguntas16PF(idPregunta16PF)
 );
 
-CREATE TABLE respuestas16PFAspirante ( -- agregar grupo :(
+CREATE TABLE respuestas16PFAspirante (
     idRespuesta16PF VARCHAR(36) PRIMARY KEY not NULL,
     idAspirante VARCHAR(36),
     idGrupo VARCHAR(36),
@@ -315,7 +315,7 @@ CREATE TABLE preguntasHartman(
     FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
 );
 
-CREATE TABLE respuestasHartmanAspirante ( -- agregar grupo :(
+CREATE TABLE respuestasHartmanAspirante (
     idRespuestaHartman VARCHAR(36) PRIMARY KEY not NULL,
     idAspirante VARCHAR(36),
     idGrupo VARCHAR(36),
@@ -354,7 +354,7 @@ CREATE TABLE opcionesTerman(
     FOREIGN KEY (idPreguntaTerman) REFERENCES preguntasTerman(idPreguntaTerman)
 );
 
-CREATE TABLE respuestasTermanAspirante ( -- agregar grupo :(
+CREATE TABLE respuestasTermanAspirante (
     idRespuestaTerman VARCHAR(36) PRIMARY KEY not NULL,
     idAspirante VARCHAR(36),
     idGrupo VARCHAR(36),

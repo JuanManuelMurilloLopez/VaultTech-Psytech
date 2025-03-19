@@ -1,4 +1,4 @@
 INSERT INTO nivelAcademico (nombreNivelAcademico) VALUES
-('Maestría'),
-('Doctorado'),
-('Licenciatura');
+('Maestría'), -- 1
+('Doctorado'), -- 2
+('Licenciatura'); -- 3

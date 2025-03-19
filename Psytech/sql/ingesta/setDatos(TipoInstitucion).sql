@@ -1,3 +1,3 @@
 INSERT INTO tipoInstitucion (nombreTipoInstitucion) VALUES
-('Educativa Pública'),
-('Educativa Privada');
+('Educativa Pública'), -- 1
+('Educativa Privada'); -- 2
