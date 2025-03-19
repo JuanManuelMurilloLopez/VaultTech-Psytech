@@ -1,27 +1,23 @@
-/*
- * ¿Todos los IDs los ponemos como UUID?
- * ¿Tenemos que añadir una tabla con las Ladas para los teléfonos?
-*/
 
 CREATE DATABASE psytech;
 
 USE psytech;
 
--- Tablas con UUID
+
 CREATE TABLE privilegios(
-    idPrivilegio VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
+    idPrivilegio INT AUTO_INCREMENT PRIMARY KEY, -- INT AutoIncremental
     nombrePrivilegio VARCHAR(50)
 );
 
 
 CREATE TABLE roles(
-    idRol VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
+    idRol INT AUTO_INCREMENT PRIMARY KEY, -- INT AutoIncremental
     nombreRol VARCHAR(50)
 );
 
 CREATE TABLE rolesPrivilegios(
-    idRol VARCHAR(36) NOT NULL, -- UUID
-    idPrivilegio VARCHAR(36) NOT NULL, -- UUID
+    idRol INT, -- INT AutoIncremental
+    idPrivilegio INT, -- INT AutoIncremental
     PRIMARY KEY (idRol, idPrivilegio),
     FOREIGN KEY (idRol) REFERENCES roles(idRol),
     FOREIGN KEY (idPrivilegio) REFERENCES privilegios(idPrivilegio)
@@ -38,8 +34,9 @@ CREATE TABLE usuarios(
     correo VARCHAR(50),
     lada VARCHAR(4),
     numeroTelefono VARCHAR(10),
-    idRol VARCHAR(36), -- UUID
-    FOREIGN KEY (idRol) REFERENCES roles(idRol)
+    idRol INT, -- UUID
+    FOREIGN KEY (idRol) REFERENCES roles(idRol),
+    INDEX usuario (usuario)
 );
 
 -- Tablas con INT AUTO_INCREMENT
@@ -68,15 +65,15 @@ CREATE TABLE aspirantes(
 );
 
 CREATE TABLE preguntasFormatoEntrevista(
-    idPreguntaFormatoEntrevista VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
+    idPreguntaFormatoEntrevista INT AUTO_INCREMENT PRIMARY KEY, -- INT AUTO_INCREMENT
     nombrePreguntaFormatoEntrevista VARCHAR(255)
 );
 
 CREATE TABLE aspirantesPreguntasFormatoEntrevista(
     idAspirante VARCHAR(36) NOT NULL, -- UUID
-    idPreguntaFormatoEntrevista VARCHAR(36) NOT NULL, -- UUID
+    idPreguntaFormatoEntrevista INT, -- INT AUTO_INCREMENT
     PRIMARY KEY (idAspirante, idPreguntaFormatoEntrevista),
-    respuestaAspirante VARCHAR(36),
+    respuestaAspirante VARCHAR(255),
     FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante),
     FOREIGN KEY (idPreguntaFormatoEntrevista) REFERENCES preguntasFormatoEntrevista(idPreguntaFormatoEntrevista)
 );
@@ -151,7 +148,7 @@ CREATE TABLE gruposAspirantes(
 );
 
 CREATE TABLE pruebas(
-    idPrueba VARCHAR(36) PRIMARY KEY not NULL,
+    idPrueba INT AUTO_INCREMENT PRIMARY KEY not NULL,
     nombre VARCHAR(100),
     descripcion VARCHAR(255),
     instrucciones VARCHAR(255),
@@ -166,21 +163,12 @@ CREATE TABLE datosPersonales(
     apellidoMaterno VARCHAR(50),
     puestoSolicitado VARCHAR(50),
     fecha DATE,
-    idPrueba VARCHAR(36),
+    idPrueba INT,
     idAspirante VARCHAR(36),
     FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba),
     FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante)
 );
 
-CREATE TABLE gruposPruebas(
-    idGrupo VARCHAR(36),
-    idPrueba VARCHAR(36),
-    fechaAsignacion DATE,
-    fechaLimite DATE,
-    PRIMARY KEY (idGrupo, idPrueba),
-    FOREIGN KEY (idGrupo) REFERENCES grupos(idGrupo),
-    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
-);
 
 CREATE TABLE estatusPrueba(
     idEstatus INT AUTO_INCREMENT PRIMARY KEY, -- INT AUTO_INCREMENT
@@ -189,10 +177,12 @@ CREATE TABLE estatusPrueba(
 
 CREATE TABLE aspirantesGruposPruebas(
     idGrupo VARCHAR(36),
-    idPrueba VARCHAR(36),
+    idPrueba INT,
     idAspirante VARCHAR(36),
     idEstatus INT,
-    PRIMARY KEY (idGrupo, idPrueba, idAspirante, idEstatus),
+    fechaAsignacion DATE,
+    fechaLimite DATE,
+    PRIMARY KEY (idGrupo, idPrueba, idAspirante),
     FOREIGN KEY (idGrupo) REFERENCES grupos(idGrupo),
     FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba),
     FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante),
@@ -201,17 +191,17 @@ CREATE TABLE aspirantesGruposPruebas(
 
 CREATE TABLE preguntasOtis (
     idPreguntaOtis VARCHAR(36) PRIMARY KEY not NULL, 
-    idPrueba VARCHAR(36),
+    idPrueba INT,
     numeroPregunta INT,
-    pregunta VARCHAR(255),
+    preguntaOtis VARCHAR(255),
     FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
 );
 
-CREATE TABLE opcionesPreguntasOtis (
-    idOpcionPreguntaOtis VARCHAR(36) PRIMARY KEY,
+CREATE TABLE opcionesOtis (
+    idOpcionOtis VARCHAR(36) PRIMARY KEY,
     idPreguntaOtis VARCHAR(36),
-    numeroOpcion INT,
-    descripcionOpcion TEXT,
+    opcionOtis INT, -- Cambiar a opcionOtis
+    descripcionOpcion TEXT, -- descripcionOpcion
     esCorrecta BOOLEAN,
     FOREIGN KEY (idPreguntaOtis) REFERENCES preguntasOtis(idPreguntaOtis)
 );
@@ -219,15 +209,17 @@ CREATE TABLE opcionesPreguntasOtis (
 CREATE TABLE respuestaOtisAspirante (
     idRespuestaOtis VARCHAR(36) PRIMARY KEY not NULL,
     idAspirante VARCHAR(36),
+    idGrupo VARCHAR(36),
     idPreguntaOtis VARCHAR(36),
-    idOpcionPreguntaOtis VARCHAR(36),  -- Solo si es opción múltiple
-    idPrueba VARCHAR(36),
+    idOpcionOtis VARCHAR(36),  -- Solo si es opción múltiple
+    idPrueba INT,
     respuestaAbierta VARCHAR(5),  -- Solo si es pregunta abierta
     tiempoRespuesta INT,  -- En segundos
     FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante),
     FOREIGN KEY (idPreguntaOtis) REFERENCES preguntasOtis(idPreguntaOtis),
-    FOREIGN KEY (idOpcionPreguntaOtis) REFERENCES opcionesPreguntasOtis(idOpcionPreguntaOtis),
-    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
+    FOREIGN KEY (idOpcionOtis) REFERENCES opcionesOtis(idOpcionOtis),
+    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba),
+    FOREIGN KEY (idGrupo) REFERENCES grupos(idGrupo)
 );
 
 CREATE TABLE colores(
@@ -240,12 +232,139 @@ CREATE TABLE colores(
 
 CREATE TABLE seleccionesColores(
     idSeleccionColores VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
-    idPrueba VARCHAR(36), -- UUID
+    idPrueba INT, -- UUID
     idAspirante VARCHAR(36), -- UUID
+    idGrupo VARCHAR(36),
     idColor INT, -- INT AUTO_INCREMENT
     posicion INT CHECK (posicion <= 7 AND posicion >= 0),
     fase INT CHECK (fase = 1 OR fase = 2),
     FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba),
     FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante),
-    FOREIGN KEY (idColor) REFERENCES colores(idColor)
+    FOREIGN KEY (idColor) REFERENCES colores(idColor),
+    FOREIGN KEY (idGrupo) REFERENCES grupos(idGrupo)
 );
+
+CREATE TABLE preguntasKostick(
+    idPreguntaKostick VARCHAR(36) PRIMARY KEY not NULL, 
+    idPrueba INT,
+    numeroPregunta INT,
+    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
+);
+
+CREATE TABLE opcionesKostick(
+    idOpcionKostick VARCHAR(36) PRIMARY KEY,
+    idPreguntaKostick VARCHAR(36),
+    opcionKostick VARCHAR(1),
+    descripcionOpcion TEXT,
+    FOREIGN KEY (idPreguntaKostick) REFERENCES preguntasKostick(idPreguntaKostick)
+);
+
+CREATE TABLE respuestasKostickAspirante ( -- agregar grupo :(
+    idRespuestaKostick VARCHAR(36) PRIMARY KEY not NULL,
+    idAspirante VARCHAR(36),
+    idGrupo VARCHAR(36),
+    idPreguntaKostick VARCHAR(36),
+    idOpcionKostick VARCHAR(36),  -- Solo si es opción múltiple
+    idPrueba INT,
+    tiempoRespuesta INT,  -- En segundos
+    FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante),
+    FOREIGN KEY (idGrupo) REFERENCES grupos(idGrupo),
+    FOREIGN KEY (idPreguntaKostick) REFERENCES preguntasKostick(idPreguntaKostick),
+    FOREIGN KEY (idOpcionKostick) REFERENCES opcionesKostick(idOpcionKostick),
+    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
+);
+
+CREATE TABLE preguntas16PF(
+    idPregunta16PF VARCHAR(36) PRIMARY KEY not NULL, 
+    idPrueba INT,
+    numeroPregunta INT,
+    pregunta16PF VARCHAR(255),
+    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
+);
+
+CREATE TABLE opciones16PF(
+    idOpcion16PF VARCHAR(36) PRIMARY KEY,
+    idPregunta16PF VARCHAR(36),
+    opcion16PF VARCHAR(1),
+    descripcionOpcion TEXT,
+    FOREIGN KEY (idPregunta16PF) REFERENCES preguntas16PF(idPregunta16PF)
+);
+
+CREATE TABLE respuestas16PFAspirante ( -- agregar grupo :(
+    idRespuesta16PF VARCHAR(36) PRIMARY KEY not NULL,
+    idAspirante VARCHAR(36),
+    idGrupo VARCHAR(36),
+    idPregunta16PF VARCHAR(36),
+    idOpcion16PF VARCHAR(36),  -- Solo si es opción múltiple
+    idPrueba INT,
+    tiempoRespuesta INT,  -- En segundos
+    FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante),
+    FOREIGN KEY (idGrupo) REFERENCES grupos(idGrupo),
+    FOREIGN KEY (idPregunta16PF) REFERENCES preguntas16PF(idPregunta16PF),
+    FOREIGN KEY (idOpcion16PF) REFERENCES opciones16PF(idOpcion16PF),
+    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
+);
+
+CREATE TABLE preguntasHartman(
+    idPreguntaHartman VARCHAR(36) PRIMARY KEY not NULL, 
+    idPrueba INT,
+    fasePregunta ENUM('1','2'),
+    numeroPregunta INT,
+    preguntaHartman VARCHAR(255),
+    valorHartman INT,
+    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
+);
+
+CREATE TABLE respuestasHartmanAspirante ( -- agregar grupo :(
+    idRespuestaHartman VARCHAR(36) PRIMARY KEY not NULL,
+    idAspirante VARCHAR(36),
+    idGrupo VARCHAR(36),
+    idPreguntaHartman VARCHAR(36),
+    idPrueba INT,
+    respuestaAbierta INT,  -- Solo si es pregunta abierta
+    tiempoRespuesta INT,  -- En segundos
+    FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante),
+    FOREIGN KEY (idGrupo) REFERENCES grupos(idGrupo),
+    FOREIGN KEY (idPreguntaHartman) REFERENCES preguntasHartman(idPreguntaHartman),
+    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
+);
+
+CREATE TABLE seriesTerman(
+    idSerieTerman INT AUTO_INCREMENT PRIMARY KEY, -- INT AUTO_INCREMENT
+    idPrueba INT,
+    duracion INT,
+    nombreSeccion VARCHAR(50),
+    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
+);
+
+CREATE TABLE preguntasTerman(
+    idPreguntaTerman VARCHAR(36) PRIMARY KEY not NULL, 
+    idSerieTerman INT,
+    numeroPregunta INT,
+    preguntaTerman VARCHAR(255),
+    FOREIGN KEY (idSerieTerman) REFERENCES seriesTerman(idSerieTerman)
+);
+
+CREATE TABLE opcionesTerman(
+    idOpcionTerman VARCHAR(36) PRIMARY KEY,
+    idPreguntaTerman VARCHAR(36),
+    opcionTerman INT,
+    descripcionOpcion TEXT,
+    esCorrecta BOOLEAN,
+    FOREIGN KEY (idPreguntaTerman) REFERENCES preguntasTerman(idPreguntaTerman)
+);
+
+CREATE TABLE respuestasTermanAspirante ( -- agregar grupo :(
+    idRespuestaTerman VARCHAR(36) PRIMARY KEY not NULL,
+    idAspirante VARCHAR(36),
+    idGrupo VARCHAR(36),
+    idPreguntaTerman VARCHAR(36),
+    idPrueba INT,
+    respuestaAbierta VARCHAR(20),  -- Solo si es pregunta abierta
+    tiempoRespuesta INT,  -- En segundos
+    FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante),
+    FOREIGN KEY (idGrupo) REFERENCES grupos(idGrupo),
+    FOREIGN KEY (idPreguntaTerman) REFERENCES preguntasTerman(idPreguntaTerman),
+    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
+);
+
