@@ -4,6 +4,15 @@ const router = express.Router();
 const path = require('path');
 const controller = require('../controllers/coordinador.controller');
 
+// Middleware de autenticación y autorización
+function verificarSesionCoordinador(request, response, next) {
+    if (request.session.user && request.session.user.rol === 'coordinador') {
+        return next();
+    } else {
+        response.redirect('/login');
+    }
+}
+
 //Rutas de registros de Psicologos y Coordinadores
 router.get('/psicologos-registrados', controller.get_psicologos_registrados);
 

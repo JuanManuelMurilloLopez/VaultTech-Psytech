@@ -7,4 +7,6 @@ const controller = require('../controllers/inicioSesion.controller');
 
 router.get('/login', controller.get_login);
 
+router.post('/login', controller.post_login);
+
 module.exports = router;
