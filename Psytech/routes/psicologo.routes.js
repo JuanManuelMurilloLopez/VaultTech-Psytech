@@ -5,38 +5,38 @@ const path = require('path');
 const controller = require('../controllers/psicologo.controller');
 
 //Rutas del portal de los Psicologos
-router.get('/principal', controller.get_principal_psicologos);
+router.get('/principal', controller.getPrincipalPsicologos);
 
-router.get('/catalogo-instituciones', controller.get_catalogo_instituciones);
+router.get('/catalogo-instituciones', controller.getCatalogoInstituciones);
 
-router.get('/registrar-institucion', controller.get_registrar_institucion);
+router.get('/registrar-institucion', controller.getRegistrarInstitucion);
 
-router.get('/editar-institucion', controller.get_editar_institucion);
+router.get('/editar-institucion', controller.getEditarInstitucion);
 
-router.get('/grupos', controller.get_grupos);
+router.get('/grupos', controller.getGrupos);
 
-router.get('/registrar-grupo', controller.get_registrar_grupo);
+router.get('/registrar-grupo', controller.getRegistrarGrupo);
 
-router.get('/editar-grupo', controller.get_editar_grupo);
+router.get('/editar-grupo', controller.getEditarGrupo);
 
-router.get('/aspirantes', controller.get_aspirantes);
+router.get('/aspirantes', controller.getAspirantes);
 
-router.get('/importar-aspirantes', controller.get_importar_aspirantes);
+router.get('/importar-aspirantes', controller.getImportarAspirantes);
 
-router.get('/registrar-aspirantes', controller.get_registrar_aspirantes);
+router.get('/registrar-aspirantes', controller.getRegistrarAspirantes);
 
-router.get('/editar-aspirantes', controller.get_editar_aspirantes);
+router.get('/editar-aspirantes', controller.getEditarAspirantes);
 
-router.get('/catalogo-pruebas', controller.get_catalogo_pruebas);
+router.get('/catalogo-pruebas', controller.getCatalogoPruebas);
 
-router.get('/prueba-otis', controller.get_prueba_otis);
+router.get('/prueba-otis', controller.getPruebaOtis);
 
-router.get('/prueba-colores', controller.get_prueba_colores);
+router.get('/prueba-colores', controller.getPruebaColores);
 
-router.get('/analisis-otis', controller.get_analisis_otis);
+router.get('/analisis-otis', controller.getAnalisisOtis);
 
-router.get('/analisis-colores', controller.get_analisis_colores);
+router.get('/analisis-colores', controller.getAnalisisColores);
 
-router.get('/respuestas-otis', controller.get_respuestas_otis);
+router.get('/respuestas-otis', controller.getRespuestasOtis);
 
 module.exports = router;

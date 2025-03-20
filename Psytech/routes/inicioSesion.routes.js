@@ -5,6 +5,6 @@ const controller = require('../controllers/inicioSesion.controller');
 
 //Rutas para el inció de sesión
 
-router.get('/login', controller.get_login);
+router.get('/login', controller.getLogin);
 
 module.exports = router;
