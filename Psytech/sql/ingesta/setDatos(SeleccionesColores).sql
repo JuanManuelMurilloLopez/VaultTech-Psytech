@@ -1,7 +1,7 @@
 INSERT INTO seleccionesColores VALUES
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'juanlópez39@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 1),
@@ -10,7 +10,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'juanlópez39@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 2),
@@ -19,7 +19,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'juanlópez39@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 3),
@@ -28,7 +28,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'juanlópez39@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 4),
@@ -37,7 +37,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'juanlópez39@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 5),
@@ -46,7 +46,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'juanlópez39@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 6),
@@ -55,7 +55,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'juanlópez39@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 7),
@@ -64,7 +64,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'juanlópez39@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 8),
@@ -73,7 +73,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'juanlópez39@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 1),
@@ -82,7 +82,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'juanlópez39@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 2),
@@ -91,7 +91,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'juanlópez39@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 3),
@@ -100,7 +100,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'juanlópez39@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 4),
@@ -109,7 +109,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'juanlópez39@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 5),
@@ -118,7 +118,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'juanlópez39@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 6),
@@ -127,7 +127,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'juanlópez39@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 7),
@@ -136,7 +136,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'juanlópez39@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 8),
@@ -145,7 +145,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'maríapérez76@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 1),
@@ -154,7 +154,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'maríapérez76@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 2),
@@ -163,7 +163,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'maríapérez76@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 3),
@@ -172,7 +172,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'maríapérez76@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 4),
@@ -181,7 +181,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'maríapérez76@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 5),
@@ -190,7 +190,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'maríapérez76@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 6),
@@ -199,7 +199,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'maríapérez76@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 7),
@@ -208,7 +208,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'maríapérez76@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 8),
@@ -217,7 +217,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'maríapérez76@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 1),
@@ -226,7 +226,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'maríapérez76@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 2),
@@ -235,7 +235,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'maríapérez76@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 3),
@@ -244,7 +244,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'maríapérez76@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 4),
@@ -253,7 +253,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'maríapérez76@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 5),
@@ -262,7 +262,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'maríapérez76@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 6),
@@ -271,7 +271,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'maríapérez76@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 7),
@@ -280,7 +280,7 @@ INSERT INTO seleccionesColores VALUES
 ),
 (
     uuid(), 
-    5, -- ID de la prueba COLORES DE LUSCHER
+    6, -- ID de la prueba COLORES DE LUSCHER (updated from 5 to 6)
     (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'maríapérez76@example.com')),
     (SELECT idGrupo FROM grupos WHERE nombreGrupo = 'G1_ISC'), -- ID del grupo G1_ISC
     (SELECT idColor FROM colores WHERE numeroColor = 8),

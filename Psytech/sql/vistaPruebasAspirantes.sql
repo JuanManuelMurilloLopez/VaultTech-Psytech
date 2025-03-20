@@ -1,9 +1,21 @@
 USE psytech;
 
 CREATE VIEW vistaPruebasAspirantes AS
-SELECT P.idPrueba, P.nombre, P.descripcion, GP.fechaLimite, PO.tiempo, GA.idAspirante
+
+SELECT P.nombre, E.nombreEstatus, P.descripcion, AGP.fechaLimite, P.tiempo, A.idAspirante 
 FROM pruebas P
-LEFT JOIN pruebaOtis PO ON P.idPrueba = PO.idPrueba 
-JOIN gruposPruebas GP ON P.idPrueba = GP.idPrueba
-JOIN gruposAspirantes GA ON GP.idGrupo = GA.idGrupo
-JOIN aspirantes A ON GA.idAspirante = A.idAspirante
+JOIN aspirantesGruposPruebas AGP ON P.idPrueba = AGP.idPrueba
+JOIN estatusPrueba E ON AGP.idEstatus = E.idEstatus
+JOIN aspirantes A ON AGP.idAspirante = A.idAspirante
+
+
+SELECT nombre, nombreEstatus, descripcion, fechaLimite,tiempo,idAspirante FROM vistapruebasaspirantes
+WHERE idAspirante = (
+    SELECT idAspirante 
+    FROM aspirantes 
+    WHERE idUsuario = (
+        SELECT idUsuario 
+        FROM usuarios 
+        WHERE Correo = 'juanlópez39@example.com'
+    )
+);
