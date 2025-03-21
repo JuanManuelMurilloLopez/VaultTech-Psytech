@@ -51,13 +51,23 @@ exports.getImportarAspirantes = (request, response, next) => {
 exports.getRegistrarAspirantes = (request, response, next) => {
     // console.log('Registrar Aspirante');
 
-    const paises = Pais.fetchAll();
-    const estados = Estado.fetchAll();
+    Pais.fetchAll()
+    .then(([rows, fieldData]) => {
+        const paises = rows;
+        Estado.fetchAll()
+        .then(([rows, fieldData]) => {
+            const estados = rows;
+            
+            response.render('Psicologos/registrarAspirante', {
+                paises: paises || [],
+                estados: estados || [],
+            });
+        })
+        .catch((error) => {console.log(error)});
+    })
+    .catch((error) => {console.log(error)});
 
-    response.render('Psicologos/registrarAspirante', {
-        paises: paises || [],
-        estados: estados || [],
-    });
+    
 };
 
 exports.getEditarAspirantes = (request, response, next) => {
