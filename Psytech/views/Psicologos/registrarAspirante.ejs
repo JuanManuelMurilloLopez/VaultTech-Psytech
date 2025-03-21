@@ -20,54 +20,77 @@
             <h1 class="text-center">REGISTRAR NUEVO ASPIRANTE</h1>
         </div>
         <div>
-            <!--Input nombre-->
-            <div class="form-floating mb-3">
-                <input type="" class="form-control" id="" placeholder="">
-                <label for="">Nombre</label>
-            </div>
+            <form action="" method="POST">
 
-            <!--Input Apellido Paterno-->
-            <div class="form-floating mb-3">
-                <input type="" class="form-control" id="" placeholder="">
-                <label for="">Apellido Paterno</label>
-            </div>
+                <!--Input nombre-->
+                <div class="">
+                    <label for="nombreUsuario">Nombre</label> <br>
+                    <input type="" class="" id="nombreUsuario" placeholder="Juan" name="nombreUsuario">
+                </div>
 
-            <!--Input Apellido Materno-->
-            <div class="form-floating mb-3">
-                <input type="" class="form-control" id="" placeholder="">
-                <label for="">Apellido Materno</label>
-            </div>
+                <!--Input Apellido Paterno-->
+                <div class="">
+                    <label for="apellidoPaterno">Apellido Paterno</label> <br>
+                    <input type="" class="" id="apellidoPaterno" placeholder="Pérez" name="apellidoPaterno">
+                </div>
 
-            <!--Input Correo-->
-            <div class="form-floating mb-3">
-                <input type="" class="form-control" id="" placeholder="">
-                <label for="">Correo electrónico</label>
-            </div>
-            <!--Input Número-->
-            <div class="form-floating mb-3">
-                <input type="" class="form-control" id="" placeholder="">
-                <label for="">Número de teléfono</label>
-            </div>
+                <!--Input Apellido Materno-->
+                <div class="">
+                    <label for="apellidoMaterno">Apellido Materno</label> <br>
+                    <input type="" class="" id="apellidoMaterno" placeholder="Pérez" name="apellidoMaterno">
+                </div>
 
-            <!--Input Pais-->
-            <select class="form-select" aria-label="Default select example">
-                <option selected>País de origen</option>
-                <option value="1">México</option>
-                <option value="2">Argentina</option>
-                <option value="3">España</option>
-            </select>
+                <!--Input institución de procedencia-->
+                <div class="">
+                    <label for="institucionProcedencia">Institución de Procedencia</label> <br>
+                    <input type="" class="" id="institucionProcedencia" placeholder="Tec de Monterrey" name="institucionProcedencia">
+                </div>
 
-            <br>
+                <!--Input Correo-->
+                <div class="">
+                    <label for="correo">Correo</label> <br>
+                    <input type="" class="" id="correo" placeholder="ejemplo@gmail.com" name="correo">
+                </div>
 
-            <!--Input Estado-->
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Estado de origen</option>
-                <option value="1">Querétaro</option>
-                <option value="2">CDMX</option>
-                <option value="3">Monterrey</option>
-                <option value="3">Puebla</option>
-            </select>
+                <!--Input Lada-->
+                <div class="">
+                    <label for="lada">Lada telefónica</label> <br>
+                    <input type="number" class="" id="lada" placeholder="52" name="lada">
+                </div>
+
+                <!--Input Número de teléfono-->
+                <div class="">
+                    <label for="numeroTelefono">Número de teléfono</label> <br>
+                    <input type="number" class="" id="numeroTelefono" placeholder="1234567890" name="numeroTelefono">
+                </div>
+
+                <!--Input País de origen-->
+                <div class="">
+                    <label for="idPais">País de origen</label> <br>
+
+                    <select name="idPais" id="idPais">
+                        <% for(pais of paises){ %>
+                            <option value="<%= pais.idPais %>"> <%= pais.nombrePais %> </option>
+                        <% } %>
+                    </select>
+
+                </div>
+
+                <!--Input Estado-->
+                <div class="">
+                    <label for="idEstado">Estado de residencia</label> <br>
+
+                    <select name="idEstado" id="iEstado">
+                        <% for(estado of estados){ %>
+                            <option value="<%= estado.idEstado %>"> <%= estado.nombreEstado %> </option>
+                        <% } %>
+                    </select>
+
+                </div>
+
+            </form>
         </div>
+        
         <br>
         <div>
             <!-- Boton de navegación "Regresar" -->
