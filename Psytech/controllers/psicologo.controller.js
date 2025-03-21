@@ -1,3 +1,7 @@
+const Pais = require('../models/Pais');
+const Estado = require('../models/Estado');
+const Aspirante = require('../models/Aspirante');
+
 //Rutas del portal de los Psicologos
 exports.getPrincipalPsicologos = (request, response, next) => {
     console.log('Pagina Principal Psicologos');
@@ -46,7 +50,14 @@ exports.getImportarAspirantes = (request, response, next) => {
 
 exports.getRegistrarAspirantes = (request, response, next) => {
     // console.log('Registrar Aspirante');
-    response.render('Psicologos/registrarAspirante');
+
+    const paises = Pais.fetchAll();
+    const estados = Estado.fetchAll();
+
+    response.render('Psicologos/registrarAspirante', {
+        paises: paises || [],
+        estados: estados || [],
+    });
 };
 
 exports.getEditarAspirantes = (request, response, next) => {
