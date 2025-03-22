@@ -44,11 +44,11 @@ exports.getPost = async (request, response) => {
 
         // Redirigir según el rol
         switch (usuarios.idRol) {  
-            case 1:
-                return response.redirect('/aspirante/mis-pruebas');
-            case 2:
-                return response.redirect('/coordinador/psicologos-registrados');
             case 3:
+                return response.redirect('/aspirante/mis-pruebas');
+            case 1:
+                return response.redirect('/coordinador/psicologos-registrados');
+            case 2:
                 return response.redirect('/psicologo/principal');
             default:
                 console.log('Error: Rol desconocido:', usuarios.idRol);

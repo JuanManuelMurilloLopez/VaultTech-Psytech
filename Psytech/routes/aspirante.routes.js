@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+const authMiddleware = require('../models/autenticacion.models');
+router.use(authMiddleware([3]));
+
 const path = require('path');
 
 const controller = require('../controllers/aspirante.controller');
