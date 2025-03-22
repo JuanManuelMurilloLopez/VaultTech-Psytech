@@ -1,4 +1,5 @@
-const { response } = require("express");
+const { request, response } = require("express");
+const RespuestaAspirante = require('../models/formatoDeEntrevista.model');
 
 //Rutas del portal de los Aspirantes
 exports.getMisPruebas = (request, response, next) => {
@@ -22,24 +23,22 @@ exports.getFormatoEntrevista = (request, response, next) => {
 };
 
 exports.postFormatoEntrevista = (request, response, next) => {
-    try{
-        const formData = request.body;
-
-        const respuestas = [];
-        for (let i = 1; i <= 51; i++) {
-            const preguntaKey = `pregunta_${i}`;
-            if (formData[preguntaKey] !== undefined) {
-                respuestas.push({
-                    numeroPregunta: i,
-                    respuesta: formData[preguntaKey]
-                });
-            }
+    // Array para almacenar respuestas del formato de entrevista
+    const respuestas = []; 
+    // Obtener las llaves del objeto request.body para separarlas de su valor
+    Object.keys(request.body).forEach(pregunta => {
+        if (pregunta.startsWith('pregunta_')) {
+        const idPregunta = pregunta.split('_')[1]; 
+        const respuesta = request.body[pregunta];
+        
+        respuestas.push([idPregunta, respuesta]);
         }
+    });
+    console.log(respuestas);
 
-        console.log("Datos recibidos del formulario:", respuestas);
-    }catch (error){
-        console.error("Error en postFormatoEntrevista:", error)
-    }
+    const nuevoFormato = new RespuestaAspirante(request.session.idAspirante, request.body.respuestas);
+
+    nuevoFormato.save()
 };
 
 exports.getIntruccionesOtis = (request, response, next) => {
