@@ -59,3 +59,13 @@ exports.getPost = async (request, response) => {
         response.status(500).send('Error en el servidor');
     }
 };
+
+exports.getLogout = ((request, response) => {
+    request.session.destroy((err) => {
+        if (err) {
+            return response.status(500).send('Error al cerrar sesión');
+        }
+        // Después de destruir la sesión, redirige al login
+        response.redirect('/login');
+    });
+});

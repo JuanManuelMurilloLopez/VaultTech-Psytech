@@ -35,13 +35,6 @@ app.use('/aspirante', rutasAspirante);
 const rutasPsicologo = require('./routes/psicologo.routes');
 app.use('/psicologo', rutasPsicologo);
 
-//Salir de la sesion
-exports.logout = (request, response, next) => {
-    request.session.destroy(() => {
-        response.redirect('/login');
-    });
-};
-
 // Iniciar servidor en el puerto 5050
 app.listen(5050, () => {
     console.log("Servidor corriendo en http://localhost:5050");

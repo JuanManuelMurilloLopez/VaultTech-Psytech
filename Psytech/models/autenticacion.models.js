@@ -1,15 +1,14 @@
 module.exports = (allowedRoles = []) => {
-    return (req, res, next) => {
-        if (!req.session.user) {
-            return res.redirect('/login'); // Si no está autenticado, redirigir al login
+    return (request, response, next) => {
+        if (!request.session.user) {
+            return response.redirect('/login');
         }
 
-        const { idRol } = req.session.user; // Obtener el rol del usuario desde la sesión
+        const { idRol } = request.session.user;
 
         if (allowedRoles.length > 0 && !allowedRoles.includes(idRol)) {
             return res.status(403).send('Acceso denegado: No tienes permisos para acceder a esta página');
         }
-
-        next(); // Si pasa todas las comprobaciones, continuar
+        next(); 
     };
 };
