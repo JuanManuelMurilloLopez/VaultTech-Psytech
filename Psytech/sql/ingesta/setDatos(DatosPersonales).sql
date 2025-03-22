@@ -1,32 +1,26 @@
-INSERT INTO datosPersonales (idDatosPersonales, nombre, apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha, idPrueba, idAspirante) 
+INSERT INTO datosPersonales (idDatosPersonales, nombre, apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha) 
 VALUES
-    (UUID(), 'Juan', 'López', 'García', 'Analista de Datos', CURDATE(), 5,
-        (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'juanlópez39@example.com'))
-    ),
-    (UUID(), 'María', 'Pérez', 'Martínez', 'Desarrollador Web', CURDATE(), 6,
-        (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'maríapérez76@example.com'))
-    ),
-    (UUID(), 'Carlos', 'Rodríguez', 'Fernández', 'Investigador en IA', CURDATE(), 5,
-        (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'carlosrodríguez58@example.com'))
-    ),
-    (UUID(), 'Laura', 'Gómez', 'Hernández', 'Psicóloga Organizacional', CURDATE(), 6,
-        (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'lauragómez50@example.com'))
-    ),
-    (UUID(), 'Pedro', 'Fernández', 'Ramírez', 'Ingeniero de Software', CURDATE(), 5,
-        (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'pedrofernández59@example.com'))
-    ),
-    (UUID(), 'Ana', 'Martínez', 'López', 'Diseñador UX/UI', CURDATE(), 6,
-        (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'anamartínez97@example.com'))
-    ),
-    (UUID(), 'Luis', 'Ramírez', 'González', 'Científico de Datos', CURDATE(), 5,
-        (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'luisramírez75@example.com'))
-    ),
-    (UUID(), 'Sofía', 'Ramírez', 'Torres', 'Consultor de RRHH', CURDATE(), 6,
-        (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'sofíaramírez88@example.com'))
-    ),
-    (UUID(), 'Miguel', 'Ramírez', 'Salinas', 'Administrador de Redes', CURDATE(), 5,
-        (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'miguelramírez66@example.com'))
-    ),
-    (UUID(), 'Elena', 'García', 'Méndez', 'Analista de Mercado', CURDATE(), 6,
-        (SELECT idAspirante FROM aspirantes WHERE idUsuario = (SELECT idUsuario FROM usuarios WHERE correo = 'elenagarcía10@example.com'))
-    );
+
+-- Grupo G1_ISC
+    (UUID(), 'Juan', 'López', 'García', 'Analista de Datos', CURDATE()),
+    (UUID(), 'María', 'Pérez', 'Martínez', 'Desarrollador Web', CURDATE()),
+    (UUID(), 'Carlos', 'Rodríguez', 'Fernández', 'Investigador en IA', CURDATE()),
+    (UUID(), 'Laura', 'Gómez', 'Hernández', 'Psicóloga Organizacional', CURDATE()),
+    (UUID(), 'Pedro', 'Fernández', 'Ramírez', 'Ingeniero de Software', CURDATE()),
+    (UUID(), 'Ana', 'Martínez', 'López', 'Diseñador UX/UI', CURDATE()),
+    (UUID(), 'Luis', 'Ramírez', 'González', 'Científico de Datos', CURDATE()),
+    (UUID(), 'Sofía', 'Ramírez', 'Torres', 'Consultor de RRHH', CURDATE()),
+    (UUID(), 'Miguel', 'Ramírez', 'Salinas', 'Administrador de Redes', CURDATE()),
+    (UUID(), 'Elena', 'García', 'Méndez', 'Analista de Mercado', CURDATE()),
+
+-- Grupo G2_II
+    (UUID(), 'Javier', 'Fernández', 'Torres', 'Ingeniero Industrial', CURDATE()),
+    (UUID(), 'Fernando', 'Torres', 'Vázquez', 'Investigador de Procesos', CURDATE()),
+    (UUID(), 'Ricardo', 'García', 'Morales', 'Ingeniero Mecánico', CURDATE()),
+    (UUID(), 'Manuel', 'Ramírez', 'Suárez', 'Ingeniero de Planta', CURDATE()),
+    (UUID(), 'Raúl', 'García', 'Díaz', 'Especialista en Calidad', CURDATE()),
+    (UUID(), 'Lucía', 'Ramírez', 'Castro', 'Diseñadora Industrial', CURDATE()),
+    (UUID(), 'Paula', 'López', 'Moreno', 'Ingeniera de Sistemas', CURDATE()),
+    (UUID(), 'Gabriela', 'Gómez', 'Soto', 'Analista de Procesos', CURDATE()),
+    (UUID(), 'Valeria', 'Gómez', 'Bravo', 'Ingeniera Eléctrica', CURDATE()),
+    (UUID(), 'Isabel', 'Fernández', 'Reyes', 'Supervisora de Producción', CURDATE());

@@ -162,11 +162,7 @@ CREATE TABLE datosPersonales(
     apellidoPaterno VARCHAR(50),
     apellidoMaterno VARCHAR(50),
     puestoSolicitado VARCHAR(50),
-    fecha DATE,
-    idPrueba INT,
-    idAspirante VARCHAR(36),
-    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba),
-    FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante)
+    fecha DATE
 );
 
 
@@ -180,13 +176,15 @@ CREATE TABLE aspirantesGruposPruebas(
     idPrueba INT,
     idAspirante VARCHAR(36),
     idEstatus INT,
+    idDatosPersonales VARCHAR(36),
     fechaAsignacion DATE,
     fechaLimite DATE,
     PRIMARY KEY (idGrupo, idPrueba, idAspirante),
     FOREIGN KEY (idGrupo) REFERENCES grupos(idGrupo),
     FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba),
     FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante),
-    FOREIGN KEY (idEstatus) REFERENCES estatusPrueba(idEstatus)
+    FOREIGN KEY (idEstatus) REFERENCES estatusPrueba(idEstatus),
+    FOREIGN KEY (idDatosPersonales) REFERENCES datosPersonales(idDatosPersonales)
 );
 
 CREATE TABLE preguntasOtis (
