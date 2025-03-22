@@ -1,40 +1,40 @@
 //Rutas del portal de los Aspirantes
-exports.get_mis_pruebas = (request, response, next) => {
+exports.getMisPruebas = (request, response, next) => {
     response.render('Aspirantes/misPruebas');
 };
 
-exports.get_pruebas_pendientes = (request, response, next) => {
+exports.getPruebasPendientes = (request, response, next) => {
     response.render('Aspirantes/pruebasPendientes');
 };
 
-exports.get_pruebas_completadas = (request, response, next) => {
+exports.getPruebasCompletadas = (request, response, next) => {
     response.render('Aspirantes/pruebasCompletadas');
 };
 
-exports.get_subir_documentos = (request, response, next) => {
+exports.getSubirDocumentos = (request, response, next) => {
     response.render('Aspirantes/subirDocumentos');
 };
 
-exports.get_formato_entrevista = (request, response, next) => {
+exports.getFormatoEntrevista = (request, response, next) => {
     response.render('Aspirantes/formatoDeEntrevista');
 };
 
-exports.get_intrucciones_otis = (request, response, next) => {
+exports.getIntruccionesOtis = (request, response, next) => {
     response.render('Aspirantes/instruccionesOtis');
 };
 
-exports.get_intrucciones_colores = (request, response, next) => {
+exports.getIntruccionesColores = (request, response, next) => {
     response.send('Instrucciones de la Prueba Colores');
 };
 
-exports.get_prueba_otis = (request, response, next) => {
+exports.getPruebaOtis = (request, response, next) => {
     response.render('Aspirantes/pruebaOtis');
 };
 
-exports.get_prueba_colores = (request, response, next) => {
+exports.getPruebaColores = (request, response, next) => {
     response.send('Prueba Colores');
 };
 
-exports.get_respuestas_enviadas = (request, response, next) => {
+exports.getRespuestasEnviadas = (request, response, next) => {
     response.send('Respuestas enviadas');
 };

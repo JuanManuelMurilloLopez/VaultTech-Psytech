@@ -1,41 +1,61 @@
 const bcrypt = require('bcryptjs');
-const usuarioModelo = require('../models/inicioSesion.models'); 
+const Usuario = require('../models/inicioSesion.models');
 
-// Rutas para el inicio de sesión
-exports.get_login = (request, response) => {
+exports.getLogin = (request, response, next) => {
     console.log('Login PSICODX');
     response.render('login');
 };
 
-exports.post_login = async (request, response) => {
+exports.getPost = async (request, response) => {
     const { usuario, contrasenia } = request.body;
 
     try {
-        const usuarioTexto = await usuarioModelo.findOne({ usuario });
-
-        if (!usuarioTexto) {
+        // Buscar usuario en la base de datos
+        const [usuarios] = await Usuario.recuperarUno(usuario);
+        
+        // Verificar si se recuperó el usuario
+        if (!usuarios) {
+            console.log('Usuario no encontrado en la base de datos.');
             return response.status(400).send('Usuario no encontrado');
         }
 
-        // Comparar la contraseña con bcrypt
-        const isMatch = await bcrypt.compare(contrasenia, usuarioTexto.contrasenia);
+        // Comparar los valores de usuario
+        const usuarioRecibido = usuario.trim().toLowerCase();
+        const usuarioBaseDatos = usuarios.usuario.trim().toLowerCase();
 
-        if (!isMatch) {
+        if (usuarioRecibido !== usuarioBaseDatos) {
+            console.log('No coinciden los usuarios');
+            return response.status(400).send('Usuario no encontrado');
+        }
+
+        // Verificar que la contraseña recibida y la almacenada en la base de datos existan
+        if (!contrasenia || !usuarios.contrasenia) {
+            console.log('Error: Contraseña no proporcionada o no encontrada.');
+            return response.status(400).send('Contraseña no válida');
+        }
+
+        // Comparar contraseñas
+        if (contrasenia !== usuarios.contrasenia) { 
             return response.status(400).send('Contraseña incorrecta');
         }
 
         // Guardar la sesión del usuario
-        request.session.user = usuarioTexto;
+        request.session.user = usuarios;
 
-        // Redirigir al dashboard basado en el rol
-        if (usuarioTexto.rol === 'coordinador') {
-            return response.redirect('/coordinador/psicologos-registrados');
-        } else if (usuarioTexto.rol === 'aspirante') {
-            return response.redirect('/aspirante/mis-pruebas');
-        } else if (usuarioTexto.rol === 'psicologo') {
-            return response.redirect('/psicologo/principal');
+        // Redirigir según el rol
+        switch (usuarios.idRol) {  
+            case 1:
+                return response.redirect('/aspirante/mis-pruebas');
+            case 2:
+                return response.redirect('/coordinador/psicologos-registrados');
+            case 3:
+                return response.redirect('/psicologo/principal');
+            default:
+                console.log('Error: Rol desconocido:', usuarios.idRol);
+                return response.status(400).send('Rol no válido');
         }
     } catch (error) {
+        console.error('Error en el servidor:', error);
         response.status(500).send('Error en el servidor');
     }
 };
