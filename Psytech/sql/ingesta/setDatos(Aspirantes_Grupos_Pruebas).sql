@@ -1,4 +1,3 @@
--- Ingesta de datos para la tabla aspirantesGruposPruebas 
 INSERT INTO aspirantesGruposPruebas (idGrupo, idPrueba, idAspirante, idEstatus, fechaAsignacion, fechaLimite)
 VALUES
     -- Grupo G1_ISC - Prueba OTIS 
