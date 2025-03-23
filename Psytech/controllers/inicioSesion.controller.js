@@ -47,7 +47,8 @@ exports.getPost = async (request, response) => {
         }
 
         // Comparar contraseñas
-        if (contrasenia !== usuarios.contrasenia) { 
+        const contraseniaValida = await bcrypt.compare(contrasenia, usuarios.contrasenia);
+        if (!contraseniaValida) { 
             return response.send(`
                 <script>
                     alert('Contraseña incorrecta');
@@ -67,9 +68,6 @@ exports.getPost = async (request, response) => {
                 return response.redirect('/coordinador/psicologos-registrados');
             case 2:
                 return response.redirect('/psicologo/principal');
-            default:
-                console.log('Error: Rol desconocido:', usuarios.idRol);
-                return response.status(400).send('Rol no válido');
         }
     } catch (error) {
         return response.send(`
