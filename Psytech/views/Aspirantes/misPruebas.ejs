@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="/css/aspirantes/misPruebas.css">
     <!-- CSS navside -->
     <link rel="stylesheet" href="/css/includeCss/_navsideAspirante.css">
+    <!-- CSS cerrar sesión -->
+    <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 </head>
 
 <body>
@@ -22,27 +24,55 @@
 
         <div class="container">
 
+            <!-- Boton de cerrar sesión -->
+            <%- include('../includes/_buttonCerrarSesion.ejs') %>
+
             <h1 class="text-center">MIS PRUEBAS</h1>
-            <hr class="w-50 mx-auto">
+            <hr>
     
-            <div class="row g-4">
+            <div class="row g-4 mt-4">
 
                 <% for(prueba of pruebas) { %>
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title"><%= prueba.nombre %></h5>
-                                <span class="badge rounded-pill text-bg-info"><%= prueba.nombreEstatus %></span>
+                                <div class="card-header">
+                                    <h5 class="card-title w-50"><%= prueba.nombre %></h5>
+                                    <% 
+                                        const estatusPrueba = {
+                                            'Completada': 'prueba-completada',
+                                            'Pendiente': 'prueba-pendiente',
+                                            'Vencida': 'prueba-vencida',
+                                            'En progreso': 'prueba-progreso'
+                                        };
+                                        const estatus = estatusPrueba[prueba.nombreEstatus] || 'prueba-default'; 
+                                    %>
+                                    <% if (estatusPrueba[prueba.nombreEstatus]) { %>
+                                        <span class="card-estatus <%= estatus %>">
+                                            <%= prueba.nombreEstatus %>
+                                        </span>
+                                    <% } %>
+                                </div>
                                 <p class="card-text"><%= prueba.descripcion %></p>
-                                <p><strong>Fecha límite:</strong><%= prueba.fechaLimite %></p>
+                                <% 
+                                    const fecha = new Date(prueba.fechaLimite);
+                                    const fechaFormato = `${fecha.getDate()}/${fecha.getMonth()+1}/${fecha.getFullYear()}`;
+                                %>
+                                <p>Fecha límite: <%= fechaFormato %></p>
                                 <div class="d-flex justify-content-between">
-                                    <a href="/aspirante/instrucciones-otis" class="btn btn-color--secondary">Realizar prueba</a>
-                                    <span><%= prueba.tiempo %> min</span>
+                                    <a href="" class="btn btn-color--secondary">Realizar prueba</a>
+                                    <span>
+                                        <%= prueba.tiempo %> 
+                                        <% if (prueba.tiempo != null) { %>
+                                            min
+                                        <% } %>
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 <% } %>
+
             </div> 
         </div> 
     

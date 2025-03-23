@@ -23,6 +23,71 @@
     display: flex;
     flex-direction: row;
 }
+
+.text-center{
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 600;
+}
+
+.card-title{
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.card-header{
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none;
+    padding: 0;
+}
+
+.card-body{
+    padding: 20px;
+}
+
+.card-estatus{
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    border-radius: 10px;
+    padding: 5px 20px;
+}
+
+.prueba-completada{
+    color: #024400;
+    background: #C7F3C2;
+}
+
+.prueba-pendiente{
+    color: #294969;
+    background: #C2EBF3;
+}
+
+.prueba-vencida{
+    color: #600000;
+    background: #FECECE;
+}
+
+.prueba-progreso{
+    color: #000000;
+    background: #d5d5d5;
+}
+
+.card-text{
+    padding-top: 20px;
+}
+
+.btn{
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 20px;
+}
+
 .btn-color--primary{
     background: var(--primary);
     color: var(--font-primary);
