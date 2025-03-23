@@ -24,6 +24,7 @@ router.get('/aspirantes', controller.getAspirantes);
 router.get('/importar-aspirantes', controller.getImportarAspirantes);
 
 router.get('/registrar-aspirantes', controller.getRegistrarAspirantes);
+router.post('/registrar-aspirantes', controller.postRegistrarAspirantes);
 
 router.get('/editar-aspirantes', controller.getEditarAspirantes);
 

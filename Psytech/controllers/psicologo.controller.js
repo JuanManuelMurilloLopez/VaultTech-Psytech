@@ -70,6 +70,34 @@ exports.getRegistrarAspirantes = (request, response, next) => {
     
 };
 
+exports.postRegistrarAspirantes = (request, response, next) => {
+    console.log("Entra al post de registrar aspirantes");
+    const aspirante = new Aspirante(request.body);
+    aspirante.saveUsuario()
+    .then(() => {
+        console.log("Se registró el usuario")
+        aspirante.getIdUsuario()
+        .then(([rows, fieldData]) => {
+            const idUsuario = rows[0].idUsuario;
+            console.log("Id de usuario: ", idUsuario);
+            aspirante.saveAspirante(idUsuario)
+            .then(() => {
+                console.log("Se registró el Aspirante")
+                response.render('Psicologos/aspirantesGrupo');
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
 exports.getEditarAspirantes = (request, response, next) => {
     console.log('Editar Aspirante');
     response.render('Psicologos/editarAspirante');

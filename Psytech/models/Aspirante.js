@@ -17,7 +17,7 @@ module.exports = class Aspirante {
     }
 
     saveUsuario(){
-        db.execute(`
+         return db.execute(`
             INSERT INTO Usuarios VALUES 
             (uuid(), ?, ?, true, ?, ?, ?, ?, ?, ?, 
             (SELECT idRol FROM Roles WHERE nombreRol = 'Aspirante')
@@ -36,7 +36,7 @@ module.exports = class Aspirante {
     }
 
     saveAspirante(idUsuario){
-        db.execute(`
+        return db.execute(`
             INSERT INTO Aspirantes VALUES (uuid(), ?, ?, ?, ?, null, null)
             `, 
             [idUsuario, this.institucionProcedencia, this.idPais, this.idEstado]);
