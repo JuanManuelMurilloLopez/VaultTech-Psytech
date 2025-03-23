@@ -158,17 +158,19 @@ CREATE TABLE pruebas(
 -- Tablas con UUID
 CREATE TABLE datosPersonales(
     idDatosPersonales VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
+    idGrupo VARCHAR(36) NOT NULL,
+    idPrueba INT NOT NULL,
+    idAspirante VARCHAR(36) NOT NULL,
     nombre VARCHAR(50),
     apellidoPaterno VARCHAR(50),
     apellidoMaterno VARCHAR(50),
     puestoSolicitado VARCHAR(50),
     fecha DATE,
-    idPrueba INT,
-    idAspirante VARCHAR(36),
+    UNIQUE(idGrupo, idPrueba, idAspirante),
+    FOREIGN KEY (idGrupo) REFERENCES grupos(idGrupo),
     FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba),
     FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante)
 );
-
 
 CREATE TABLE estatusPrueba(
     idEstatus INT AUTO_INCREMENT PRIMARY KEY, -- INT AUTO_INCREMENT

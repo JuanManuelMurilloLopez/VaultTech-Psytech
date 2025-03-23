@@ -19,3 +19,4 @@ INSERT INTO aspirantes (idAspirante, idUsuario, institucionProcedencia, idPais, 
 (uuid(), (SELECT idUsuario FROM usuarios WHERE correo = 'valeriagómez68@example.com'), 'Universidad de Tokio', 14, 23, 'cv_valeriagomez.pdf', 'kardex_valeriagomez.pdf'),
 (uuid(), (SELECT idUsuario FROM usuarios WHERE correo = 'raúlgarcía25@example.com'), 'Universidad de París', 10, 9, 'cv_raulgarcia.pdf', 'kardex_raulgarcia.pdf'),
 (uuid(), (SELECT idUsuario FROM usuarios WHERE correo = 'isabelfernández54@example.com'), 'Universidad de Moscú', 19, 26, 'cv_isabelfernandez.pdf', 'kardex_isabelfernandez.pdf');
+
