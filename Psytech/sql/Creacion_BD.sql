@@ -3,12 +3,10 @@ CREATE DATABASE psytech;
 
 USE psytech;
 
-
 CREATE TABLE privilegios(
     idPrivilegio INT AUTO_INCREMENT PRIMARY KEY, -- INT AutoIncremental
     nombrePrivilegio VARCHAR(50)
 );
-
 
 CREATE TABLE roles(
     idRol INT AUTO_INCREMENT PRIMARY KEY, -- INT AutoIncremental
@@ -66,7 +64,8 @@ CREATE TABLE aspirantes(
 
 CREATE TABLE preguntasFormatoEntrevista(
     idPreguntaFormatoEntrevista INT AUTO_INCREMENT PRIMARY KEY, -- INT AUTO_INCREMENT
-    nombrePreguntaFormatoEntrevista VARCHAR(255)
+    nombrePreguntaFormatoEntrevista VARCHAR(255),
+    tipoPregunta VARCHAR(60)
 );
 
 CREATE TABLE aspirantesPreguntasFormatoEntrevista(
@@ -369,4 +368,3 @@ CREATE TABLE respuestasTermanAspirante (
     FOREIGN KEY (idPreguntaTerman) REFERENCES preguntasTerman(idPreguntaTerman),
     FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
 );
-
