@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const authMiddleware = require('../models/autenticacion.models');
+const authMiddleware = require('../util/autenticacionRoles');
 router.use(authMiddleware([1]));
 
 const path = require('path');
