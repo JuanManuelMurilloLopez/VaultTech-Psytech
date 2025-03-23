@@ -1,8 +1,16 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 
 const app = express();
+
+// Configuración de sesiones
+app.use(session({
+    secret: 'claveTemporal',
+    resave: false,
+    saveUninitialized: true
+}));
 
 // Servir archivos estáticos desde la carpeta public
 app.use(express.static(path.join(__dirname, 'public')));

@@ -7,4 +7,8 @@ const controller = require('../controllers/inicioSesion.controller');
 
 router.get('/login', controller.getLogin);
 
+router.post('/login', controller.getPost);
+
+router.get('/logout', controller.getLogout);
+
 module.exports = router;

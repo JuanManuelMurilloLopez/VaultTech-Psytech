@@ -1,4 +1,5 @@
 const db = require('../util/database');
+const bcrypt = require('bcryptjs');
 
 module.exports = class Aspirante {
 
@@ -17,14 +18,21 @@ module.exports = class Aspirante {
     }
 
     saveUsuario(){
-         return db.execute(`
-            INSERT INTO Usuarios VALUES 
-            (uuid(), ?, ?, true, ?, ?, ?, ?, ?, ?, 
-            (SELECT idRol FROM Roles WHERE nombreRol = 'Aspirante')
-            )`, 
-            [this.usuario, this.contrasenia, this.nombreUsuario, 
-                this.apellidoPaterno, this.apellidoMaterno, this.correo, 
-                this.lada, this.numeroTelefono]);
+        return bcrypt.hash(this.contrasenia, 12)
+        .then((contraseniaCifrada) => {
+            return db.execute(`
+                INSERT INTO Usuarios VALUES 
+                (uuid(), ?, ?, true, ?, ?, ?, ?, ?, ?, 
+                (SELECT idRol FROM Roles WHERE nombreRol = 'Aspirante')
+                )`, 
+                [this.usuario, contraseniaCifrada, this.nombreUsuario, 
+                    this.apellidoPaterno, this.apellidoMaterno, this.correo, 
+                    this.lada, this.numeroTelefono]);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+         
     }
     getIdUsuario(){
         return db.execute(`

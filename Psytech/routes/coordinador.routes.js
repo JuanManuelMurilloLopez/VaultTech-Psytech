@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+const authMiddleware = require('../util/autenticacionRoles');
+router.use(authMiddleware([1]));
+
 const path = require('path');
 const controller = require('../controllers/coordinador.controller');
 
