@@ -15,9 +15,8 @@ class Usuario {
 
       if (filas.length === 0) {
         console.log('Usuario no encontrado en la base de datos.');
-      } else {
-        console.log('Usuario encontrado:', filas[0]);
       }
+      
       return filas;
     } catch (error) {
       console.error('Error en recuperarUno:', error);

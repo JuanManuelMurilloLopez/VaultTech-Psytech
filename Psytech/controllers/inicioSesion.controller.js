@@ -23,19 +23,6 @@ exports.getPost = async (request, response) => {
             `);
         }
 
-        // Comparar los valores de usuario
-        const usuarioRecibido = usuario.trim().toLowerCase();
-        const usuarioBaseDatos = usuarios.usuario.trim().toLowerCase();
-
-        if (usuarioRecibido !== usuarioBaseDatos) {
-            return response.send(`
-                <script>
-                    alert('Usuario no encontrado');
-                    window.location.href = '/login';
-                </script>
-            `);
-        }
-
         // Verificar que la contraseña recibida y la almacenada en la base de datos existan
         if (!contrasenia || !usuarios.contrasenia){
             return response.send(`
@@ -58,7 +45,7 @@ exports.getPost = async (request, response) => {
         }
 
         // Guardar la sesión del usuario
-        request.session.user = usuarios;
+        request.session.user = usuarios.idUsuario;
 
         // Redirigir según el rol
         switch (usuarios.idRol) {  
