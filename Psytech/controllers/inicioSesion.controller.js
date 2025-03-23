@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const Usuario = require('../models/inicioSesion.models');
+const Usuario = require('../models/inicioSesion.model');
 
 exports.getLogin = (request, response, next) => {
     console.log('Login PSICODX');
@@ -15,8 +15,12 @@ exports.getPost = async (request, response) => {
         
         // Verificar si se recuperó el usuario
         if (!usuarios) {
-            console.log('Usuario no encontrado en la base de datos.');
-            return response.status(400).send('Usuario no encontrado');
+            return response.send(`
+                <script>
+                    alert('Usuario no encontrado');
+                    window.location.href = '/login';
+                </script>
+            `);
         }
 
         // Comparar los valores de usuario
@@ -24,19 +28,32 @@ exports.getPost = async (request, response) => {
         const usuarioBaseDatos = usuarios.usuario.trim().toLowerCase();
 
         if (usuarioRecibido !== usuarioBaseDatos) {
-            console.log('No coinciden los usuarios');
-            return response.status(400).send('Usuario no encontrado');
+            return response.send(`
+                <script>
+                    alert('Usuario no encontrado');
+                    window.location.href = '/login';
+                </script>
+            `);
         }
 
         // Verificar que la contraseña recibida y la almacenada en la base de datos existan
-        if (!contrasenia || !usuarios.contrasenia) {
-            console.log('Error: Contraseña no proporcionada o no encontrada.');
-            return response.status(400).send('Contraseña no válida');
+        if (!contrasenia || !usuarios.contrasenia){
+            return response.send(`
+                <script>
+                    alert('Contraseña no válida');
+                    window.location.href = '/login';
+                </script>
+            `);
         }
 
         // Comparar contraseñas
         if (contrasenia !== usuarios.contrasenia) { 
-            return response.status(400).send('Contraseña incorrecta');
+            return response.send(`
+                <script>
+                    alert('Contraseña incorrecta');
+                    window.location.href = '/login';
+                </script>
+            `);
         }
 
         // Guardar la sesión del usuario
@@ -55,8 +72,12 @@ exports.getPost = async (request, response) => {
                 return response.status(400).send('Rol no válido');
         }
     } catch (error) {
-        console.error('Error en el servidor:', error);
-        response.status(500).send('Error en el servidor');
+        return response.send(`
+            <script>
+                alert('Error en el servidor');
+                window.location.href = '/login';
+            </script>
+        `);
     }
 };
 

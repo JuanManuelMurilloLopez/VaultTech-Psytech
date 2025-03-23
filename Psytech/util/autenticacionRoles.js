@@ -7,7 +7,12 @@ module.exports = (allowedRoles = []) => {
         const { idRol } = request.session.user;
 
         if (allowedRoles.length > 0 && !allowedRoles.includes(idRol)) {
-            return res.status(403).send('Acceso denegado: No tienes permisos para acceder a esta página');
+            return response.send(`
+                <script>
+                    alert('Acceso denegado: No tienes permisos para acceder a esta página.');
+                    window.location.href = '/login';
+                </script>
+            `);
         }
         next(); 
     };
