@@ -37,14 +37,22 @@ exports.getFormatoEntrevista = (request, response, next) => {
 
 exports.postFormatoEntrevista = (request, response, next) => {
     // Array para almacenar respuestas del formato de entrevista
-    const respuestas = []; 
+    const respuestasParseadas = []; 
     // Obtener las llaves del objeto request.body para separarlas de su valor
-    const respuesta = request.body[pregunta];
-    respuestas.push([request.session.idAspirante, idPregunta, respuesta]);
-    
-    console.log(respuestas);
+    for(let key in request.body){
+        const value = request.body[key]; 
+        respuestasParseadas.push([request.session.idAspirante, key, value]);
+    }
 
-    const nuevoFormato = new RespuestaAspirante(respuestas);
+    const respuesta = new FormatoEntrevista(respuestasParseadas);
+
+    respuesta.saveRespuestaAspirante()
+    .then(() => {
+        response.redirect('/aspirante/respuestas-enviadas')
+    }).catch((error) => {
+        console.log(error)
+    });
+    
 };
 
 exports.getIntruccionesOtis = (request, response, next) => {
