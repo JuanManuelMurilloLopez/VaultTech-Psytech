@@ -23,6 +23,15 @@ class Usuario {
       throw error;
     }
   };
+
+  static getIdAspirante(usuario){
+    return db.execute(`SELECT IdAspirante 
+      FROM Aspirantes 
+      WHERE IdUsuario = 
+        (SELECT IdUsuario FROM Usuarios WHERE idUsuario = ?)`, 
+        [usuario]
+      );
+  }
 }
 
 module.exports = Usuario;

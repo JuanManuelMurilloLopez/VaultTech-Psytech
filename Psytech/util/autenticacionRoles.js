@@ -6,8 +6,6 @@ module.exports = (allowedRoles = []) => {
 
         const { idRol } = request.session.rol;
 
-        console.log(allowedRoles);
-
         if (!allowedRoles.length > 0 && !allowedRoles.includes(idRol)) {
             return response.send(`
                 <script>

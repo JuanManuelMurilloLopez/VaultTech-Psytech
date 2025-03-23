@@ -46,15 +46,27 @@ exports.getPost = async (request, response) => {
 
         // Guardar la sesión del usuario
         request.session.user = usuarios.idUsuario;
+        request.session.rol = usuarios.idRol;
 
         // Redirigir según el rol
         switch (usuarios.idRol) {  
             case 3:
-                return response.redirect('/aspirante/mis-pruebas');
+                Usuario.getIdAspirante(request.session.user)
+                .then(([rows,fieldData]) => {
+                    request.session.idAspirante = rows[0].IdAspirante;
+                    console.log(request.session.idAspirante)
+                    return response.redirect('/aspirante/mis-pruebas');
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+                break
             case 1:
                 return response.redirect('/coordinador/psicologos-registrados');
             case 2:
                 return response.redirect('/psicologo/principal');
+            default:
+                return response.status(400).send("Rol no reconocido");
         }
     } catch (error) {
         return response.send(`
