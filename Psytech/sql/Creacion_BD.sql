@@ -64,7 +64,8 @@ CREATE TABLE aspirantes(
 
 CREATE TABLE preguntasFormatoEntrevista(
     idPreguntaFormatoEntrevista INT AUTO_INCREMENT PRIMARY KEY, -- INT AUTO_INCREMENT
-    nombrePreguntaFormatoEntrevista VARCHAR(255)
+    nombrePreguntaFormatoEntrevista VARCHAR(255),
+    tipoPregunta VARCHAR(60)
 );
 
 CREATE TABLE aspirantesPreguntasFormatoEntrevista(

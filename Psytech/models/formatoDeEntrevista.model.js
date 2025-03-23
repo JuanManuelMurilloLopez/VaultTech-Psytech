@@ -1,13 +1,22 @@
 const db = require('../util/database');
 
-module.exports = class RespuestaAspirante{
-    constructor(respuestas){
-        this.respuestas = respuestas;
+module.exports = class FormatoEntrevista{
+    constructor(){
+        
     }
 
-    save(){
+    static fetchAll(){
         return db.execute(
-            'INSERT INTO aspirantesPreguntasFormatoEntrevista (idAspirante, idPreguntaFormatoEntrevista, respuestaAspirante) VALUES (?)',
+            `SELECT * 
+            FROM preguntasFormatoEntrevista`
+        );
+    }
+
+    saveRespuestaAspirante(){
+        return db.execute(
+            `INSERT INTO aspirantesPreguntasFormatoEntrevista 
+            (idAspirante, idPreguntaFormatoEntrevista, respuestaAspirante) 
+            VALUES (?)`,
             [this.respuestas]);
     }
 }
