@@ -1,9 +1,23 @@
 const { request, response } = require("express");
 const FormatoEntrevista = require('../models/formatoDeEntrevista.model');
+const ConsultarPruebas = require("../models/consultarPruebas.model");
 
 //Rutas del portal de los Aspirantes
 exports.getMisPruebas = (request, response, next) => {
-    response.render('Aspirantes/misPruebas');
+    ConsultarPruebas.obtenerPruebas(request.session.idAspirante)
+    .then(([rows, fieldData]) => {
+        const pruebas  = rows;
+        console.log(pruebas);
+
+        response.render('Aspirantes/misPruebas',{
+            pruebas: pruebas || [],
+        });
+        
+    })
+
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getPruebasPendientes = (request, response, next) => {
