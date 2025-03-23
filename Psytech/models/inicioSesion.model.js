@@ -7,14 +7,6 @@ class Usuario {
     this.usuario = usuario;
     this.contrasenia = contrasenia;
     this.rol = rol;
-
-    this.compararContrasenia = async (contraseniaCandidata) => {
-      if (!this.contrasenia) {
-        console.error('Error: La contraseña es NULL o undefined.');
-        throw new Error('La contraseña guardada no es válida.');
-      }
-      return bcrypt.compare(contraseniaCandidata, this.contrasenia);
-    };
   }
 
   static recuperarUno = async (usuario) => {
