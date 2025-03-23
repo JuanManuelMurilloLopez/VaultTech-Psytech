@@ -26,86 +26,23 @@
             <hr class="w-50 mx-auto">
     
             <div class="row g-4">
-                <!-- Tarjeta 1: Prueba Otis -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Prueba Otis</h5>
-                            <span class="badge rounded-pill text-bg-info">Pendiente</span>
-                            <p class="card-text">Descripción breve de la prueba.</p>
-                            <p><strong>Fecha límite:</strong> 20/02/2025</p>
-                            <div class="d-flex justify-content-between">
-                                <a href="/aspirante/instrucciones-otis" class="btn btn-color--secondary">Realizar prueba</a>
-                                <span>30 min</span>
+
+                <% for(prueba of pruebas) { %>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= prueba.nombre %></h5>
+                                <span class="badge rounded-pill text-bg-info"><%= prueba.nombreEstatus %></span>
+                                <p class="card-text"><%= prueba.descripcion %></p>
+                                <p><strong>Fecha límite:</strong><%= prueba.fechaLimite %></p>
+                                <div class="d-flex justify-content-between">
+                                    <a href="/aspirante/instrucciones-otis" class="btn btn-color--secondary">Realizar prueba</a>
+                                    <span><%= prueba.tiempo %> min</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-    
-                <!-- Tarjeta 2: Prueba Terman -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Prueba Terman</h5>
-                            <span class="badge rounded-pill text-bg-danger">Vencida</span>
-                            <p class="card-text">Descripción breve de la prueba.</p>
-                            <p><strong>Fecha límite:</strong> 20/02/2025</p>
-                            <a href="#" class="btn btn-color--secondary w-100">Realizar prueba</a>
-                        </div>
-                    </div>
-                </div>
-    
-                <!-- Tarjeta 3: Prueba Luscher -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Prueba Luscher</h5>
-                            <span class="badge rounded-pill text-bg-info">Pendiente</span>
-                            <p class="card-text">Descripción breve de la prueba.</p>
-                            <p><strong>Fecha límite:</strong> 20/02/2025</p>
-                            <a href="#" class="btn btn-color--secondary w-100">Realizar prueba</a>
-                        </div>
-                    </div>
-                </div>
-    
-                <!-- Tarjeta 4: Prueba 16 PF -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Prueba 16 PF</h5>
-                            <span class="badge rounded-pill text-bg-success">Completada</span>
-                            <p class="card-text">Descripción breve de la prueba.</p>
-                        </div>
-                    </div>
-                </div>
-    
-                <!-- Tarjeta 5: Prueba Kostick -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Prueba Kostick</h5>
-                            <span class="badge rounded-pill text-bg-info">Pendiente</span>
-                            <p class="card-text">Descripción breve de la prueba.</p>
-                            <p><strong>Fecha límite:</strong> 20/02/2025</p>
-                            <div class="d-flex justify-content-between">
-                                <a href="#" class="btn btn-color--secondary">Realizar prueba</a>
-                                <span>20 - 30 min</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-    
-                <!-- Tarjeta 6: Prueba Hartman -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Prueba Hartman</h5>
-                            <span class="badge rounded-pill text-bg-success">Completada</span>
-                            <p class="card-text">Descripción breve de la prueba.</p>
-                        </div>
-                    </div>
-                </div>
-    
+                <% } %>
             </div> 
         </div> 
     
