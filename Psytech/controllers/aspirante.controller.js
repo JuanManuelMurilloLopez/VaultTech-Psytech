@@ -3,7 +3,7 @@ const FormatoEntrevista = require('../models/formatoDeEntrevista.model');
 const ConsultarPruebas = require("../models/consultarPruebas.model");
 
 //Rutas del portal de los Aspirantes
-exports.getMisPruebas = (request, response, next) => {
+exports.getPruebas = (request, response) => {
     ConsultarPruebas.obtenerPruebas(request.session.idAspirante)
     .then(([rows, fieldData]) => {
         const pruebas  = rows;
@@ -36,8 +36,6 @@ exports.getFormatoEntrevista = (request, response, next) => {
     FormatoEntrevista.fetchAll()
     .then(([rows, fieldData]) => {
         const preguntas = rows;
-
-        console.log(preguntas[0])
 
         response.render('Aspirantes/formatoDeEntrevista',{
             preguntas: preguntas || [],
