@@ -375,4 +375,5 @@ CREATE TABLE respuestasTermanAspirante (
     FOREIGN KEY (idGrupo) REFERENCES grupos(idGrupo),
     FOREIGN KEY (idPreguntaTerman) REFERENCES preguntasTerman(idPreguntaTerman),
     FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
+
 );

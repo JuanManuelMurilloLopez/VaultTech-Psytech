@@ -18,6 +18,8 @@ router.get('/editar-institucion', controller.getEditarInstitucion);
 
 router.get('/grupos', controller.getGrupos);
 
+router.get('/grupos/:idInstitucion', controller.getGrupos);
+
 router.get('/registrar-grupo', controller.getRegistrarGrupo);
 
 router.get('/editar-grupo', controller.getEditarGrupo);

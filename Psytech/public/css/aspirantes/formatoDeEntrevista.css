@@ -9,6 +9,21 @@
     --third-hover:#B1B1B1;
 }
 
+form {
+    padding-bottom: 70px;
+}
+
+.fixed-bottom-buttons {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    padding: 10px 0;
+    z-index: 1000;
+}
+
+
 .btn-color--primary{
     background: var(--primary);
     color: var(--font-primary);

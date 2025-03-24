@@ -18,108 +18,48 @@
 <body class="bg-light">
     <div class="container">
         <h1 class="text-center">INSTITUCIONES</h1>
-   
+        
         <!-- Campo Buscar -->
         <div class="form-floating mb-3">
             <input type="" class="form-control" id="" placeholder="">
             <label for="">Buscar</label>
         </div>
-
-
         <!-- Boton de navegación "Registrar nueva institucion" -->
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <button type="button" class="btn btn-color--secondary"
             onclick="window.location.href=
             '/psicologo/registrar-institucion'">Registrar Nueva</button>
         </div>
+
+        <div class="row g-4">
+            <% for(institucion of arregloInstituciones) { %>
+                <!-- Tarjetas Institución-->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= institucion.nombreInstitucion %></h5>
+                            <span class="badge rounded-pill text-bg-info"><% if(institucion.estatusInstitucion == 1){ %>
+                                                                                    <%= "Activo" %> 
+                                                                            <%} else { %> 
+                                                                                <%= "Inactivo" %>
+                                                                            <% } %></span>
+                            <p class="card-text">Tipo de Institución: <%= institucion.nombreTipoInstitucion %></p>
+                            <p class="card-text">Número de grupos: <%= institucion.numeroGrupos %></p>
+                            <a href="/psicologo/grupos/<%= institucion.idInstitucion %> " class="btn btn-color--secondary w-100">Ver Institución</a>
+                            <a href="/psicologo/editar-institucion" class="btn btn-color--third w-100">Editar</a>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+            
+
+        </div>
+
+        
        
 
 
-        <div class="row g-4">
-            <!-- Tarjetas Institución-->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Tecnológico de Monterrey</h5>
-                        <span class="badge rounded-pill text-bg-info">Activa</span>
-                        <p class="card-text">Tipo de Institución: Educativa</p>
-                        <p class="card-text">Número de grupos: 10</p>
-                        <a href="/psicologo/grupos" class="btn btn-color--secondary w-100">Ver Institución</a>
-                        <a href="/psicologo/editar-institucion" class="btn btn-color--third w-100">Editar</a>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">UNAM</h5>
-                        <span class="badge rounded-pill text-bg-info">Activa</span>
-                        <p class="card-text">Tipo de Institución: Educativa</p>
-                        <p class="card-text">Número de grupos: 20</p>
-                        <a href="/psicologo/grupos" class="btn btn-color--secondary w-100">Ver Institución</a>
-                        <a href="/psicologo/editar-institucion" class="btn btn-color--third w-100">Editar</a>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Politecnico</h5>
-                        <span class="badge rounded-pill text-bg-info">Activa</span>
-                        <p class="card-text">Tipo de Institución: Educativa</p>
-                        <p class="card-text">Número de grupos: 15</p>
-                        <a href="/psicologo/grupos" class="btn btn-color--secondary w-100">Ver Institución</a>
-                        <a href="/psicologo/editar-institucion" class="btn btn-color--third w-100">Editar</a>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Anahuac</h5>
-                        <span class="badge rounded-pill text-bg-danger">Desactivada</span>
-                        <p class="card-text">Tipo de Institución: Educativa</p>
-                        <p class="card-text">Número de grupos: 12</p>
-                        <a href="/psicologo/grupos" class="btn btn-color--secondary w-100">Ver Institución</a>
-                        <a href="/psicologo/editar-institucion" class="btn btn-color--third w-100">Editar</a>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">UAQ</h5>
-                        <span class="badge rounded-pill text-bg-info">Activa</span>
-                        <p class="card-text">Tipo de Institución: Educativa</p>
-                        <p class="card-text">Número de grupos: 19</p>
-                        <a href="/psicologo/grupos" class="btn btn-color--secondary w-100">Ver Institución</a>
-                        <a href="/psicologo/editar-institucion" class="btn btn-color--third w-100">Editar</a>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">UVM</h5>
-                        <span class="badge rounded-pill text-bg-danger">Desactivada</span>
-                        <p class="card-text">Tipo de Institución: Educativa</p>
-                        <p class="card-text">Número de grupos: 5</p>
-                        <a href="/psicologo/grupos" class="btn btn-color--secondary w-100">Ver Institución</a>
-                        <a href="/psicologo/editar-institucion" class="btn btn-color--third w-100">Editar</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
        
     </div>
    

@@ -1,6 +1,7 @@
 const Pais = require('../models/Pais');
 const Estado = require('../models/Estado');
 const Aspirante = require('../models/Aspirante');
+const Institucion = require('../models/Institucion');
 
 //Rutas del portal de los Psicologos
 exports.getPrincipalPsicologos = (request, response, next) => {
@@ -9,8 +10,16 @@ exports.getPrincipalPsicologos = (request, response, next) => {
 };
 
 exports.getCatalogoInstituciones = (request, response, next) => {
-    console.log('Catalogo de Instituciones');
-    response.render('Psicologos/catalogoInstituciones');
+    Institucion.fetchAll()
+    .then(([rows, fieldData]) => {
+        const arregloInstituciones = rows;
+        response.render('Psicologos/catalogoInstituciones', {
+            arregloInstituciones: arregloInstituciones || [],
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getRegistrarInstitucion = (request, response, next) => {
@@ -24,8 +33,17 @@ exports.getEditarInstitucion = (request, response, next) => {
 };
 
 exports.getGrupos = (request, response, next) => {
-    console.log('Grupos por Institucion');
-    response.render('Psicologos/gruposInstitucion');
+    console.log("Rquest params: ", request.params.idInstitucion);
+    Institucion.fetchOne(request.params.idInstitucion)
+    .then(([informacionInstitucion, arregloGrupos]) => {
+        console.log([informacionInstitucion, arregloGrupos]);
+        response.render('Psicologos/gruposInstitucion', {
+            informacionInstitucion: informacionInstitucion || [],
+            arregloGrupos: arregloGrupos || [],
+        });
+    })
+    .catch();
+    
 };
 
 exports.getRegistrarGrupo = (request, response, next) => {
