@@ -54,7 +54,6 @@ exports.getPost = async (request, response) => {
                 Usuario.getIdAspirante(request.session.user)
                 .then(([rows,fieldData]) => {
                     request.session.idAspirante = rows[0].IdAspirante;
-                    console.log(request.session.idAspirante)
                     return response.redirect('/aspirante/mis-pruebas');
                 })
                 .catch((error) => {
