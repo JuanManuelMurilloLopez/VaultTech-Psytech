@@ -8,7 +8,7 @@ const path = require('path');
 const controller = require('../controllers/psicologo.controller');
 
 //Rutas del portal de los Psicologos
-router.get('/principal', controller.getPrincipalPsicologos);
+router.get('/lista-grupos', controller.getListaGrupos);
 
 router.get('/catalogo-instituciones', controller.getCatalogoInstituciones);
 

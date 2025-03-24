@@ -64,7 +64,7 @@ exports.getPost = async (request, response) => {
             case 1:
                 return response.redirect('/coordinador/psicologos-registrados');
             case 2:
-                return response.redirect('/psicologo/principal');
+                return response.redirect('/psicologo/lista-grupos');
             default:
                 return response.status(400).send("Rol no reconocido");
         }
