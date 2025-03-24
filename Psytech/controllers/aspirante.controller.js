@@ -7,8 +7,6 @@ exports.getPruebas = (request, response) => {
     ConsultarPruebas.obtenerPruebas(request.session.idAspirante)
     .then(([rows, fieldData]) => {
         const pruebas  = rows;
-        console.log(pruebas);
-
         response.render('Aspirantes/misPruebas',{
             pruebas: pruebas || [],
         });

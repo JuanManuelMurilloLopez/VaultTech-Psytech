@@ -53,12 +53,13 @@
                                         </span>
                                     <% } %>
                                 </div>
+                                <p class="card-text card-grupo">Grupo: <%= prueba.nombreGrupo %></p>
                                 <p class="card-text"><%= prueba.descripcion %></p>
                                 <% 
                                     const fecha = new Date(prueba.fechaLimite);
                                     const fechaFormato = `${fecha.getDate()}/${fecha.getMonth()+1}/${fecha.getFullYear()}`;
                                 %>
-                                <p>Fecha límite: <%= fechaFormato %></p>
+                                <p class="card-text">Fecha límite: <%= fechaFormato %></p>
                                 <div class="d-flex justify-content-between">
                                     <a href="" class="btn btn-color--secondary">Realizar prueba</a>
                                     <span>
