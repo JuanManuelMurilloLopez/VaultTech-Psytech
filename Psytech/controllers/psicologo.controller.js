@@ -30,8 +30,17 @@ exports.getEditarInstitucion = (request, response, next) => {
 };
 
 exports.getGrupos = (request, response, next) => {
-    console.log('Grupos por Institucion');
-    response.render('Psicologos/gruposInstitucion');
+    console.log("Rquest params: ", request.params.idInstitucion);
+    Institucion.fetchOne(request.params.idInstitucion)
+    .then(([informacionInstitucion, arregloGrupos]) => {
+        console.log([informacionInstitucion, arregloGrupos]);
+        response.render('Psicologos/gruposInstitucion', {
+            informacionInstitucion: informacionInstitucion || [],
+            arregloGrupos: arregloGrupos || [],
+        });
+    })
+    .catch();
+    
 };
 
 exports.getRegistrarGrupo = (request, response, next) => {

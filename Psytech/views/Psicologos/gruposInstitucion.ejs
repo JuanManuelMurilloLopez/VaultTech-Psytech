@@ -18,11 +18,15 @@
 
 <body class="bg-light">
     <div class="container">
-        <h3>Tecnológico de Monterrey</h3>
+        <h3><%= institucion.nombreInstitucion %></h3>
         <h4>Estatus:</h4>
-        <span class="badge text-bg-info">Activa</span>
+        <span class="badge text-bg-info"><% if(institucion.estatusInstitucion == 1){ %>
+                                            <%= "Activa" %> 
+                                        <%} else { %> 
+                                            <%= "Inactiva" %>
+                                        <% } %></span>
         <br>
-        <h4>Tipo de Institución: Educativa</h4>
+        <h4>Tipo de Institución: <%= institucion.nombreTipoInstitucion %></h4>
         <br>
         <h1 class="text-center">GRUPOS REGISTRADOS</h1>
        
@@ -33,7 +37,7 @@
         </div>
 
 
-        <!-- Boton de navegación "Registrar nueva institucion" -->
+        <!-- Boton de navegación "Registrar nuevao grupo" -->
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <button type="button" class="btn btn-color--secondary"
             onclick="window.location.href=
@@ -41,103 +45,59 @@
         </div>
 
 
-        <div class="row g-4">
-            <!-- Tarjetas Grupos-->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">ITC 2025</h5>
-                        <span class="badge rounded-pill text-bg-info">Activa</span>
-                        <p class="card-text">Carrera: Ingeniería en Tecnologías Computacionales</p>
-                        <p class="card-text">Año de Generación: 2025</p>
-                        <p class="card-text">Semestre: Feb - Jun</p>
-                        <p class="card-text">Número de Aspirantes: 20</p>
-                        <a href="/psicologo/aspirantes" class="btn btn-color--secondary w-100">Ver Grupo</a>
-                        <a href="/psicologo/editar-grupo" class="btn btn-color--third w-100">Editar</a>
+        <div class="row g-4 mt-4">
+
+            <% for(grupo of arregloGrupos) { %>
+
+                <div class="col-md-4">
+
+                    <div class="card">
+
+                        <div class="card-body">
+
+                            <div class="card-title">
+
+                                <p><%= grupo.nombreGrupo %></p>
+
+                                <span class="badge rounded-pill text-bg-info"><% if(grupo.estatusGrupo == 1){ %>
+                                    <%= "Activo" %> 
+                                <%} else { %> 
+                                    <%= "Inactivo" %>
+                                <% } %></span>
+
+                            </div>
+
+                            <p class="card-text">Carrera: <%= grupo.carrera %></p>
+
+                            <p class="card-text">Año de Generación: <%= grupo.anioGeneracion %></p>
+
+                            <p class="card-text">Semestre: <%= grupo.cicloEscolar %></p>
+
+                            <p class="card-text">Número de aspirantes: <%= grupo.numeroAspirantes %></p>
+
+                            <div>
+
+                                <a href="/psicólogo/aspirantes" class="btn btn-color--secondary w-100">Ver grupo</a>
+
+                                <a href="/psicólogo/editar-grupo" class="btn btn-color--third w-100">Editar</a>
+
+                            </div>
+
+                        </div>
+
+                        
+
                     </div>
+
+                    
+
                 </div>
-            </div>
 
+            <% } %>
 
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">IRS 2024</h5>
-                        <span class="badge rounded-pill text-bg-danger">Desactivada</span>
-                        <p class="card-text">Carrera: Ingeniería en Robótica y Sistemas Digitales</p>
-                        <p class="card-text">Año de Generación: 2024</p>
-                        <p class="card-text">Semestre: Feb - Jun</p>
-                        <p class="card-text">Número de Aspirantes: 12</p>
-                        <a href="/psicologo/aspirantes" class="btn btn-color--secondary w-100 ">Ver Grupo</a>
-                        <a href="/psicologo/editar-grupo" class="btn btn-color--third w-100">Editar</a>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">IM 2025</h5>
-                        <span class="badge rounded-pill text-bg-info">Activa</span>
-                        <p class="card-text">Carrera: Ingeniería Mecánica</p>
-                        <p class="card-text">Año de Generación: 2025</p>
-                        <p class="card-text">Semestre: Ago - Dic</p>
-                        <p class="card-text">Número de Aspirantes: 16</p>
-                        <a href="/psicologo/aspirantes" class="btn btn-color--secondary w-100">Ver Grupo</a>
-                        <a href="/psicologo/editar-grupo" class="btn btn-color--third w-100">Editar</a>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">IBM 2023</h5>
-                        <span class="badge rounded-pill text-bg-danger">Desactivada</span>
-                        <p class="card-text">Carrera: Ingeniería Biomédica</p>
-                        <p class="card-text">Año de Generación: 2023</p>
-                        <p class="card-text">Semestre: Ago - Dic</p>
-                        <p class="card-text">Número de Aspirantes: 19</p>
-                        <a href="/psicologo/aspirantes" class="btn btn-color--secondary w-100 ">Ver Grupo</a>
-                        <a href="/psicologo/editar-grupo" class="btn btn-color--third w-100">Editar</a>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">IMT 2024</h5>
-                        <span class="badge rounded-pill text-bg-danger">Desactivada</span>
-                        <p class="card-text">Carrera: Ingeniería en Mecatrónica</p>
-                        <p class="card-text">Año de Generación: 2024</p>
-                        <p class="card-text">Semestre: Feb - Jun</p>
-                        <p class="card-text">Número de Aspirantes: 18</p>
-                        <a href="/psicologo/aspirantes" class="btn btn-color--secondary w-100">Ver Grupo</a>
-                        <a href="/psicologo/editar-grupo" class="btn btn-color--third w-100">Editar</a>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">IIS 2025</h5>
-                        <span class="badge rounded-pill text-bg-info">Activa</span>
-                        <p class="card-text">Carrera: Ingeniería Industrial y de Sistemas</p>
-                        <p class="card-text">Año de Generación: 2025</p>
-                        <p class="card-text">Semestre: Ago - Dic</p>
-                        <p class="card-text">Número de Aspirantes: 6</p>
-                        <a href="/psicologo/aspirantes" class="btn btn-color--secondary w-100">Ver Grupo</a>
-                        <a href="/psicologo/editar-grupo" class="btn btn-color--third w-100">Editar</a>
-                    </div>
-                </div>
-            </div>
         </div>
+
+        
 
 
         <br>
