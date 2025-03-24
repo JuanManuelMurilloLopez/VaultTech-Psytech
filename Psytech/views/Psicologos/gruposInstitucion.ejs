@@ -18,15 +18,15 @@
 
 <body class="bg-light">
     <div class="container">
-        <h3><%= institucion.nombreInstitucion %></h3>
+        <h3><%= informacionInstitucion.nombreInstitucion %></h3>
         <h4>Estatus:</h4>
-        <span class="badge text-bg-info"><% if(institucion.estatusInstitucion == 1){ %>
+        <span class="badge text-bg-info"><% if(informacionInstitucion.estatusInstitucion == 1){ %>
                                             <%= "Activa" %> 
                                         <%} else { %> 
                                             <%= "Inactiva" %>
                                         <% } %></span>
         <br>
-        <h4>Tipo de Institución: <%= institucion.nombreTipoInstitucion %></h4>
+        <h4>Tipo de Institución: <%= informacionInstitucion.nombreTipoInstitucion %></h4>
         <br>
         <h1 class="text-center">GRUPOS REGISTRADOS</h1>
        

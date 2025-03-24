@@ -12,7 +12,9 @@ module.exports = class Institucion {
         return db.execute(`SELECT nombreInstitucion, estatusInstitucion, nombreTipoInstitucion 
             FROM institucion, tipoinstitucion 
             WHERE institucion.idTipoInstitucion = tipoinstitucion.idTipoInstitucion 
-            AND institucion.idInstitucion = ?`,[idInstitucion])
+            AND institucion.idInstitucion = ?
+            ORDER BY institucion.nombreInstitucion, institucion.estatusInstitucion
+            `,[idInstitucion])
             .then(([institucionRows])=> {
                 return [institucionRows[0], rows];
             })
@@ -26,14 +28,23 @@ module.exports = class Institucion {
   }
 
   static fetchAll(){
-    return db.execute(`SELECT I.idInstitucion, I.nombreInstitucion, I.estatusInstitucion, 
-        nombreTipoInstitucion, COUNT(idGrupo) as numeroGrupos
-        FROM institucion I, grupos G, tipoinstitucion TI 
-        WHERE I.idInstitucion = G.idInstitucion 
-        AND I.idTipoInstitucion = TI.idTipoInstitucion 
-        GROUP BY I.idInstitucion
-        ORDER BY I.nombreInstitucion
-        AND I.estatusInstitucion`);
+    return db.execute(`SELECT 
+    I.idInstitucion, 
+    I.nombreInstitucion, 
+    I.estatusInstitucion, 
+    TI.nombreTipoInstitucion, 
+    COUNT(G.idGrupo) AS numeroGrupos
+FROM institucion I
+JOIN grupos G ON I.idInstitucion = G.idInstitucion
+JOIN tipoinstitucion TI ON I.idTipoInstitucion = TI.idTipoInstitucion
+GROUP BY 
+    I.idInstitucion, 
+    I.nombreInstitucion, 
+    I.estatusInstitucion, 
+    TI.nombreTipoInstitucion
+ORDER BY 
+    I.nombreInstitucion, 
+    I.estatusInstitucion;`);
   }
 }
 

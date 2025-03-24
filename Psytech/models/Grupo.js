@@ -6,24 +6,46 @@ module.exports = class Grupo {
   }
 
   static fetchAll(){
-    return db.execute(`SELECT nombreInstitucion, nombreGrupo, estatusGrupo, 
-        carrera, anioGeneracion, cicloEscolar, 
-        COUNT(idAspirante) as numeroAspirantes
-        FROM grupos, institucion, gruposaspirantes 
-        WHERE grupos.idInstitucion = institucion.idInstitucion 
-        AND grupos.idGrupo = gruposaspirantes.idGrupo 
-        GROUP BY grupos.idGrupo`)
+    return db.execute(`SELECT grupos.idGrupo, institucion.nombreInstitucion,
+                      grupos.nombreGrupo, grupos.estatusGrupo, grupos.carrera,
+                      grupos.anioGeneracion, grupos.cicloEscolar,
+                      COUNT(gruposaspirantes.idAspirante) as numeroAspirantes 
+                      FROM grupos
+                      JOIN institucion ON 
+                      grupos.idInstitucion = institucion.idInstitucion
+                      LEFT JOIN gruposaspirantes ON 
+                      grupos.idGrupo = gruposaspirantes.idGrupo
+                      GROUP BY 
+                          grupos.idGrupo, 
+                          institucion.nombreInstitucion, 
+                          grupos.nombreGrupo, 
+                          grupos.estatusGrupo, 
+                          grupos.carrera, 
+                          grupos.anioGeneracion, 
+                          grupos.cicloEscolar;`
+                    )
   }
 
   static fetchAll(idInstitucion){
-    return db.execute(`SELECT nombreInstitucion, nombreGrupo, estatusGrupo, 
-        carrera, anioGeneracion, cicloEscolar, 
-        COUNT(idAspirante) as numeroAspirantes 
-        FROM grupos, institucion, gruposaspirantes 
-        WHERE grupos.idInstitucion = institucion.idInstitucion 
-        AND grupos.idGrupo = gruposaspirantes.idGrupo 
-        AND grupos.idInstitucion = ? 
-        GROUP BY grupos.idGrupo`, [idInstitucion])
+    return db.execute(`SELECT grupos.idGrupo, institucion.nombreInstitucion,
+                      grupos.nombreGrupo, grupos.estatusGrupo, grupos.carrera,
+                      grupos.anioGeneracion, grupos.cicloEscolar,
+                      COUNT(gruposaspirantes.idAspirante) as numeroAspirantes 
+                      FROM grupos
+                      JOIN institucion ON 
+                      grupos.idInstitucion = institucion.idInstitucion
+                      LEFT JOIN gruposaspirantes ON 
+                      grupos.idGrupo = gruposaspirantes.idGrupo
+                      WHERE institucion.idInstitucion = ?
+                      GROUP BY 
+                          grupos.idGrupo, 
+                          institucion.nombreInstitucion, 
+                          grupos.nombreGrupo, 
+                          grupos.estatusGrupo, 
+                          grupos.carrera, 
+                          grupos.anioGeneracion, 
+                          grupos.cicloEscolar;`
+                          , [idInstitucion])
   }
 
 }

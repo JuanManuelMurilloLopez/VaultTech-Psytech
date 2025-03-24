@@ -33,10 +33,9 @@ exports.getEditarInstitucion = (request, response, next) => {
 };
 
 exports.getGrupos = (request, response, next) => {
-    console.log("Rquest params: ", request.params.idInstitucion);
     Institucion.fetchOne(request.params.idInstitucion)
     .then(([informacionInstitucion, arregloGrupos]) => {
-        console.log([informacionInstitucion, arregloGrupos]);
+        console.log("Informacion de la Institución: ", informacionInstitucion);
         response.render('Psicologos/gruposInstitucion', {
             informacionInstitucion: informacionInstitucion || [],
             arregloGrupos: arregloGrupos || [],
