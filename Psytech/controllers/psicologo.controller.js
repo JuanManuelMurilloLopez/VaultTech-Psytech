@@ -1,3 +1,6 @@
+const Grupo = require('../models/grupo.model');
+
+
 //Rutas del portal de los Psicologos
 exports.getPrincipalPsicologos = (request, response, next) => {
     console.log('Pagina Principal Psicologos');
@@ -24,10 +27,82 @@ exports.getGrupos = (request, response, next) => {
     response.render('Psicologos/gruposInstitucion');
 };
 
-exports.getRegistrarGrupo = (request, response, next) => {
-    console.log('Registrar Nuevo Grupo');
-    response.render('Psicologos/registrarGrupo');
-};
+
+// Registrar Nuevo Grupo
+// Get
+exports.getRegistrarGrupo = (req, res, next) => {
+    Promise.all([
+      Grupo.obtenerInstituciones(),
+      Grupo.obtenerNiveles(),
+      Grupo.obtenerPruebas()
+    ])
+      .then(([instituciones, niveles, pruebas]) => {
+        res.render('Psicologos/registrarGrupo', {
+          listadoInstituciones: instituciones[0],
+          listadoNiveles: niveles[0],
+          listadoPruebas: pruebas[0],
+          error: null
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        res.send('Error al cargar formulario');
+      });
+  };
+
+// Post
+  exports.postRegistrarGrupo = (req, res, next) => {
+    const {
+      nombreGrupo,
+      carrera,
+      semestre,
+      anio,
+      idInstitucion,
+      idNivelAcademico,
+      pruebasSeleccionadas
+    } = req.body;
+  
+    Grupo.existe(nombreGrupo)
+      .then(([rows]) => {
+        if (rows.length > 0) {
+          return Promise.all([
+            Grupo.obtenerInstituciones(),
+            Grupo.obtenerNiveles(),
+            Grupo.obtenerPruebas()
+          ]).then(([instituciones, niveles, pruebas]) => {
+            return res.render('Psicologos/registrarGrupo', {
+              error: 'El grupo ya está registrado.',
+              listadoInstituciones: instituciones[0],
+              listadoNiveles: niveles[0],
+              listadoPruebas: pruebas[0]
+            });
+          });
+        }
+  
+        const grupo = new Grupo(
+          nombreGrupo,
+          carrera,
+          semestre,
+          anio,
+          idInstitucion,
+          idNivelAcademico
+        );
+  
+        return grupo.guardarGrupoYPruebas(pruebasSeleccionadas);
+      })
+      .then(() => {
+        res.redirect('/psicologo/grupos');
+      })
+      .catch(error => {
+        console.log('Error al registrar grupo:', error);
+        if (!res.headersSent) {
+          res.send('Error al registrar grupo');
+        }
+      });
+  };
+  
+
+
 
 exports.getEditarGrupo = (request, response, next) => {
     console.log('Editar Grupo');
