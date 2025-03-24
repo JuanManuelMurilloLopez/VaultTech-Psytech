@@ -1,3 +1,5 @@
+const Institucion = require('../models/Institucion');
+
 //Rutas del portal de los Psicologos
 exports.getPrincipalPsicologos = (request, response, next) => {
     console.log('Pagina Principal Psicologos');
@@ -5,8 +7,16 @@ exports.getPrincipalPsicologos = (request, response, next) => {
 };
 
 exports.getCatalogoInstituciones = (request, response, next) => {
-    console.log('Catalogo de Instituciones');
-    response.render('Psicologos/catalogoInstituciones');
+    Institucion.fetchAll()
+    .then(([rows, fieldData]) => {
+        const arregloInstituciones = rows;
+        response.render('Psicologos/catalogoInstituciones', {
+            arregloInstituciones: arregloInstituciones || [],
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getRegistrarInstitucion = (request, response, next) => {
