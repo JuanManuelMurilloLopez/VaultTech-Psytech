@@ -4,7 +4,7 @@ const ConsultarPruebas = require("../models/consultarPruebas.model");
 
 //Rutas del portal de los Aspirantes
 exports.getPruebas = (request, response) => {
-    ConsultarPruebas.obtenerPruebas(request.session.idAspirante)
+    ConsultarPruebas.fetchAll(request.session.idAspirante)
     .then(([rows, fieldData]) => {
         const pruebas  = rows;
         response.render('Aspirantes/misPruebas',{
