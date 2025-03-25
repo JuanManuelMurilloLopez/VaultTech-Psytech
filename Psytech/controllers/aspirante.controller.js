@@ -1,5 +1,7 @@
 const { request, response } = require("express");
 const FormatoEntrevista = require('../models/formatoDeEntrevista.model');
+const Genero =  require('../models/generos.model');
+const EstadoCivil = require('../models/estadoCivil.model')
 
 //Rutas del portal de los Aspirantes
 exports.getMisPruebas = (request, response, next) => {
@@ -22,12 +24,31 @@ exports.getFormatoEntrevista = (request, response, next) => {
     FormatoEntrevista.fetchAll()
     .then(([rows, fieldData]) => {
         const preguntas = rows;
-
         console.log(preguntas[0])
 
-        response.render('Aspirantes/formatoDeEntrevista',{
-            preguntas: preguntas || [],
-        });
+        Genero.fetchAll()
+        .then(([rows, fieldData]) => {
+            const generos = rows;
+            console.log(generos);
+
+            EstadoCivil.fetchAll()
+            .then(([rows, fieldData]) => {
+                const estadosCiviles = rows;
+                console.log(estadosCiviles);
+                
+                response.render('Aspirantes/formatoDeEntrevista',{
+                    preguntas: preguntas || [],
+                    generos: generos || [],
+                    estadosCiviles: estadosCiviles || [],
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        })
+        .catch((error) => {
+            console.log(error);
+        })
     })
 
     .catch((error) => {
