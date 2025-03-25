@@ -19,11 +19,12 @@
 <body class="bg-light">
     <div class="container">
 
-        <h2 class="text-center">NOMBRE DEL GRUPO</h2>
+        <h2 class="text-center"><%= grupo.nombreGrupo %></h2>
         <h4>Información del grupo</h4>
-        <p>Carrera: Ingeniería en Tecnologías Computacionales</p>
-        <p>Año de Generación: 2025</p>
-        <p>Semestre: Feb - Jun</p>
+        <p>Carrera: <%= grupo.carrera %></p>
+        <p>Año de Generación: <%= grupo.anioGeneracion %></p>
+        <p>Ciclo Escolar: <%= grupo.cicloEscolar %></p>
+        <p>Nivel Académico: <%= grupo.nombreNivelAcademico %></p>
 
         <h1 class="text-center">ASPIRANTES</h1>
 
@@ -41,9 +42,13 @@
 
                         <!-- Lista Aspirantes-->
                         <div class="list-group">
-                            <a href="#" class="list-group-item list-group-item-action active">John Doe Smith</a>
-                            <a href="#" class="list-group-item list-group-item-action">Maria García López</a>
-                            <a href="#" class="list-group-item list-group-item-action">Luis Pérez Ramírez</a>
+                            <% for(aspirante of aspirantes) { %>
+                                <a href="" class="list-group-item list-group-item-action" >
+                                    <%= (aspirante.nombreUsuario + " " + 
+                                    aspirante.apellidoPaterno + " " + 
+                                    aspirante.apellidoMaterno) %>
+                                </a>
+                            <% } %>
                         </div>
                     </div>
                 </div>

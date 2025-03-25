@@ -2,6 +2,7 @@ const Pais = require('../models/Pais');
 const Estado = require('../models/Estado');
 const Aspirante = require('../models/Aspirante');
 const Institucion = require('../models/Institucion');
+const Grupo = require('../models/Grupo');
 
 //Rutas del portal de los Psicologos
 exports.getPrincipalPsicologos = (request, response, next) => {
@@ -45,6 +46,31 @@ exports.getGrupos = (request, response, next) => {
     
 };
 
+exports.getInformacionGrupo = (request, response, next) => {
+    Grupo.fetchOne(request.params.idGrupo)
+    .then(([rows, fieldData]) => {
+        const grupo = rows[0];
+        Grupo.getAspirantes(request.params.idGrupo)
+        .then(([rows, fieldData]) => {
+            const aspirantes = rows;
+            console.log("Información del grupo: ", grupo);
+            console.log("Aspirantes del grupo :", aspirantes);
+            response.render('Psicologos/informacionGrupo.ejs', {
+                grupo: grupo || null,
+                aspirantes: aspirantes || [],
+            })
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+    
+
+}
+
 exports.getRegistrarGrupo = (request, response, next) => {
     console.log('Registrar Nuevo Grupo');
     response.render('Psicologos/registrarGrupo');
@@ -67,7 +93,6 @@ exports.getImportarAspirantes = (request, response, next) => {
 
 exports.getRegistrarAspirantes = (request, response, next) => {
     // console.log('Registrar Aspirante');
-
     Pais.fetchAll()
     .then(([rows, fieldData]) => {
         const paises = rows;
