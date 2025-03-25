@@ -21,6 +21,7 @@ router.get('/instrucciones-otis', controller.get_intrucciones_otis);
 router.get('/intrucciones-colores', controller.get_intrucciones_colores);
 
 router.get('/prueba-otis', controller.get_prueba_otis);
+router.post('/prueba-otis', controller.obtenerPreguntas);
 
 router.get('/prueba-colores', controller.get_prueba_colores);
 

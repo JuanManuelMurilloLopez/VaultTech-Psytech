@@ -38,3 +38,34 @@ exports.get_prueba_colores = (request, response, next) => {
 exports.get_respuestas_enviadas = (request, response, next) => {
     response.send('Respuestas enviadas');
 };
+
+const PreguntaOtis = require('../models/preguntasOtis.model.js');
+const OpcionOtis = require('../models/opcionOtis.model.js');
+
+exports.obtenerPreguntas = async (req, res) => {
+    try {
+        const [preguntasDB] = await PreguntaOtis.fetchAll();
+        const [opcionesDB] = await OpcionOtis.fetchAll();
+
+        const preguntas = preguntasDB.map(pregunta => {
+            const opciones = opcionesDB
+                .filter(opcion => opcion.idPreguntaOtis === pregunta.idPreguntaOtis)
+                .map(opcion => opcion.descripcionOpcion);
+
+            const respuestaCorrecta = opcionesDB.find(opcion => 
+                opcion.idPreguntaOtis === pregunta.idPreguntaOtis && opcion.esCorrecta === 1
+            )?.descripcionOpcion;
+
+            return {
+                num: pregunta.numeroPregunta,
+                pregunta: pregunta.preguntaOtis,
+                respuesta: respuestaCorrecta,
+                opciones: opciones
+            };
+        });
+
+        return res.json({ preguntas });
+    } catch (error) {
+        console.error("Error obteniendo preguntas:", error);
+    }
+};
