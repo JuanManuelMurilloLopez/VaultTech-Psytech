@@ -21,6 +21,8 @@ router.get('/formato-entrevista', controller.getFormatoEntrevista);
 
 router.post('/formato-entrevista', controller.postFormatoEntrevista);
 
+router.get('/formulario-familiar', controller.getFormularioFamiliares);
+
 router.get('/instrucciones-otis', controller.getIntruccionesOtis);
 
 router.get('/intrucciones-colores', controller.getIntruccionesColores);
