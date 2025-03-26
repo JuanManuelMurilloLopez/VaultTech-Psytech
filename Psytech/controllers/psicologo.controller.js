@@ -114,25 +114,26 @@ exports.getRegistrarAspirantes = (request, response, next) => {
 
 exports.postRegistrarAspirantes = (request, response, next) => {
     const aspirante = new Aspirante(request.body);
-    aspirante.saveUsuario()
+
+    aspirante.saveAspirante(request.params.idGrupo)
+    .then(() => aspirante.getIdUsuario())
+    .then(([rows]) => {
+        const idAspirante = rows[0].idAspirante;
+        return Grupo.getInformacionGruposPruebas(request.params.idGrupo)
+            .then(([pruebas]) => ({
+                idAspirante, pruebas
+            }));
+    })
+    .then(({ idAspirante, pruebas }) => {
+        return Promise.all(pruebas.map(prueba => 
+            aspirante.vincularPrueba(idAspirante, request.params.idGrupo, prueba)
+        ));
+    })
     .then(() => {
-        aspirante.getIdUsuario()
-        .then(([rows, fieldData]) => {
-            const idUsuario = rows[0].idUsuario;
-            aspirante.saveAspirante(idUsuario)
-            .then(() => {
-                response.render('Psicologos/aspirantesGrupo');
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+        response.redirect("/informacion-grupos/" + request.params.idGrupo);
     })
     .catch((error) => {
-        console.log(error);
+        console.error(error);
     });
 }
 
