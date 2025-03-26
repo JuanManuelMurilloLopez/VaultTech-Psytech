@@ -71,4 +71,12 @@ module.exports = class Grupo {
       `, [idGrupo])
   }
 
+  static getInformacionGruposPruebas(idGrupo){
+    return db.execute(`
+        SELECT idPrueba, fechaLimite
+        FROM gruposPruebas
+        WHERE idGrupo = ?
+      `, [idGrupo])
+  }
+
 }

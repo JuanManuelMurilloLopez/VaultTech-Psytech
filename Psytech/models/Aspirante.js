@@ -38,4 +38,11 @@ module.exports = class Aspirante {
             `, [this.usuario, this.idGrupo])
     }
 
+    vincularPrueba(idAspirante, idGrupo, prueba){
+        return db.execute(`
+                INSERT INTO aspirantesGruposPruebas
+                VALUES (?, ?, ?, 1, CURRENT_DATE(), ?)
+            `, [idGrupo, prueba.idPrueba, idAspirante, prueba.fechaLimite])
+    }
+
 }
