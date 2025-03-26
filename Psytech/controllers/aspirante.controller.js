@@ -1,7 +1,8 @@
 const { request, response } = require("express");
 const FormatoEntrevista = require('../models/formatoDeEntrevista.model');
 const Genero =  require('../models/generos.model');
-const EstadoCivil = require('../models/estadoCivil.model')
+const EstadoCivil = require('../models/estadoCivil.model');
+const Familiar = require('../models/formularioFamiliares.model');
 
 //Rutas del portal de los Aspirantes
 exports.getMisPruebas = (request, response, next) => {
@@ -24,7 +25,6 @@ exports.getFormatoEntrevista = (request, response, next) => {
     FormatoEntrevista.fetchAll()
     .then(([rows, fieldData]) => {
         const preguntas = rows;
-        // console.log(preguntas)
         response.render('Aspirantes/formatoDeEntrevista',{
             preguntas: preguntas || [],
         });
@@ -39,7 +39,6 @@ exports.postFormatoEntrevista = (request, response, next) => {
     // Obtener las llaves del objeto request.body para separarlas de su valor
     for(let key in request.body){
         const value = request.body[key];
-        console.log(request.body[key]);
         respuestasParseadas.push([request.session.idAspirante, key, value]);
     }
 
@@ -55,7 +54,34 @@ exports.postFormatoEntrevista = (request, response, next) => {
 };
 
 exports.getFormularioFamiliares = (request, response, next) => {
-    response.render('Aspirantes/formularioFamiliar');
+    Familiar.fetchAll()
+    .then(([rows, fieldData]) => {
+        const familiares = rows;
+
+        Genero.fetchAll()
+            .then(([rows, fieldData]) => {
+                const generos = rows;
+
+                EstadoCivil.fetchAll()
+                .then(([rows, fieldData]) => {
+                    const estadosCiviles = rows;
+
+                    response.render('Aspirantes/formularioFamiliar',{
+                        familiares: familiares || [],
+                        generos: generos || [],
+                        estadosCiviles: estadosCiviles || [],
+                    });
+                }).catch((error) => {
+                    console.log(error);
+                });
+
+            }).catch((error) => {
+                console.log(error);
+            });
+            
+    }).catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getIntruccionesOtis = (request, response, next) => {
