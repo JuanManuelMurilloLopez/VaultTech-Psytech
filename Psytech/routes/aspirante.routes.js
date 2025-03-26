@@ -18,10 +18,10 @@ router.get('/pruebas-completadas', controller.getPruebasCompletadas);
 router.get('/subir-documentos', controller.getSubirDocumentos);
 
 router.get('/formato-entrevista', controller.getFormatoEntrevista);
-
 router.post('/formato-entrevista', controller.postFormatoEntrevista);
 
 router.get('/formulario-familiar', controller.getFormularioFamiliares);
+router.post('/formulario-familiar', controller.postFormularioFamiliares)
 
 router.get('/instrucciones-otis', controller.getIntruccionesOtis);
 

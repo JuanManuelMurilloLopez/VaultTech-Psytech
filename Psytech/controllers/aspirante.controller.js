@@ -84,6 +84,31 @@ exports.getFormularioFamiliares = (request, response, next) => {
     });
 };
 
+exports.postFormularioFamiliares = (request, response, next) => {
+    // Array para almacenar respuestas del formato de entrevista
+    const familiaresParseados = []; 
+    // Obtener las llaves del objeto request.body para separarlas de su valor
+    for(let key in request.body){
+        let value = request.body[key];
+        if (key === 'hijoDe' && value === '') {
+            value = null;
+        }
+        familiaresParseados.push(value);
+    }
+
+    console.log(familiaresParseados)
+    
+    const respuesta = new Familiar(request.session.idAspirante, familiaresParseados);
+
+    respuesta.saveFamiliar()
+    .then(() => {
+        response.redirect('/aspirante/respuestas-enviadas')
+    }).catch((error) => {
+        console.log(error)
+    });
+
+};
+
 exports.getIntruccionesOtis = (request, response, next) => {
     response.render('Aspirantes/instruccionesOtis');
 };
