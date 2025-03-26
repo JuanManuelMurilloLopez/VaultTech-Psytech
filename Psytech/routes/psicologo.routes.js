@@ -40,8 +40,8 @@ router.get('/aspirantes', controller.getAspirantes);
 router.get('/importar-aspirantes', controller.getImportarAspirantes);
 
 // Formulario para crear nuevos aspirantes
-router.get('/registrar-aspirantes', controller.getRegistrarAspirantes);
-router.post('/registrar-aspirantes', controller.postRegistrarAspirantes);
+router.get('/registrar-aspirantes/:idGrupo', controller.getRegistrarAspirantes);
+router.post('/registrar-aspirantes/:idGrupo', controller.postRegistrarAspirantes);
 
 // Formulario para editar aspirantes
 router.get('/editar-aspirantes', controller.getEditarAspirantes);

@@ -18,27 +18,28 @@ module.exports = class Aspirante {
     }
     save(idGrupo){
         return db.execute(`
-            EXEC RegistrarAspiranteEnGrupo 
+            CALL RegistrarAspiranteEnGrupo 
             (?, ?, ?, ?, ?, ?, ?, ?, 'Aspirante', ?, ?, ?, ?)
             `
             , [this.usuario, this.contrasenia, this.nombreUsuario, 
                 this.apellidoPaterno, this.apellidoMaterno, this.correo, 
-                this.lada, this.numeroTelefono, this.idPais, this.idEstado, 
+                this.lada, this.numeroTelefono, this.institucionProcedencia, this.idPais, this.idEstado, 
                 idGrupo])
     }
 
     getIdAspirante(idGrupo){
         return db.execute(`
-            SELECT idAspirante
-            FROM aspirantes, usuarios, aspirantesGrupos
+            SELECT aspirantes.idAspirante
+            FROM aspirantes, usuarios, gruposAspirantes
             WHERE aspirantes.idUsuario = usuarios.idUsuario
             AND usuarios.usuario = ?
-            AND aspirantes.idAspirante = aspirantesGrupos.idAspirante
-            AND aspirantesGrupos.idGrupo = ?
-            `, [this.usuario, this.idGrupo])
+            AND aspirantes.idAspirante = gruposAspirantes.idAspirante
+            AND gruposAspirantes.idGrupo = ?
+            `, [this.usuario, idGrupo])
     }
 
     vincularPrueba(idAspirante, idGrupo, prueba){
+        console.log("Información de la prueba: ", prueba);
         return db.execute(`
                 INSERT INTO aspirantesGruposPruebas
                 VALUES (?, ?, ?, 1, CURRENT_DATE(), ?)

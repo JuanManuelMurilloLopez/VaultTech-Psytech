@@ -36,7 +36,6 @@ exports.getEditarInstitucion = (request, response, next) => {
 exports.getGrupos = (request, response, next) => {
     Institucion.fetchOne(request.params.idInstitucion)
     .then(([informacionInstitucion, arregloGrupos]) => {
-        console.log("Informacion de la Institución: ", informacionInstitucion);
         response.render('Psicologos/gruposInstitucion', {
             informacionInstitucion: informacionInstitucion || [],
             arregloGrupos: arregloGrupos || [],
@@ -53,8 +52,6 @@ exports.getInformacionGrupo = (request, response, next) => {
         Grupo.getAspirantes(request.params.idGrupo)
         .then(([rows, fieldData]) => {
             const aspirantes = rows;
-            console.log("Información del grupo: ", grupo);
-            console.log("Aspirantes del grupo :", aspirantes);
             response.render('Psicologos/informacionGrupo.ejs', {
                 grupo: grupo || null,
                 aspirantes: aspirantes || [],
@@ -114,9 +111,8 @@ exports.getRegistrarAspirantes = (request, response, next) => {
 
 exports.postRegistrarAspirantes = (request, response, next) => {
     const aspirante = new Aspirante(request.body);
-
-    aspirante.saveAspirante(request.params.idGrupo)
-    .then(() => aspirante.getIdUsuario())
+    aspirante.save(request.params.idGrupo)
+    .then(() => aspirante.getIdAspirante(request.params.idGrupo))
     .then(([rows]) => {
         const idAspirante = rows[0].idAspirante;
         return Grupo.getInformacionGruposPruebas(request.params.idGrupo)
@@ -125,8 +121,10 @@ exports.postRegistrarAspirantes = (request, response, next) => {
             }));
     })
     .then(({ idAspirante, pruebas }) => {
-        return Promise.all(pruebas.map(prueba => 
+        return Promise.all(pruebas.map(prueba => {
+            console.log("Llega a vincularPrueba");
             aspirante.vincularPrueba(idAspirante, request.params.idGrupo, prueba)
+        }
         ));
     })
     .then(() => {
@@ -135,7 +133,11 @@ exports.postRegistrarAspirantes = (request, response, next) => {
     .catch((error) => {
         console.error(error);
     });
-}
+};
+
+
+
+
 
 exports.getEditarAspirantes = (request, response, next) => {
     console.log('Editar Aspirante');
