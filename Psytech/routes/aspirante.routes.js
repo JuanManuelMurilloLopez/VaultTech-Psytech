@@ -9,7 +9,7 @@ const path = require('path');
 const controller = require('../controllers/aspirante.controller');
 
 //Rutas del portal de los Aspirantes
-router.get('/mis-pruebas', controller.getMisPruebas);
+router.get('/mis-pruebas', controller.getPruebas);
 
 router.get('/pruebas-pendientes', controller.getPruebasPendientes);
 

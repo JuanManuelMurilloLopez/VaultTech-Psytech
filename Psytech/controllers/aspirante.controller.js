@@ -3,10 +3,22 @@ const FormatoEntrevista = require('../models/formatoDeEntrevista.model');
 const Genero =  require('../models/generos.model');
 const EstadoCivil = require('../models/estadoCivil.model');
 const Familiar = require('../models/formularioFamiliares.model');
+const ConsultarPruebas = require("../models/consultarPruebas.model");
 
 //Rutas del portal de los Aspirantes
-exports.getMisPruebas = (request, response, next) => {
-    response.render('Aspirantes/misPruebas');
+exports.getPruebas = (request, response) => {
+    ConsultarPruebas.fetchAll(request.session.idAspirante)
+    .then(([rows, fieldData]) => {
+        const pruebas  = rows;
+        response.render('Aspirantes/misPruebas',{
+            pruebas: pruebas || [],
+        });
+        
+    })
+
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getPruebasPendientes = (request, response, next) => {

@@ -1,3 +1,9 @@
+const Pais = require('../models/Pais');
+const Estado = require('../models/Estado');
+const Aspirante = require('../models/Aspirante');
+const Institucion = require('../models/Institucion');
+const Grupo = require('../models/Grupo');
+
 //Rutas del portal de los Psicologos
 exports.getPrincipalPsicologos = (request, response, next) => {
     console.log('Pagina Principal Psicologos');
@@ -5,8 +11,16 @@ exports.getPrincipalPsicologos = (request, response, next) => {
 };
 
 exports.getCatalogoInstituciones = (request, response, next) => {
-    console.log('Catalogo de Instituciones');
-    response.render('Psicologos/catalogoInstituciones');
+    Institucion.fetchAll()
+    .then(([rows, fieldData]) => {
+        const arregloInstituciones = rows;
+        response.render('Psicologos/catalogoInstituciones', {
+            arregloInstituciones: arregloInstituciones || [],
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getRegistrarInstitucion = (request, response, next) => {
@@ -20,9 +34,38 @@ exports.getEditarInstitucion = (request, response, next) => {
 };
 
 exports.getGrupos = (request, response, next) => {
-    console.log('Grupos por Institucion');
-    response.render('Psicologos/gruposInstitucion');
+    Institucion.fetchOne(request.params.idInstitucion)
+    .then(([informacionInstitucion, arregloGrupos]) => {
+        response.render('Psicologos/gruposInstitucion', {
+            informacionInstitucion: informacionInstitucion || [],
+            arregloGrupos: arregloGrupos || [],
+        });
+    })
+    .catch();
+    
 };
+
+exports.getInformacionGrupo = (request, response, next) => {
+    Grupo.fetchOne(request.params.idGrupo)
+    .then(([rows, fieldData]) => {
+        const grupo = rows[0];
+        Grupo.getAspirantes(request.params.idGrupo)
+        .then(([rows, fieldData]) => {
+            const aspirantes = rows;
+            response.render('Psicologos/informacionGrupo.ejs', {
+                grupo: grupo || null,
+                aspirantes: aspirantes || [],
+            })
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+    
+}
 
 exports.getRegistrarGrupo = (request, response, next) => {
     console.log('Registrar Nuevo Grupo');
@@ -45,9 +88,63 @@ exports.getImportarAspirantes = (request, response, next) => {
 };
 
 exports.getRegistrarAspirantes = (request, response, next) => {
-    console.log('Registrar Aspirante');
-    response.render('Psicologos/registrarAspirante');
+    Pais.fetchAll()
+    .then(([rows, fieldData]) => {
+        const paises = rows;
+        Estado.fetchAll()
+        .then(([rows, fieldData]) => {
+            const estados = rows;
+            
+            response.render('Psicologos/registrarAspirante', {
+                paises: paises || [],
+                estados: estados || [],
+            });
+        })
+        .catch((error) => {console.log(error)});
+    })
+    .catch((error) => {console.log(error)});
+
+    
 };
+
+
+exports.postRegistrarAspirantes = (request, response, next) => {
+    const aspirante = new Aspirante(request.body);
+    aspirante.save(request.params.idGrupo)
+    .then(() => {
+        aspirante.getIdAspirante(request.params.idGrupo)
+        .then(([rows, fieldData]) => {
+            const idAspirante = rows[0].idAspirante;
+            Grupo.getInformacionGruposPruebas(request.params.idGrupo)
+            .then(([rows, fieldData]) => {
+                const pruebas = rows;
+                const promesas = [];
+                for(prueba of pruebas){
+                    promesas.push(aspirante.vincularPrueba(idAspirante, request.params.idGrupo, prueba));
+                }
+                Promise.all(promesas)
+                .then(([rows, fieldData]) => {
+                    console.log("Proceso terminado");
+                    exports.getInformacionGrupo(request, response, next);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    }).catch((error) => {
+        console.log(error);
+    })
+};
+
+
+
 
 exports.getEditarAspirantes = (request, response, next) => {
     console.log('Editar Aspirante');
