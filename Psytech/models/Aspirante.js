@@ -41,7 +41,7 @@ module.exports = class Aspirante {
     vincularPrueba(idAspirante, idGrupo, prueba){
         return db.execute(`
                 INSERT INTO aspirantesGruposPruebas
-                VALUES (?, ?, ?, 1, CURRENT_DATE(), ?)
+                VALUES (?, ?, ?, 2, CURRENT_DATE(), ?)
             `, [idGrupo, prueba.idPrueba, idAspirante, prueba.fechaLimite.toISOString().substring(0, 10)])
     }
 
