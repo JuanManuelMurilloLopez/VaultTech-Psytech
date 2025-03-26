@@ -26,5 +26,12 @@ module.exports = class Familiar{
     
         return db.query(sql, [this.idAspirante, ...this.respuestas]);
     }
+
+    static fetchHijoDe(idAspirante){
+        return db.execute(
+            `SELECT idFamiliar, nombreFamiliar, idAspirante 
+            FROM familiares WHERE idAspirante = ?`, [idAspirante]
+        );
+    }
     
 }

@@ -65,12 +65,22 @@ exports.getFormularioFamiliares = (request, response, next) => {
                 EstadoCivil.fetchAll()
                 .then(([rows, fieldData]) => {
                     const estadosCiviles = rows;
+                    
+                    Familiar.fetchHijoDe(request.session.idAspirante)
+                    .then(([rows, fieldData]) => {
+                        const hijoDe = rows;
 
-                    response.render('Aspirantes/formularioFamiliar',{
-                        familiares: familiares || [],
-                        generos: generos || [],
-                        estadosCiviles: estadosCiviles || [],
-                    });
+                        response.render('Aspirantes/formularioFamiliar',{
+                            familiares: familiares || [],
+                            generos: generos || [],
+                            estadosCiviles: estadosCiviles || [],
+                            hijoDe: hijoDe || [],
+                        });
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+
                 }).catch((error) => {
                     console.log(error);
                 });
@@ -102,7 +112,7 @@ exports.postFormularioFamiliares = (request, response, next) => {
 
     respuesta.saveFamiliar()
     .then(() => {
-        response.redirect('/aspirante/respuestas-enviadas')
+        response.redirect('/aspirante/formulario-familiar')
     }).catch((error) => {
         console.log(error)
     });
