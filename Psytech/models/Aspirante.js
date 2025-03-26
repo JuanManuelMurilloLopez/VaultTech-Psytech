@@ -39,11 +39,10 @@ module.exports = class Aspirante {
     }
 
     vincularPrueba(idAspirante, idGrupo, prueba){
-        console.log("Información de la prueba: ", prueba);
         return db.execute(`
                 INSERT INTO aspirantesGruposPruebas
                 VALUES (?, ?, ?, 1, CURRENT_DATE(), ?)
-            `, [idGrupo, prueba.idPrueba, idAspirante, prueba.fechaLimite])
+            `, [idGrupo, prueba.idPrueba, idAspirante, prueba.fechaLimite.toISOString().substring(0, 10)])
     }
 
 }

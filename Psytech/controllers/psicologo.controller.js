@@ -65,7 +65,6 @@ exports.getInformacionGrupo = (request, response, next) => {
         console.log(error);
     });
     
-
 }
 
 exports.getRegistrarGrupo = (request, response, next) => {
@@ -89,7 +88,6 @@ exports.getImportarAspirantes = (request, response, next) => {
 };
 
 exports.getRegistrarAspirantes = (request, response, next) => {
-    // console.log('Registrar Aspirante');
     Pais.fetchAll()
     .then(([rows, fieldData]) => {
         const paises = rows;
@@ -109,32 +107,41 @@ exports.getRegistrarAspirantes = (request, response, next) => {
     
 };
 
+
 exports.postRegistrarAspirantes = (request, response, next) => {
     const aspirante = new Aspirante(request.body);
     aspirante.save(request.params.idGrupo)
-    .then(() => aspirante.getIdAspirante(request.params.idGrupo))
-    .then(([rows]) => {
-        const idAspirante = rows[0].idAspirante;
-        return Grupo.getInformacionGruposPruebas(request.params.idGrupo)
-            .then(([pruebas]) => ({
-                idAspirante, pruebas
-            }));
-    })
-    .then(({ idAspirante, pruebas }) => {
-        return Promise.all(pruebas.map(prueba => {
-            console.log("Llega a vincularPrueba");
-            aspirante.vincularPrueba(idAspirante, request.params.idGrupo, prueba)
-        }
-        ));
-    })
     .then(() => {
-        response.redirect("/informacion-grupos/" + request.params.idGrupo);
+        aspirante.getIdAspirante(request.params.idGrupo)
+        .then(([rows, fieldData]) => {
+            const idAspirante = rows[0].idAspirante;
+            Grupo.getInformacionGruposPruebas(request.params.idGrupo)
+            .then(([rows, fieldData]) => {
+                const pruebas = rows;
+                const promesas = [];
+                for(prueba of pruebas){
+                    promesas.push(aspirante.vincularPrueba(idAspirante, request.params.idGrupo, prueba));
+                }
+                Promise.all(promesas)
+                .then(([rows, fieldData]) => {
+                    console.log("Proceso terminado");
+                    exports.getInformacionGrupo(request, response, next);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    }).catch((error) => {
+        console.log(error);
     })
-    .catch((error) => {
-        console.error(error);
-    });
 };
-
 
 
 
