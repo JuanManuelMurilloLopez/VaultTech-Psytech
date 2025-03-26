@@ -3,12 +3,10 @@ CREATE DATABASE psytech;
 
 USE psytech;
 
-
 CREATE TABLE privilegios(
     idPrivilegio INT AUTO_INCREMENT PRIMARY KEY, -- INT AutoIncremental
     nombrePrivilegio VARCHAR(50)
 );
-
 
 CREATE TABLE roles(
     idRol INT AUTO_INCREMENT PRIMARY KEY, -- INT AutoIncremental
@@ -66,7 +64,9 @@ CREATE TABLE aspirantes(
 
 CREATE TABLE preguntasFormatoEntrevista(
     idPreguntaFormatoEntrevista INT AUTO_INCREMENT PRIMARY KEY, -- INT AUTO_INCREMENT
-    nombrePreguntaFormatoEntrevista VARCHAR(255)
+    nombrePreguntaFormatoEntrevista VARCHAR(255),
+    tipoPregunta VARCHAR(60),
+    seccion VARCHAR(60)
 );
 
 CREATE TABLE aspirantesPreguntasFormatoEntrevista(
@@ -93,12 +93,13 @@ CREATE TABLE estadoCivil(
 CREATE TABLE familiares(
     idFamiliar VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
     idAspirante VARCHAR(36), -- UUID
+    rolFamiliar VARCHAR(50),
     nombreFamiliar VARCHAR(255),
-    estadoDeVida BOOLEAN,
+    edadFamiliar INT,
     idGenero INT, -- INT AUTO_INCREMENT
     idEstadoCivil INT, -- INT AUTO_INCREMENT
-    edadFamiliar INT,
     hijoDe VARCHAR(36), -- UUID
+    estadoDeVida BOOLEAN,
     FOREIGN KEY (idGenero) REFERENCES generos(idGenero),
     FOREIGN KEY (idEstadoCivil) REFERENCES estadoCivil(idEstadoCivil),
     FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante),
@@ -368,5 +369,5 @@ CREATE TABLE respuestasTermanAspirante (
     FOREIGN KEY (idGrupo) REFERENCES grupos(idGrupo),
     FOREIGN KEY (idPreguntaTerman) REFERENCES preguntasTerman(idPreguntaTerman),
     FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
-);
 
+);
