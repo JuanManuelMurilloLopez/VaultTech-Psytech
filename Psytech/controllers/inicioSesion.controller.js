@@ -13,7 +13,7 @@ exports.getPost = async (request, response) => {
         // Buscar usuario en la base de datos
         const [usuarios] = await Usuario.recuperarUno(usuario);
         
-        // Verificar si se recuperó el usuario
+        // Checa si se recupero el usuario
         if (!usuarios) {
             return response.send(`
                 <script>
@@ -23,7 +23,7 @@ exports.getPost = async (request, response) => {
             `);
         }
 
-        // Verificar que la contraseña recibida y la almacenada en la base de datos existan
+        // Checa que la contraseña recibida y la almacenada en la base de datos existan
         if (!contrasenia || !usuarios.contrasenia){
             return response.send(`
                 <script>
@@ -45,15 +45,17 @@ exports.getPost = async (request, response) => {
             `);
         }
 
-        // Guardar la sesión del usuario
-        request.session.user = usuarios.idUsuario;
-        request.session.rol = usuarios.idRol;
+        // Guardar la sesion del usuario
+        request.session.user = usuarios; // Guarda objeto usuarios
+        request.session.idRol = usuarios.idRol; // Guarda idRol
+        console.log("Usuario guardado en sesión:", request.session.user);
 
-        // Redirigir según el rol
+
+        // Redirigir segun el rol
         switch (usuarios.idRol) {  
             case 3:
-                Usuario.getIdAspirante(request.session.user)
-                .then(([rows,fieldData]) => {
+                Usuario.getIdAspirante(request.session.user.idUsuario)  // Accede a idUsuario desde la sesion
+                .then(([rows, fieldData]) => {
                     request.session.idAspirante = rows[0].IdAspirante;
                     return response.redirect('/aspirante/mis-pruebas');
                 })
@@ -78,12 +80,13 @@ exports.getPost = async (request, response) => {
     }
 };
 
+
 exports.getLogout = ((request, response) => {
     request.session.destroy((err) => {
         if (err) {
             return response.status(500).send('Error al cerrar sesión');
         }
-        // Después de destruir la sesión, redirige al login
+        
         response.redirect('/login');
     });
 });

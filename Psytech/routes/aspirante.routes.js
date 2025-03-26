@@ -8,6 +8,7 @@ const path = require('path');
 
 const controller = require('../controllers/aspirante.controller');
 
+
 //Rutas del portal de los Aspirantes
 router.get('/mis-pruebas', controller.getPruebas);
 
@@ -23,11 +24,19 @@ router.post('/formato-entrevista', controller.postFormatoEntrevista);
 
 router.get('/instrucciones-otis', controller.getIntruccionesOtis);
 
-router.get('/intrucciones-colores', controller.getIntruccionesColores);
+router.get('/instrucciones-hartman', controller.get_instrucciones_hartman);
+
+router.get('/instrucciones-terman', controller.get_instrucciones_terman);
+
+router.get('/instrucciones-colores', controller.get_intrucciones_colores);
+router.post('/prueba-colores/instrucciones', controller.post_datos_colores_en_sesion);
+router.get('/datos-personales-colores', controller.get_datos_personales_colores);
 
 router.get('/prueba-otis', controller.getPruebaOtis);
 
-router.get('/prueba-colores', controller.getPruebaColores);
+router.get('/prueba-colores', controller.get_prueba_colores);
+router.post('/guardar-selecciones-colores', controller.post_guardar_selecciones_colores);
+
 
 router.get('/respuestas-enviadas', controller.getRespuestasEnviadas);
 
