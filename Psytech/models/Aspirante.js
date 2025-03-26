@@ -16,38 +16,26 @@ module.exports = class Aspirante {
         this.idPais = infoAspirante.idPais,
         this.idEstado = infoAspirante.idEstado
     }
-
-    saveUsuario(){
-        return bcrypt.hash(this.contrasenia, 12)
-        .then((contraseniaCifrada) => {
-            return db.execute(`
-                INSERT INTO Usuarios VALUES 
-                (uuid(), ?, ?, true, ?, ?, ?, ?, ?, ?, 
-                (SELECT idRol FROM Roles WHERE nombreRol = 'Aspirante')
-                )`, 
-                [this.usuario, contraseniaCifrada, this.nombreUsuario, 
-                    this.apellidoPaterno, this.apellidoMaterno, this.correo, 
-                    this.lada, this.numeroTelefono]);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-         
-    }
-    getIdUsuario(){
+    save(idGrupo){
         return db.execute(`
-            SELECT idUsuario
-            FROM Usuarios
-            WHERE nombreUsuario = ?
-            `, 
-            [this.nombreUsuario]);
+            EXEC RegistrarAspiranteEnGrupo 
+            (?, ?, ?, ?, ?, ?, ?, ?, 'Aspirante', ?, ?, ?, ?)
+            `
+            , [this.usuario, this.contrasenia, this.nombreUsuario, 
+                this.apellidoPaterno, this.apellidoMaterno, this.correo, 
+                this.lada, this.numeroTelefono, this.idPais, this.idEstado, 
+                idGrupo])
     }
 
-    saveAspirante(idUsuario){
+    getIdAspirante(idGrupo){
         return db.execute(`
-            INSERT INTO Aspirantes VALUES (uuid(), ?, ?, ?, ?, null, null)
-            `, 
-            [idUsuario, this.institucionProcedencia, this.idPais, this.idEstado]);
+            SELECT idAspirante
+            FROM aspirantes, usuarios, aspirantesGrupos
+            WHERE aspirantes.idUsuario = usuarios.idUsuario
+            AND usuarios.usuario = ?
+            AND aspirantes.idAspirante = aspirantesGrupos.idAspirante
+            AND aspirantesGrupos.idGrupo = ?
+            `, [this.usuario, this.idGrupo])
     }
 
 }
