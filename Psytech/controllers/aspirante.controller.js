@@ -136,5 +136,5 @@ exports.getPruebaColores = (request, response, next) => {
 };
 
 exports.getRespuestasEnviadas = (request, response, next) => {
-    response.send('Respuestas enviadas');
+    response.render('Aspirantes/respuestasEnviadas');
 };
