@@ -34,7 +34,7 @@ module.exports = class Grupo {
                     )
   }
 
-  static fetchAll(idInstitucion){
+  static fetchAllInstitucion(idInstitucion){
     return db.execute(`SELECT grupos.idGrupo, institucion.nombreInstitucion,
                       grupos.nombreGrupo, grupos.estatusGrupo, grupos.carrera,
                       grupos.anioGeneracion, grupos.cicloEscolar,

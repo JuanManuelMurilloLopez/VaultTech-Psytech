@@ -8,11 +8,10 @@ exports.getLogin = (request, response, next) => {
 
 exports.getPost = async (request, response) => {
     const { usuario, contrasenia } = request.body;
-
+    console.log(request.body)
     try {
         // Buscar usuario en la base de datos
         const [usuarios] = await Usuario.recuperarUno(usuario);
-        console.log(usuarios);
         // Verificar si se recuperó el usuario
         if (!usuarios) {
             return response.send(`
@@ -64,7 +63,7 @@ exports.getPost = async (request, response) => {
             case 1:
                 return response.redirect('/coordinador/psicologos-registrados');
             case 2:
-                return response.redirect('/psicologo/principal');
+                return response.redirect('/psicologo/lista-grupos');
             default:
                 return response.status(400).send("Rol no reconocido");
         }

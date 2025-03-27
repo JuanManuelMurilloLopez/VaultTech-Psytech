@@ -7,9 +7,15 @@ const Institucion = require('../models/Institucion');
 const Grupo = require('../models/Grupo');
 
 //Rutas del portal de los Psicologos
-exports.getPrincipalPsicologos = (request, response, next) => {
-    console.log('Pagina Principal Psicologos');
-    response.render('Psicologos/principal');
+exports.getListaGrupos = (request, response, next) => {
+    Grupo.fetchAll()
+    .then(([rows, fieldData]) => {
+        const arregloGrupos = rows;
+        response.render('Psicologos/listaGrupos', {arregloGrupos: arregloGrupos || []});
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getCatalogoInstituciones = (request, response, next) => {

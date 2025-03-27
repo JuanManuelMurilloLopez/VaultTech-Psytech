@@ -7,7 +7,7 @@ module.exports = class Institucion {
   }
 
   static fetchOne(idInstitucion){
-    return Grupo.fetchAll(idInstitucion)
+    return Grupo.fetchAllInstitucion(idInstitucion)
     .then(([rows, fieldData]) => {
         return db.execute(`SELECT nombreInstitucion, estatusInstitucion, nombreTipoInstitucion 
             FROM institucion, tipoinstitucion 
