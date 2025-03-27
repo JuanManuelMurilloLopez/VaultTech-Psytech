@@ -24,8 +24,8 @@ router.get('/editar-institucion', controller.getEditarInstitucion);
 router.get('/grupos', controller.getGrupos);
 
 //LILI REGISTRAR GRUPO
-router.get('/registrar-grupo', controller.getRegistrarGrupo); 
-router.post('/registrar-grupo', controller.postRegistrarGrupo); 
+router.get('/registrar-grupo/:idInstitucion', controller.getRegistrarGrupo); 
+router.post('/registrar-grupo/:idInstitucion', controller.postRegistrarGrupo); 
 
 // Vista con los grupos de cierta institución
 router.get('/grupos/:idInstitucion', controller.getGrupos);

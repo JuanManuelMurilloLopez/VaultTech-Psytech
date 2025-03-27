@@ -52,8 +52,10 @@
             <!-- Boton de navegación "Registrar nuevao grupo" -->
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <button type="button" class="btn btn-color--secondary"
-                onclick="window.location.href=
-                '/psicologo/registrar-grupo'">Registrar Nuevo</button>
+                onclick=window.location.href=
+                "/psicologo/registrar-grupo/<%= informacionInstitucion.idInstitucion %>">Registrar Nuevo</button>
+                <a href=
+                "/psicologo/registrar-grupo/<%= informacionInstitucion.idInstitucion %>">Registrar Nuevo</a>
             </div>
     
     
