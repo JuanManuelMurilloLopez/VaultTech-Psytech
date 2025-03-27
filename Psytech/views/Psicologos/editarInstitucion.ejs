@@ -1,5 +1,3 @@
-<%- include('../includes/_navsidePsicologo.ejs') %>
-<%- include('../includes/_buttonCerrarSesion.ejs') %>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -13,50 +11,62 @@
     rel="stylesheet">
     <!-- Link css -->
     <link rel="stylesheet" href="/css/psicologos/editarInstitucion.css">
+    <!-- CSS navside -->
+    <link rel="stylesheet" href="/css/includeCss/_navsidePsicologo.css">
+    <!-- CSS cerrar sesión -->
+    <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 </head>
 
 <body class="bg-light">
-    <div class="container">
 
-        <h1 class="text-center">EDITAR INSTITUCIÓN</h1>
-       
-        <!-- Campo Nombre -->
-        <div class="form-floating mb-3">
-            <input type="" class="form-control" id="" placeholder="">
-            <label for="">Nombre</label>
-        </div>
-       
-        <!-- Campo Tipo Institución -->
-        <select class="form-select" aria-label="Default select example">
-            <option selected>Tipo de Institución</option>
-            <option value="1">Educativa</option>
-            <option value="2">Laboral</option>
-            <option value="3">Artistica</option>
-        </select>
+    <div class="main">
 
+        <!-- Navside -->
+        <%- include('../includes/_navsidePsicologo.ejs') %>
 
-        <br>
-        <h3>Estatus: </h3>
-        <button type="button" class="btn btn-info">Activa</button>
-        <button type="button" class="btn btn-danger">Desactivar</button>
-        <p></p>
-        <!-- Botones de navegación "Regresar y Guardar" -->
-        <button type="button" class="btn btn-color--third"
-        onclick="window.location.href=
-        '/psicologo/catalogo-instituciones'"
-        >Regresar</button>
+        <div class="container">
 
+            <!-- Boton de cerrar sesión -->
+            <%- include('../includes/_buttonCerrarSesion.ejs') %>
 
-        <button type="button" class="btn btn-color--secondary"
-        onclick="confirm('¿Está seguro de guardar los cambios?'),
-        window.location.href=
-        '/psicologo/catalogo-instituciones'"
-        >Guardar</button>
+            <h1 class="text-center">EDITAR INSTITUCIÓN</h1>
+        
+            <!-- Campo Nombre -->
+            <div class="form-floating mb-3">
+                <input type="" class="form-control" id="" placeholder="">
+                <label for="">Nombre</label>
+            </div>
+        
+            <!-- Campo Tipo Institución -->
+            <select class="form-select" aria-label="Default select example">
+                <option selected>Tipo de Institución</option>
+                <option value="1">Educativa</option>
+                <option value="2">Laboral</option>
+                <option value="3">Artistica</option>
+            </select>
+    
+    
+            <br>
+            <h3>Estatus: </h3>
+            <button type="button" class="btn btn-info">Activa</button>
+            <button type="button" class="btn btn-danger">Desactivar</button>
+            <p></p>
+            <!-- Botones de navegación "Regresar y Guardar" -->
+            <button type="button" class="btn btn-color--third"
+            onclick="window.location.href=
+            '/psicologo/catalogo-instituciones'"
+            >Regresar</button>
+    
+    
+            <button type="button" class="btn btn-color--secondary"
+            onclick="confirm('¿Está seguro de guardar los cambios?'),
+            window.location.href=
+            '/psicologo/catalogo-instituciones'"
+            >Guardar</button>
+        </div>    
     </div>
-
-
     <!-- Bootstrap JS -->
-    <script src=
-    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Incluir el script del navside -->
+    <script src="/js/_navside.js"></script>
 </body>

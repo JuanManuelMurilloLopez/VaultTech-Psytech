@@ -154,6 +154,14 @@ CREATE TABLE pruebas(
     tiempo INT
 );
 
+CREATE TABLE gruposPruebas(
+    idGrupo VARCHAR(36),
+    idPrueba VARCHAR(36),
+    PRIMARY KEY(idGrupo, idPrueba),
+    FOREIGN KEY (idGrupo) REFERENCES grupos.(idGrupo),
+    FOREIGN KEY (idPrueba) REFERENCES pruebas.(idPrueba)
+);
+
 -- Tablas con UUID
 CREATE TABLE datosPersonales(
     idDatosPersonales VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
@@ -367,4 +375,5 @@ CREATE TABLE respuestasTermanAspirante (
     FOREIGN KEY (idGrupo) REFERENCES grupos(idGrupo),
     FOREIGN KEY (idPreguntaTerman) REFERENCES preguntasTerman(idPreguntaTerman),
     FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
+
 );

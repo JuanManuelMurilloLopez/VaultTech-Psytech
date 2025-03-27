@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+:root{
+    --secondary: #294969;
+    --font-secondary: #fff;
+    --secondary-hover: #193858;
+}
+
+.main-container{
+    margin-top: 16rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-color--secondary{
+    background: var(--secondary);
+    color: var(--font-secondary);
+}
+
+.btn-color--secondary:hover{
+    background: var(--secondary-hover);
+    color: var(--font-secondary);
+}
