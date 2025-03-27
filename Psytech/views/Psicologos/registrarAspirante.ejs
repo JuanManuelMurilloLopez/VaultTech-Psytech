@@ -1,7 +1,5 @@
-<%- include('../includes/_navsidePsicologo.ejs') %>
-<%- include('../includes/_buttonCerrarSesion.ejs') %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,76 +10,116 @@
     rel="stylesheet">
     <!-- Link css -->
     <link rel="stylesheet" href="/css/psicologos/registrarAspirante.css">
+    <!-- CSS navside -->
+    <link rel="stylesheet" href="/css/includeCss/_navsidePsicologo.css">
+    <!-- CSS cerrar sesión -->
+    <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 </head>
 
 <body class="bg-light">
-    <div class="container">
-        <div>
-            <h1 class="text-center">REGISTRAR NUEVO ASPIRANTE</h1>
-        </div>
-        <div>
-            <!--Input nombre-->
-            <div class="form-floating mb-3">
-                <input type="" class="form-control" id="" placeholder="">
-                <label for="">Nombre</label>
-            </div>
 
-            <!--Input Apellido Paterno-->
-            <div class="form-floating mb-3">
-                <input type="" class="form-control" id="" placeholder="">
-                <label for="">Apellido Paterno</label>
-            </div>
+    <div class="main">
 
-            <!--Input Apellido Materno-->
-            <div class="form-floating mb-3">
-                <input type="" class="form-control" id="" placeholder="">
-                <label for="">Apellido Materno</label>
-            </div>
+        <!-- Navside -->
+        <%- include('../includes/_navsidePsicologo.ejs') %>
 
-            <!--Input Correo-->
-            <div class="form-floating mb-3">
-                <input type="" class="form-control" id="" placeholder="">
-                <label for="">Correo electrónico</label>
-            </div>
-            <!--Input Número-->
-            <div class="form-floating mb-3">
-                <input type="" class="form-control" id="" placeholder="">
-                <label for="">Número de teléfono</label>
-            </div>
+        <div class="container">
 
-            <!--Input Pais-->
-            <select class="form-select" aria-label="Default select example">
-                <option selected>País de origen</option>
-                <option value="1">México</option>
-                <option value="2">Argentina</option>
-                <option value="3">España</option>
-            </select>
+            <!-- Boton de cerrar sesión -->
+            <%- include('../includes/_buttonCerrarSesion.ejs') %>
 
+            <div>
+                <h1 class="text-center">REGISTRAR NUEVO ASPIRANTE</h1>
+            </div>
+            <div>
+                <form action="" method="POST">
+    
+                    <!--Input nombre-->
+                    <div class="">
+                        <label for="nombreUsuario">Nombre</label> <br>
+                        <input type="" class="" id="nombreUsuario" placeholder="Juan" name="nombreUsuario">
+                    </div>
+    
+                    <!--Input Apellido Paterno-->
+                    <div class="">
+                        <label for="apellidoPaterno">Apellido Paterno</label> <br>
+                        <input type="" class="" id="apellidoPaterno" placeholder="Pérez" name="apellidoPaterno">
+                    </div>
+    
+                    <!--Input Apellido Materno-->
+                    <div class="">
+                        <label for="apellidoMaterno">Apellido Materno</label> <br>
+                        <input type="" class="" id="apellidoMaterno" placeholder="Pérez" name="apellidoMaterno">
+                    </div>
+    
+                    <!--Input institución de procedencia-->
+                    <div class="">
+                        <label for="institucionProcedencia">Institución de Procedencia</label> <br>
+                        <input type="" class="" id="institucionProcedencia" placeholder="Tec de Monterrey" name="institucionProcedencia">
+                    </div>
+    
+                    <!--Input Correo-->
+                    <div class="">
+                        <label for="correo">Correo</label> <br>
+                        <input type="" class="" id="correo" placeholder="ejemplo@gmail.com" name="correo">
+                    </div>
+    
+                    <!--Input Lada-->
+                    <div class="">
+                        <label for="lada">Lada telefónica</label> <br>
+                        <input type="number" class="" id="lada" placeholder="52" name="lada">
+                    </div>
+    
+                    <!--Input Número de teléfono-->
+                    <div class="">
+                        <label for="numeroTelefono">Número de teléfono</label> <br>
+                        <input type="number" class="" id="numeroTelefono" placeholder="1234567890" name="numeroTelefono">
+                    </div>
+    
+                    <!--Input País de origen-->
+                    <div class="">
+                        <label for="idPais">País de origen</label> <br>
+    
+                        <select name="idPais" id="idPais">
+                            <% for(pais of paises){ %>
+                                <option value="<%= pais.idPais %>"> <%= pais.nombrePais %> </option>
+                            <% } %>
+                        </select>
+    
+                    </div>
+    
+                    <!--Input Estado-->
+                    <div class="">
+                        <label for="idEstado">Estado de residencia</label> <br>
+    
+                        <select name="idEstado" id="iEstado">
+                            <% for(estado of estados){ %>
+                                <option value="<%= estado.idEstado %>"> <%= estado.nombreEstado %> </option>
+                            <% } %>
+                        </select>
+    
+                    </div>
+    
+                    <button class="btn btn-color--third">Cancelar</button>
+                    <button class="btn btn-color--secondary" type="submit">Guardar</button>
+    
+                </form>
+            </div>
+            
             <br>
-
-            <!--Input Estado-->
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Estado de origen</option>
-                <option value="1">Querétaro</option>
-                <option value="2">CDMX</option>
-                <option value="3">Monterrey</option>
-                <option value="3">Puebla</option>
-            </select>
-        </div>
-        <br>
-        <div>
-            <!-- Boton de navegación "Regresar" -->
-            <a href="/psicologo/aspirantes" class="btn btn-color--third">Regresar</a>
-
-            <!-- Boton de navegación "Guardar" -->
-            <a href="/psicologo/aspirantes" class="btn btn-color--secondary" 
-            onclick="confirm('¿Está seguro de guardar los cambios?')">Guardar</a>
+            <div>
+                <!-- Boton de navegación "Regresar" -->
+                <a href="/psicologo/aspirantes" class="btn btn-color--third">Regresar</a>
+    
+                <!-- Boton de navegación "Guardar" -->
+                <a href="/psicologo/aspirantes" class="btn btn-color--secondary" 
+                onclick="confirm('¿Está seguro de guardar los cambios?')">Guardar</a>
+            </div>
         </div>
     </div>
-
     <!-- Bootstrap JS -->
-    <script src=
-    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Incluir el script del navside -->
+    <script src="/js/_navside.js"></script>
 </body>
 </html>
