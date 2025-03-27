@@ -22,11 +22,6 @@
     font-weight: 500;
 }
 
-.titulo-seccion{
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--secondary);
-}
 
 .form-label{
     font-size: 20px;
@@ -34,11 +29,8 @@
     color: var(--secondary);
 }
 
-.input, .textarea{
-    border-color: var(--secondary);
-}
-
 .input{
+    border-color: var(--secondary);
     height: 40px;
 }
 
@@ -48,7 +40,7 @@
     left: 0;
     right: 0;
     background-color: #fff;
-    padding: 10px 0;
+    padding: 20px 0;
     z-index: 1000;
 }
 

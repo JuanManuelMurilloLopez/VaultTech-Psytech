@@ -46,6 +46,11 @@
                                             'En progreso': 'prueba-progreso'
                                         };
                                         const estatus = estatusPrueba[prueba.nombreEstatus] || 'prueba-default'; 
+
+                                        <!-- CAMBIO CODIGO: Asignar la ruta segUn el nombre de la prueba -->
+                                        let rutaPrueba = '';
+                                        if (prueba.nombre === 'Colores de Luscher') rutaPrueba = '/aspirante/instrucciones-colores';
+                                        if (prueba.nombre === 'OTIS') rutaPrueba = '/aspirante/instrucciones-otis';
                                     %>
                                     <% if (estatusPrueba[prueba.nombreEstatus]) { %>
                                         <span class="card-estatus <%= estatus %>">
@@ -60,28 +65,28 @@
                                     const fechaFormato = `${fecha.getDate()}/${fecha.getMonth()+1}/${fecha.getFullYear()}`;
                                 %>
                                 <p class="card-text">Fecha límite: <%= fechaFormato %></p>
-                                <div class="d-flex justify-content-between">
-                                    <% if (prueba.nombreEstatus === 'Pendiente' || prueba.nombreEstatus === 'En progreso') { %>
-                                        <% if (prueba.nombre === 'Colores de Luscher') { %>
-                                          <a href="/aspirante/instrucciones-colores" class="btn btn-color--secondary">Realizar prueba</a>
-                                        <% } else if (prueba.nombre === 'Perfil de valores Hartman') { %>
-                                          <a href="/aspirante/instrucciones-hartman" class="btn btn-color--secondary">Realizar prueba</a>
-                                        <% } else if (prueba.nombre === 'Aptitud Mental TERMAN') { %>
-                                          <a href="/aspirante/instrucciones-terman" class="btn btn-color--secondary">Realizar prueba</a>
-                                        <% } else { %>
-                                          <a href="#" class="btn btn-secondary disabled">No disponible</a>
-                                        <% } %>
-                                      <% } else { %>
-                                        <span class="text-muted">Prueba completada</span>
-                                      <% } %>
-                                      
-                                    <span>
-                                        <%= prueba.tiempo %> 
-                                        <% if (prueba.tiempo != null) { %>
-                                            min
-                                        <% } %>
-                                    </span>
-                                </div>
+                                <% if (prueba.nombreEstatus === 'Pendiente' || prueba.nombreEstatus === 'En progreso') { %>
+                                    <div class="d-flex justify-content-between">
+                                        <!-- CAMBIO CODIGO: href ruta -->
+                                        <a href="<%= rutaPrueba %>" class="btn btn-color--secondary">Realizar prueba</a>
+                                        <span>
+                                            <%= prueba.tiempo %> 
+                                            <% if (prueba.tiempo != null) { %>
+                                                min
+                                            <% } %>
+                                        </span>
+                                    </div>
+                                <% } else {%>
+                                    <div class="d-flex justify-content-between">
+                                        <span>
+                                            <%= prueba.tiempo %> 
+                                            <% if (prueba.tiempo != null) { %>
+                                                min
+                                            <% } %>
+                                        </span>
+                                    </div>
+                                <% } %>
+
                             </div>
                         </div>
                     </div>
@@ -95,7 +100,7 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Incluir el script del navside -->
-    <script src="/js/_navsideAspirante.js"></script>
+    <script src="/js/_navside.js"></script>
 
 </body>
 </html>

@@ -1,24 +1,25 @@
 const { request, response } = require("express");
 const FormatoEntrevista = require('../models/formatoDeEntrevista.model');
+const Genero =  require('../models/generos.model');
+const EstadoCivil = require('../models/estadoCivil.model');
+const Familiar = require('../models/formularioFamiliares.model');
 const ConsultarPruebas = require("../models/consultarPruebas.model");
-const SeleccionesColores = require('../models/seleccionesColores.model');
-const db = require('../util/database');
-const { v4: uuidv4 } = require('uuid');
+const PruebaColores = require('../models/pruebaColores.model');
 
-
-// == RUTAS
-
+//Rutas del portal de los Aspirantes
 exports.getPruebas = (request, response) => {
     ConsultarPruebas.fetchAll(request.session.idAspirante)
-        .then(([rows, fieldData]) => {
-            const pruebas = rows;
-            response.render('Aspirantes/misPruebas', {
-                pruebas: pruebas || [],
-            });
-        })
-        .catch((error) => {
-            console.log(error);
+    .then(([rows, fieldData]) => {
+        const pruebas  = rows;
+        response.render('Aspirantes/misPruebas',{
+            pruebas: pruebas || [],
         });
+        
+    })
+
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getPruebasPendientes = (request, response, next) => {
@@ -33,25 +34,23 @@ exports.getSubirDocumentos = (request, response, next) => {
     response.render('Aspirantes/subirDocumentos');
 };
 
-
-// == FORMATO ENTREVISTA
-
 exports.getFormatoEntrevista = (request, response, next) => {
     FormatoEntrevista.fetchAll()
-        .then(([rows, fieldData]) => {
-            const preguntas = rows;
-            response.render('Aspirantes/formatoDeEntrevista', {
-                preguntas: preguntas || [],
-            });
-        })
-        .catch((error) => {
-            console.log(error);
+    .then(([rows, fieldData]) => {
+        const preguntas = rows;
+        response.render('Aspirantes/formatoDeEntrevista',{
+            preguntas: preguntas || [],
         });
+    }).catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.postFormatoEntrevista = (request, response, next) => {
-    const respuestasParseadas = [];
-    for (let key in request.body) {
+    // Array para almacenar respuestas del formato de entrevista
+    const respuestasParseadas = []; 
+    // Obtener las llaves del objeto request.body para separarlas de su valor
+    for(let key in request.body){
         const value = request.body[key];
         respuestasParseadas.push([request.session.idAspirante, key, value]);
     }
@@ -59,186 +58,294 @@ exports.postFormatoEntrevista = (request, response, next) => {
     const respuesta = new FormatoEntrevista(respuestasParseadas);
 
     respuesta.saveRespuestaAspirante()
-        .then(() => {
-            response.redirect('/aspirante/respuestas-enviadas');
-        }).catch((error) => {
-            console.log(error);
-        });
+    .then(() => {
+        response.redirect('/aspirante/formulario-familiar')
+    }).catch((error) => {
+        console.log(error)
+    });
+
 };
 
+exports.getFormularioFamiliares = (request, response, next) => {
+    Familiar.fetchAll()
+    .then(([rows, fieldData]) => {
+        const familiares = rows;
 
-// == INSTRUCCIONES Y VISTAS
+        Genero.fetchAll()
+            .then(([rows, fieldData]) => {
+                const generos = rows;
+
+                EstadoCivil.fetchAll()
+                .then(([rows, fieldData]) => {
+                    const estadosCiviles = rows;
+                    
+                    Familiar.fetchHijoDe(request.session.idAspirante)
+                    .then(([rows, fieldData]) => {
+                        const hijoDe = rows;
+
+                        response.render('Aspirantes/formularioFamiliar',{
+                            familiares: familiares || [],
+                            generos: generos || [],
+                            estadosCiviles: estadosCiviles || [],
+                            hijoDe: hijoDe || [],
+                        });
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+
+                }).catch((error) => {
+                    console.log(error);
+                });
+
+            }).catch((error) => {
+                console.log(error);
+            });
+            
+    }).catch((error) => {
+        console.log(error);
+    });
+};
+
+exports.postFormularioFamiliares = (request, response, next) => {
+    // Array para almacenar respuestas del formato de entrevista
+    const familiaresParseados = []; 
+    // Obtener las llaves del objeto request.body para separarlas de su valor
+    for(let key in request.body){
+        let value = request.body[key];
+        if (key === 'hijoDe' && value === '') {
+            value = null;
+        }
+        familiaresParseados.push(value);
+    }
+
+    console.log(familiaresParseados)
+    
+    const respuesta = new Familiar(request.session.idAspirante, familiaresParseados);
+
+    respuesta.saveFamiliar()
+    .then(() => {
+        response.redirect('/aspirante/formulario-familiar')
+    }).catch((error) => {
+        console.log(error)
+    });
+
+};
 
 exports.getIntruccionesOtis = (request, response, next) => {
     response.render('Aspirantes/instruccionesOtis');
 };
 
-exports.get_instrucciones_hartman = (request, response, next) => {
-    response.send('Aspirantes/instruccionesHartman');
+// Mostrar instrucciones colores
+exports.getInstruccionesColores = (request, response, next) => {
+    PruebaColores.fetchInstrucciones()
+    .then(([rows, fieldData]) => {
+        const instrucciones = rows[0]?.instrucciones || 'Instrucciones no disponibles';
+        response.render('Aspirantes/instruccionesColores', {
+            instrucciones: instrucciones
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+        response.render('Aspirantes/instruccionesColores', {
+            instrucciones: 'Error al cargar las instrucciones'
+        });
+    });
 };
 
-exports.get_instrucciones_terman = (request, response, next) => {
-    response.send('Aspirantes/instruccionesTerman');
+exports.postInstruccionesColores = (req, res) => {
+    res.redirect('/aspirante/datos-personales-colores');
 };
-
-exports.get_intrucciones_colores = (request, response, next) => {
-    response.render('Aspirantes/instruccionesColores');
-};
-
-exports.get_datos_personales_colores = (request, response, next) => {
-    response.render('Aspirantes/datosPersonalesColores');
-};
+  
 
 exports.getPruebaOtis = (request, response, next) => {
     response.render('Aspirantes/pruebaOtis');
 };
 
-exports.get_prueba_colores = (req, res, next) => {
-    res.render('Aspirantes/pruebaColores');
+// Formulario datos personales
+exports.getDatosPersonalesColores = (request, response, next) => {
+    response.render('Aspirantes/datosPersonalesColores');
 };
 
+// Procesar datos personales y pasar a la prueba
+exports.postDatosPersonalesColores = (request, response, next) => {
+    const { nombre, apellidoPaterno, apellidoMaterno, puestoSolicitado } = request.body;
+    
+    // Guardar en la sesion
+    request.session.datosPersonalesColores = {
+        nombre,
+        apellidoPaterno,
+        apellidoMaterno,
+        puestoSolicitado,
+        fecha: new Date()
+    };
+    
+    // Primera fase de la prueba
+    response.redirect('/aspirante/prueba-colores');
+};
 
-// == DATOS PERSONALES (POST)
-
-console.log("Controlador cargado correctamente");
-
-// Guardar datos personales del aspirante
-exports.post_datos_colores_en_sesion = async (req, res, next) => {
-    console.log("Controlador cargado correctamente");
-  
-    try {
-      const idUsuario = req.session.user?.idUsuario;  // Tener idUsuario desde la sesion
-      console.log("idUsuario desde sesión:", idUsuario);  // Checar que idUsuario esta bien almacenado en la sesion
-  
-      const { nombre, apellidoPaterno, apellidoMaterno, postgrado } = req.body;
-      const idPrueba = 8;
-  
-      // Checar que no haya campos vacios
-      if (!idUsuario || !nombre || !apellidoPaterno || !apellidoMaterno || !postgrado) {
-        return res.status(400).send("Faltan datos obligatorios.");
-      }
-  
-      // Buscar ID del aspirante
-      const [aspirante] = await db.execute(
-        'SELECT idAspirante FROM aspirantes WHERE idUsuario = ?',
-        [idUsuario]
-      );
-  
-      console.log("Resultado de la consulta de aspirante:", aspirante);  // Checa que la consulta devuelve el idAspirante
-  
-      if (aspirante.length === 0) {
-        return res.status(404).send('Aspirante no encontrado');
-      }
-  
-      const idAspirante = aspirante[0].idAspirante;
-  
-      // Buscar grupo del aspirante
-      const [grupo] = await db.execute(
-        'SELECT idGrupo FROM gruposAspirantes WHERE idAspirante = ?',
-        [idAspirante]
-      );
-  
-      console.log("Resultado de la consulta de grupo:", grupo);  // Checa que la consulta devuelve el idGrupo
-  
-      if (grupo.length === 0) {
-        return res.status(404).send('Grupo no encontrado');
-      }
-  
-      const idGrupo = grupo[0].idGrupo;
-  
-      // Guardar en sesion
-      req.session.idAspirante = idAspirante;
-      req.session.idGrupo = idGrupo;
-      req.session.nombre = nombre;
-      req.session.apellidoPaterno = apellidoPaterno;
-      req.session.apellidoMaterno = apellidoMaterno;
-      req.session.puestoSolicitado = postgrado;
-  
-      // Checa si ya existe el registro
-      const [existe] = await db.execute(
-        'SELECT * FROM datosPersonales WHERE idGrupo = ? AND idPrueba = ? AND idAspirante = ?',
-        [idGrupo, idPrueba, idAspirante]
-      );
-  
-      console.log("Registro existente en datosPersonales:", existe);  // Checa si ya existe un registro para los datos personales
-  
-      if (existe.length === 0) {
-        // Inserta los datos en la tabla datosPersonales
-        await db.execute(`
-          INSERT INTO datosPersonales (
-            idDatosPersonales,
-            idGrupo,
-            idPrueba,
-            idAspirante,
-            nombre,
-            apellidoPaterno,
-            apellidoMaterno,
-            puestoSolicitado,
-            fecha
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURDATE())
-        `, [
-          uuidv4(),
-          idGrupo,
-          idPrueba,
-          idAspirante,
-          nombre,
-          apellidoPaterno,
-          apellidoMaterno,
-          postgrado
-        ]);
-      }
-  
-      // Redirigir a la prueba de colores
-      res.redirect('/aspirante/prueba-colores');
-  
-    } catch (err) {
-      console.error("ERROR EN post_datos_colores_en_sesion");
-      console.error(err.message);
-      console.error(err.stack);
-      res.status(500).send('Error del servidor');
-    }
-  };
-
-
-// == CONFIRMACIÓN FINAL
-
-exports.post_guardar_selecciones_colores = async (req, res, next) => {
-    const selecciones = req.body.selecciones; // Accede a 'selecciones'
-    const idAspirante = req.session.idAspirante;
-    const idGrupo = req.session.idGrupo;
-    const idPrueba = 8; // ID de la prueba de colores
-
-    console.log("Selecciones recibidas en el backend:", selecciones);
-
-    if (!idAspirante || !idGrupo) {
-        return res.status(400).json({ error: "Faltan datos de sesión" });
+exports.getPruebaColores = (request, response, next) => {
+    if (!request.session.datosPersonalesColores) {
+        return response.redirect('/aspirante/datos-personales-colores');
     }
 
-    if (!Array.isArray(selecciones) || selecciones.length !== 16) {
-        return res.status(400).json({ error: "Número incorrecto de selecciones" });
-    }
+    const idPrueba = 6; 
 
-    try {
-        for (const sel of selecciones) {
-            await SeleccionesColores.insertarSeleccionColor({
-                idPrueba,
-                idAspirante,
-                idGrupo,
-                idColor: sel.idColor,
-                posicion: sel.posicion,
-                fase: sel.fase,
+    // Obtener el idGrupo aspirante y prueba
+    PruebaColores.obtenerGrupoParaPrueba(request.session.idAspirante, idPrueba)
+        .then(([rows, fieldData]) => {
+            if (rows.length > 0) {
+                // Guardar el idGrupo
+                request.session.idGrupo = rows[0].idGrupo;
+                console.log("ID de Grupo establecido:", request.session.idGrupo);
+            } else {
+                console.log("No se encontró grupo para este aspirante y prueba");
+            }
+
+            // Continuar con colores
+            return PruebaColores.fetchColores();
+        })
+        .then(([rows, fieldData]) => {
+            const colores = rows;
+            response.render('Aspirantes/pruebaColores', {
+                colores: colores || [],
+                fase: 1,
+                error: null
             });
-        }
-
-        res.json({ mensaje: "Selecciones guardadas correctamente" });
-    } catch (error) {
-        console.error("Error al guardar selecciones:", error);
-        res.status(500).json({ error: "Error al guardar selecciones" });
-    }
+        })
+        .catch((error) => {
+            console.log(error);
+            response.render('Aspirantes/pruebaColores', {
+                colores: [],
+                fase: 1,
+                error: 'Error al cargar los colores'
+            });
+        });
 };
 
+exports.postPruebaColores = (request, response, next) => {
+    response.redirect('/aspirante/prueba-completada');
+};
 
-  
+exports.postGuardarSeleccionesColores = (request, response) => {
+    console.log("1. Iniciando controlador postGuardarSeleccionesColores");
+    
+    if (!request.session.idAspirante) {
+        console.log("2. Error: No se encontró idAspirante en la sesión");
+        return response.status(400).json({ 
+            error: "No se encontró información del aspirante"
+        });
+    }
+    
+    const { selecciones } = request.body;
+    
+    if (!selecciones || !Array.isArray(selecciones)) {
+        console.log("3. Error: Formato de datos incorrecto");
+        return response.status(400).json({ 
+            error: "Formato de datos incorrecto",
+            received: request.body
+        });
+    }
+    
+    const idPrueba = 6; 
+    
+    // Obtener idGrupo
+    PruebaColores.obtenerGrupoParaPrueba(request.session.idAspirante, idPrueba)
+        .then(([rows]) => {
+            if (rows.length === 0) {
+                throw new Error("No se encontró grupo para este aspirante y prueba");
+            }
+            
+            const idGrupo = rows[0].idGrupo;
+            console.log("4. ID de Grupo obtenido:", idGrupo);
+            
+            // Separar las selecciones de fase 1 y 2
+            const seleccionesFase1 = selecciones.filter(s => s.fase === 1);
+            const seleccionesFase2 = selecciones.filter(s => s.fase === 2);
+            
+            // Checar que hay datos en ambas fases
+            if (seleccionesFase1.length !== 8 || seleccionesFase2.length !== 8) {
+                throw new Error("Número incorrecto de selecciones por fase");
+            }
+            
+            // Obtener datos personales
+            const datosPersonales = request.session.datosPersonalesColores || {
+                nombre: "Usuario",
+                apellidoPaterno: "",
+                apellidoMaterno: "",
+                puestoSolicitado: "No especificado",
+                fecha: new Date()
+            };
+            
+            // Guardar en base
+            return PruebaColores.guardarDatosPersonales(
+                request.session.idAspirante,
+                idGrupo,
+                idPrueba,
+                datosPersonales
+            ).then(() => {
+                console.log("5. Datos personales guardados correctamente");
+                const pruebaColores1 = new PruebaColores(seleccionesFase1);
+                return pruebaColores1.saveSeleccion(
+                    request.session.idAspirante,
+                    idGrupo,
+                    idPrueba,
+                    1
+                );
+            }).then(() => {
+                console.log("6. Primera selección guardada");
+                const pruebaColores2 = new PruebaColores(seleccionesFase2);
+                return pruebaColores2.saveSeleccion(
+                    request.session.idAspirante,
+                    idGrupo,
+                    idPrueba,
+                    2
+                );
+            }).then(() => {
+                console.log("7. Segunda selección guardada");
+                // Existe registro?
+                return PruebaColores.verificarExistencia(
+                    request.session.idAspirante,
+                    idGrupo,
+                    idPrueba
+                ).then(([rows]) => {
+                    if (rows.length === 0) {
+                        console.log("No existe registro para actualizar. Intentando insertar...");
+                        // Si no existe insertarlo
+                        return db.execute(
+                            `INSERT INTO aspirantesGruposPruebas (idAspirante, idGrupo, idPrueba, idEstatus)
+                            VALUES (?, ?, ?, 2)`,
+                            [request.session.idAspirante, idGrupo, idPrueba]
+                        );
+                    } else {
+                        console.log("Registro encontrado, actualizando estado...");
+                        return PruebaColores.updateEstadoPrueba(
+                            request.session.idAspirante,
+                            idGrupo,
+                            idPrueba
+                        );
+                    }
+                });
+            });
+        })
+        .then(() => {
+            console.log("8. Estado de la prueba actualizado");
+            delete request.session.datosPersonalesColores;
+            delete request.session.primeraSeleccion;
+            response.status(200).json({ mensaje: "Selecciones guardadas correctamente" });
+        })
+        .catch((error) => {
+            console.error("Error:", error.message);
+            response.status(500).json({ 
+                error: error.message || "Error al guardar los datos"
+            });
+        });
+};
+
+exports.getPruebaCompletada = (request, response, next) => {
+    response.render('Aspirantes/pruebaCompletada', {
+    });
+};
 
 exports.getRespuestasEnviadas = (request, response, next) => {
     response.render('Aspirantes/respuestasEnviadas');

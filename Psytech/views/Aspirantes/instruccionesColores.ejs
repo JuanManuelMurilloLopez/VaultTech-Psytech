@@ -37,9 +37,13 @@
 
 
         <div class="d-flex justify-content-between mt-5">
-            <button type="button" class="btn btn-secondary" onclick="window.location.href='/aspirante/mis-pruebas'">Regresar</button>
-            <button type="button" class="btn btn-color--secondary" onclick="window.location.href='/aspirante/datos-personales-colores'">Iniciar Prueba</button>
+            <a href="/aspirante/mis-pruebas" class="btn btn-secondary">Regresar</a>
+        
+            <form action="/aspirante/instrucciones-colores" method="POST">
+                <button type="submit" class="btn btn-primary">Iniciar Prueba</button>
+            </form>
         </div>
+        
     </div>
 
     <!-- Bootstrap JS -->
