@@ -30,8 +30,6 @@ router.post('/registrar-grupo/:idInstitucion', controller.postRegistrarGrupo);
 // Vista con los grupos de cierta institución
 router.get('/grupos/:idInstitucion', controller.getGrupos);
 
-// Formulario para crear nuevos grupos
-router.get('/registrar-grupo', controller.getRegistrarGrupo);
 
 // Formulario para editar grupos
 router.get('/editar-grupo', controller.getEditarGrupo);

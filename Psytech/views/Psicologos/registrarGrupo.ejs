@@ -26,7 +26,6 @@
 
       <!-- Boton de cerrar sesión -->
       <%- include('../includes/_buttonCerrarSesion.ejs') %>
-
     <% if (error && error.trim().length > 0) { %>
       <div class="alert alert-danger text-center">
         <%= error %>
@@ -34,9 +33,7 @@
     <% } %>
     
 
-
-    <!-- FORMULARIO -->
-    <form action="/psicologo/registrar-grupo" method="POST">
+    <form action="/psicologo/registrar-grupo/<%= idInstitucion %>"  method="POST">
 
       <!-- Nombre -->
       <div class="form-floating mb-3">
@@ -66,15 +63,6 @@
         <label for="semestre">Semestre</label>
       </div>
 
-      <!-- Institución -->
-      <div class="form-floating mb-3">
-        <select class="form-select" id="idInstitucion" name="idInstitucion" required>
-          <% listadoInstituciones.forEach(inst => { %>
-            <option value="<%= inst.idInstitucion %>"><%= inst.nombreInstitucion %></option>
-          <% }) %>
-        </select>
-        <label for="idInstitucion">Institución</label>
-      </div>
 
       <!-- Nivel Académico -->
       <div class="form-floating mb-3">
@@ -103,19 +91,13 @@
       </div>
 
 
-      <!-- Botones de navegación "Regresar y Guardar" -->
-      <button type="button" class="btn btn-secondary"
-      onclick="window.location.href=
-      '/psicologo/grupos'"
-      >Regresar</button>
+      <!-- Botones -->
+      <div class="mt-4">
+        <a href="/psicologo/grupos/<%= idInstitucion %>" class="btn btn-secondary">Regresar</a>
+        <button type="submit" class="btn btn-primary" onclick="return confirm('¿Está seguro de guardar los cambios?')">Guardar</button>
+      </div>
+    </form>
 
-
-      <button type="button" class="btn btn-color--secondary"
-      onclick="confirm('¿Está seguro de guardar los cambios?'),
-      window.location.href=
-      '/psicologo/grupos'"
-      >Guardar</button>
-    </div>
   </div>
 
     <!-- Bootstrap JS -->

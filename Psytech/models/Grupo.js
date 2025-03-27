@@ -2,14 +2,14 @@ const db = require('../util/database');
 
 
 module.exports = class Grupo {
-  constructor(nombreGrupo, carrera, semestre, anioGeneracion, idInstitucion, idNivelAcademico) {
-    this.idGrupo = uuidv4();
+  constructor(nombreGrupo, carrera, semestre, anioGeneracion, idInstitucion, idNivelAcademico, fechaLimite) {
     this.nombreGrupo = nombreGrupo;
     this.carrera = carrera;
     this.semestre = semestre;
     this.anioGeneracion = anioGeneracion;
     this.idInstitucion = idInstitucion;
-    this.idNivelAcademico = idNivelAcademico;
+    this.idNivelAcademico = idNivelAcademico,
+    this.fechaLimite = fechaLimite;
   }
 
   static fetchAll(){
@@ -104,9 +104,8 @@ static obtenerInstituciones() {
   guardarGrupo() {
     return db.execute(
       `INSERT INTO grupos (idGrupo, nombreGrupo, estatusGrupo, cicloEscolar, anioGeneracion, carrera, idInstitucion, idNivelAcademico)
-       VALUES (?, ?, true, ?, ?, ?, ?, ?)`,
+       VALUES (uuid(), ?, true, ?, ?, ?, ?, ?)`,
       [
-        this.idGrupo,
         this.nombreGrupo,
         this.semestre,
         this.anioGeneracion,
@@ -117,6 +116,7 @@ static obtenerInstituciones() {
     );
   }
 
+
   guardarPruebasSeleccionadas(pruebasSeleccionadas) {
     if (!Array.isArray(pruebasSeleccionadas)) {
       pruebasSeleccionadas = [pruebasSeleccionadas];
@@ -124,8 +124,8 @@ static obtenerInstituciones() {
 
     const inserts = pruebasSeleccionadas.map(idPrueba => {
       return db.execute(
-        `INSERT INTO gruposPruebas (idGrupo, idPrueba) VALUES (?, ?)`,
-        [this.idGrupo, idPrueba]
+        `INSERT INTO gruposPruebas (idGrupo, idPrueba, fechaAsignacion, fechaLimite) VALUES ((SELECT idGrupo FROM grupos WHERE grupos.nombreGrupo = ?), ?, CURRENT_DATE(), ?)`,
+        [this.nombreGrupo, idPrueba, this.fechaLimite]
       );
     });
 

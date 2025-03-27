@@ -41,6 +41,7 @@ exports.getGrupos = (request, response, next) => {
         response.render('Psicologos/gruposInstitucion', {
             informacionInstitucion: informacionInstitucion || [],
             arregloGrupos: arregloGrupos || [],
+            idInstitucion: request.params.idInstitucion,
         });
     })
     .catch();
@@ -57,11 +58,12 @@ exports.getRegistrarGrupo = (req, res, next) => {
       Grupo.obtenerPruebas()
     ])
       .then(([instituciones, niveles, pruebas]) => {
-        res.render('Psicologos/registrarGrupo', {
+        res.render('Psicologos/registrarGrupo.ejs', {
           listadoInstituciones: instituciones[0],
           listadoNiveles: niveles[0],
           listadoPruebas: pruebas[0],
-          error: null
+          error: '',
+          idInstitucion: req.params.idInstitucion,
         });
       })
       .catch(err => {
@@ -72,14 +74,15 @@ exports.getRegistrarGrupo = (req, res, next) => {
 
 // Post
   exports.postRegistrarGrupo = (req, res, next) => {
+    console.log("Request Body", req.body);
     const {
       nombreGrupo,
       carrera,
       semestre,
       anio,
-      idInstitucion,
       idNivelAcademico,
-      pruebasSeleccionadas
+      pruebasSeleccionadas,
+      fechaLimite
     } = req.body;
   
     Grupo.existe(nombreGrupo)
@@ -94,7 +97,8 @@ exports.getRegistrarGrupo = (req, res, next) => {
               error: 'El grupo ya está registrado.',
               listadoInstituciones: instituciones[0],
               listadoNiveles: niveles[0],
-              listadoPruebas: pruebas[0]
+              listadoPruebas: pruebas[0],
+              idInstitucion: req.params.idInstitucion,
             });
           });
         }
@@ -104,14 +108,16 @@ exports.getRegistrarGrupo = (req, res, next) => {
           carrera,
           semestre,
           anio,
-          idInstitucion,
-          idNivelAcademico
+          req.params.idInstitucion,
+          idNivelAcademico,
+          fechaLimite
         );
+        console.log("Grupo", grupo);
   
         return grupo.guardarGrupoYPruebas(pruebasSeleccionadas);
       })
       .then(() => {
-        res.redirect('/psicologo/grupos');
+        exports.getGrupos(req, res, next);
       })
       .catch(error => {
         console.log('Error al registrar grupo:', error);
@@ -130,6 +136,7 @@ exports.getInformacionGrupo = (request, response, next) => {
         Grupo.getAspirantes(request.params.idGrupo)
         .then(([rows, fieldData]) => {
             const aspirantes = rows;
+            console.log(grupo);
             response.render('Psicologos/informacionGrupo.ejs', {
                 grupo: grupo || null,
                 aspirantes: aspirantes || [],
@@ -145,10 +152,6 @@ exports.getInformacionGrupo = (request, response, next) => {
     
 }
 
-exports.getRegistrarGrupo = (request, response, next) => {
-    console.log('Registrar Nuevo Grupo');
-    response.render('Psicologos/registrarGrupo');
-};
 
 exports.getEditarGrupo = (request, response, next) => {
     console.log('Editar Grupo');
