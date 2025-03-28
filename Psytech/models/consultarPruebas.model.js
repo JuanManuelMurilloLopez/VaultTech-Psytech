@@ -10,5 +10,15 @@ module.exports = class ConsultarPruebas{
             [idAspirante]
         );
     }
+
+    static fetchAllPendientes(idAspirante){
+        return db.execute(`
+            SELECT nombre, nombreEstatus, descripcion, fechaLimite, tiempo, idAspirante, nombreGrupo 
+            FROM vistaPruebasAspirantes
+            WHERE idAspirante = ? 
+            AND nombreEstatus = 'Pendiente'`, 
+            [idAspirante]
+        );
+    }
     
 }
