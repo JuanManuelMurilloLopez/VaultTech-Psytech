@@ -1,5 +1,3 @@
-<%- include('../includes/_navsidePsicologo.ejs') %>
-<%- include('../includes/_buttonCerrarSesion.ejs') %>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -14,42 +12,56 @@
     rel="stylesheet">
     <!-- Link css -->
     <link rel="stylesheet" href="/css/psicologos/registrarInstitucion.css">
+    <!-- CSS navside -->
+    <link rel="stylesheet" href="/css/includeCss/_navsidePsicologo.css">
+    <!-- CSS cerrar sesión -->
+    <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 </head>
 
 
 <body class="bg-light">
-    <div class="container">
 
-        <h1 class="text-center">REGISTRAR NUEVA INSTITUCIÓN</h1>
-       <form action="/psicologo/registrar-institucion" method="POST">
-            <!-- Campo Nombre -->
-            <div class="form-floating mb-3">
-                <input type="" class="form-control" id="" placeholder="" name="nombreInstitucion">
-                <label for="">Nombre</label>
-            </div>
-        
-            <!-- Campo Tipo Institución -->
-            <select class="form-select" aria-label="Default select example" name="idTipoInstitucion">
-                <% for(tipoInstitucion of tiposInstitucion) { %>
-                    <option value="<%= tipoInstitucion.idTipoInstitucion %>"><%= tipoInstitucion.nombreTipoInstitucion %></option>
-                <% } %>
-            </select>
-        
-            <br>
+    <div class="main">
+        <!-- Navside -->
+        <%- include('../includes/_navsidePsicologo.ejs') %>
+        <div class="container">
 
-                <!-- Botones de navegación "Regresar y Guardar" -->
-            <button type="button" class="btn btn-color--third"
-            onclick="window.location.href=
-            '/psicologo/catalogo-instituciones'"
-            >Regresar</button>
+            <!-- Boton de cerrar sesión -->
+            <%- include('../includes/_buttonCerrarSesion.ejs') %>
 
-            <button type="submit" class="btn btn-color--secondary"
-            onclick="confirm('¿Está seguro de guardar los cambios?')"
-            >Guardar</button>
-       </form>
-
-        
+            <h1 class="text-center">REGISTRAR NUEVA INSTITUCIÓN</h1>
+           <form action="/psicologo/registrar-institucion" method="POST">
+                <!-- Campo Nombre -->
+                <div class="form-floating mb-3">
+                    <input type="" class="form-control" id="" placeholder="" name="nombreInstitucion">
+                    <label for="">Nombre</label>
+                </div>
+            
+                <!-- Campo Tipo Institución -->
+                <select class="form-select" aria-label="Default select example" name="idTipoInstitucion">
+                    <% for(tipoInstitucion of tiposInstitucion) { %>
+                        <option value="<%= tipoInstitucion.idTipoInstitucion %>"><%= tipoInstitucion.nombreTipoInstitucion %></option>
+                    <% } %>
+                </select>
+            
+                <br>
+    
+                    <!-- Botones de navegación "Regresar y Guardar" -->
+                <button type="button" class="btn btn-color--third"
+                onclick="window.location.href=
+                '/psicologo/catalogo-instituciones'"
+                >Regresar</button>
+    
+                <button type="submit" class="btn btn-color--secondary"
+                onclick="confirm('¿Está seguro de guardar los cambios?')"
+                >Guardar</button>
+           </form>
+    
+            
+        </div>
     </div>
+
+
 
     <!-- Bootstrap JS -->
     <script src=

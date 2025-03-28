@@ -204,6 +204,7 @@ exports.getRegistrarAspirantes = (request, response, next) => {
             response.render('Psicologos/registrarAspirante', {
                 paises: paises || [],
                 estados: estados || [],
+                idGrupo: request.params.idGrupo,
             });
         })
         .catch((error) => {console.log(error)});
