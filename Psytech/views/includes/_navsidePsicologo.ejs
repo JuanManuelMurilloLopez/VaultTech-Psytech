@@ -1,21 +1,32 @@
-<!DOCTYPE html>
-<html lang="es">
-<body>
-    <h3>Nav side</h3>
-    <aside>
-        <ul>
-            <li onclick="navigateTo('/psicologo/principal')">Inicio</li>
-            <li onclick="navigateTo('/psicologo/catalogo-instituciones')"
-            >Instituciones</li>
-            <li onclick="navigateTo('/psicologo/catalogo-pruebas')"
-            >Pruebas</li>
+<div class="wrapper">
+    <aside id="sidebar">
+        <div class="d-flex justify-content-between p-4">
+            <button class="toggle-btn border-0 " id="toggle-btn">
+                <div class="logo-container">
+                    <img class="normal-logo" id="logoCompleto" src="/images/logoCompleto.png" alt="Logo PSICODX">
+                    <img class="small-logo" id="logoIndividual" src="/images/logoIndividual.png" alt="Logo PSICODX">
+                </div>
+            </button>
+        </div>
+        <ul class="sidebar-nav">
+            <li class="sidebar-item">
+                <a href="/psicologo/lista-grupos" class="sidebar-link">
+                    <img class="icon-group" src="/images/group.svg" alt="grupos icon">
+                    <span class="text-group">Grupos</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="/psicologo/catalogo-instituciones" class="sidebar-link">
+                    <img class="icon-inst" src="/images/building.svg" alt="instituciones icon">
+                    <span class="text-inst">Instituciones</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="/psicologo/catalogo-pruebas" class="sidebar-link">
+                    <img class="icon-exam" src="/images/examIcon.svg" alt="instituciones icon">
+                    <span class="text-exam">Pruebas</span>
+                </a>
+            </li>
         </ul>
     </aside>
-
-    <script>
-        function navigateTo(route) {
-            window.location.href = route;
-        }
-    </script>
-</body>
-</html>
+</div>

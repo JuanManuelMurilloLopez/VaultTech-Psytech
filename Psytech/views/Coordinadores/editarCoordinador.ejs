@@ -1,5 +1,3 @@
-<%- include('../includes/_navsideCoordinador.ejs') %>
-<%- include('../includes/_buttonCerrarSesion.ejs') %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,53 +8,73 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- CSS link -->
     <link rel="stylesheet" href="/css/coordinadores/editarCoordinador.css">
+    <!-- CSS navside -->
+    <link rel="stylesheet" href="/css/includeCss/_navsideCoordinador.css">
+    <!-- CSS cerrar sesión -->
+    <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 </head>
 <body>
-    <div class="container">
-        <div>
-            <h1 class="text-container">EDITAR INFORMACIÓN DE COORDINADOR</h1>
-        </div>
-        <div>
-            <!--Input nombre-->
-            <div class="mb-3">
-                <label class="form-label" for="">Nombre</label>
-                <input class="form-control" type="text" name="" id="">
-            </div>
-            <!--Input Apellido Paterno-->
-            <div class="mb-3">
-                <label class="form-label" for="">Apellido Paterno</label>
-                <input class="form-control" type="text" name="" id="">
-            </div>
-            <!--Input Apellido Materno-->
-            <div class="mb-3">
-                <label class="form-label" for="">Apellido Materno</label>
-                <input class="form-control" type="text" name="" id="">
-            </div>
-            <!--Input Correo-->
-            <div class="mb-3">
-                <label class="form-label" for="">Correo electrónico</label>
-                <input class="form-control" type="text" name="" id="">
-            </div>
-            <!--Input Número-->
-            <div class="mb-3">
-                <label class="form-label" for="">Número de teléfono</label>
-                <input class="form-control" type="text" name="" id="">
-            </div>
-        </div>
-        <div>
-            <p>Estatus:</p>
+    <div class="main">
+
+        <!-- Navside -->
+        <%- include('../includes/_navsideCoordinador.ejs') %>
+
+        <div class="container">
+
+            <!-- Boton de cerrar sesión -->
+            <%- include('../includes/_buttonCerrarSesion.ejs') %>
+
             <div>
-                <p>Activa</p>
+                <h1 class="text-container">EDITAR INFORMACIÓN DE COORDINADOR</h1>
             </div>
-            <button type="button" class="btn btn-color--third btn-sm">Desactivar</button>
-        </div>
-        <div>
-            <button type="button" class="btn btn-color--third btn-sm" 
-            onclick="window.location.href='/coordinador/coordinadores-registrados'">Regresar</button>
-            <button type="button" class="btn btn-color--secondary btn-sm"
-            onclick="confirm('¿Está seguro de guardar los cambios?');
-            window.location.href='/coordinador/coordinadores-registrados'">Guardar</button>
+            <div>
+                <!--Input nombre-->
+                <div class="mb-3">
+                    <label class="form-label" for="">Nombre</label>
+                    <input class="form-control" type="text" name="" id="">
+                </div>
+                <!--Input Apellido Paterno-->
+                <div class="mb-3">
+                    <label class="form-label" for="">Apellido Paterno</label>
+                    <input class="form-control" type="text" name="" id="">
+                </div>
+                <!--Input Apellido Materno-->
+                <div class="mb-3">
+                    <label class="form-label" for="">Apellido Materno</label>
+                    <input class="form-control" type="text" name="" id="">
+                </div>
+                <!--Input Correo-->
+                <div class="mb-3">
+                    <label class="form-label" for="">Correo electrónico</label>
+                    <input class="form-control" type="text" name="" id="">
+                </div>
+                <!--Input Número-->
+                <div class="mb-3">
+                    <label class="form-label" for="">Número de teléfono</label>
+                    <input class="form-control" type="text" name="" id="">
+                </div>
+            </div>
+            <div>
+                <p>Estatus:</p>
+                <div>
+                    <p>Activa</p>
+                </div>
+                <button type="button" class="btn btn-color--third btn-sm">Desactivar</button>
+            </div>
+            <div>
+                <button type="button" class="btn btn-color--third btn-sm" 
+                onclick="window.location.href='/coordinador/coordinadores-registrados'">Regresar</button>
+                <button type="button" class="btn btn-color--secondary btn-sm"
+                onclick="confirm('¿Está seguro de guardar los cambios?');
+                window.location.href='/coordinador/coordinadores-registrados'">Guardar</button>
+            </div>
         </div>
     </div>
+
+    <!-- JS de Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Incluir el script del navside -->
+    <script src="/js/_navside.js"></script>
+
 </body>
 </html>

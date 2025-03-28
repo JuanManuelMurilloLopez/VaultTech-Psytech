@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+:root{
+    --secondary: #294969;
+    --third: #C1C1C1;
+    --font-primary: #000;
+    --font-secondary: #fff;
+    --secondary-hover: #193858;
+    --third-hover:#B1B1B1;
+}
+
+*{
+    font-family: "Lato", sans-serif;
+}
+
+.main-container{
+    margin: 5rem 8.438rem 0;
+}
+
+.text-center{
+    font-size: 2.25rem;
+    font-weight: 500;
+}
+
+
+.form-label{
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--secondary);
+}
+
+.input{
+    border-color: var(--secondary);
+    height: 40px;
+}
+
+.fixed-bottom-buttons {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    padding: 20px 0;
+    z-index: 1000;
+}
+
+.btn-color--secondary{
+    background: var(--secondary);
+    color: var(--font-secondary);
+}
+
+.btn-color--third{
+    background: var(--third);
+    color: var(--font-primary);
+}
+
+.btn-color--third:hover{
+    background: var(--third-hover);
+    color: var(--font-primary);
+}
+
+.btn-color--secondary:hover{
+    background: var(--secondary-hover);
+    color: var(--font-secondary);
+}
