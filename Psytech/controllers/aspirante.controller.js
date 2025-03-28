@@ -23,7 +23,19 @@ exports.getPruebas = (request, response) => {
 };
 
 exports.getPruebasPendientes = (request, response, next) => {
-    response.render('Aspirantes/pruebasPendientes');
+    ConsultarPruebas.fetchAllPendientes(request.session.idAspirante)
+    .then(([rows, fieldData]) => {
+        const pruebasPendientes  = rows;
+        console.log(pruebasPendientes)
+        response.render('Aspirantes/pruebasPendientes',{
+            pruebasPendientes: pruebasPendientes || [],
+        });
+        
+    })
+
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getPruebasCompletadas = (request, response, next) => {
