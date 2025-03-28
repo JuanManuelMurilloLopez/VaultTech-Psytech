@@ -15,3 +15,10 @@
     background: var(--primary-hover);
     color: var(--font-primary);
 }
+
+.centrado {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
