@@ -1,10 +1,9 @@
-
-
 const Pais = require('../models/Pais');
 const Estado = require('../models/Estado');
 const Aspirante = require('../models/Aspirante');
 const Institucion = require('../models/Institucion');
 const Grupo = require('../models/Grupo');
+const TipoInstitucion = require('../models/TipoInstitucion');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
@@ -32,9 +31,21 @@ exports.getCatalogoInstituciones = (request, response, next) => {
 };
 
 exports.getRegistrarInstitucion = (request, response, next) => {
-    console.log('Registrar Instituciones');
-    response.render('Psicologos/registrarInstitucion');
+    TipoInstitucion.fetchAll()
+    .then(([rows, fieldData]) => {
+        const tiposInstitucion = rows;
+        response.render('Psicologos/registrarInstitucion', {
+            tiposInstitucion: tiposInstitucion || [],
+        })
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
+
+exports.postRegistrarInstitucion = (request, response, next) => {
+
+}
 
 exports.getEditarInstitucion = (request, response, next) => {
     console.log('Editar Instituciones');

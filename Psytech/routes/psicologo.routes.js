@@ -15,6 +15,7 @@ router.get('/catalogo-instituciones', controller.getCatalogoInstituciones);
 
 // Formulario para crear nuevas instituciones
 router.get('/registrar-institucion', controller.getRegistrarInstitucion);
+router.post('/registrar-institucion', controller.postRegistrarInstitucion);
 
 // Formulario para editar instituciones
 router.get('/editar-institucion', controller.getEditarInstitucion);

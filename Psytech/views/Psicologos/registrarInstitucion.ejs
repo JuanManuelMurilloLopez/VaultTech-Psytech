@@ -21,33 +21,35 @@
     <div class="container">
 
         <h1 class="text-center">REGISTRAR NUEVA INSTITUCIÓN</h1>
-       
-        <!-- Campo Nombre -->
-        <div class="form-floating mb-3">
-            <input type="" class="form-control" id="" placeholder="">
-            <label for="">Nombre</label>
-        </div>
-       
-        <!-- Campo Tipo Institución -->
-        <select class="form-select" aria-label="Default select example">
-            <option selected>Tipo de Institución</option>
-            <option value="1">Educativa</option>
-            <option value="2">Laboral</option>
-            <option value="3">Artistica</option>
-        </select>
-       
-        <br>
-        <!-- Botones de navegación "Regresar y Guardar" -->
-        <button type="button" class="btn btn-color--third"
-        onclick="window.location.href=
-        '/psicologo/catalogo-instituciones'"
-        >Regresar</button>
+       <form action="/psicologo/registrar-institucion" method="POST">
+            <!-- Campo Nombre -->
+            <div class="form-floating mb-3">
+                <input type="" class="form-control" id="" placeholder="">
+                <label for="">Nombre</label>
+            </div>
+        
+            <!-- Campo Tipo Institución -->
+            <select class="form-select" aria-label="Default select example">
+                <% for(tipoInstitucion of tiposInstitucion) { %>
+                    <option value="<%= tipoInstitucion.idTipoInstitucion %>"><%= tipoInstitucion.nombreTipoInstitucion %></option>
+                <% } %>
+            </select>
+        
+            <br>
 
-        <button type="button" class="btn btn-color--secondary"
-        onclick="confirm('¿Está seguro de guardar los cambios?'),
-        window.location.href=
-        '/psicologo/catalogo-instituciones'"
-        >Guardar</button>
+                <!-- Botones de navegación "Regresar y Guardar" -->
+            <button type="button" class="btn btn-color--third"
+            onclick="window.location.href=
+            '/psicologo/catalogo-instituciones'"
+            >Regresar</button>
+
+            <button type="submit" class="btn btn-color--secondary"
+            onclick="confirm('¿Está seguro de guardar los cambios?'),
+            window.location.href= '/psicologo/catalogo-instituciones'"
+            >Guardar</button>
+       </form>
+
+        
     </div>
 
     <!-- Bootstrap JS -->
