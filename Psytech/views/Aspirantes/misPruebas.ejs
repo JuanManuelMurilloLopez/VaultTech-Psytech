@@ -46,6 +46,11 @@
                                             'En progreso': 'prueba-progreso'
                                         };
                                         const estatus = estatusPrueba[prueba.nombreEstatus] || 'prueba-default'; 
+
+                                        <!-- CAMBIO CODIGO: Asignar la ruta segUn el nombre de la prueba -->
+                                        let rutaPrueba = '';
+                                        if (prueba.nombre === 'Colores de Luscher') rutaPrueba = '/aspirante/instrucciones-colores';
+                                        if (prueba.nombre === 'OTIS') rutaPrueba = '/aspirante/instrucciones-otis';
                                     %>
                                     <% if (estatusPrueba[prueba.nombreEstatus]) { %>
                                         <span class="card-estatus <%= estatus %>">
@@ -62,7 +67,8 @@
                                 <p class="card-text">Fecha límite: <%= fechaFormato %></p>
                                 <% if (prueba.nombreEstatus === 'Pendiente' || prueba.nombreEstatus === 'En progreso') { %>
                                     <div class="d-flex justify-content-between">
-                                        <a href="" class="btn btn-color--secondary">Realizar prueba</a>
+                                        <!-- CAMBIO CODIGO: href ruta -->
+                                        <a href="<%= rutaPrueba %>" class="btn btn-color--secondary">Realizar prueba</a>
                                         <span>
                                             <%= prueba.tiempo %> 
                                             <% if (prueba.tiempo != null) { %>
