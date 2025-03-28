@@ -11,11 +11,12 @@ const colores = [
 
 let ronda = 1;
 let seleccionados = [];
-let enviando = false;
 
 const container = document.getElementById("colorContainer");
 const terminarBtn = document.getElementById("terminarBtn");
 const modalElement = document.getElementById("segundaRondaModal");
+const seleccionesContainer = document.getElementById("seleccionesContainer");
+const colorSelectionForm = document.getElementById("colorSelectionForm");
 
 terminarBtn.classList.add("d-none");
 
@@ -23,6 +24,7 @@ function mostrarColores() {
   container.innerHTML = "";
   if (ronda === 1) {
     seleccionados = [];
+    seleccionesContainer.innerHTML = ""; // Limpiar campos de selecciones anteriores
   }
 
   const desordenados = [...colores].sort(() => Math.random() - 0.5);
@@ -60,6 +62,9 @@ function seleccionarColor(idColor, wrapperElement) {
   wrapperElement.remove();
   seleccionados.push(idColor);
 
+  // Guardar selecciones en el formulario
+  actualizarCamposFormulario();
+
   if (ronda === 1 && seleccionados.length === 8) {
     ronda = 2;
     const modal = new bootstrap.Modal(modalElement);
@@ -71,7 +76,40 @@ function seleccionarColor(idColor, wrapperElement) {
   }
 }
 
+function actualizarCamposFormulario() {
+  // Limpiar contenedor
+  seleccionesContainer.innerHTML = "";
+  
+  // Crear campos con las selecciones
+  seleccionados.forEach((idColor, index) => {
+    const fase = index < 8 ? 1 : 2;
+    const posicion = index % 8;
+    
+    // Campo para idColor
+    const colorInput = document.createElement("input");
+    colorInput.type = "hidden";
+    colorInput.name = `selecciones[${index}][idColor]`;
+    colorInput.value = idColor;
+    seleccionesContainer.appendChild(colorInput);
+    
+    // Campo para fase
+    const faseInput = document.createElement("input");
+    faseInput.type = "hidden";
+    faseInput.name = `selecciones[${index}][fase]`;
+    faseInput.value = fase;
+    seleccionesContainer.appendChild(faseInput);
+    
+    // Campo para posición
+    const posicionInput = document.createElement("input");
+    posicionInput.type = "hidden";
+    posicionInput.name = `selecciones[${index}][posicion]`;
+    posicionInput.value = posicion;
+    seleccionesContainer.appendChild(posicionInput);
+  });
+}
+
 function verificarFinalizar() {
+  // Mostrar boton terminar cuando se tengan las 16 selecciones
   terminarBtn.classList.remove("d-none");
 }
 
@@ -81,66 +119,5 @@ modalElement.addEventListener("hidden.bs.modal", () => {
   }
 });
 
-terminarBtn.addEventListener("click", async (e) => {
-  e.preventDefault();
-
-  if (enviando) return;
-  enviando = true;
-
-  if (ronda !== 2 || seleccionados.length < 16) {
-      alert("Debes seleccionar todos los colores de ambas rondas.");
-      enviando = false;
-      return;
-  }
-
-  const selecciones = seleccionados.map((idColor, index) => {
-      return {
-          idColor,
-          posicion: index % 8,
-          fase: index < 8 ? 1 : 2
-      };
-  });
-
-
-  console.log("Datos que se están enviando:", selecciones); 
-
-  try {
-      const response = await fetch("/aspirante/guardar-selecciones-colores", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json" 
-          },
-          body: JSON.stringify({ selecciones })
-      });
-
-      
-      console.log("Código de estado:", response.status);
-
-      // Leer respuesta como JSON
-      const responseText = await response.text();
-      console.log("Respuesta completa:", responseText);
-      
-      let resultado;
-      try {
-          resultado = JSON.parse(responseText);
-      } catch (e) {
-          console.error("La respuesta no es JSON válido:", e);
-          resultado = { error: "Respuesta del servidor no válida" };
-      }
-
-      if (response.ok) {
-          alert("¡Selecciones guardadas correctamente!");
-          window.location.href = "/aspirante/prueba-completada";
-      } else {
-          alert("Error: " + (resultado.error || "Error desconocido al guardar"));
-          enviando = false;
-      }
-  } catch (err) {
-      console.error("Error en la petición fetch:", err);
-      alert("Error al comunicarse con el servidor");
-      enviando = false;
-  }
-});
-
-
+// Iniciar prueba
 mostrarColores();

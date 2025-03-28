@@ -21,9 +21,15 @@
       <div id="colorContainer" class="circle-container"></div>
     </div>
 
-    <div class="btn-container">
-      <a id="terminarBtn" href="#" class="btn btn-primary d-none">Terminar prueba</a>
-    </div>
+    <!-- Formulario para enviar los datos -->
+    <form id="colorSelectionForm" action="/aspirante/guardar-selecciones-colores" method="POST">
+      <!-- Campos para guardar las selecciones -->
+      <div id="seleccionesContainer"></div>
+      
+      <div class="btn-container">
+        <button id="terminarBtn" type="submit" class="btn btn-primary d-none">Terminar prueba</button>
+      </div>
+    </form>
   </div>
 
   <!-- Modal segunda ronda -->

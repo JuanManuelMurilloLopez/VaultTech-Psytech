@@ -244,24 +244,51 @@ exports.postGuardarSeleccionesColores = (request, response) => {
     
     if (!request.session.idAspirante) {
         console.log("2. Error: No se encontró idAspirante en la sesión");
-        return response.status(400).json({ 
-            error: "No se encontró información del aspirante"
+        return response.redirect('/aspirante/datos-personales-colores');
+    }
+    
+    console.log("Datos recibidos:", request.body);
+    
+    // Recolectar las selecciones de colores desde los campos del formulario
+    const selecciones = [];
+    const regex = /selecciones\[(\d+)\]\[(\w+)\]/;
+    
+    const datos = {};
+    for (const key in request.body) {
+        if (key.startsWith('selecciones')) {
+            const matches = key.match(regex);
+            if (matches) {
+                const index = matches[1];
+                const prop = matches[2];
+                const value = request.body[key];
+                
+                if (!datos[index]) {
+                    datos[index] = {};
+                }
+                datos[index][prop] = value;
+            }
+        }
+    }
+    
+    // Convertir el objeto en un array
+    for (const index in datos) {
+        selecciones.push({
+            idColor: parseInt(datos[index].idColor),
+            fase: parseInt(datos[index].fase),
+            posicion: parseInt(datos[index].posicion)
         });
     }
     
-    const { selecciones } = request.body;
+    console.log("3. Selecciones procesadas:", selecciones);
     
-    if (!selecciones || !Array.isArray(selecciones)) {
-        console.log("3. Error: Formato de datos incorrecto");
-        return response.status(400).json({ 
-            error: "Formato de datos incorrecto",
-            received: request.body
-        });
+    if (selecciones.length === 0) {
+        console.log("4. Error: No hay selecciones para procesar");
+        return response.redirect('/aspirante/prueba-colores');
     }
     
     const idPrueba = 6; 
     
-    // Obtener idGrupo
+    
     PruebaColores.obtenerGrupoParaPrueba(request.session.idAspirante, idPrueba)
         .then(([rows]) => {
             if (rows.length === 0) {
@@ -269,16 +296,14 @@ exports.postGuardarSeleccionesColores = (request, response) => {
             }
             
             const idGrupo = rows[0].idGrupo;
-            console.log("4. ID de Grupo obtenido:", idGrupo);
+            console.log("5. ID de Grupo obtenido:", idGrupo);
             
             // Separar las selecciones de fase 1 y 2
             const seleccionesFase1 = selecciones.filter(s => s.fase === 1);
             const seleccionesFase2 = selecciones.filter(s => s.fase === 2);
             
-            // Checar que hay datos en ambas fases
-            if (seleccionesFase1.length !== 8 || seleccionesFase2.length !== 8) {
-                throw new Error("Número incorrecto de selecciones por fase");
-            }
+            console.log("6. Selecciones fase 1:", seleccionesFase1.length);
+            console.log("7. Selecciones fase 2:", seleccionesFase2.length);
             
             // Obtener datos personales
             const datosPersonales = request.session.datosPersonalesColores || {
@@ -296,7 +321,7 @@ exports.postGuardarSeleccionesColores = (request, response) => {
                 idPrueba,
                 datosPersonales
             ).then(() => {
-                console.log("5. Datos personales guardados correctamente");
+                console.log("8. Datos personales guardados correctamente");
                 const pruebaColores1 = new PruebaColores(seleccionesFase1);
                 return pruebaColores1.saveSeleccion(
                     request.session.idAspirante,
@@ -305,7 +330,7 @@ exports.postGuardarSeleccionesColores = (request, response) => {
                     1
                 );
             }).then(() => {
-                console.log("6. Primera selección guardada");
+                console.log("9. Primera selección guardada");
                 const pruebaColores2 = new PruebaColores(seleccionesFase2);
                 return pruebaColores2.saveSeleccion(
                     request.session.idAspirante,
@@ -314,43 +339,43 @@ exports.postGuardarSeleccionesColores = (request, response) => {
                     2
                 );
             }).then(() => {
-                console.log("7. Segunda selección guardada");
-                // Existe registro?
+                console.log("10. Segunda selección guardada");
                 return PruebaColores.verificarExistencia(
                     request.session.idAspirante,
                     idGrupo,
                     idPrueba
-                ).then(([rows]) => {
-                    if (rows.length === 0) {
-                        console.log("No existe registro para actualizar. Intentando insertar...");
-                        // Si no existe insertarlo
-                        return db.execute(
-                            `INSERT INTO aspirantesGruposPruebas (idAspirante, idGrupo, idPrueba, idEstatus)
-                            VALUES (?, ?, ?, 2)`,
-                            [request.session.idAspirante, idGrupo, idPrueba]
-                        );
-                    } else {
-                        console.log("Registro encontrado, actualizando estado...");
-                        return PruebaColores.updateEstadoPrueba(
-                            request.session.idAspirante,
-                            idGrupo,
-                            idPrueba
-                        );
-                    }
-                });
+                );
+            }).then(([rows]) => {
+                if (rows.length === 0) {
+                    console.log("11. No existe registro, insertando...");
+                    return db.execute(
+                        `INSERT INTO aspirantesGruposPruebas (idAspirante, idGrupo, idPrueba, idEstatus)
+                        VALUES (?, ?, ?, 2)`,
+                        [request.session.idAspirante, idGrupo, idPrueba]
+                    );
+                } else {
+                    console.log("12. Registro encontrado, actualizando estado...");
+                    return PruebaColores.updateEstadoPrueba(
+                        request.session.idAspirante,
+                        idGrupo, 
+                        idPrueba
+                    );
+                }
             });
         })
         .then(() => {
-            console.log("8. Estado de la prueba actualizado");
+            console.log("13. Proceso completado con éxito");
             delete request.session.datosPersonalesColores;
             delete request.session.primeraSeleccion;
-            response.status(200).json({ mensaje: "Selecciones guardadas correctamente" });
+            response.redirect('/aspirante/prueba-completada');
         })
         .catch((error) => {
             console.error("Error:", error.message);
-            response.status(500).json({ 
-                error: error.message || "Error al guardar los datos"
-            });
+            return response.send(`
+                <h3>Error al procesar la prueba</h3>
+                <p>${error.message}</p>
+                <a href="/aspirante/prueba-colores" class="btn btn-primary">Volver a intentar</a>
+            `);
         });
 };
 
