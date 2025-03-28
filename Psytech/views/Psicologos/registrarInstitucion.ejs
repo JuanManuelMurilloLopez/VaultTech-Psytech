@@ -24,12 +24,12 @@
        <form action="/psicologo/registrar-institucion" method="POST">
             <!-- Campo Nombre -->
             <div class="form-floating mb-3">
-                <input type="" class="form-control" id="" placeholder="">
+                <input type="" class="form-control" id="" placeholder="" name="nombreInstitucion">
                 <label for="">Nombre</label>
             </div>
         
             <!-- Campo Tipo Institución -->
-            <select class="form-select" aria-label="Default select example">
+            <select class="form-select" aria-label="Default select example" name="idTipoInstitucion">
                 <% for(tipoInstitucion of tiposInstitucion) { %>
                     <option value="<%= tipoInstitucion.idTipoInstitucion %>"><%= tipoInstitucion.nombreTipoInstitucion %></option>
                 <% } %>
@@ -44,8 +44,7 @@
             >Regresar</button>
 
             <button type="submit" class="btn btn-color--secondary"
-            onclick="confirm('¿Está seguro de guardar los cambios?'),
-            window.location.href= '/psicologo/catalogo-instituciones'"
+            onclick="confirm('¿Está seguro de guardar los cambios?')"
             >Guardar</button>
        </form>
 

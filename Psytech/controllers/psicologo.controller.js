@@ -21,6 +21,7 @@ exports.getCatalogoInstituciones = (request, response, next) => {
     Institucion.fetchAll()
     .then(([rows, fieldData]) => {
         const arregloInstituciones = rows;
+        console.log("Instituciones Registradas: ", arregloInstituciones);
         response.render('Psicologos/catalogoInstituciones', {
             arregloInstituciones: arregloInstituciones || [],
         });
@@ -44,7 +45,14 @@ exports.getRegistrarInstitucion = (request, response, next) => {
 };
 
 exports.postRegistrarInstitucion = (request, response, next) => {
-
+    const institucion = new Institucion(request.body);
+    institucion.save()
+    .then(() => {
+        exports.getCatalogoInstituciones(request, response, next);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 }
 
 exports.getEditarInstitucion = (request, response, next) => {
