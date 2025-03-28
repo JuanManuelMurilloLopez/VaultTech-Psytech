@@ -76,95 +76,11 @@
             onclick="window.location.href=
             '/psicologo/registrar-aspirantes/<%= grupo.idGrupo %>'"
             >Registrar Aspirante</button><br>
-    
-            <!-- Infromación -->
-            <div class="container d-flex justify-content-center">
-                <div class="col-md-3 text-justify">
-                    <h2>John</h2>
-                    <h2>Doe Smith</h2>
-                    <h3>Datos personales</h3>
-                    <button type="button" class="btn btn-danger"
-                    onclick="window.location.href=
-                    '/psicologo/editar-aspirantes'"
-                    >Editar</button>
-                </div>
-            </div>
-    
-    
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <!-- Estatus -->
-                <h3>Estatus: </h3>
-                <span class="badge text-bg-info">Activa</span>
-            </div>
-            
-            <div class="container d-flex justify-content-center">
-                <div class="col-md-3 text-justify">
-                    <p>Institución de procedencia: Tecnológico de Monterrey</p>
-                    <p>Correo electrónico: a01711870@tec.mx</p>
-                    <p>Número telefónico: 442 457 6724</p>
-                    <p>Lugar de origen: Querétaro, Querétaro</p>
-    
-                    <!-- Documentacion -->
-                    <h3>Documentación</h3>
-                    <p>CV.pdf</p>
-                    <button type="button" class="btn btn-color--secondary">Descargar</button>
-                    <p>Kardex.pdf</p>
-                    <button type="button" class="btn btn-color--secondary">Descargar</button>
-    
-                    <!-- Entrevista -->
-                    <h3>Entrevista Individual</h3>
-                    <p>Entrevista</p>
-                    <button type="button" class="btn btn-color--secondary">Ver</button>
-    
-                </div>
-            </div>
-    
-    
-            <!-- Pruebas -->
-    
-            <div class="row g-4">
-    
-    
-                <!-- Tarjeta 1: Prueba Otis -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Prueba Otis</h5>
-                            <span class="badge rounded-pill text-bg-success">Completada</span>
-                            <p class="card-text">Calificaacion 30/100</p>
-                            <p><strong>Tiempo respondido: </strong> 1h</p>
-                            <div class="d-flex justify-content-between">
-                                <a href="/psicologo/respuestas-otis" class="btn btn-color--secondary">Ver Resultados</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-    
-                <!-- Tarjeta 6: Prueba Hartman -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Prueba Hartman</h5>
-                            <span class="badge rounded-pill text-bg-info">Pendiente</span>
-                            <p class="card-text">Fecha Limite: 20/02/2025</p>
-                        </div>
-                    </div>
-                </div>
-    
-                <!-- Tarjeta 2: Prueba Terman -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Prueba Terman</h5>
-                            <span class="badge rounded-pill text-bg-danger">Vencida</span>
-                        </div>
-                    </div>
-                </div>
-        </div>
+
         
         <button type="button" class="btn btn-color--third"
         onclick="window.location.href=
-        '/psicologo/grupos'"
+        '/psicologo/grupos/<%= grupo.idInstitucion %>'"
         >Regresar</button>
     </div>
     
