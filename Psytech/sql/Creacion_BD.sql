@@ -21,10 +21,18 @@ CREATE TABLE rolesPrivilegios(
     FOREIGN KEY (idPrivilegio) REFERENCES privilegios(idPrivilegio)
 );
 
+CREATE TABLE OTP (
+    idOTP INT AUTO_INCREMENT PRIMARY KEY,
+    idUsuario VARCHAR(36),
+    codigo INT,
+    validez timestamp, --timestamp actual + 5 minutos
+    usado BOOLEAN
+    FOREIGN KEY (idUsuario) REFERENCES usuarios(idUsuario)
+);
+
 CREATE TABLE usuarios(
     idUsuario VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
     usuario VARCHAR(50),
-    contrasenia VARCHAR(60),
     estatusUsuario BOOLEAN,
     nombreUsuario VARCHAR(50),
     apellidoPaterno VARCHAR(50),
@@ -65,7 +73,8 @@ CREATE TABLE aspirantes(
 CREATE TABLE preguntasFormatoEntrevista(
     idPreguntaFormatoEntrevista INT AUTO_INCREMENT PRIMARY KEY, -- INT AUTO_INCREMENT
     nombrePreguntaFormatoEntrevista VARCHAR(255),
-    tipoPregunta VARCHAR(60)
+    tipoPregunta VARCHAR(60),
+    seccion VARCHAR(40)
 );
 
 CREATE TABLE aspirantesPreguntasFormatoEntrevista(
@@ -157,6 +166,8 @@ CREATE TABLE pruebas(
 CREATE TABLE gruposPruebas(
     idGrupo VARCHAR(36),
     idPrueba VARCHAR(36),
+    fechaAsignacion DATE, 
+    fechaLimite DATE,
     PRIMARY KEY(idGrupo, idPrueba),
     FOREIGN KEY (idGrupo) REFERENCES grupos.(idGrupo),
     FOREIGN KEY (idPrueba) REFERENCES pruebas.(idPrueba)
@@ -198,12 +209,19 @@ CREATE TABLE aspirantesGruposPruebas(
     FOREIGN KEY (idEstatus) REFERENCES estatusPrueba(idEstatus)
 );
 
+CREATE TABLE AreasOtis (
+    idAreaOtis INT AUTO_INCREMENT PRIMARY KEY not NULL,
+    nombreAreaOtis VARCHAR(30)
+);
+
 CREATE TABLE preguntasOtis (
     idPreguntaOtis VARCHAR(36) PRIMARY KEY not NULL, 
     idPrueba INT,
     numeroPregunta INT,
     preguntaOtis VARCHAR(255),
-    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
+    idAreaOtis INT,
+    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba),
+    FOREIGN KEY (idAreaOtis) REFERENCES AreasOtis(idAreaOtis)
 );
 
 CREATE TABLE opcionesOtis (
@@ -222,7 +240,7 @@ CREATE TABLE respuestaOtisAspirante (
     idPreguntaOtis VARCHAR(36),
     idOpcionOtis VARCHAR(36),  -- Solo si es opción múltiple
     idPrueba INT,
-    respuestaAbierta VARCHAR(5),  -- Solo si es pregunta abierta
+    -- (Ya no se cuentan con respuestas abiertas) respuestaAbierta VARCHAR(5),  -- Solo si es pregunta abierta
     tiempoRespuesta INT,  -- En segundos
     FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante),
     FOREIGN KEY (idPreguntaOtis) REFERENCES preguntasOtis(idPreguntaOtis),
