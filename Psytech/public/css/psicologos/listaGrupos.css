@@ -1,12 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 
 :root{
-    --primary: #95B6BC;
     --secondary: #294969;
     --third: #C1C1C1;
     --font-primary: #000;
     --font-secondary: #fff;
-    --primary-hover: #7BA1A8;
     --secondary-hover: #193858;
     --third-hover:#B1B1B1;
 }
@@ -64,27 +62,41 @@
     margin: 16px 0;
 }
 
-.grupo-activo{
-    color: #024400;
-    background: #C7F3C2;
+.card-estatus{
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    border-radius: 10px;
+    padding: 4px 28px;
+}
+.activo{
+    color: #294969;
+    background: #C2EBF3 ;
 }
 
-.grupo-inactivo{
+.inactivo{
     color: #600000;
     background: #FECECE;
 }
 
-.btn-color--primary{
-    background: var(--primary);
-    color: var(--font-primary);
+.btn{
+    padding: 0;
 }
 
 .btn-color--secondary{
+    padding: 4px 28px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
     background: var(--secondary);
     color: var(--font-secondary);
 }
 
 .btn-color--third{
+    padding: 4px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
     background: var(--third);
     color: var(--font-primary);
 }
@@ -97,9 +109,4 @@
 .btn-color--secondary:hover{
     background: var(--secondary-hover);
     color: var(--font-secondary);
-}
-
-.btn-color--primary:hover{
-    background: var(--primary-hover);
-    color: var(--font-primary);
 }
