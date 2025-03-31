@@ -63,7 +63,7 @@
             </div>
 
             <div class="mb-3 col-md-3">
-                <label for="hijoDe">Hijo de</label> <br>
+                <label class="form-label" for="hijoDe">Hijo de</label> <br>
                 <select class="form-select" name="hijoDe">
                     <option value="">familiares registrados</option>
                     <% if (hijoDe.length > 0) { %>
@@ -99,15 +99,13 @@
                     </label>
                 </div>
             </div> 
-            <div class="botones mt-5 mb-3">
-                <button type="submit" class="btn btn-color--third">Enviar</button>
+            <div class="mt-5 mb-4">
+                <button type="submit" class="btn btn-color--secondary">Enviar información</button>
             </div>
 
-            <div class="fixed-bottom-buttons">
-                <button id="botonTerminar" type="button" class="btn btn-color--secondary">
-                    Terminar
-                </button>
-            </div>
+            <button id="botonTerminar" type="button" class="btn btn-color--third mb-4">
+                Terminar
+            </button>
 
         </form>
     </div>

@@ -37,11 +37,11 @@
                         </label>
                         <% if (pregunta.tipoPregunta == 'textarea') { %>
                             <textarea name="<%= pregunta.idPreguntaFormatoEntrevista %>" 
-                                rows="5" class="form-control textarea" required>
+                                rows="5" class="form-control textarea" >
                             </textarea>
                         <% } else { %>
                             <input type="<%= pregunta.tipoPregunta %>" class="form-control input" 
-                            name="<%= pregunta.idPreguntaFormatoEntrevista %>" required>
+                            name="<%= pregunta.idPreguntaFormatoEntrevista %>">
                         <% } %>
                     </div>
 
