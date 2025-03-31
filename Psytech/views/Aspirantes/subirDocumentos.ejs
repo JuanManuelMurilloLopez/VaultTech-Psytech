@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="/css/aspirantes/subirDocumentos.css">
     <!-- CSS navside -->
     <link rel="stylesheet" href="/css/includeCss/_navsideAspirante.css">
+    <!-- CSS cerrar sesión -->
+    <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 </head>
 
 <body class="bg-light">
@@ -22,10 +24,8 @@
         <%- include('../includes/_navsideAspirante.ejs') %>
 
         <div class="container">
-            <!-- Boton cerrar sesion -->
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button type="button" class="btn btn-secondary" onclick="window.location.href='/login'">Cerrar Sesión</button>
-            </div>
+            <!-- Boton de cerrar sesión -->
+            <%- include('../includes/_buttonCerrarSesion.ejs') %>
             
             <h1 class="text-center mt-5">SUBIR DOCUMENTOS</h1>
             <hr class="w-50 mx-auto">
