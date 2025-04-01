@@ -9,8 +9,13 @@ module.exports = class PruebaColores {
         return db.execute('SELECT * FROM colores ORDER BY numeroColor');
     }
 
+    // Este método ya no leerá archivos, sino que devolverá una promesa vacía
+    // para mantener compatibilidad con el código existente
     static fetchInstrucciones() {
-        return db.execute('SELECT instrucciones FROM pruebas WHERE nombre = "Colores de Luscher"');
+        return Promise.resolve([
+            [{ instrucciones: '' }], // Devuelve un array con un objeto vacío
+            [] // fieldData vacío
+        ]);
     }
 
     static obtenerGrupoParaPrueba(idAspirante, idPrueba) {

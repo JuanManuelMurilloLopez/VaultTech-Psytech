@@ -150,19 +150,7 @@ exports.getIntruccionesOtis = (request, response, next) => {
 
 // Mostrar instrucciones colores
 exports.getInstruccionesColores = (request, response, next) => {
-    PruebaColores.fetchInstrucciones()
-    .then(([rows, fieldData]) => {
-        const instrucciones = rows[0]?.instrucciones || 'Instrucciones no disponibles';
-        response.render('Aspirantes/instruccionesColores', {
-            instrucciones: instrucciones
-        });
-    })
-    .catch((error) => {
-        console.log(error);
-        response.render('Aspirantes/instruccionesColores', {
-            instrucciones: 'Error al cargar las instrucciones'
-        });
-    });
+    response.render('Aspirantes/instruccionesColores');
 };
 
 exports.postInstruccionesColores = (req, res) => {
