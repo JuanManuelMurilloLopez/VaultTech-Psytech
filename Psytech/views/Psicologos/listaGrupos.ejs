@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 </head>
 
-<body class="bg-light">
+<body>
 
     <div class="main">
 
@@ -31,7 +31,7 @@
 
             <h1 class="text-center mt-5">PSICODX</h1>
 
-            <div class="row g-4 mt-4">
+            <div class="row g-4 mt-4 mb-5">
                 <% for(grupo of arregloGrupos) { %>
                     <div class="col-md-4">
                         <div class="card">
@@ -40,18 +40,24 @@
 
                                     <h5 class="card-title w-50"><%= grupo.nombreGrupo %></h5>
 
-                                    <span class="badge text-bg-info"><% if(grupo.estatusGrupo == 1){ %>
-                                                <%= "Activo" %> 
-                                            <%} else { %> 
-                                                <%= "Inactivo" %>
-                                            <% } %></span>
+                                    <% if(grupo.estatusGrupo == 1){ %>
+                                        <span class="card-estatus activo">
+                                            <%= "Activo" %> 
+                                        </span>
+                                    <%} else { %> 
+                                        <span class="card-estatus inactivo">
+                                            <%= "Inactivo" %>
+                                        </span>
+                                    <% } %>
+
                                 </div>
                                 <p class="card-text">Carrera: <%= grupo.carrera %></p>
                                 <p class="card-text">Año de Generación: <%= grupo.anioGeneracion %></p>
                                 <p class="card-text">Semestre: <%= grupo.cicloEscolar %></p>
                                 <p class="card-text">Número de aspirantes: <%= grupo.numeroAspirantes %></p>
                                 <div class="d-flex justify-content-between">
-                                    <a class="btn btn-color--secondary" href="/psicologo/informacion-grupos/<%= grupo.idGrupo %> ">Ver grupo</a>
+                                    <a class="btn btn-color--secondary" 
+                                    href="/psicologo/informacion-grupos/<%= grupo.idGrupo %> ">Ver grupo</a>
                                     <a class="btn btn-color--third" href="/psicologo/editar-grupo">Editar</a>
                                 </div>
                             </div>
