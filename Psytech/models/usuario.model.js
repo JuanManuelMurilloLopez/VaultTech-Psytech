@@ -1,5 +1,4 @@
 const db = require('../util/database');
-const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 
 
@@ -25,6 +24,7 @@ class Usuario {
       throw error;
     }
   };
+
 
   static getIdAspirante(usuario){
     return db.execute(`SELECT IdAspirante 

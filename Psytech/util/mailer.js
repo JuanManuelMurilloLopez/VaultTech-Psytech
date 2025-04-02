@@ -1,10 +1,11 @@
+require('dotenv').config(); 
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL,
-    pass: process.env.EMAIL_PASS
+    user: process.env.EMAIL,  
+    pass: process.env.EMAIL_PASS 
   }
 });
 
@@ -22,4 +23,7 @@ const enviarCorreo = async (destinatario, asunto, mensaje) => {
   }
 };
 
-module.exports = enviarCorreo;
+// Exportar como un objeto
+module.exports = {
+  enviarCorreo
+};

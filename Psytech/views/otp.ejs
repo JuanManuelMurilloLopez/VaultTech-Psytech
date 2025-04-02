@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verificación OTP</title>
+</head>
+<body>
+    <h2>Verificar OTP</h2>
+    <form action="/otp" method="POST">
+        <label for="usuario">Usuario:</label>
+        <input type="text" id="usuario" name="usuario" required>
+        <br>
+        <label for="otp">Código OTP:</label>
+        <input type="text" id="otp" name="otp" required>
+        <br>
+        <button type="submit">Verificar</button>
+    </form>
+</body>
+</html>

@@ -1,15 +1,17 @@
 const bcrypt = require('bcryptjs');
 const Usuario = require('../models/usuario.model');
+const { OTP } = require('../models/otp.model');
+const crypto = require('crypto');
+const mail = require('../util/mailer');
 
 exports.getLogin = (request, response, next) => {
-    console.log('Login PSICODX');
     response.render('login');
 };
 
 exports.getPost = async (request, response) => {
-    const { usuario, contrasenia, terminos } = request.body;
+    const {usuario} = request.body;
 
-    // Verificar si el checkbox está marcado
+    /* Verificar si el checkbox está marcado
     if (!terminos) {
         return response.send(`
             <script>
@@ -18,74 +20,52 @@ exports.getPost = async (request, response) => {
             </script>
         `);
     }
+    */
 
     try {
-        // Buscar usuario en la base de datos
-        const [usuarios] = await Usuario.fetchOne(usuario);
-        
-        if (!usuarios) {
-            return response.send(`
-                <script>
-                    alert('Usuario no encontrado');
-                    window.location.href = '/login';
-                </script>
-            `);
+        const usuarioData  = await Usuario.fetchOne(usuario);
+        const usuarioId = usuarioData[0]; 
+
+        if (!usuarioId) {
+            return response.send('<script>alert("Usuario no encontrado"); window.location.href = "/login";</script>');
         }
 
-        if (!contrasenia || !usuarios.contrasenia){
-            return response.send(`
-                <script>
-                    alert('Contraseña no válida');
-                    window.location.href = '/login';
-                </script>
-            `);
-        }
+        const codigoOTP = crypto.randomInt(100000, 999999);
+        const validez = new Date(Date.now() + 5 * 60000);
 
-        // Comparar contraseñas
-        // const contraseniaValida = await bcrypt.compare(contrasenia, usuarios.contrasenia);
-        const contraseniaValida = true;
-        if (!contraseniaValida) { 
-            return response.send(`
-                <script>
-                    alert('Contraseña incorrecta');
-                    window.location.href = '/login';
-                </script>
-            `);
-        }
+        await OTP.crearOTP(usuarioId.idUsuario, codigoOTP, validez);
 
-        // Guardar la sesión del usuario
-        request.session.user = usuarios.idUsuario;
-        request.session.rol = usuarios.idRol;
-
-        // Redirigir según el rol
-        switch (usuarios.idRol) {  
-            case 3:
-                Usuario.getIdAspirante(request.session.user)
-                .then(([rows,fieldData]) => {
-                    request.session.idAspirante = rows[0].IdAspirante;
-                    return response.redirect('/aspirante/mis-pruebas');
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-                break
-            case 1:
-                return response.redirect('/coordinador/psicologos-registrados');
-            case 2:
-                return response.redirect('/psicologo/lista-grupos');
-            default:
-                return response.status(400).send("Rol no reconocido");
-        }
+        //await mail.enviarCorreo(usuarioId.correo, 'Código de acceso', `Tu código OTP es: ${codigoOTP}`);
+        console.log('Usuario id:', usuarioId);
+        console.log('codigoOTP:', codigoOTP);
+        console.log('validez:', validez);
+        response.redirect('/otp');
     } catch (error) {
-        return response.send(`
-            <script>
-                alert('Error en el servidor');
-                window.location.href = '/login';
-            </script>
-        `);
+        console.error('Error en postLogin:', error);
+        response.send('<script>alert("Error al generar OTP"); window.location.href = "/login";</script>');
     }
 };
 
+exports.verificarOTP = async (req, res) => {
+    const { usuario, otp } = req.body;
+    
+    try {
+      const usuarioData = await Usuario.fetchOne(usuario);
+      const otpData = await OTP.obtenerOTP(usuarioData.idUsuario);
+  
+      if (!otpData || otpData.codigo !== parseInt(otp)) {
+        return res.send('<script>alert("OTP incorrecto o vencido"); window.location.href = "/otp";</script>');
+      }
+  
+      await OTP.usarOTP(otpData.idOTP);
+      req.session.user = usuarioData.idUsuario;
+      req.session.rol = usuarioData.rol;
+      res.redirect('/dashboard');
+    } catch (error) {
+      console.error('Error al verificar OTP:', error);
+      res.send('<script>alert("Error al verificar OTP"); window.location.href = "/otp";</script>');
+    }
+  };
 
 exports.getLogout = ((request, response) => {
     request.session.destroy((err) => {
