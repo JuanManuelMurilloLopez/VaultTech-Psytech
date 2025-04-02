@@ -8,6 +8,10 @@ exports.getLogin = (request, response, next) => {
     response.render('login');
 };
 
+exports.getOtp = (request, response, next) => {
+    response.render('otp');
+};
+
 exports.getPost = async (request, response) => {
     const {usuario} = request.body;
 
@@ -33,10 +37,10 @@ exports.getPost = async (request, response) => {
         const codigoOTP = crypto.randomInt(100000, 999999);
         const validez = new Date(Date.now() + 5 * 60000);
 
+
         await OTP.crearOTP(usuarioId.idUsuario, codigoOTP, validez);
 
         //await mail.enviarCorreo(usuarioId.correo, 'Código de acceso', `Tu código OTP es: ${codigoOTP}`);
-        console.log('Usuario id:', usuarioId);
         console.log('codigoOTP:', codigoOTP);
         console.log('validez:', validez);
         response.redirect('/otp');
@@ -46,24 +50,61 @@ exports.getPost = async (request, response) => {
     }
 };
 
-exports.verificarOTP = async (req, res) => {
-    const { usuario, otp } = req.body;
+exports.verificarOTP = async (request, response) => {
+    const { usuario, otp } = request.body;
     
     try {
-      const usuarioData = await Usuario.fetchOne(usuario);
-      const otpData = await OTP.obtenerOTP(usuarioData.idUsuario);
+        const usuarioData  = await Usuario.fetchOne(usuario);
+        if (!usuarioData || usuarioData.length === 0) {
+            return res.send('<script>alert("Usuario no encontrado"); window.location.href = "/login";</script>');
+        }
+        
+        const usuarioId = usuarioData[0].idUsuario;
+        if (!usuarioId) {
+            return res.send('<script>alert("Usuario no encontrado"); window.location.href = "/login";</script>');
+        }
+        
+        const otpData = await OTP.obtenerOTP(usuarioId);
+        
   
       if (!otpData || otpData.codigo !== parseInt(otp)) {
-        return res.send('<script>alert("OTP incorrecto o vencido"); window.location.href = "/otp";</script>');
+        return response.send('<script>alert("OTP incorrecto o vencido"); window.location.href = "/otp";</script>');
       }
   
       await OTP.usarOTP(otpData.idOTP);
-      req.session.user = usuarioData.idUsuario;
-      req.session.rol = usuarioData.rol;
-      res.redirect('/dashboard');
+      
+      request.session.user = usuarioData[0].idUsuario;
+      console.log("ID de usuario:", request.session.user);
+      request.session.rol = usuarioData[0].idRol;
+      console.log("ID de rol:", request.session.rol);
+
+        switch (usuarioData[0].idRol) {  
+            case 3:
+                Usuario.getIdAspirante(request.session.user)
+                .then(([rows, fieldData]) => {
+                    if (rows.length > 0) {
+                        request.session.idAspirante = rows[0].idAspirante;
+                        return response.redirect('/aspirante/mis-pruebas');
+                    } else {
+                        console.error('No se encontró el aspirante');
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    return response.status(500).send("Error en el servidor");
+                })
+                break;
+            case 1:
+                return response.redirect('/coordinador/psicologos-registrados');
+            case 2:
+                return response.redirect('/psicologo/lista-grupos');
+            default:
+                return response.status(400).send("Rol no reconocido");
+        }
+
     } catch (error) {
       console.error('Error al verificar OTP:', error);
-      res.send('<script>alert("Error al verificar OTP"); window.location.href = "/otp";</script>');
+      response.send('<script>alert("Error al verificar OTP"); window.location.href = "/otp";</script>');
     }
   };
 

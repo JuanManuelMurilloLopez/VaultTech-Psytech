@@ -26,13 +26,13 @@ class Usuario {
   };
 
 
-  static getIdAspirante(usuario){
-    return db.execute(`SELECT IdAspirante 
-      FROM Aspirantes 
-      WHERE IdUsuario = 
-        (SELECT IdUsuario FROM Usuarios WHERE idUsuario = ?)`, 
+  static getIdAspirante(usuario) {
+    return db.execute(
+        `SELECT idAspirante 
+         FROM aspirantes 
+         WHERE idUsuario = ?`, 
         [usuario]
-      );
+    );
   }
 }
 
