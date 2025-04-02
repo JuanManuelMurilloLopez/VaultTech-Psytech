@@ -1,9 +1,9 @@
-const Pais = require('../models/Pais');
-const Estado = require('../models/Estado');
-const Aspirante = require('../models/Aspirante');
-const Institucion = require('../models/Institucion');
-const Grupo = require('../models/Grupo');
-const TipoInstitucion = require('../models/TipoInstitucion');
+const Pais = require('../models/pais.model');
+const Estado = require('../models/estado.model');
+const Aspirante = require('../models/aspirante.model');
+const Institucion = require('../models/institucion.model');
+const Grupo = require('../models/grupo.model');
+const TipoInstitucion = require('../models/tipoInstitucion.model');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
