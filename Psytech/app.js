@@ -1,18 +1,29 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 
 const app = express();
 
-// Servir archivos estáticos desde la carpeta public
+// Configuracion de sesiones
+app.use(session({
+    secret: 'claveTemporal',
+    resave: false,
+    saveUninitialized: true
+}));
+
+// Servir archivos estaticos desde public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Configuración de EJS como motor de vistas
+// Configuracion de EJS como motor de vistas
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 // Middleware para procesar datos del formulario
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Middleware para procesar JSON
+app.use(express.json());
 
 // Importar rutas
 const rutasInicioSesion = require('./routes/inicioSesion.routes');

@@ -1,17 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
 :root{
-    --primary: #95B6BC;
     --secondary: #294969;
     --third: #C1C1C1;
     --font-primary: #000;
     --font-secondary: #fff;
-    --primary-hover: #7BA1A8;
     --secondary-hover: #193858;
     --third-hover:#B1B1B1;
 }
 
-.btn-color--primary{
-    background: var(--primary);
-    color: var(--font-primary);
+*{
+    font-family: "Lato", sans-serif;
+}
+
+.main-container{
+    margin: 5rem 8.438rem 0;
+}
+
+.text-center{
+    font-size: 2.25rem;
+    font-weight: 500;
+}
+
+.titulo-seccion{
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--secondary);
+}
+
+.form-label{
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--secondary);
+}
+
+.input, .textarea{
+    border-color: var(--secondary);
+}
+
+.input{
+    height: 40px;
+}
+
+.fixed-bottom-buttons {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    padding: 10px 0;
+    z-index: 1000;
 }
 
 .btn-color--secondary{
@@ -32,9 +70,4 @@
 .btn-color--secondary:hover{
     background: var(--secondary-hover);
     color: var(--font-secondary);
-}
-
-.btn-color--primary:hover{
-    background: var(--primary-hover);
-    color: var(--font-primary);
 }
