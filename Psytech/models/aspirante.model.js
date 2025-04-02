@@ -44,4 +44,28 @@ module.exports = class Aspirante {
             `, [idGrupo, prueba.idPrueba, idAspirante, prueba.fechaLimite.toISOString().substring(0, 10)])
     }
 
+    static getExpedientes(idAspirante){
+        return db.execute(`
+                SELECT kardex, cv
+                FROM aspirantes
+                WHERE idAspirante = ?
+            `, [idAspirante]);
+    }
+
+    static addKardex(idAspirante, rutaKardex){
+        return db.execute(`
+                UPDATE aspirante
+                SET kardex = ?
+                WHERE idAspirante = ?
+            `, [rutaKardex, idAspirante])
+    }
+
+    static addCv(idAspirante, rutaCv){
+        return db.execute(`
+                UPDATE aspirante
+                SET cv = ?
+                WHERE idAspirante = ?
+            `, [rutaCv, idAspirante])
+    }
+
 }
