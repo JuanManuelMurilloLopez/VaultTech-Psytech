@@ -1,28 +1,13 @@
 const db = require('../util/database');
 
-module.exports = class PruebaColores {
-    constructor(seleccion) {
-        this.seleccion = seleccion;
-    }
+module.exports = class Prueba{
 
-    static fetchColores() {
-        return db.execute('SELECT * FROM colores ORDER BY numeroColor');
-    }
 
     static fetchInstrucciones() {
-        return db.execute('SELECT instrucciones FROM pruebas WHERE nombre = "Colores de Luscher"');
-    }
+            return db.execute('SELECT instrucciones FROM pruebas WHERE nombre = "Colores de Luscher"');
+        }
 
-    static obtenerGrupoParaPrueba(idAspirante, idPrueba) {
-        return db.execute(`
-            SELECT idGrupo 
-            FROM aspirantesGruposPruebas 
-            WHERE idAspirante = ? AND idPrueba = ?
-        `, [idAspirante, idPrueba]);
-    }
-
-    // Guardar datos personales
-    static guardarDatosPersonales(idAspirante, idGrupo, idPrueba, datosPersonales) {
+    static saveDatosPersonales(idAspirante, idGrupo, idPrueba, datosPersonales){
         // Ya existen datos?
         return db.execute(`
             SELECT idDatosPersonales FROM datosPersonales 
@@ -67,17 +52,41 @@ module.exports = class PruebaColores {
         });
     }
 
-    // Guarda selecciones de colores
-    saveSeleccion(idAspirante, idGrupo, idPrueba, fase) {
+    static getPreguntasOtis(){}
+
+    static getPreguntas16PF(){}
+
+    static getPreguntasHartman(){}
+
+    static getPreguntasKostick(){}
+
+    static getPreguntasTerman(){}
+
+
+    static addRespuestaOtis(){}
+
+    static addRespuesta16PF(){}
+
+    static addRespuestaHartman(){}
+
+    static addRespuestaKostick(){}
+
+    static addRespuestaTerman(){}
+
+    static fetchColores(){
+        return db.execute('SELECT * FROM colores ORDER BY numeroColor');
+    }
+
+    static saveSeleccion(idAspirante, idGrupo, idPrueba, fase, seleccion){
         const promesas = [];
         
-        for (let i = 0; i < this.seleccion.length; i++) {
+        for (let i = 0; i < seleccion.length; i++) {
             promesas.push(
                 db.execute(
                     `INSERT INTO seleccionesColores 
                     (idSeleccionColores, idPrueba, idAspirante, idGrupo, idColor, posicion, fase) 
                     VALUES (UUID(), ?, ?, ?, ?, ?, ?)`,
-                    [idPrueba, idAspirante, idGrupo, this.seleccion[i].idColor, i, fase]
+                    [idPrueba, idAspirante, idGrupo, seleccion[i].idColor, i, fase]
                 ).catch((error) => {
                     console.error(`Error al insertar la selección ${i}:`, error);
                     throw error;
@@ -87,20 +96,26 @@ module.exports = class PruebaColores {
         
         return Promise.all(promesas);
     }
-    
 
-    // Ya completó la prueba?
-    static checkEstadoPrueba(idAspirante, idGrupo, idPrueba) {
+    static getGrupoPrueba(idAspirante, idPrueba){
+        return db.execute(`
+            SELECT idGrupo 
+            FROM aspirantesGruposPruebas 
+            WHERE idAspirante = ? AND idPrueba = ?
+        `, [idAspirante, idPrueba]);       
+    }
+
+    static getEstatusPrueba(idAspirante, idGrupo, idPrueba){
         return db.execute(
             `SELECT idEstatus 
             FROM aspirantesGruposPruebas 
             WHERE idAspirante = ? AND idGrupo = ? AND idPrueba = ?`,
             [idAspirante, idGrupo, idPrueba]
-        );
+        );       
     }
 
     // Actualizar estado de prueba
-    static updateEstadoPrueba(idAspirante, idGrupo, idPrueba, idEstatus = 1) {
+    static updateEstatusPrueba(idAspirante, idGrupo, idPrueba, idEstatus = 1) {
         return db.execute(
             `UPDATE aspirantesGruposPruebas 
             SET idEstatus = ? 
@@ -109,12 +124,11 @@ module.exports = class PruebaColores {
         );
     }
 
-    
     static verificarExistencia(idAspirante, idGrupo, idPrueba) {
         return db.execute(
-        `SELECT * FROM aspirantesGruposPruebas 
-        WHERE idAspirante = ? AND idGrupo = ? AND idPrueba = ?`,
-        [idAspirante, idGrupo, idPrueba]
-    );
+            `SELECT * FROM aspirantesGruposPruebas 
+            WHERE idAspirante = ? AND idGrupo = ? AND idPrueba = ?`,
+            [idAspirante, idGrupo, idPrueba]
+        );
+    }
 }
-};

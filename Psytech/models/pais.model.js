@@ -6,16 +6,4 @@ module.exports = class Pais {
         return db.execute('SELECT * FROM paises');
     }
 
-    static fetchOne(idPais) {
-        return db.execute('SELECT * FROM paises WHERE idPais=?', [idPais]);
-    }
-
-    static fetch(idPais) {
-        if (idPais) {
-            return this.fetchOne(idPais);
-        } else {
-            return this.fetchAll();
-        }
-    }
-
 }

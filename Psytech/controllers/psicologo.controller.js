@@ -78,9 +78,9 @@ exports.getGrupos = (request, response, next) => {
 // Get
 exports.getRegistrarGrupo = (req, res, next) => {
     Promise.all([
-      Grupo.obtenerInstituciones(),
-      Grupo.obtenerNiveles(),
-      Grupo.obtenerPruebas()
+      Grupo.getInstituciones(),
+      Grupo.getNiveles(),
+      Grupo.getPruebas()
     ])
       .then(([instituciones, niveles, pruebas]) => {
         res.render('Psicologos/registrarGrupo.ejs', {
@@ -114,9 +114,9 @@ exports.getRegistrarGrupo = (req, res, next) => {
       .then(([rows]) => {
         if (rows.length > 0) {
           return Promise.all([
-            Grupo.obtenerInstituciones(),
-            Grupo.obtenerNiveles(),
-            Grupo.obtenerPruebas()
+            Grupo.getInstituciones(),
+            Grupo.getNiveles(),
+            Grupo.getPruebas()
           ]).then(([instituciones, niveles, pruebas]) => {
             return res.render('Psicologos/registrarGrupo', {
               error: 'El grupo ya está registrado.',
@@ -139,7 +139,7 @@ exports.getRegistrarGrupo = (req, res, next) => {
         );
         console.log("Grupo", grupo);
   
-        return grupo.guardarGrupoYPruebas(pruebasSeleccionadas);
+        return grupo.saveGrupoYPruebas(pruebasSeleccionadas);
       })
       .then(() => {
         exports.getGrupos(req, res, next);

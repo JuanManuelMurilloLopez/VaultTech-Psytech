@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const Usuario = require('../models/inicioSesion.model');
+const Usuario = require('../models/usuario.model');
 
 exports.getLogin = (request, response, next) => {
     console.log('Login PSICODX');
@@ -21,7 +21,7 @@ exports.getPost = async (request, response) => {
 
     try {
         // Buscar usuario en la base de datos
-        const [usuarios] = await Usuario.recuperarUno(usuario);
+        const [usuarios] = await Usuario.fetchOne(usuario);
         
         if (!usuarios) {
             return response.send(`

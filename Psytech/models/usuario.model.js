@@ -9,7 +9,7 @@ class Usuario {
     this.rol = rol;
   }
 
-  static recuperarUno = async (usuario) => {
+  static fetchOne = async (usuario) => {
     try {
       const [filas] = await db.execute('SELECT * FROM usuarios WHERE usuario = ?', [usuario]);
 
