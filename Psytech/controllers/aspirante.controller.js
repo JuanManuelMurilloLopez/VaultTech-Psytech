@@ -5,6 +5,7 @@ const EstadoCivil = require('../models/estadoCivil.model');
 const Familiar = require('../models/formularioFamiliares.model');
 const ConsultarPruebas = require("../models/consultarPruebas.model");
 const PruebaColores = require('../models/prueba.model');
+const Aspirante = require('../models/aspirante.model');
 
 //Rutas del portal de los Aspirantes
 exports.getPruebas = (request, response) => {
@@ -42,8 +43,22 @@ exports.getPruebasCompletadas = (request, response, next) => {
     response.render('Aspirantes/pruebasCompletadas');
 };
 
-exports.getSubirDocumentos = (request, response, next) => {
-    response.render('Aspirantes/subirDocumentos');
+exports.getCargarExpedientes = (request, response, next) => {
+    Aspirante.getExpedientes(request.session.idAspirante)
+    .then(([rows, fieldData]) => {
+        const informacionExpedientes = rows;
+        console.log("Información Expedientes", informacionExpedientes);
+        response.render('Aspirantes/cargaExpedientes', {
+            informacionExpedientes: informacionExpedientes || [],
+        })
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+};
+
+exports.postCargarExpedientes = (request, response, next) => {
+
 };
 
 exports.getFormatoEntrevista = (request, response, next) => {
