@@ -11,7 +11,6 @@ module.exports = class Aspirante {
         this.lada = infoAspirante.lada,
         this.numeroTelefono = infoAspirante.numeroTelefono,
         this.usuario = this.correo,
-        this.contrasenia = this.nombreUsuario,
         this.institucionProcedencia = infoAspirante.institucionProcedencia,
         this.idPais = infoAspirante.idPais,
         this.idEstado = infoAspirante.idEstado
@@ -19,9 +18,9 @@ module.exports = class Aspirante {
     save(idGrupo){
         return db.execute(`
             CALL RegistrarAspiranteEnGrupo 
-            (?, ?, ?, ?, ?, ?, ?, ?, 'Aspirante', ?, ?, ?, ?)
+            (?, ?, ?, ?, ?, ?, ?, 'Aspirante', ?, ?, ?, ?)
             `
-            , [this.usuario, this.contrasenia, this.nombreUsuario, 
+            , [this.usuario, this.nombreUsuario, 
                 this.apellidoPaterno, this.apellidoMaterno, this.correo, 
                 this.lada, this.numeroTelefono, this.institucionProcedencia, this.idPais, this.idEstado, 
                 idGrupo])
