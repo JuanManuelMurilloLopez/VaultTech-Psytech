@@ -54,7 +54,7 @@ module.exports = class Aspirante {
 
     static addKardex(idAspirante, rutaKardex){
         return db.execute(`
-                UPDATE aspirante
+                UPDATE aspirantes
                 SET kardex = ?
                 WHERE idAspirante = ?
             `, [rutaKardex, idAspirante])
@@ -62,7 +62,7 @@ module.exports = class Aspirante {
 
     static addCv(idAspirante, rutaCv){
         return db.execute(`
-                UPDATE aspirante
+                UPDATE aspirantes
                 SET cv = ?
                 WHERE idAspirante = ?
             `, [rutaCv, idAspirante])
