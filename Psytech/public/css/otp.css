@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+:root{
+    --secondary: #294969;
+    --font-primary: #000;
+    --font-secondary: #fff;
+    --secondary-hover: #193858;
+}
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Lato", sans-serif;
+}
+
+.container{
+    margin: 120px auto;
+}
+
+.form-label{
+    display: flex;
+    margin-left: 2.1rem;
+    color: var(--secondary);
+}
+
+.input-login{
+    display: flex;
+}
+
+.form-control{
+    border-color: var(--secondary);
+    border-radius: 10px;
+    height: 40px;
+}
+
+.icon{
+    height: 2rem;
+    filter: invert(25%) sepia(36%) saturate(765%) 
+    hue-rotate(169deg) brightness(91%) contrast(91%);
+}
+
+
+.btn-color--secondary{
+    padding: 5px 30px;
+    border-radius: 20px;
+    background: var(--secondary);
+    color: var(--font-secondary);
+}
+
+.btn-color--secondary:hover{
+    background: var(--secondary-hover);
+    color: var(--font-secondary);
+}
+
+.centrado {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
