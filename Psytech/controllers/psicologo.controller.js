@@ -319,9 +319,7 @@ exports.getCuadernilloOtis = (request, response, next) => {
                         }
                     })
 
-                    const respuestasAspitanteOtis = Object.values(preguntasAgrupadas)
-
-                    console.log(respuestasAspitanteOtis)
+                    const respuestasAspitanteOtis = Object.values(preguntasAgrupadas);
 
                     response.render('Psicologos/cuadernilloRespuestasOtis.ejs', {
                         datosPersonales: datosPersonales || [],

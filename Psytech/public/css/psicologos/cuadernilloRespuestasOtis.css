@@ -1,13 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 :root{
-    --primary: #95B6BC;
     --secondary: #294969;
-    --third: #C1C1C1;
     --font-primary: #000;
     --font-secondary: #fff;
-    --primary-hover: #7BA1A8;
     --secondary-hover: #193858;
-    --third-hover:#B1B1B1;
 }
 
 *{
@@ -26,10 +22,22 @@
     flex-direction: row;
 }
 
+.text-center{
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 500;
+}
+
 .titulo-seccion {
     color: var(--secondary);
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.dato-titulo{
+    color: var(--secondary);
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .datos-personales {
@@ -45,10 +53,45 @@
     gap: 20px;
 }
 
+.resultado-titulo{
+    font-size: 24px;
+    font-weight: 500;
+    margin-right: 14px;
+}
 
-.btn-color--primary{
-    background: var(--primary);
-    color: var(--font-primary);
+.resultado{
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.incorrecta{
+    color: #C30101;
+}
+
+.respuesta-titulo{
+    display: flex;
+    justify-content: space-between;
+}
+
+.respuesta-decs{
+    font-size: 16px;
+    font-weight: 400;
+    max-width: 70%;
+}
+
+.respuesta-tiempo{
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.opcion{
+    display: flex;
+    gap: 20px
+}
+
+.opcion p{
+    font-size: 16px;
+    font-weight: 400;
 }
 
 .btn-color--secondary{
@@ -56,22 +99,7 @@
     color: var(--font-secondary);
 }
 
-.btn-color--third{
-    background: var(--third);
-    color: var(--font-primary);
-}
-
-.btn-color--third:hover{
-    background: var(--third-hover);
-    color: var(--font-primary);
-}
-
 .btn-color--secondary:hover{
     background: var(--secondary-hover);
     color: var(--font-secondary);
-}
-
-.btn-color--primary:hover{
-    background: var(--primary-hover);
-    color: var(--font-primary);
 }
