@@ -4,9 +4,23 @@
     --primary-hover: #7BA1A8;
 }
 
+*{
+    font-family: "Lato", sans-serif;
+}
+
+.logout-container{
+    margin: 3.125rem 0 1rem 0;
+    display: flex;
+    justify-content: end;
+}
+
 .btn-color--primary{
     background: var(--primary);
     color: var(--font-primary);
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.4rem 1.625rem;
+    border-radius: 20px;
 }
 
 .btn-color--primary:hover{

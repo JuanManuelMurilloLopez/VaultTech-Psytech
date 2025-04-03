@@ -1,30 +1,48 @@
-<!DOCTYPE html>
-<html lang="es">
-    
-<body>
-
-    <h3>Nav Side</h3>
-
-    <aside>
-        <h3>Pruebas</h3>
-        <ul>
-            <li onclick="navigateTo('/aspirante/mis-pruebas')">Todas mis pruebas</li>
-            <li onclick="navigateTo('/aspirante/pruebas-pendientes')">Pruebas pendientes</li>
-            <li onclick="navigateTo('/aspirante/pruebas-completadas')">Pruebas completadas</li>
-        </ul>
-
-        <h3>Documentos</h3>
-        <ul>
-            <li onclick="navigateTo('/aspirante/subir-documentos')">Subir documentos</li>
-            <li onclick="navigateTo('/aspirante/formato-entrevista')">Formato de entrevista</li>
+<div class="wrapper">
+    <aside id="sidebar">
+        <div class="d-flex justify-content-between p-4">
+            <button class="toggle-btn border-0 " id="toggle-btn">
+                <div class="logo-container">
+                    <img class="normal-logo" id="logoCompleto" src="/images/logoCompleto.png" alt="Logo PSICODX">
+                    <img class="small-logo" id="logoIndividual" src="/images/logoIndividual.png" alt="Logo PSICODX">
+                </div>
+            </button>
+        </div>
+        <ul class="sidebar-nav">
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" 
+                    data-bs-target="#pruebas" aria-expanded="false" aria-controls="pruebas">
+                    <img class="icon-exam" src="/images/examIcon.svg" alt="icono de pruebas">
+                    <span class="text-exam">Pruebas</span>
+                </a>
+                <ul id="pruebas" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                    <li class="sidebar-item">
+                        <a href="/aspirante/mis-pruebas" class="sidebar-link">Todas mis pruebas</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/aspirante/pruebas-pendientes" class="sidebar-link">Pruebas pendientes</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/aspirante/pruebas-completadas" class="sidebar-link">Pruebas completadas</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" 
+                    data-bs-target="#documentos" aria-expanded="false" aria-controls="documentos">
+                    <img class="icon-docs" src="/images/document.svg" alt="icono de documentos">
+                    <span class="text-docs">Documentos</span>
+                </a>
+                <ul id="documentos" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                    <li class="sidebar-item">
+                        <a href="/aspirante/cargar-expedientes" class="sidebar-link">Subir documentos</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/aspirante/formato-entrevista" class="sidebar-link">Formato de entrevista</a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </aside>
+</div>
 
-    <script>
-        function navigateTo(route) {
-            window.location.href = route;
-        }
-    </script>
-
-</body>
-</html>

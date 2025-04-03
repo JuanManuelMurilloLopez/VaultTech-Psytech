@@ -1,42 +1,66 @@
 const express = require('express');
 const router = express.Router();
 
+const authMiddleware = require('../util/autenticacionRoles');
+router.use(authMiddleware([2]));
+
 const path = require('path');
 const controller = require('../controllers/psicologo.controller');
 
 //Rutas del portal de los Psicologos
-router.get('/principal', controller.get_principal_psicologos);
+router.get('/lista-grupos', controller.getListaGrupos);
 
-router.get('/catalogo-instituciones', controller.get_catalogo_instituciones);
+// Vista con las instituciones registradas
+router.get('/catalogo-instituciones', controller.getCatalogoInstituciones);
 
-router.get('/registrar-institucion', controller.get_registrar_institucion);
+// Formulario para crear nuevas instituciones
+router.get('/registrar-institucion', controller.getRegistrarInstitucion);
+router.post('/registrar-institucion', controller.postRegistrarInstitucion);
 
-router.get('/editar-institucion', controller.get_editar_institucion);
+// Formulario para editar instituciones
+router.get('/editar-institucion', controller.getEditarInstitucion);
 
-router.get('/grupos', controller.get_grupos);
+router.get('/grupos', controller.getGrupos);
 
-router.get('/registrar-grupo', controller.get_registrar_grupo);
+//LILI REGISTRAR GRUPO
+router.get('/registrar-grupo/:idInstitucion', controller.getRegistrarGrupo); 
+router.post('/registrar-grupo/:idInstitucion', controller.postRegistrarGrupo); 
 
-router.get('/editar-grupo', controller.get_editar_grupo);
+// Vista con los grupos de cierta institución
+router.get('/grupos/:idInstitucion', controller.getGrupos);
 
-router.get('/aspirantes', controller.get_aspirantes);
 
-router.get('/importar-aspirantes', controller.get_importar_aspirantes);
+// Formulario para editar grupos
+router.get('/editar-grupo', controller.getEditarGrupo);
 
-router.get('/registrar-aspirantes', controller.get_registrar_aspirantes);
+// Vista con la información de cierto grupo
+router.get('/informacion-grupos/:idGrupo', controller.getInformacionGrupo)
 
-router.get('/editar-aspirantes', controller.get_editar_aspirantes);
+router.get('/aspirantes', controller.getAspirantes);
 
-router.get('/catalogo-pruebas', controller.get_catalogo_pruebas);
+router.get('/importar-aspirantes', controller.getImportarAspirantes);
 
-router.get('/prueba-otis', controller.get_prueba_otis);
+// Formulario para crear nuevos aspirantes
+router.get('/registrar-aspirantes/:idGrupo', controller.getRegistrarAspirantes);
+router.post('/registrar-aspirantes/:idGrupo', controller.postRegistrarAspirantes);
 
-router.get('/prueba-colores', controller.get_prueba_colores);
+// Formulario para editar aspirantes
+router.get('/editar-aspirantes', controller.getEditarAspirantes);
 
-router.get('/analisis-otis', controller.get_analisis_otis);
+// Vista con todas las pruebas
+router.get('/catalogo-pruebas', controller.getCatalogoPruebas);
 
-router.get('/analisis-colores', controller.get_analisis_colores);
+// Vista con información de la prueba Otis
+router.get('/prueba-otis', controller.getPruebaOtis);
 
-router.get('/respuestas-otis', controller.get_respuestas_otis);
+// Vista con la información de la prueba Colores
+router.get('/prueba-colores', controller.getPruebaColores);
+
+// Vista con el análisis de la prueba otis del aspirante
+router.get('/analisis-otis/:idGrupo/:idAspirante', controller.getAnalisisOtis);
+
+router.get('/analisis-colores', controller.getAnalisisColores);
+
+router.get('/respuestas-otis', controller.getRespuestasOtis);
 
 module.exports = router;
