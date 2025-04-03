@@ -343,8 +343,26 @@ exports.getCuadernilloOtis = (request, response, next) => {
 };
 
 exports.getAnalisisOtis = (request, response, next) => {
-    console.log('Analisis Otis');
-    response.render('Psicologos/analisisOtis');
+    Prueba.getRespuestasOtis(request.params.idAspirante, request.params.idGrupo)
+    .then(([rows, fieldData]) => {
+        const informacionAnalisis = rows;
+        Prueba.getPuntajeBrutoOtis(request.params.idAspirante, request.params.idGrupo)
+        .then(([rows, fieldData]) => {
+            const puntajeBruto = rows[0].puntajeBruto;
+            console.log("Informacion Analisis: ", informacionAnalisis);
+            console.log("Puntaje Bruto: ", puntajeBruto);
+            response.render('Psicologos/analisisOtis.ejs', {
+                informacionAnalisis: informacionAnalisis || [],
+                puntajeBruto: puntajeBruto || 0
+            })
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getAnalisisColores = (request, response, next) => {

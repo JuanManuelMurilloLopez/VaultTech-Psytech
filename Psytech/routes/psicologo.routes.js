@@ -58,7 +58,8 @@ router.get('/prueba-colores', controller.getPruebaColores);
 // Cuadernillo de respuestas de la prueba OTIS por aspirante
 router.get('/cuadernillo-Otis/:idGrupo/:idAspirante', controller.getCuadernilloOtis);
 
-router.get('/analisis-otis', controller.getAnalisisOtis);
+// Vista con el análisis de la prueba otis del aspirante
+router.get('/analisis-otis/:idGrupo/:idAspirante', controller.getAnalisisOtis);
 
 router.get('/analisis-colores', controller.getAnalisisColores);
 

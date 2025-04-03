@@ -5,6 +5,7 @@ const EstadoCivil = require('../models/estadoCivil.model');
 const Familiar = require('../models/formularioFamiliares.model');
 const ConsultarPruebas = require("../models/consultarPruebas.model");
 const PruebaColores = require('../models/prueba.model');
+const Aspirante = require('../models/aspirante.model');
 
 //Rutas del portal de los Aspirantes
 exports.getPruebas = (request, response) => {
@@ -42,8 +43,47 @@ exports.getPruebasCompletadas = (request, response, next) => {
     response.render('Aspirantes/pruebasCompletadas');
 };
 
-exports.getSubirDocumentos = (request, response, next) => {
-    response.render('Aspirantes/subirDocumentos');
+exports.getCargarExpedientes = (request, response, next) => {
+
+    //Recuperamos los archivos previamente subidos por el aspirante
+    Aspirante.getExpedientes(request.session.idAspirante)
+    .then(([rows, fieldData]) => {
+        const informacionExpedientes = rows[0];
+        console.log("Información Expedientes", informacionExpedientes);
+        response.render('Aspirantes/cargaExpedientes', {
+            informacionExpedientes: informacionExpedientes || [],
+        })
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+};
+
+exports.postCargarExpedientes = (request, response, next) => {
+
+    /*Revisamos el archivo que el aspirante subió, para mandarlo a su
+      respectivo campo en la base de datos*/
+    if(request.files['cv']){
+        console.log("entra al if de cv")
+        Aspirante.addCv(request.session.idAspirante, request.files['cv'][0].filename)
+        .then(() => {
+            response.render('Aspirantes/expedientesGuardados');
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
+    if(request.files['kardex']){
+        console.log("nombre archivo kardex", request.files['kardex'])
+        Aspirante.addKardex(request.session.idAspirante, request.files['kardex'][0].filename)
+        .then(() => {
+            response.render('Aspirantes/expedientesGuardados');
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
 };
 
 exports.getFormatoEntrevista = (request, response, next) => {
@@ -150,19 +190,7 @@ exports.getIntruccionesOtis = (request, response, next) => {
 
 // Mostrar instrucciones colores
 exports.getInstruccionesColores = (request, response, next) => {
-    PruebaColores.fetchInstrucciones()
-    .then(([rows, fieldData]) => {
-        const instrucciones = rows[0]?.instrucciones || 'Instrucciones no disponibles';
-        response.render('Aspirantes/instruccionesColores', {
-            instrucciones: instrucciones
-        });
-    })
-    .catch((error) => {
-        console.log(error);
-        response.render('Aspirantes/instruccionesColores', {
-            instrucciones: 'Error al cargar las instrucciones'
-        });
-    });
+    response.render('Aspirantes/instruccionesColores');
 };
 
 exports.postInstruccionesColores = (req, res) => {
