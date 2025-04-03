@@ -6,6 +6,7 @@ const Grupo = require('../models/grupo.model');
 const TipoInstitucion = require('../models/tipoInstitucion.model');
 const Prueba = require('../models/prueba.model');
 const { request, response } = require('express');
+const Cuadernillo = require('../models/cuadernilloOtis.model');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
@@ -273,11 +274,19 @@ exports.getCuadernilloOtis = (request, response, next) => {
     // Obtiene los datos personales del aspirante
     Prueba.getDatosPersonalesAspirante(request.params.idGrupo, request.params.idAspirante)
     .then(([rows, fieldData]) => {
-        const datosPersonales = rows;
-        console.log(datosPersonales)
+        const datosPersonales = rows[0];
+        console.log(datosPersonales);
+        // Obtiene las respuestas correctas del aspirante
+        Cuadernillo.getRespuestasCorrectas(request.params.idGrupo, request.params.idAspirante)
+        .then(([rows, fieldData]) => {
+            const respuestasCorrectas = rows[0];
+            console.log(respuestasCorrectas);
+        }).catch((error) => {
+            console.log(error)
+        });
     }).catch((error) => {
         console.log(error);
-    })
+    });
 };
 
 exports.getAnalisisOtis = (request, response, next) => {
