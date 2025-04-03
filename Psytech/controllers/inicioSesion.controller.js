@@ -9,7 +9,8 @@ exports.getLogin = (request, response, next) => {
 };
 
 exports.getOtp = (request, response, next) => {
-    response.render('otp');
+    const usuario = request.session.usuario;
+    response.render('otp', { usuario });
 };
 
 exports.getPost = async (request, response) => {
@@ -37,12 +38,12 @@ exports.getPost = async (request, response) => {
         const codigoOTP = crypto.randomInt(100000, 999999);
         const validez = new Date(Date.now() + 5 * 60000);
 
-
         await OTP.crearOTP(usuarioId.idUsuario, codigoOTP, validez);
+
+        request.session.usuario = usuario;
 
         //await mail.enviarCorreo(usuarioId.correo, 'Código de acceso', `Tu código OTP es: ${codigoOTP}`);
         console.log('codigoOTP:', codigoOTP);
-        console.log('validez:', validez);
         response.redirect('/otp');
     } catch (error) {
         console.error('Error en postLogin:', error);
@@ -51,21 +52,17 @@ exports.getPost = async (request, response) => {
 };
 
 exports.verificarOTP = async (request, response) => {
-    const { usuario, otp } = request.body;
+    const { otp } = request.body;
+    const usuario = request.session.usuario;
     
     try {
         const usuarioData  = await Usuario.fetchOne(usuario);
-        if (!usuarioData || usuarioData.length === 0) {
-            return res.send('<script>alert("Usuario no encontrado"); window.location.href = "/login";</script>');
-        }
-        
         const usuarioId = usuarioData[0].idUsuario;
         if (!usuarioId) {
             return res.send('<script>alert("Usuario no encontrado"); window.location.href = "/login";</script>');
         }
         
         const otpData = await OTP.obtenerOTP(usuarioId);
-        
   
       if (!otpData || otpData.codigo !== parseInt(otp)) {
         return response.send('<script>alert("OTP incorrecto o vencido"); window.location.href = "/otp";</script>');
@@ -74,9 +71,7 @@ exports.verificarOTP = async (request, response) => {
       await OTP.usarOTP(otpData.idOTP);
       
       request.session.user = usuarioData[0].idUsuario;
-      console.log("ID de usuario:", request.session.user);
       request.session.rol = usuarioData[0].idRol;
-      console.log("ID de rol:", request.session.rol);
 
         switch (usuarioData[0].idRol) {  
             case 3:
@@ -85,8 +80,6 @@ exports.verificarOTP = async (request, response) => {
                     if (rows.length > 0) {
                         request.session.idAspirante = rows[0].idAspirante;
                         return response.redirect('/aspirante/mis-pruebas');
-                    } else {
-                        console.error('No se encontró el aspirante');
                     }
                 })
                 .catch((error) => {
@@ -113,7 +106,6 @@ exports.getLogout = ((request, response) => {
         if (err) {
             return response.status(500).send('Error al cerrar sesión');
         }
-        // Después de destruir la sesión, redirige al login
         response.redirect('/login');
     });
 });
