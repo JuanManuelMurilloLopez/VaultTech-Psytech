@@ -1,5 +1,4 @@
-<%- include('../includes/_navsidePsicologo.ejs') %>
-<%- include('../includes/_buttonCerrarSesion.ejs') %>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -12,41 +11,157 @@
     <link href=
     "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
     rel="stylesheet">
+
+
+    <!-- Link css -->
+    <link rel="stylesheet" href="/css/psicologos/analisisOtis.css">
+    <!-- CSS navside -->
+    <link rel="stylesheet" href="/css/includeCss/_navsidePsicologo.css">
+    <!-- CSS cerrar sesión -->
+    <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
+
 </head>
 
-<body class="bg-light">
-    <div class="container">
-        <h1 class="text-center">Analisis Prueba Otis</h1>
-        <h4 class="text-center">Nombre del aspirante: Luisa Fernanda Valdez Guillén</h4>
-        <br>
-        <div class="card">
-            <div class="card-body">
-                <p>El análisis de la prueba psicológica aplicada indica un nivel 
-                    moderado de estabilidad emocional, con una tendencia a responder de 
-                    manera reflexiva ante situaciones de estrés. Los resultados muestran 
-                    que su capacidad de regulación emocional se encuentra dentro del rango esperado, 
-                    aunque se identificaron algunos indicadores de ansiedad en escenarios de alta presión. 
-                    En la sección de toma de decisiones, su desempeño fue consistente, aunque con cierta
-                     dificultad al enfrentarse a opciones con múltiples variables. Estos hallazgos sugieren que, 
-                    si bien posee una base sólida en el manejo emocional, podría beneficiarse de estrategias
-                     adicionales para optimizar su respuesta ante desafíos complejos.
-                </p>
-            </div>
-        </div>
-        <br>
+<body class="">
 
-        <div class="text-center mt-5">
-            <img src="/images/graph_analisis.png" alt="Grafica" width="400">
+    <div class="main">
+        <%- include('../includes/_navsidePsicologo.ejs') %>
+        <div class="container">
+            <%- include('../includes/_buttonCerrarSesion.ejs') %>
+            <h1 class="text-center">Analisis Prueba Otis</h1> <br>
+            <h4 class="text-center nombre-aspirante">Nombre del aspirante:
+                 <%= informacionAnalisis[0].nombreUsuario +  " " +
+                 informacionAnalisis[0].apellidoPaterno + " " +
+                 informacionAnalisis[0].apellidoMaterno %>
+                </h4> <br>
+            <br>
+            
+            <div class="row g-4">
+                <% let respuestasIncorrectas = 0 %>
+                <% let sinRespuesta = 0 %>
+                <% for(area of informacionAnalisis) { %>
+                    <% respuestasIncorrectas += parseInt(area.respuestasIncorrectas, 10) || 0 %>
+                    <% sinRespuesta += parseInt(area.sinRespuesta, 10) || 0 %>
+                <% } %>
+                <div class="col-md-4 card">
+                    Puntaje Bruto: <%= puntajeBruto %> <br> <br>
+                    Respuestas Correctas: <%= puntajeBruto %> <br>
+                    Respuestas Incorrectas: <%= respuestasIncorrectas %> <br>
+                    No Contestadas: <%= sinRespuesta %> <br> <br>
+                    Coeficiente Intelecual: <%= puntajeBruto + 64 %>
+                </div>
+
+                <div class="col-md-4 card">
+                    <p>El aspirante se encuentra <br>
+                        en el nivel intelectual: <br> <br>
+                        <% if ((puntajeBruto + 64) <= 69) { %>
+                            RETARDO MENTAL
+                        <% } else if ((puntajeBruto + 64) <= 79) { %>
+                            LIMÍTROFE
+                        <% } else if ((puntajeBruto + 64) <= 89) { %>
+                            NORMAL LENTO
+                        <% } else if ((puntajeBruto + 64) <= 109) { %>
+                            NORMAL
+                        <% } else if ((puntajeBruto + 64) <= 119) { %>
+                            NORMAL BRILLANTE
+                        <% } else if ((puntajeBruto + 64) <= 129) { %>
+                            SUPERIOR
+                        <% } else { %>
+                            MUY SUPERIOR
+                        <% } %>
+                    </p>  
+
+                </div>
+                <div class="col-md-4 card">
+                    <table class="table table-bordered table-sm">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Área</th>
+                                <th>Porcentaje</th>
+                            </tr>
+                        </thead>
+                        <tbody class="">
+                            <% for(area of informacionAnalisis) { %>
+                                <tr>
+                                    <td> <%= area.nombreAreaOtis %> </td>
+                                    <td> <%= area.porcentajeCorrectas %> </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+                    
+            </div>
+
+            <br>
+    
+            <br>
+
+            <div>
+                <canvas id="graficaAreas"></canvas>
+            </div>
+
+            <button type="button" class="btn btn-secondary"
+            onclick="window.location.href=
+            '/psicologo/respuestas-otis'"
+            >Regresar</button>
         </div>
-        <br>
-        <button type="button" class="btn btn-secondary"
-        onclick="window.location.href=
-        '/psicologo/respuestas-otis'"
-        >Regresar</button>
     </div>
+
+
     
     <!-- Bootstrap JS -->
-    <script src=
-    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Incluir el script del navside -->
+    <script src="/js/_navside.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+
+        const informacionAnalisis = <%- JSON.stringify(informacionAnalisis)  %>;
+
+        const labels = informacionAnalisis.map(area => area.nombreAreaOtis);
+        const data = informacionAnalisis.map(area => parseFloat(area.porcentajeCorrectas));
+
+        const backgroundColors = data.map(valor => {
+        if (valor >= 75) return 'rgba(40, 167, 69, 0.7)';  // Verde
+        if (valor >= 50) return 'rgba(255, 193, 7, 0.7)';  // Amarillo
+        if (valor >= 25) return 'rgba(255, 140, 0, 0.7)';  // Naranja
+        return 'rgba(220, 53, 69, 0.7)';  // Rojo
+        });
+
+        const borderColors = data.map(valor => {
+            if (valor >= 75) return 'rgba(40, 167, 69, 1)';
+            if (valor >= 50) return 'rgba(255, 193, 7, 1)';
+            if (valor >= 25) return 'rgba(255, 140, 0, 1)';
+            return 'rgba(220, 53, 69, 1)';
+        });
+
+        const ctx = document.getElementById('graficaAreas');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Porcentaje por Área',
+                    data: data,
+                    backgroundColor: backgroundColors,
+                    borderColor: borderColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        })
+    </script>
+
+    
+
 </body>

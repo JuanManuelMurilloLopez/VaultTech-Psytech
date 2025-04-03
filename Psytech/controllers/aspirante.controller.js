@@ -4,7 +4,8 @@ const Genero =  require('../models/generos.model');
 const EstadoCivil = require('../models/estadoCivil.model');
 const Familiar = require('../models/formularioFamiliares.model');
 const ConsultarPruebas = require("../models/consultarPruebas.model");
-const PruebaColores = require('../models/pruebaColores.model');
+const PruebaColores = require('../models/prueba.model');
+const Aspirante = require('../models/aspirante.model');
 
 //Rutas del portal de los Aspirantes
 exports.getPruebas = (request, response) => {
@@ -42,8 +43,47 @@ exports.getPruebasCompletadas = (request, response, next) => {
     response.render('Aspirantes/pruebasCompletadas');
 };
 
-exports.getSubirDocumentos = (request, response, next) => {
-    response.render('Aspirantes/subirDocumentos');
+exports.getCargarExpedientes = (request, response, next) => {
+
+    //Recuperamos los archivos previamente subidos por el aspirante
+    Aspirante.getExpedientes(request.session.idAspirante)
+    .then(([rows, fieldData]) => {
+        const informacionExpedientes = rows[0];
+        console.log("Información Expedientes", informacionExpedientes);
+        response.render('Aspirantes/cargaExpedientes', {
+            informacionExpedientes: informacionExpedientes || [],
+        })
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+};
+
+exports.postCargarExpedientes = (request, response, next) => {
+
+    /*Revisamos el archivo que el aspirante subió, para mandarlo a su
+      respectivo campo en la base de datos*/
+    if(request.files['cv']){
+        console.log("entra al if de cv")
+        Aspirante.addCv(request.session.idAspirante, request.files['cv'][0].filename)
+        .then(() => {
+            response.render('Aspirantes/expedientesGuardados');
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
+    if(request.files['kardex']){
+        console.log("nombre archivo kardex", request.files['kardex'])
+        Aspirante.addKardex(request.session.idAspirante, request.files['kardex'][0].filename)
+        .then(() => {
+            response.render('Aspirantes/expedientesGuardados');
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
 };
 
 exports.getFormatoEntrevista = (request, response, next) => {
@@ -192,7 +232,7 @@ exports.getPruebaColores = (request, response, next) => {
     const idPrueba = 6; 
 
     // Obtener el idGrupo aspirante y prueba
-    PruebaColores.obtenerGrupoParaPrueba(request.session.idAspirante, idPrueba)
+    PruebaColores.getGrupoPrueba(request.session.idAspirante, idPrueba)
         .then(([rows, fieldData]) => {
             if (rows.length > 0) {
                 // Guardar el idGrupo
@@ -277,7 +317,7 @@ exports.postGuardarSeleccionesColores = (request, response) => {
     const idPrueba = 6; 
     
     
-    PruebaColores.obtenerGrupoParaPrueba(request.session.idAspirante, idPrueba)
+    PruebaColores.getGrupoPrueba(request.session.idAspirante, idPrueba)
         .then(([rows]) => {
             if (rows.length === 0) {
                 throw new Error("No se encontró grupo para este aspirante y prueba");
@@ -303,28 +343,30 @@ exports.postGuardarSeleccionesColores = (request, response) => {
             };
             
             // Guardar en base
-            return PruebaColores.guardarDatosPersonales(
+            return PruebaColores.saveDatosPersonales(
                 request.session.idAspirante,
                 idGrupo,
                 idPrueba,
                 datosPersonales
             ).then(() => {
                 console.log("8. Datos personales guardados correctamente");
-                const pruebaColores1 = new PruebaColores(seleccionesFase1);
-                return pruebaColores1.saveSeleccion(
+                // const pruebaColores1 = new PruebaColores(seleccionesFase1);
+                return PruebaColores.saveSeleccion(
                     request.session.idAspirante,
                     idGrupo,
                     idPrueba,
-                    1
+                    1,
+                    seleccionesFase1
                 );
             }).then(() => {
                 console.log("9. Primera selección guardada");
-                const pruebaColores2 = new PruebaColores(seleccionesFase2);
-                return pruebaColores2.saveSeleccion(
+                // const pruebaColores2 = new PruebaColores(seleccionesFase2);
+                return PruebaColores.saveSeleccion(
                     request.session.idAspirante,
                     idGrupo,
                     idPrueba,
-                    2
+                    2,
+                    seleccionesFase2
                 );
             }).then(() => {
                 console.log("10. Segunda selección guardada");
@@ -343,7 +385,7 @@ exports.postGuardarSeleccionesColores = (request, response) => {
                     );
                 } else {
                     console.log("12. Registro encontrado, actualizando estado...");
-                    return PruebaColores.updateEstadoPrueba(
+                    return PruebaColores.updateEstatusPrueba(
                         request.session.idAspirante,
                         idGrupo, 
                         idPrueba
@@ -359,11 +401,14 @@ exports.postGuardarSeleccionesColores = (request, response) => {
         })
         .catch((error) => {
             console.error("Error:", error.message);
+            console.log(error);
             return response.send(`
                 <h3>Error al procesar la prueba</h3>
                 <p>${error.message}</p>
                 <a href="/aspirante/prueba-colores" class="btn btn-primary">Volver a intentar</a>
-            `);
+            `)
+            
+            ;
         });
 };
 

@@ -1,9 +1,10 @@
-const Pais = require('../models/Pais');
-const Estado = require('../models/Estado');
-const Aspirante = require('../models/Aspirante');
-const Institucion = require('../models/Institucion');
-const Grupo = require('../models/Grupo');
-const TipoInstitucion = require('../models/TipoInstitucion');
+const Pais = require('../models/pais.model');
+const Estado = require('../models/estado.model');
+const Aspirante = require('../models/aspirante.model');
+const Institucion = require('../models/institucion.model');
+const Grupo = require('../models/grupo.model');
+const TipoInstitucion = require('../models/tipoInstitucion.model');
+const Prueba = require('../models/prueba.model');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
@@ -78,9 +79,9 @@ exports.getGrupos = (request, response, next) => {
 // Get
 exports.getRegistrarGrupo = (req, res, next) => {
     Promise.all([
-      Grupo.obtenerInstituciones(),
-      Grupo.obtenerNiveles(),
-      Grupo.obtenerPruebas()
+      Grupo.getInstituciones(),
+      Grupo.getNiveles(),
+      Grupo.getPruebas()
     ])
       .then(([instituciones, niveles, pruebas]) => {
         res.render('Psicologos/registrarGrupo.ejs', {
@@ -114,9 +115,9 @@ exports.getRegistrarGrupo = (req, res, next) => {
       .then(([rows]) => {
         if (rows.length > 0) {
           return Promise.all([
-            Grupo.obtenerInstituciones(),
-            Grupo.obtenerNiveles(),
-            Grupo.obtenerPruebas()
+            Grupo.getInstituciones(),
+            Grupo.getNiveles(),
+            Grupo.getPruebas()
           ]).then(([instituciones, niveles, pruebas]) => {
             return res.render('Psicologos/registrarGrupo', {
               error: 'El grupo ya está registrado.',
@@ -139,7 +140,7 @@ exports.getRegistrarGrupo = (req, res, next) => {
         );
         console.log("Grupo", grupo);
   
-        return grupo.guardarGrupoYPruebas(pruebasSeleccionadas);
+        return grupo.saveGrupoYPruebas(pruebasSeleccionadas);
       })
       .then(() => {
         exports.getGrupos(req, res, next);
@@ -273,8 +274,26 @@ exports.getPruebaColores = (request, response, next) => {
 };
 
 exports.getAnalisisOtis = (request, response, next) => {
-    console.log('Analisis Otis');
-    response.render('Psicologos/analisisOtis');
+    Prueba.getRespuestasOtis(request.params.idAspirante, request.params.idGrupo)
+    .then(([rows, fieldData]) => {
+        const informacionAnalisis = rows;
+        Prueba.getPuntajeBrutoOtis(request.params.idAspirante, request.params.idGrupo)
+        .then(([rows, fieldData]) => {
+            const puntajeBruto = rows[0].puntajeBruto;
+            console.log("Informacion Analisis: ", informacionAnalisis);
+            console.log("Puntaje Bruto: ", puntajeBruto);
+            response.render('Psicologos/analisisOtis.ejs', {
+                informacionAnalisis: informacionAnalisis || [],
+                puntajeBruto: puntajeBruto || 0
+            })
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getAnalisisColores = (request, response, next) => {
