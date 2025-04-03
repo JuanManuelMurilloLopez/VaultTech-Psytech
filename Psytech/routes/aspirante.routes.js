@@ -28,12 +28,10 @@ router.post('/formulario-familiar', controller.postFormularioFamiliares)
 
 router.get('/instrucciones-otis', controller.getIntruccionesOtis);
 
-<<<<<<< HEAD
-router.get('/prueba-otis', controller.get_prueba_otis);
+router.get('/prueba-otis', controller.getPruebaOtis);
 router.post('/prueba-otis', controller.obtenerPreguntas);
-=======
+
 //router.get('/instrucciones-hartman', controller.get_instrucciones_hartman);
->>>>>>> f259af967dd7b6613584584b31eb61348d920b45
 
 //router.get('/instrucciones-terman', controller.get_instrucciones_terman);
 
