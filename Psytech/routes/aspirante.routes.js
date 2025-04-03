@@ -27,6 +27,10 @@ router.get('/formulario-familiar', controller.getFormularioFamiliares);
 router.post('/formulario-familiar', controller.postFormularioFamiliares)
 
 router.get('/instrucciones-otis', controller.getIntruccionesOtis);
+router.post('/instrucciones-otis', controller.postInstruccionesOtis);
+
+router.get('/datos-personales-otis', controller.getDatosPersonalesOtis);
+router.post('/datos-personales-otis', controller.postDatosPersonalesOtis);
 
 router.get('/prueba-otis', controller.getPruebaOtis);
 router.post('/prueba-otis', controller.obtenerPreguntas);
@@ -39,8 +43,6 @@ router.get('/instrucciones-colores', controller.getInstruccionesColores);
 router.post('/instrucciones-colores', controller.postInstruccionesColores);
 router.get('/datos-personales-colores', controller.getDatosPersonalesColores);
 router.post('/datos-personales-colores', controller.postDatosPersonalesColores);
-
-router.get('/prueba-otis', controller.getPruebaOtis);
 
 router.get('/prueba-colores', controller.getPruebaColores);
 router.post('/prueba-colores', controller.postPruebaColores);

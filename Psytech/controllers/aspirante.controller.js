@@ -185,12 +185,28 @@ exports.postFormularioFamiliares = (request, response, next) => {
 };
 
 exports.getIntruccionesOtis = (request, response, next) => {
-    response.render('Aspirantes/instruccionesOtis');
+    PruebaColores.fetchInstruccionesOtis()
+    .then(([rows, fieldData]) => {
+        const instrucciones = rows[0]?.instrucciones || 'Instrucciones no disponibles';
+        response.render('Aspirantes/instruccionesOtis', {
+            instrucciones: instrucciones
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+        response.render('Aspirantes/instruccionesOtis', {
+            instrucciones: 'Error al cargar las instrucciones'
+        });
+    });
+};
+
+exports.postInstruccionesOtis = (req, res) => {
+    res.redirect('/aspirante/datos-personales-otis');
 };
 
 // Mostrar instrucciones colores
 exports.getInstruccionesColores = (request, response, next) => {
-    PruebaColores.fetchInstrucciones()
+    PruebaColores.fetchInstruccionesColores()
     .then(([rows, fieldData]) => {
         const instrucciones = rows[0]?.instrucciones || 'Instrucciones no disponibles';
         response.render('Aspirantes/instruccionesColores', {
@@ -215,12 +231,34 @@ exports.getPruebaOtis = (request, response, next) => {
 };
 
 // Formulario datos personales
+exports.getDatosPersonalesOtis = (request, response, next) => {
+    response.render('Aspirantes/datosPersonalesOtis');
+};
+
+// Formulario datos personales
 exports.getDatosPersonalesColores = (request, response, next) => {
     response.render('Aspirantes/datosPersonalesColores');
 };
 
 exports.get_respuestas_enviadas = (request, response, next) => {
     response.send('Respuestas enviadas');
+};
+
+// Procesar datos personales y pasar a la prueba
+exports.postDatosPersonalesOtis = (request, response, next) => {
+    const { nombre, apellidoPaterno, apellidoMaterno, puestoSolicitado } = request.body;
+    
+    // Guardar en la sesion
+    request.session.datosPersonalesOtis = {
+        nombre,
+        apellidoPaterno,
+        apellidoMaterno,
+        puestoSolicitado,
+        fecha: new Date()
+    };
+    
+    // Primera fase de la prueba
+    response.redirect('/aspirante/prueba-otis');
 };
 
 const PreguntaOtis = require('../models/preguntasOtis.model.js');
