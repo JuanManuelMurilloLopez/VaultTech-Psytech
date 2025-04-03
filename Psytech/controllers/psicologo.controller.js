@@ -281,8 +281,15 @@ exports.getCuadernilloOtis = (request, response, next) => {
         .then(([rows, fieldData]) => {
             const respuestasCorrectas = rows[0];
             console.log(respuestasCorrectas);
+            Cuadernillo.getTiempoTotal(request.params.idGrupo, request.params.idAspirante)
+            .then(([rows, fieldData]) => {
+                const tiempoTotal = rows[0];
+                console.log(tiempoTotal);
+            }).catch((error) => {
+                console.log(error);
+            });
         }).catch((error) => {
-            console.log(error)
+            console.log(error);
         });
     }).catch((error) => {
         console.log(error);
