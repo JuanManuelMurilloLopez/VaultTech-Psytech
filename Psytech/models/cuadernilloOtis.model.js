@@ -17,4 +17,16 @@ module.exports = class Cuadernillo{
             AND idPrueba = 5 
             AND idGrupo = ?`, [idAspirante, idGrupo]);
     }
+
+    static getRespuestasOtisAspirante(idGrupo, idAspirante){
+        return db.execute(`SELECT PO.idPreguntaOtis, PO.numeroPregunta, PO.preguntaOtis,
+            OO.idOpcionOtis, OO.opcionOtis ,OO.descripcionOpcion, OO.esCorrecta,
+            ROA.idOpcionOtis IS NOT NULL AS opcionSeleccionada, ROA.tiempoRespuesta 
+            FROM preguntasotis PO 
+            JOIN opcionesotis OO ON PO.idPreguntaOtis = OO.idPreguntaOtis
+            LEFT JOIN respuestaotisaspirante ROA ON OO.idOpcionOtis = ROA.idOpcionOtis 
+            AND ROA.idAspirante = ?
+            AND ROA.idGrupo = ?
+            AND ROA.idPrueba = 5`, [idAspirante, idGrupo]);
+    }
 }
