@@ -4,6 +4,8 @@ const Aspirante = require('../models/aspirante.model');
 const Institucion = require('../models/institucion.model');
 const Grupo = require('../models/grupo.model');
 const TipoInstitucion = require('../models/tipoInstitucion.model');
+const Prueba = require('../models/prueba.model');
+const { request, response } = require('express');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
@@ -72,7 +74,6 @@ exports.getGrupos = (request, response, next) => {
     .catch();
     
 };
-
 
 // Registrar Nuevo Grupo
 // Get
@@ -153,7 +154,6 @@ exports.getRegistrarGrupo = (req, res, next) => {
   };
   
 
-
 exports.getInformacionGrupo = (request, response, next) => {
     Grupo.fetchOne(request.params.idGrupo)
     .then(([rows, fieldData]) => {
@@ -176,7 +176,6 @@ exports.getInformacionGrupo = (request, response, next) => {
     });
     
 }
-
 
 exports.getEditarGrupo = (request, response, next) => {
     console.log('Editar Grupo');
@@ -214,7 +213,6 @@ exports.getRegistrarAspirantes = (request, response, next) => {
     
 };
 
-
 exports.postRegistrarAspirantes = (request, response, next) => {
     const aspirante = new Aspirante(request.body);
     aspirante.save(request.params.idGrupo)
@@ -250,9 +248,6 @@ exports.postRegistrarAspirantes = (request, response, next) => {
     })
 };
 
-
-
-
 exports.getEditarAspirantes = (request, response, next) => {
     console.log('Editar Aspirante');
     response.render('Psicologos/editarAspirante');
@@ -270,6 +265,19 @@ exports.getPruebaOtis = (request, response, next) => {
 
 exports.getPruebaColores = (request, response, next) => {
     response.send('Prueba Colores');
+};
+
+// Controlador para manejar la obtención del cuadernillo de respuestas OTIS.
+
+exports.getCuadernilloOtis = (request, response, next) => {
+    // Obtiene los datos personales del aspirante
+    Prueba.getDatosPersonalesAspirante(request.params.idGrupo, request.params.idAspirante)
+    .then(([rows, fieldData]) => {
+        const datosPersonales = rows;
+        console.log(datosPersonales)
+    }).catch((error) => {
+        console.log(error);
+    })
 };
 
 exports.getAnalisisOtis = (request, response, next) => {

@@ -7,6 +7,15 @@ module.exports = class Prueba{
             return db.execute('SELECT instrucciones FROM pruebas WHERE nombre = "Colores de Luscher"');
         }
 
+    // Obtiene los datos personales de un aspirante según el grupo y la prueba OTIS.
+    static getDatosPersonalesAspirante(idGrupo, idAspirante){
+        return db.execute(`SELECT nombre, apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha 
+            FROM datosPersonales 
+            WHERE idAspirante = ? 
+            AND idPrueba = 5
+            AND idGrupo = ?`, [idAspirante, idGrupo])
+    }
+
     static saveDatosPersonales(idAspirante, idGrupo, idPrueba, datosPersonales){
         // Ya existen datos?
         return db.execute(`
