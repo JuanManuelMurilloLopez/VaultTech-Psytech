@@ -46,7 +46,7 @@ exports.getPruebasCompletadas = (request, response, next) => {
 exports.getCargarExpedientes = (request, response, next) => {
     Aspirante.getExpedientes(request.session.idAspirante)
     .then(([rows, fieldData]) => {
-        const informacionExpedientes = rows;
+        const informacionExpedientes = rows[0];
         console.log("Información Expedientes", informacionExpedientes);
         response.render('Aspirantes/cargaExpedientes', {
             informacionExpedientes: informacionExpedientes || [],
