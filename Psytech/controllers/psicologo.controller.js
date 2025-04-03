@@ -4,6 +4,7 @@ const Aspirante = require('../models/aspirante.model');
 const Institucion = require('../models/institucion.model');
 const Grupo = require('../models/grupo.model');
 const TipoInstitucion = require('../models/tipoInstitucion.model');
+const Prueba = require('../models/prueba.model');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
@@ -273,8 +274,26 @@ exports.getPruebaColores = (request, response, next) => {
 };
 
 exports.getAnalisisOtis = (request, response, next) => {
-    console.log('Analisis Otis');
-    response.render('Psicologos/analisisOtis');
+    Prueba.getRespuestasOtis(request.params.idAspirante, request.params.idGrupo)
+    .then(([rows, fieldData]) => {
+        const informacionAnalisis = rows;
+        Prueba.getPuntajeBrutoOtis(request.params.idAspirante, request.params.idGrupo)
+        .then(([rows, fieldData]) => {
+            const puntajeBruto = rows[0].puntajeBruto;
+            console.log("Informacion Analisis: ", informacionAnalisis);
+            console.log("Puntaje Bruto: ", puntajeBruto);
+            response.render('Psicologos/analisisOtis.ejs', {
+                informacionAnalisis: informacionAnalisis || [],
+                puntajeBruto: puntajeBruto || 0
+            })
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getAnalisisColores = (request, response, next) => {
