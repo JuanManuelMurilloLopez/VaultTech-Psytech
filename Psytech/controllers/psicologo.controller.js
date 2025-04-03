@@ -269,26 +269,35 @@ exports.getPruebaColores = (request, response, next) => {
 };
 
 // Controlador para manejar la obtención del cuadernillo de respuestas OTIS.
-
 exports.getCuadernilloOtis = (request, response, next) => {
     // Obtiene los datos personales del aspirante
     Prueba.getDatosPersonalesAspirante(request.params.idGrupo, request.params.idAspirante)
     .then(([rows, fieldData]) => {
-        const datosPersonales = rows[0];
+        const datosPersonales = rows;
         console.log(datosPersonales);
         // Obtiene las respuestas correctas del aspirante
         Cuadernillo.getRespuestasCorrectas(request.params.idGrupo, request.params.idAspirante)
         .then(([rows, fieldData]) => {
-            const respuestasCorrectas = rows[0];
+            const respuestasCorrectas = rows;
             console.log(respuestasCorrectas);
+            // Obtiene el tiempo total que tomo el aspirante para completar la prueba
             Cuadernillo.getTiempoTotal(request.params.idGrupo, request.params.idAspirante)
             .then(([rows, fieldData]) => {
-                const tiempoTotal = rows[0];
+                const tiempoTotal = rows;
                 console.log(tiempoTotal);
+                // Obtiene las preguntas, opciones y la respuesta del aspirante
                 Cuadernillo.getRespuestasOtisAspirante(request.params.idGrupo, request.params.idAspirante)
                 .then(([rows, fieldData]) => {
-                    const respuestasAspitanteOtis = rows[0];
+                    const respuestasAspitanteOtis = rows;
                     console.log(respuestasAspitanteOtis);
+
+                    response.render('Psicologos/cuadernilloRespuestasOtis.ejs', {
+                        datosPersonales: datosPersonales || [],
+                        respuestasCorrectas: respuestasCorrectas || [],
+                        tiempoTotal: tiempoTotal || [],
+                        respuestasAspitanteOtis: respuestasAspitanteOtis || [],
+                    });
+
                 }).catch((error) => {
                     console.log(error);
                 })

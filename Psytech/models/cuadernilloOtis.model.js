@@ -1,5 +1,4 @@
 const db = require('../util/database');
-
 module.exports = class Cuadernillo{
     
     // Obtiene las respuestas correctas que el aspirante tuvo en la prueba
@@ -10,6 +9,7 @@ module.exports = class Cuadernillo{
             `, [idAspirante, idGrupo]);
     }
 
+    // Obtiene el timpo en que el aspirante respindio la prueba
     static getTiempoTotal(idGrupo, idAspirante){
         return db.execute (`SELECT SUM(tiempoRespuesta) AS Tiempo 
             FROM respuestaotisaspirante 
@@ -18,6 +18,7 @@ module.exports = class Cuadernillo{
             AND idGrupo = ?`, [idAspirante, idGrupo]);
     }
 
+    // Obtiene las preguntas, opciones y la respuesta del aspirante 
     static getRespuestasOtisAspirante(idGrupo, idAspirante){
         return db.execute(`SELECT PO.idPreguntaOtis, PO.numeroPregunta, PO.preguntaOtis,
             OO.idOpcionOtis, OO.opcionOtis ,OO.descripcionOpcion, OO.esCorrecta,
