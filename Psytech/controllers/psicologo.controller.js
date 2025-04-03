@@ -285,7 +285,43 @@ exports.getCuadernilloOtis = (request, response, next) => {
                 // Obtiene las preguntas, opciones y la respuesta del aspirante
                 Cuadernillo.getRespuestasOtisAspirante(request.params.idGrupo, request.params.idAspirante)
                 .then(([rows, fieldData]) => {
-                    const respuestasAspitanteOtis = rows;
+                    const preguntasAgrupadas = {};
+
+                    rows.forEach(row => {
+                        // Creamos el objeto de pregunta si este no existe
+                        if (!preguntasAgrupadas[row.idPreguntaOtis]) {
+                            preguntasAgrupadas[row.idPreguntaOtis] = {
+                                idPreguntaOtis: row.idPreguntaOtis,
+                                numeroPregunta: row.numeroPregunta,
+                                preguntaOtis: row.preguntaOtis,
+                                opciones: [],
+                                esCorrecta: false,
+                                tiempoRespuesta: 0,
+                                contestada: false
+                            };
+                        }
+                        // Vamos añadiendo las opciones de la pregunta correspondiente
+                        preguntasAgrupadas[row.idPreguntaOtis].opciones.push({
+                            idOpcionOtis: row.idOpcionOtis,
+                            opcionOtis: row.opcionOtis,
+                            descripcionOpcion: row.descripcionOpcion,
+                            esCorrecta: row.esCorrecta === 1, 
+                            seleccionada: row.opcionSeleccionada === 1
+                        });
+
+                        if (row.opcionSeleccionada === 1) {
+                            preguntasAgrupadas[row.idPreguntaOtis].tiempoRespuesta = row.tiempoRespuesta;
+                            preguntasAgrupadas[row.idPreguntaOtis].contestada = true;
+
+                            if (row.esCorrecta === 1) {
+                                preguntasAgrupadas[row.idPreguntaOtis].esCorrecta = true;
+                            }
+                        }
+                    })
+
+                    const respuestasAspitanteOtis = Object.values(preguntasAgrupadas)
+
+                    console.log(respuestasAspitanteOtis)
 
                     response.render('Psicologos/cuadernilloRespuestasOtis.ejs', {
                         datosPersonales: datosPersonales || [],

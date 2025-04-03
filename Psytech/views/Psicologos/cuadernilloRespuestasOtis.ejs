@@ -64,11 +64,11 @@
                 </div>
             <% } %>
 
-            <h4 class="titulo-seccion">Respuestas</h4>
+            <h4 class="titulo-seccion">Resultados</h4>
             <hr><br>
             <div class="mb-3">
 
-            <div class="aspirante-puestoS">
+            <div class="aspirante-puestos">
                 <h5>Puntaje bruto: <%= respuestasCorrectas %></h5>
                 <% 
                 const calificacion = ((respuestasCorrectas/75) * 100).toFixed(2)
@@ -77,8 +77,37 @@
                 <% 
                 const tiempoMin = Math.trunc(tiempoTotal/60)
                 %>
-                <h5>Tiempo en que se realizo la prueba: <%= tiempoMin %>:<%= tiempoTotal %> min</h5>
+                <h5>Tiempo total en que se realizo la prueba: 
+                    <%= tiempoMin %> min
+                    <%= tiempoTotal %> seg</h5>
             </div>
+
+            <h4 class="titulo-seccion">Respuestas del aspirante</h4>
+            <hr><br>
+            <div class="mb-3">
+
+            <% for(respuesta of respuestasAspitanteOtis) { %>
+                <div>
+                    <h5><%= respuesta.numeroPregunta %> .- <%= respuesta. preguntaOtis %></h5>
+                    <% 
+                    const min = Math.trunc(respuesta.tiempoRespuesta/60)
+                    %>
+                    <p>Tiempo en responder 
+                        <%= min %> min
+                        <%= respuesta.tiempoRespuesta%> seg</p>
+                </div>
+
+                <% for(opcion of respuesta.opciones) { %>
+                    <div class="opcion">
+                        <%= opcion.opcionOtis %>) <%= opcion.descripcionOpcion %>
+                        <% if(opcion.seleccionada) { %>
+                            <img src="/images/check.svg" alt="respuesta correcta">
+                        <% } else { %>
+                            <img src="/images/uncheck.svg" alt="respuesta incorrecta">
+                        <% } %>
+                    </div>
+                <% } %>
+            <% } %>
 
         </div>
     </div>
