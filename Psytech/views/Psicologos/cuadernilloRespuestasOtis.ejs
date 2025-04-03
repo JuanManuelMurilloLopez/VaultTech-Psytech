@@ -62,7 +62,23 @@
                         <p><%= fechaFormato %></p>
                     </div>
                 </div>
-            <% } %>       
+            <% } %>
+
+            <h4 class="titulo-seccion">Respuestas</h4>
+            <hr><br>
+            <div class="mb-3">
+
+            <div class="aspirante-puestoS">
+                <h5>Puntaje bruto: <%= respuestasCorrectas %></h5>
+                <% 
+                const calificacion = ((respuestasCorrectas/75) * 100).toFixed(2)
+                %>
+                <h5>Calificacion: <%= calificacion %> / 100</h5>
+                <% 
+                const tiempoMin = Math.trunc(tiempoTotal/60)
+                %>
+                <h5>Tiempo en que se realizo la prueba: <%= tiempoMin %>:<%= tiempoTotal %> min</h5>
+            </div>
 
         </div>
     </div>

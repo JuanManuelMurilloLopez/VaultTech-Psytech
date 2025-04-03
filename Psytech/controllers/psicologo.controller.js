@@ -274,27 +274,23 @@ exports.getCuadernilloOtis = (request, response, next) => {
     Prueba.getDatosPersonalesAspirante(request.params.idGrupo, request.params.idAspirante)
     .then(([rows, fieldData]) => {
         const datosPersonales = rows;
-        console.log(datosPersonales);
         // Obtiene las respuestas correctas del aspirante
         Cuadernillo.getRespuestasCorrectas(request.params.idGrupo, request.params.idAspirante)
         .then(([rows, fieldData]) => {
-            const respuestasCorrectas = rows;
-            console.log(respuestasCorrectas);
+            const respuestasCorrectas = rows[0].RespuestasCorrectas;
             // Obtiene el tiempo total que tomo el aspirante para completar la prueba
             Cuadernillo.getTiempoTotal(request.params.idGrupo, request.params.idAspirante)
             .then(([rows, fieldData]) => {
-                const tiempoTotal = rows;
-                console.log(tiempoTotal);
+                const tiempoTotal = rows[0].Tiempo;
                 // Obtiene las preguntas, opciones y la respuesta del aspirante
                 Cuadernillo.getRespuestasOtisAspirante(request.params.idGrupo, request.params.idAspirante)
                 .then(([rows, fieldData]) => {
                     const respuestasAspitanteOtis = rows;
-                    console.log(respuestasAspitanteOtis);
 
                     response.render('Psicologos/cuadernilloRespuestasOtis.ejs', {
                         datosPersonales: datosPersonales || [],
-                        respuestasCorrectas: respuestasCorrectas || [],
-                        tiempoTotal: tiempoTotal || [],
+                        respuestasCorrectas: respuestasCorrectas || 0,
+                        tiempoTotal: tiempoTotal || 0,
                         respuestasAspitanteOtis: respuestasAspitanteOtis || [],
                     });
 
