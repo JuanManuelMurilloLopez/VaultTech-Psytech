@@ -67,7 +67,7 @@ exports.postCargarExpedientes = (request, response, next) => {
         console.log("entra al if de cv")
         Aspirante.addCv(request.session.idAspirante, request.files['cv'][0].filename)
         .then(() => {
-            response.render('Aspirante/expedientesGuardados');
+            response.render('Aspirantes/expedientesGuardados');
         })
         .catch((error) => {
             console.log(error);
@@ -78,7 +78,7 @@ exports.postCargarExpedientes = (request, response, next) => {
         console.log("nombre archivo kardex", request.files['kardex'])
         Aspirante.addKardex(request.session.idAspirante, request.files['kardex'][0].filename)
         .then(() => {
-            response.render('Aspirante/expedientesGuardados');
+            response.render('Aspirantes/expedientesGuardados');
         })
         .catch((error) => {
             console.log(error);
