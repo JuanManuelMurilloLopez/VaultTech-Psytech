@@ -44,6 +44,8 @@ exports.getPruebasCompletadas = (request, response, next) => {
 };
 
 exports.getCargarExpedientes = (request, response, next) => {
+
+    //Recuperamos los archivos previamente subidos por el aspirante
     Aspirante.getExpedientes(request.session.idAspirante)
     .then(([rows, fieldData]) => {
         const informacionExpedientes = rows[0];
@@ -59,6 +61,29 @@ exports.getCargarExpedientes = (request, response, next) => {
 
 exports.postCargarExpedientes = (request, response, next) => {
 
+    /*Revisamos el archivo que el aspirante subió, para mandarlo a su
+      respectivo campo en la base de datos*/
+    if(request.files['cv']){
+        console.log("entra al if de cv")
+        Aspirante.addCv(request.session.idAspirante, request.files['cv'][0].filename)
+        .then(() => {
+            response.render('Aspirante/expedientesGuardados');
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
+    if(request.files['kardex']){
+        console.log("nombre archivo kardex", request.files['kardex'])
+        Aspirante.addKardex(request.session.idAspirante, request.files['kardex'][0].filename)
+        .then(() => {
+            response.render('Aspirante/expedientesGuardados');
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
 };
 
 exports.getFormatoEntrevista = (request, response, next) => {
