@@ -71,14 +71,7 @@
                 <h5 class="resultado-titulo">Puntaje bruto:</h5>
                 <p class="resultado"><%= respuestasCorrectas %></p>
             </div>
-        
-            <div class="d-flex">
-                <% 
-                const calificacion = ((respuestasCorrectas/75) * 100).toFixed(2)
-                %>
-                <h5 class="resultado-titulo" >Calificacion:</h5>
-                <p class="resultado"><%= calificacion %> / 100</p>
-            </div>
+
             <div class="d-flex">
                 <% 
                 const tiempoMin = Math.trunc(tiempoTotal/60)
@@ -91,7 +84,7 @@
                 </p>
             </div>
 
-            <br><br>
+            <br>
             <h4 class="titulo-seccion">Respuestas del aspirante</h4>
             <hr><br>
             <div class="mb-3">
@@ -103,10 +96,8 @@
                         <div class="respuesta-decs 
                         <% if (respuesta.esCorrecta === true) { %>
                             correcta
-                        <% } else if (respuesta.esCorrecta === false) { %>
-                            incorrecta
                         <% } else { %>
-                            no-contestada
+                            incorrecta
                         <% } %> ">
                             <h5><%= respuesta.numeroPregunta %> .- 
                                 <%= respuesta. preguntaOtis %> - 
@@ -125,7 +116,7 @@
                             const min = Math.trunc(respuesta.tiempoRespuesta/60)
                             const seg = (respuesta.tiempoRespuesta%60).toFixed(0)
                             %>
-                            <p>Tiempo en responder 
+                            <p>Tiempo en responder:  
                                 <%= min %> min
                                 <%= seg %> seg
                             </p>
@@ -136,7 +127,7 @@
 
                 <% for(opcion of respuesta.opciones) { %>
                     <div class="opcion">
-                        <p> <%= opcion.opcionOtis %>) <%= opcion.descripcionOpcion %></p>
+                        <p><%= opcion.opcionOtis %>)</p>
                         <div class="opcion-check" >
                             <% if(opcion.seleccionada) { %>
                                 <img class="correcta" src="/images/check.svg" alt="respuesta correcta">
@@ -144,10 +135,10 @@
                                 <img class="incorrecta" src="/images/uncheck.svg" alt="respuesta incorrecta">
                             <% } %>
                         </div>
-
+                        <p><%= opcion.descripcionOpcion %></p>
                     </div>
                 <% } %>
-            <% } %>
+            <% } %><br><br><br>
 
             <div class="fixed-bottom-buttons">
                 <div class="container">

@@ -102,7 +102,7 @@
 
 .opcion{
     display: flex;
-    gap: 20px
+    gap: 20px;  
 }
 
 .opcion p{
@@ -116,7 +116,6 @@
     left: 0;
     right: 0;
     background-color: #fff;
-    padding: 5px 0;
     z-index: 1000;
 }
 
@@ -124,7 +123,6 @@
     background: var(--secondary);
     color: var(--font-secondary);
 }
-
 .btn-color--third{
     background: var(--third);
     color: var(--font-primary);
