@@ -27,7 +27,6 @@ exports.getPruebasPendientes = (request, response, next) => {
     ConsultarPruebas.fetchAllPendientes(request.session.idAspirante)
     .then(([rows, fieldData]) => {
         const pruebasPendientes  = rows;
-        console.log(pruebasPendientes)
         response.render('Aspirantes/pruebasPendientes',{
             pruebasPendientes: pruebasPendientes || [],
         });
@@ -40,7 +39,18 @@ exports.getPruebasPendientes = (request, response, next) => {
 };
 
 exports.getPruebasCompletadas = (request, response, next) => {
-    response.render('Aspirantes/pruebasCompletadas');
+    ConsultarPruebas.fetchAllCompletadas(request.session.idAspirante)
+    .then(([rows, fieldData]) => {
+        const pruebasCompletadas  = rows;
+        response.render('Aspirantes/pruebasCompletadas',{
+            pruebasCompletadas: pruebasCompletadas || [],
+        });
+        
+    })
+
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getCargarExpedientes = (request, response, next) => {
