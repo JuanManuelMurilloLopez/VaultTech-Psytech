@@ -297,7 +297,7 @@ exports.getCuadernilloOtis = (request, response, next) => {
                                 opciones: [],
                                 esCorrecta: false,
                                 tiempoRespuesta: 0,
-                                contestada: false
+                                contestada: null
                             };
                         }
                         // Vamos añadiendo las opciones de la pregunta correspondiente
@@ -312,10 +312,12 @@ exports.getCuadernilloOtis = (request, response, next) => {
                         if (row.opcionSeleccionada === 1) {
                             preguntasAgrupadas[row.idPreguntaOtis].tiempoRespuesta = row.tiempoRespuesta;
                             preguntasAgrupadas[row.idPreguntaOtis].contestada = true;
+                            preguntasAgrupadas[row.idPreguntaOtis].esCorrecta = row.esCorrecta === 1;
 
-                            if (row.esCorrecta === 1) {
-                                preguntasAgrupadas[row.idPreguntaOtis].esCorrecta = true;
-                            }
+                        }
+
+                        if(!preguntasAgrupadas[row.idPreguntaOtis].contestada){
+                            preguntasAgrupadas[row.idPreguntaOtis].esCorrecta = null;
                         }
                     })
 

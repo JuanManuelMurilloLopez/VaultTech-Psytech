@@ -36,21 +36,21 @@
                 <div class="datos-personales">
                     <div class="aspirante-nombre">
                         <h5 class="dato-titulo">Nombre</h5>
-                        <p class=""><%= dato.nombre %></p>       
+                        <p class="dato"><%= dato.nombre %></p>       
                     </div>
                     <div class="aspirante-apellidoP">
                         <h5 class="dato-titulo">Apellido Paterno</h5>
-                        <p><%= dato.apellidoPaterno %></p>
+                        <p class="dato"><%= dato.apellidoPaterno %></p>
                     </div>
                     <div class="aspirante-apellidoM">
                         <h5 class="dato-titulo">Apellido Materno</h5>
-                        <p><%= dato.apellidoMaterno %></p>
+                        <p class="dato"><%= dato.apellidoMaterno %></p>
                     </div>
                 </div>
                 <div class="datos-secundarios">
                     <div class="aspirante-puestoS">
                         <h5 class="dato-titulo">Puesto solicitado</h5>
-                        <p><%= dato.puestoSolicitado %></p>
+                        <p class="dato"><%= dato.puestoSolicitado %></p>
                     </div>
                     <div class="aspirante-fecha">
                         <h5 class="dato-titulo">Fecha</h5>
@@ -58,7 +58,7 @@
                         const fecha = new Date(dato.fecha);
                         const fechaFormato = `${fecha.getDate()}/${fecha.getMonth()+1}/${fecha.getFullYear()}`;
                         %>
-                        <p><%= fechaFormato %></p>
+                        <p class="dato"><%= fechaFormato %></p>
                     </div>
                 </div>
             <% } %>
@@ -100,10 +100,23 @@
                 <div class="pregunta">
                     
                     <div class="respuesta-titulo">
-                        <div class="respuesta-decs <%= respuesta.esCorrecta ? 'correcta' : 'incorrecta' %>">
+                        <div class="respuesta-decs 
+                        <% if (respuesta.esCorrecta === true) { %>
+                            correcta
+                        <% } else if (respuesta.esCorrecta === false) { %>
+                            incorrecta
+                        <% } else { %>
+                            no-contestada
+                        <% } %> ">
                             <h5><%= respuesta.numeroPregunta %> .- 
                                 <%= respuesta. preguntaOtis %> - 
-                                <%= respuesta.esCorrecta ? 'CORRECTA' : 'INCORRECTA' %>
+                                <% if (respuesta.esCorrecta === null) { %>
+                                    NO CONTESTADA
+                                <% } else if (respuesta.esCorrecta) { %>
+                                    CORRECTA
+                                <% } else { %>
+                                    INCORRECTA
+                                <% } %> 
                             </h5>
                         </div>
 
@@ -135,6 +148,22 @@
                     </div>
                 <% } %>
             <% } %>
+
+            <div class="fixed-bottom-buttons">
+                <div class="container">
+                    <div class="row gx-3 mt-4 mb-3">
+                        <div class="col-md-6">
+                            <a href="/psicologo/informacion-grupos" 
+                            class="btn btn-color--third">Regresar</a>
+                        </div>
+    
+                        <div class="col-md-6 text-end">
+                            <a href="/analisis-otis" 
+                            class="btn btn-color--secondary">Ver Análisis</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
