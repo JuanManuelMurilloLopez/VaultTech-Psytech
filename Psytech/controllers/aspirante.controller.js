@@ -185,44 +185,20 @@ exports.postFormularioFamiliares = (request, response, next) => {
 };
 
 exports.getIntruccionesOtis = (request, response, next) => {
-    PruebaColores.fetchInstruccionesOtis()
-    .then(([rows, fieldData]) => {
-        const instrucciones = rows[0]?.instrucciones || 'Instrucciones no disponibles';
-        response.render('Aspirantes/instruccionesOtis', {
-            instrucciones: instrucciones
-        });
-    })
-    .catch((error) => {
-        console.log(error);
-        response.render('Aspirantes/instruccionesOtis', {
-            instrucciones: 'Error al cargar las instrucciones'
-        });
-    });
+    response.render('Aspirantes/instrucciones-otis');
 };
 
 exports.postInstruccionesOtis = (req, res) => {
-    res.redirect('/aspirante/datos-personales-otis');
+    res.redirect('Aspirante/datos-personales-otis');
 };
 
 // Mostrar instrucciones colores
 exports.getInstruccionesColores = (request, response, next) => {
-    PruebaColores.fetchInstruccionesColores()
-    .then(([rows, fieldData]) => {
-        const instrucciones = rows[0]?.instrucciones || 'Instrucciones no disponibles';
-        response.render('Aspirantes/instruccionesColores', {
-            instrucciones: instrucciones
-        });
-    })
-    .catch((error) => {
-        console.log(error);
-        response.render('Aspirantes/instruccionesColores', {
-            instrucciones: 'Error al cargar las instrucciones'
-        });
-    });
+    response.render('Aspirantes/instrucciones-colores');
 };
 
 exports.postInstruccionesColores = (req, res) => {
-    res.redirect('/aspirante/datos-personales-colores');
+    res.redirect('Aspirante/datos-personales-colores');
 };
   
 

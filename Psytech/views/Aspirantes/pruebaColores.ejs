@@ -27,7 +27,7 @@
       <div id="seleccionesContainer"></div>
       
       <div class="btn-container">
-        <button id="terminarBtn" type="submit" class="btn btn-primary d-none">Terminar prueba</button>
+        <button id="terminarBtn" type="submit" class="btn btn-color--secondary d-none">Terminar prueba</button>
       </div>
     </form>
   </div>
@@ -43,11 +43,47 @@
           Ahora selecciona nuevamente los colores, en orden de atracción.
         </div>
         <div class="modal-footer justify-content-center">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Entendido</button>
+          <button type="button" class="btn btn-color--secondary" data-bs-dismiss="modal">Entendido</button>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- (HISTORY.PUSHSTATE, POPSTATE Y BEFOREUNLOAD) -->
+  <script>
+    // Intentar prevenir la navegacion hacia atras
+    window.addEventListener('load', function() {
+      // Hacer que el boton "Atras" no lleve a la pagina anterior
+      window.history.pushState(null, document.title, window.location.href);
+      
+      // Cada vez que el usuario intente navegar hacia atras volver a pushState
+      window.addEventListener('popstate', function() {
+        window.history.pushState(null, document.title, window.location.href);
+        // Mostrar mensaje
+        alert("No es posible regresar a la página anterior durante la prueba.");
+      });
+    });
+    
+    // Beforeunload para advertir al usuario
+    window.addEventListener('beforeunload', function(e) {
+      // No interrumpir cuando se envia el formulario
+      if (document.querySelector('#colorSelectionForm').getAttribute('data-submitting') === 'true') {
+        return;
+      }
+      
+      // Si la prueba esta en progreso (hay selecciones) mostrar advertencia
+      if (seleccionados && seleccionados.length > 0) {
+        const message = "¿Está seguro que desea salir? Su progreso en la prueba se perderá.";
+        e.returnValue = message;
+        return message;
+      }
+    });
+    
+    // Marcar el formulario como en envio cuando se hace submit
+    document.querySelector('#colorSelectionForm').addEventListener('submit', function() {
+      this.setAttribute('data-submitting', 'true');
+    });
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/js/aspirantes/pruebaColores.js"></script>

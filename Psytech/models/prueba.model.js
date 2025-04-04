@@ -3,12 +3,12 @@ const db = require('../util/database');
 module.exports = class Prueba{
 
 
-    static fetchInstruccionesColores() {
-            return db.execute('SELECT instrucciones FROM pruebas WHERE nombre = "OTIS"');
-    }
-
-    static fetchInstruccionesOtis() {
-        return db.execute('SELECT instrucciones FROM pruebas WHERE nombre = "Colores de Luscher"');
+    // Ya no leera archivos, que devolvera promesa vacia
+    static fetchInstrucciones() {
+        return Promise.resolve([
+            [{ instrucciones: '' }], 
+            []
+        ]);
     }
 
     static saveDatosPersonales(idAspirante, idGrupo, idPrueba, datosPersonales){
