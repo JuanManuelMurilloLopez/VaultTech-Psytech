@@ -16,7 +16,9 @@ router.get('/pruebas-pendientes', controller.getPruebasPendientes);
 
 router.get('/pruebas-completadas', controller.getPruebasCompletadas);
 
-router.get('/subir-documentos', controller.getSubirDocumentos);
+//Rutas para subir los expedientes personales
+router.get('/cargar-expedientes', controller.getCargarExpedientes);
+router.post('/cargar-expedientes', controller.postCargarExpedientes);
 
 router.get('/formato-entrevista', controller.getFormatoEntrevista);
 router.post('/formato-entrevista', controller.postFormatoEntrevista);

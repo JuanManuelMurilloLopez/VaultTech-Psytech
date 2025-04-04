@@ -85,15 +85,16 @@ module.exports = class Grupo {
         WHERE idGrupo = ?
       `, [idGrupo])
   }
-static obtenerInstituciones() {
+
+  static getInstituciones() {
     return db.execute('SELECT idInstitucion, nombreInstitucion FROM institucion');
   }
 
-  static obtenerNiveles() {
+  static getNiveles() {
     return db.execute('SELECT idNivelAcademico, nombreNivelAcademico FROM nivelAcademico');
   }
 
-  static obtenerPruebas() {
+  static getPruebas() {
     return db.execute('SELECT idPrueba, nombre FROM pruebas');
   }
 
@@ -101,7 +102,7 @@ static obtenerInstituciones() {
     return db.execute('SELECT * FROM grupos WHERE nombreGrupo = ?', [nombreGrupo]);
   }
 
-  guardarGrupo() {
+  saveGrupo() {
     return db.execute(
       `INSERT INTO grupos (idGrupo, nombreGrupo, estatusGrupo, cicloEscolar, anioGeneracion, carrera, idInstitucion, idNivelAcademico)
        VALUES (uuid(), ?, true, ?, ?, ?, ?, ?)`,
@@ -117,7 +118,7 @@ static obtenerInstituciones() {
   }
 
 
-  guardarPruebasSeleccionadas(pruebasSeleccionadas) {
+  savePruebasSeleccionadas(pruebasSeleccionadas) {
     if (!Array.isArray(pruebasSeleccionadas)) {
       pruebasSeleccionadas = [pruebasSeleccionadas];
     }
@@ -132,9 +133,9 @@ static obtenerInstituciones() {
     return Promise.all(inserts);
   }
 
-  guardarGrupoYPruebas(pruebasSeleccionadas) {
-    return this.guardarGrupo()
-      .then(() => this.guardarPruebasSeleccionadas(pruebasSeleccionadas));
+  saveGrupoYPruebas(pruebasSeleccionadas) {
+    return this.saveGrupo()
+      .then(() => this.savePruebasSeleccionadas(pruebasSeleccionadas));
   }
 
 }

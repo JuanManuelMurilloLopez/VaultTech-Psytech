@@ -25,6 +25,26 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Middleware para procesar JSON
 app.use(express.json());
 
+const multer = require('multer');
+
+const fileStorage = multer.diskStorage({
+    destination: (request, file, callback) => {
+        callback(null, 'public/expedientes');
+    },
+    filename: (request, file, callback) => {
+        callback(null, file.originalname + new Date().toISOString().substring(0, 10));
+    },
+});
+
+//app.use(multer({ storage: fileStorage }).single('cv'));
+//app.use(multer({ storage: fileStorage }).single('kardex'));
+const upload = multer({ storage: fileStorage });
+
+app.use(upload.fields([
+    { name: 'cv', maxCount: 1 },
+    { name: 'kardex', maxCount: 1 }
+]));
+
 // Importar rutas
 const rutasInicioSesion = require('./routes/inicioSesion.routes');
 app.use('/', rutasInicioSesion);

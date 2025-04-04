@@ -1,5 +1,5 @@
 const db = require('../util/database');
-const Grupo = require('../models/Grupo');
+const Grupo = require('../models/grupo.model');
 
 
 module.exports = class Institucion {

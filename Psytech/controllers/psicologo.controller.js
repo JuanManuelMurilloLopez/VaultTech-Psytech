@@ -1,9 +1,12 @@
-const Pais = require('../models/Pais');
-const Estado = require('../models/Estado');
-const Aspirante = require('../models/Aspirante');
-const Institucion = require('../models/Institucion');
-const Grupo = require('../models/Grupo');
-const TipoInstitucion = require('../models/TipoInstitucion');
+const Pais = require('../models/pais.model');
+const Estado = require('../models/estado.model');
+const Aspirante = require('../models/aspirante.model');
+const Institucion = require('../models/institucion.model');
+const Grupo = require('../models/grupo.model');
+const TipoInstitucion = require('../models/tipoInstitucion.model');
+const Prueba = require('../models/prueba.model');
+const { request, response } = require('express');
+const Cuadernillo = require('../models/cuadernilloOtis.model');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
@@ -73,14 +76,13 @@ exports.getGrupos = (request, response, next) => {
     
 };
 
-
 // Registrar Nuevo Grupo
 // Get
 exports.getRegistrarGrupo = (req, res, next) => {
     Promise.all([
-      Grupo.obtenerInstituciones(),
-      Grupo.obtenerNiveles(),
-      Grupo.obtenerPruebas()
+      Grupo.getInstituciones(),
+      Grupo.getNiveles(),
+      Grupo.getPruebas()
     ])
       .then(([instituciones, niveles, pruebas]) => {
         res.render('Psicologos/registrarGrupo.ejs', {
@@ -114,9 +116,9 @@ exports.getRegistrarGrupo = (req, res, next) => {
       .then(([rows]) => {
         if (rows.length > 0) {
           return Promise.all([
-            Grupo.obtenerInstituciones(),
-            Grupo.obtenerNiveles(),
-            Grupo.obtenerPruebas()
+            Grupo.getInstituciones(),
+            Grupo.getNiveles(),
+            Grupo.getPruebas()
           ]).then(([instituciones, niveles, pruebas]) => {
             return res.render('Psicologos/registrarGrupo', {
               error: 'El grupo ya está registrado.',
@@ -139,7 +141,7 @@ exports.getRegistrarGrupo = (req, res, next) => {
         );
         console.log("Grupo", grupo);
   
-        return grupo.guardarGrupoYPruebas(pruebasSeleccionadas);
+        return grupo.saveGrupoYPruebas(pruebasSeleccionadas);
       })
       .then(() => {
         exports.getGrupos(req, res, next);
@@ -152,7 +154,6 @@ exports.getRegistrarGrupo = (req, res, next) => {
       });
   };
   
-
 
 exports.getInformacionGrupo = (request, response, next) => {
     Grupo.fetchOne(request.params.idGrupo)
@@ -176,7 +177,6 @@ exports.getInformacionGrupo = (request, response, next) => {
     });
     
 }
-
 
 exports.getEditarGrupo = (request, response, next) => {
     console.log('Editar Grupo');
@@ -214,7 +214,6 @@ exports.getRegistrarAspirantes = (request, response, next) => {
     
 };
 
-
 exports.postRegistrarAspirantes = (request, response, next) => {
     const aspirante = new Aspirante(request.body);
     aspirante.save(request.params.idGrupo)
@@ -250,9 +249,6 @@ exports.postRegistrarAspirantes = (request, response, next) => {
     })
 };
 
-
-
-
 exports.getEditarAspirantes = (request, response, next) => {
     console.log('Editar Aspirante');
     response.render('Psicologos/editarAspirante');
@@ -272,9 +268,103 @@ exports.getPruebaColores = (request, response, next) => {
     response.send('Prueba Colores');
 };
 
+// Controlador para manejar la obtención del cuadernillo de respuestas OTIS.
+exports.getCuadernilloOtis = (request, response, next) => {
+    // Obtiene los datos personales del aspirante
+    Prueba.getDatosPersonalesAspirante(request.params.idGrupo, request.params.idAspirante)
+    .then(([rows, fieldData]) => {
+        const datosPersonales = rows;
+        // Obtiene las respuestas correctas del aspirante
+        Cuadernillo.getRespuestasCorrectas(request.params.idGrupo, request.params.idAspirante)
+        .then(([rows, fieldData]) => {
+            const respuestasCorrectas = rows[0].RespuestasCorrectas;
+            // Obtiene el tiempo total que tomo el aspirante para completar la prueba
+            Cuadernillo.getTiempoTotal(request.params.idGrupo, request.params.idAspirante)
+            .then(([rows, fieldData]) => {
+                const tiempoTotal = rows[0].Tiempo;
+                // Obtiene las preguntas, opciones y la respuesta del aspirante
+                Cuadernillo.getRespuestasOtisAspirante(request.params.idGrupo, request.params.idAspirante)
+                .then(([rows, fieldData]) => {
+                    const preguntasAgrupadas = {};
+
+                    rows.forEach(row => {
+                        // Creamos el objeto de pregunta si este no existe
+                        if (!preguntasAgrupadas[row.idPreguntaOtis]) {
+                            preguntasAgrupadas[row.idPreguntaOtis] = {
+                                idPreguntaOtis: row.idPreguntaOtis,
+                                numeroPregunta: row.numeroPregunta,
+                                preguntaOtis: row.preguntaOtis,
+                                opciones: [],
+                                esCorrecta: false,
+                                tiempoRespuesta: 0,
+                                contestada: null
+                            };
+                        }
+                        // Vamos añadiendo las opciones de la pregunta correspondiente
+                        preguntasAgrupadas[row.idPreguntaOtis].opciones.push({
+                            idOpcionOtis: row.idOpcionOtis,
+                            opcionOtis: row.opcionOtis,
+                            descripcionOpcion: row.descripcionOpcion,
+                            esCorrecta: row.esCorrecta === 1, 
+                            seleccionada: row.opcionSeleccionada === 1
+                        });
+
+                        if (row.opcionSeleccionada === 1) {
+                            preguntasAgrupadas[row.idPreguntaOtis].tiempoRespuesta = row.tiempoRespuesta;
+                            preguntasAgrupadas[row.idPreguntaOtis].contestada = true;
+                            preguntasAgrupadas[row.idPreguntaOtis].esCorrecta = row.esCorrecta === 1;
+
+                        }
+
+                        if(!preguntasAgrupadas[row.idPreguntaOtis].contestada){
+                            preguntasAgrupadas[row.idPreguntaOtis].esCorrecta = null;
+                        }
+                    })
+
+                    const respuestasAspitanteOtis = Object.values(preguntasAgrupadas);
+
+                    response.render('Psicologos/cuadernilloRespuestasOtis.ejs', {
+                        datosPersonales: datosPersonales || [],
+                        respuestasCorrectas: respuestasCorrectas || 0,
+                        tiempoTotal: tiempoTotal || 0,
+                        respuestasAspitanteOtis: respuestasAspitanteOtis || [],
+                    });
+
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }).catch((error) => {
+                console.log(error);
+            });
+        }).catch((error) => {
+            console.log(error);
+        });
+    }).catch((error) => {
+        console.log(error);
+    });
+};
+
 exports.getAnalisisOtis = (request, response, next) => {
-    console.log('Analisis Otis');
-    response.render('Psicologos/analisisOtis');
+    Prueba.getRespuestasOtis(request.params.idAspirante, request.params.idGrupo)
+    .then(([rows, fieldData]) => {
+        const informacionAnalisis = rows;
+        Prueba.getPuntajeBrutoOtis(request.params.idAspirante, request.params.idGrupo)
+        .then(([rows, fieldData]) => {
+            const puntajeBruto = rows[0].puntajeBruto;
+            console.log("Informacion Analisis: ", informacionAnalisis);
+            console.log("Puntaje Bruto: ", puntajeBruto);
+            response.render('Psicologos/analisisOtis.ejs', {
+                informacionAnalisis: informacionAnalisis || [],
+                puntajeBruto: puntajeBruto || 0
+            })
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getAnalisisColores = (request, response, next) => {
