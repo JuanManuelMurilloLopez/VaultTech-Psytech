@@ -185,20 +185,20 @@ exports.postFormularioFamiliares = (request, response, next) => {
 };
 
 exports.getIntruccionesOtis = (request, response, next) => {
-    response.render('Aspirantes/instrucciones-otis');
+    response.render('Aspirantes/instruccionesOtis');
 };
 
 exports.postInstruccionesOtis = (req, res) => {
-    res.redirect('Aspirante/datos-personales-otis');
+    res.redirect('/aspirante/datos-personales-otis');
 };
 
 // Mostrar instrucciones colores
 exports.getInstruccionesColores = (request, response, next) => {
-    response.render('Aspirantes/instrucciones-colores');
+    response.render('Aspirantes/instruccionesColores');
 };
 
 exports.postInstruccionesColores = (req, res) => {
-    res.redirect('Aspirante/datos-personales-colores');
+    res.redirect('/aspirante/datos-personales-colores');
 };
   
 
