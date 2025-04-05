@@ -59,6 +59,17 @@
                 </div>
 
                 <div class="col-md-4">
+                    <canvas id="graficaPieRespuestas" width="200" height="200"></canvas>
+                </div>
+
+                
+
+                
+                    
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
                     <div class="card text-center shadow-sm p-4 border-0">
                       <h5 class="text-uppercase text-muted fw-semibold mb-2">Coeficiente Intelectual</h5>
                       <p id="ci" class="display-3 fw-bold mb-0">
@@ -90,15 +101,6 @@
                       </p>
                     </div>
                 </div>
-
-                
-                    
-            </div>
-
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <canvas id="graficaPieRespuestas" width="200" height="200"></canvas>
-                </div>
             </div>
 
             <br> <br> <br> <br> <br> <br>
@@ -106,34 +108,37 @@
             <div class="row g-4">
                 <div class="row g-4">
                     <div class="col-md-12">
-                        <h3 class="fw-bolder">Resultados de Áreas</h3>
+                        <h3 class="fw-bolder">Resultados por Área</h3>
                 </div>
-                <canvas id="graficaAreas" class="col-md-4"></canvas>
-                <table class="table table-bordered col-md-4">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Área</th>
-                            <th>Porcentaje</th>
-                        </tr>
-                    </thead>
-                    <tbody class="">
-                        <% for(area of informacionAnalisis) { %>
+                    <canvas id="graficaAreas" class="col-md-4"></canvas>
+                    <table class="table table-bordered col-md-4">
+                        <thead class="table-dark">
                             <tr>
-                                <td> <%= area.nombreAreaOtis %> </td>
-                                <td> <%= area.porcentajeCorrectas %> </td>
+                                <th>Área</th>
+                                <th>Porcentaje</th>
                             </tr>
-                        <% } %>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody class="">
+                            <% for(area of informacionAnalisis) { %>
+                                <tr>
+                                    <td> <%= area.nombreAreaOtis %> </td>
+                                    <td> <%= area.porcentajeCorrectas %> </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+                
             </div>
 
+            <div>
+                <button type="button" class="btn btn-color--third"
+                onclick="window.location.href=
+                ''"
+                >Regresar</button>
+            </div>
             
-            </div>
-
-            <button type="button" class="btn btn-secondary w-auto mx-auto d-block"
-            onclick="window.location.href=
-            '/psicologo/respuestas-otis'"
-            >Regresar</button>
+            
     </div>
 
 
