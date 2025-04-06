@@ -50,8 +50,6 @@ router.post('/prueba-colores', controller.postPruebaColores);
 router.post('/guardar-selecciones-colores', controller.postGuardarSeleccionesColores);
 router.get('/prueba-completada', controller.getPruebaCompletada);
 
-
-
 router.get('/respuestas-enviadas', controller.getRespuestasEnviadas);
 
 module.exports = router;

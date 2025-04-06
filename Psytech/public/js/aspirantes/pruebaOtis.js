@@ -1,6 +1,7 @@
 const preguntasCj = document.querySelector(".preguntasCaja");
 const contadorTiempo = preguntasCj.querySelector(".Temporizador .tiempoNumeroSec");
 const respEnviadas = document.querySelector(".enviadasCaja");
+const enviarRespuestas = document.querySelector("#enviarRespuestas"); 
 
 let pregAcum = 0;
 let pregNum = 1;
@@ -8,14 +9,14 @@ let contTiempo;
 let valorTemporizador = 1800; //Segundos de 30 min
 let tiempoInicioPregunta = null;
 
-//Llamar a la funciónes
+// Llamar a la funciónes
 cargarPreguntas();
 empezarTemporizador(valorTemporizador);
 
-//Función del temporizador
-function empezarTemporizador(tiempo){
+// Función del temporizador
+function empezarTemporizador(tiempo) {
     contTiempo = setInterval(timer, 1000);
-    function timer(){
+    function timer() {
         let minutos = Math.floor(tiempo / 60);
         let segundos = tiempo % 60;
 
@@ -24,16 +25,16 @@ function empezarTemporizador(tiempo){
 
         contadorTiempo.textContent = `${minutos}:${segundos}`;
 
-        tiempo --;
+        tiempo--;
 
-        if (tiempo < 0){
+        if (tiempo < 0) {
             clearInterval(contTiempo);
             contadorTiempo.textContent = "00:00";
         }
     }
 }
 
-//Tener un tope para no llegar a preguntas de más
+// Tener un tope para no llegar a preguntas de más
 document.body.addEventListener("click", (event) => {
     if (event.target.classList.contains("sigbtn")) {
         const opciones = document.querySelectorAll(".option input:checked");
@@ -68,14 +69,23 @@ document.body.addEventListener("click", (event) => {
             pregNum++;
             ensenarPregunta(pregAcum);
             pregContador(pregNum);
+            verificarMostrarBoton();  // Verificar si mostrar el botón de enviar
         } else {
             console.log("Preguntas completadas");
         }
     }
 });
 
-let preguntas = []; //Arreglo para poder tener las preguntas
+// Función para verificar si mostrar el botón de enviar respuestas
+function verificarMostrarBoton() {
+    if (pregNum === 5) {  
+        enviarRespuestas.classList.remove("d-none");
+    }
+}
 
+let preguntas = []; // Arreglo para poder tener las preguntas
+
+// Función para cargar las preguntas desde la base de datos
 async function cargarPreguntas() {
     try {
         const response = await fetch('/aspirante/prueba-otis', { method: 'POST' });
@@ -123,58 +133,48 @@ function ensenarPregunta(index) {
     // Asignar el evento onclick a cada opción
     const opcionSelec = optLista.querySelectorAll(".option");
     for (let i = 0; i < opcionSelec.length; i++) {
-        opcionSelec[i].setAttribute("onclick", "optionSelected(this)");
+        opcionSelec[i].setAttribute("onclick", "opcionSeleccionada(this)");
     }
 }
 
-// Función que se llama cuando se selecciona una opción
-function optionSelected(element) {
-    // Quitar selección previa si la hay
+// Función cuando se selecciona una opción
+function opcionSeleccionada(element) {
     const opciones = document.querySelectorAll(".option");
     opciones.forEach(op => op.classList.remove("selected"));
 
-    // Marcar la opción seleccionada visualmente (si usas estilos)
     element.classList.add("selected");
 
-    // Marcar el input como seleccionado
     const input = element.querySelector('input');
     if (input) {
         input.checked = true;
     }
-
-    // Aquí ya no se guarda la respuesta ni el tiempo.
-    // Eso se hace cuando el usuario da clic en "Siguiente".
 }
 
-
-//Tener un contador de en que pregunta vas (progreso)
-function pregContador(index){
+// Tener un contador de en qué pregunta vas (progreso)
+function pregContador(index) {
     const progresoAcum = preguntasCj.querySelector(".pregProgreso");
     if (!progresoAcum) {
         console.error("No se encontró el elemento con clase .pregProgreso");
         return;
     }
     let progresoTexto = '<span style="display: inline;">' + index + ' de ' + preguntas.length + ' Preguntas</span>';
-    progresoAcum.innerHTML = progresoTexto; 
+    progresoAcum.innerHTML = progresoTexto;
 }
-
 
 let respuestasSeleccionadas = [];
 
-document.querySelector("#enviarRespuestas").addEventListener("click", enviarRespuestas);
+// Ocultar el botón de enviar respuestas inicialmente
+enviarRespuestas.classList.add("d-none");
 
-const idAspirante = sessionStorage.getItem('idAspirante') || 'valor_default'; // O de alguna otra fuente.
-const idGrupo = sessionStorage.getItem('idGrupo') || 'valor_default';
+const idAspirante = sessionStorage.getItem('idAspirante');
+const idGrupo = sessionStorage.getItem('idGrupo');
 
 // Función para enviar las respuestas seleccionadas
-function enviarRespuestas() {
+function sendRespuestas() {
     if (respuestasSeleccionadas.length === 0) {
         console.log("No se seleccionaron respuestas.");
         return;
     }
-
-    // Mostrar las respuestas antes de enviarlas para depuración
-    console.log("Respuestas a enviar:", respuestasSeleccionadas);
 
     const datosRespuestas = respuestasSeleccionadas.map(respuesta => ({
         idAspirante: idAspirante,
@@ -196,9 +196,12 @@ function enviarRespuestas() {
     .then(response => response.json())
     .then(data => {
         console.log('Respuestas enviadas con éxito:', data);
-        // Aquí puedes redirigir o mostrar un mensaje de éxito
     })
     .catch(error => {
         console.error('Error al enviar las respuestas:', error);
     });
 }
+
+enviarRespuestas.addEventListener("click", function() {
+    sendRespuestas(); 
+});

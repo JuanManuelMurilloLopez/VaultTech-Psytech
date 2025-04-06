@@ -9,7 +9,8 @@ const app = express();
 app.use(session({
     secret: 'claveTemporal',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: { secure: false } 
 }));
 
 // Servir archivos estaticos desde public
