@@ -2,13 +2,15 @@ const preguntasCj = document.querySelector(".preguntasCaja");
 const contadorTiempo = preguntasCj.querySelector(".Temporizador .tiempoNumeroSec");
 const respEnviadas = document.querySelector(".enviadasCaja");
 
-//Llamar a la función para cargar las preguntas
-cargarPreguntas();
-
 let pregAcum = 0;
 let pregNum = 1;
 let contTiempo;
 let valorTemporizador = 1800; //Segundos de 30 min
+let tiempoInicioPregunta = null;
+
+//Llamar a la funciónes
+cargarPreguntas();
+empezarTemporizador(valorTemporizador);
 
 //Función del temporizador
 function empezarTemporizador(tiempo){
@@ -31,10 +33,37 @@ function empezarTemporizador(tiempo){
     }
 }
 
-//Tener un tope para no llegar a preguntas en negativo o de más
+//Tener un tope para no llegar a preguntas de más
 document.body.addEventListener("click", (event) => {
-    if (event.target.classList.contains("sigbtn")){
-        if(pregAcum < preguntas.length -1){
+    if (event.target.classList.contains("sigbtn")) {
+        const opciones = document.querySelectorAll(".option input:checked");
+
+        if (opciones.length === 0) {
+            alert("Selecciona una opción antes de continuar.");
+            return;
+        }
+
+        const inputSeleccionado = opciones[0];
+        const idOpcion = inputSeleccionado.value;
+        const idPregunta = inputSeleccionado.closest(".option").getAttribute("data-idPregunta");
+
+        const tiempoActual = Date.now();
+        const tiempoRespuesta = Math.floor((tiempoActual - tiempoInicioPregunta) / 1000); // segundos
+
+        // Buscar si ya existe y actualizar o agregar
+        let respuesta = respuestasSeleccionadas.find(r => r.idPreguntaOtis === idPregunta);
+        if (respuesta) {
+            respuesta.idOpcion = idOpcion;
+            respuesta.tiempoRespuesta = tiempoRespuesta;
+        } else {
+            respuestasSeleccionadas.push({
+                idPreguntaOtis: idPregunta,
+                idOpcion: idOpcion,
+                tiempoRespuesta: tiempoRespuesta
+            });
+        }
+
+        if (pregAcum < preguntas.length - 1) {
             pregAcum++;
             pregNum++;
             ensenarPregunta(pregAcum);
@@ -53,9 +82,8 @@ async function cargarPreguntas() {
         const data = await response.json();
         preguntas = data.preguntas;
 
-        // Verificar que las preguntas tengan opciones
         if (preguntas.length > 0) {
-            ensenarPregunta(0); // Mostrar la primera pregunta
+            ensenarPregunta(0);
             pregContador(1);
         } else {
             console.log("No se encontraron preguntas.");
@@ -72,6 +100,8 @@ function ensenarPregunta(index) {
 
     const pregunta = preguntas[index];
 
+    tiempoInicioPregunta = Date.now();
+
     // Mostrar la pregunta
     let pregTag = `<span>${pregunta.num}. ${pregunta.pregunta}</span>`;
     pregTexto.innerHTML = pregTag;
@@ -80,8 +110,8 @@ function ensenarPregunta(index) {
     let optTag = "";
     if (pregunta.opciones && pregunta.opciones.length > 0) {
         pregunta.opciones.forEach(opcion => {
-            optTag += `<div class="option">
-                <input type="radio" name="pregunta${index}" value="${opcion.descripcionOpcion}">
+            optTag += `<div class="option" data-idPregunta="${pregunta.idPreguntaOtis}">
+                <input type="radio" name="pregunta${index}" value="${opcion.idOpcionOtis}">
                 <span>${opcion.descripcionOpcion}</span>
             </div>`;
         });
@@ -98,26 +128,23 @@ function ensenarPregunta(index) {
 }
 
 // Función que se llama cuando se selecciona una opción
-function optionSelected(idPregunta, idOpcion) {
-    // Obtener el tiempo actual en segundos
-    const tiempoRespuesta = Math.floor(Date.now() / 1000); // Puedes usar esto para almacenar el tiempo de respuesta en segundos
+function optionSelected(element) {
+    // Quitar selección previa si la hay
+    const opciones = document.querySelectorAll(".option");
+    opciones.forEach(op => op.classList.remove("selected"));
 
-    // Buscar si la pregunta ya tiene una respuesta registrada
-    let respuesta = respuestasSeleccionadas.find(r => r.idPregunta === idPregunta);
+    // Marcar la opción seleccionada visualmente (si usas estilos)
+    element.classList.add("selected");
 
-    // Si ya existe la respuesta, actualizarla. Si no, agregarla.
-    if (respuesta) {
-        respuesta.idOpcion = idOpcion;
-        respuesta.tiempoRespuesta = tiempoRespuesta;
-    } else {
-        respuestasSeleccionadas.push({
-            idPregunta: idPregunta,
-            idOpcion: idOpcion,
-            tiempoRespuesta: tiempoRespuesta
-        });
+    // Marcar el input como seleccionado
+    const input = element.querySelector('input');
+    if (input) {
+        input.checked = true;
     }
-}
 
+    // Aquí ya no se guarda la respuesta ni el tiempo.
+    // Eso se hace cuando el usuario da clic en "Siguiente".
+}
 
 
 //Tener un contador de en que pregunta vas (progreso)
@@ -136,6 +163,9 @@ let respuestasSeleccionadas = [];
 
 document.querySelector("#enviarRespuestas").addEventListener("click", enviarRespuestas);
 
+const idAspirante = sessionStorage.getItem('idAspirante') || 'valor_default'; // O de alguna otra fuente.
+const idGrupo = sessionStorage.getItem('idGrupo') || 'valor_default';
+
 // Función para enviar las respuestas seleccionadas
 function enviarRespuestas() {
     if (respuestasSeleccionadas.length === 0) {
@@ -143,17 +173,19 @@ function enviarRespuestas() {
         return;
     }
 
-    // Aquí puedes preparar los datos para enviarlos al backend
+    // Mostrar las respuestas antes de enviarlas para depuración
+    console.log("Respuestas a enviar:", respuestasSeleccionadas);
+
     const datosRespuestas = respuestasSeleccionadas.map(respuesta => ({
-        idAspirante: 'idAspirante',  // Asegúrate de tener esta información
-        idGrupo: 'idGrupo',          // Lo mismo para el grupo
-        idPrueba: 5,                 // ID de la prueba
-        idPreguntaOtis: respuesta.idPregunta,
+        idAspirante: idAspirante,
+        idGrupo: idGrupo,
+        idPrueba: 5,
+        idPreguntaOtis: respuesta.idPreguntaOtis,
         idOpcionOtis: respuesta.idOpcion,
         tiempoRespuesta: respuesta.tiempoRespuesta
-    }));
+    }));    
 
-    // Enviar las respuestas al servidor (usando fetch o cualquier otro método)
+    // Enviar las respuestas al servidor
     fetch('/aspirante/guardar-selecciones-otis', {
         method: 'POST',
         headers: {
@@ -170,4 +202,3 @@ function enviarRespuestas() {
         console.error('Error al enviar las respuestas:', error);
     });
 }
-

@@ -63,21 +63,23 @@ module.exports = class Prueba{
     }
 
     static saveRespuestas = (idAspirante, idGrupo, idPrueba, respuestas) => {
-        return new Promise((resolve, reject) => {
-            const queries = respuestas.map((respuesta) => {
-                return db.execute(
-                    `INSERT INTO respuestas (idAspirante, idGrupo, idPrueba, idPregunta, respuestaSeleccionada)
+        const promesas = [];
+
+        for(let i=0; i < respuestas.length; i++){
+            promesas.push(
+                db.execute(
+                    `INSERT INTO respuestaotisaspirante 
+                    (idRespuestaOtis, idAspirante, idGrupo, idPreguntaOtis, idOpcionOtis, idPrueba, tiempoRespuesta)
                     VALUES (?, ?, ?, ?, ?)`,
-                    [idAspirante, idGrupo, idPrueba, respuesta.idPregunta, respuesta.respuestaSeleccionada]
-                );
-            });
-    
-            Promise.all(queries)
-                .then(() => resolve())
-                .catch((error) => reject(error));
-        });
-    };
-    
+                    [idPrueba, idAspirante, idGrupo, respuestas.idPregunta, respuestas.idOpcionOtis, respuestas.tiempoRespuesta] 
+                ).catch((error) => {
+                    console.error(`Error al insertar la respuesta ${i}:`, error);
+                    throw error;
+                })
+            );
+        }
+        return Promise.all(promesas);
+    };               
 
     static getPreguntas16PF(){}
 
@@ -118,7 +120,6 @@ module.exports = class Prueba{
                 })
             );
         }
-        
         return Promise.all(promesas);
     }
 

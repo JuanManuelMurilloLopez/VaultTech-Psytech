@@ -28,13 +28,13 @@ router.post('/formulario-familiar', controller.postFormularioFamiliares)
 
 router.get('/instrucciones-otis', controller.getIntruccionesOtis);
 router.post('/instrucciones-otis', controller.postInstruccionesOtis);
-
 router.get('/datos-personales-otis', controller.getDatosPersonalesOtis);
 router.post('/datos-personales-otis', controller.postDatosPersonalesOtis);
 
 router.get('/prueba-otis', controller.getPruebaOtis);
 router.post('/prueba-otis', controller.obtenerPreguntas);
 router.post('/guardar-selecciones-otis', controller.postGuardarRespuestas);
+router.get('/prueba-completada', controller.getPruebaCompletada);
 
 //router.get('/instrucciones-hartman', controller.get_instrucciones_hartman);
 

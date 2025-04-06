@@ -5,9 +5,9 @@ const EstadoCivil = require('../models/estadoCivil.model');
 const Familiar = require('../models/formularioFamiliares.model');
 const ConsultarPruebas = require("../models/consultarPruebas.model");
 const PruebaColores = require('../models/prueba.model');
+const PruebaOtis = require('../models/prueba.model');
+const OpcionOtis = require('../models/opcionOtis.model.js');
 const Aspirante = require('../models/aspirante.model');
-
-const db = require('../util/database');
 
 //Rutas del portal de los Aspirantes
 exports.getPruebas = (request, response) => {
@@ -202,18 +202,12 @@ exports.getInstruccionesColores = (request, response, next) => {
 exports.postInstruccionesColores = (req, res) => {
     res.redirect('/aspirante/datos-personales-colores');
 };
-  
-
-exports.getPruebaOtis = (request, response, next) => {
-    response.render('Aspirantes/pruebaOtis');
-};
 
 // Formulario datos personales
 exports.getDatosPersonalesOtis = (request, response, next) => {
     response.render('Aspirantes/datosPersonalesOtis');
 };
 
-// Formulario datos personales
 exports.getDatosPersonalesColores = (request, response, next) => {
     response.render('Aspirantes/datosPersonalesColores');
 };
@@ -239,18 +233,21 @@ exports.postDatosPersonalesOtis = (request, response, next) => {
     response.redirect('/aspirante/prueba-otis');
 };
 
-const PreguntaOtis = require('../models/preguntasOtis.model.js');
-const OpcionOtis = require('../models/opcionOtis.model.js');
+exports.getPruebaOtis = (request, response, next) => {
+    response.render('Aspirantes/pruebaOtis');
+};
 
-exports.obtenerPreguntas = async (req, res) => {
+exports.obtenerPreguntas = async (req, res, next) => {
+
     try {
-        const [preguntasDB] = await PreguntaOtis.fetchAll();
+        const [preguntasDB] = await PruebaOtis.getPreguntasOtis();
         const [opcionesDB] = await OpcionOtis.fetchAll();
 
         const preguntas = preguntasDB.map(pregunta => {
             const opciones = opcionesDB
                 .filter(opcion => opcion.idPreguntaOtis === pregunta.idPreguntaOtis)
                 .map(opcion => ({
+                    idOpcionOtis: opcion.idOpcionOtis,
                     descripcionOpcion: opcion.descripcionOpcion,
                     esCorrecta: opcion.esCorrecta
                 }));
@@ -261,6 +258,7 @@ exports.obtenerPreguntas = async (req, res) => {
 
             return {
                 num: pregunta.numeroPregunta,
+                idPreguntaOtis: pregunta.idPreguntaOtis,
                 pregunta: pregunta.preguntaOtis,
                 respuesta: respuestaCorrecta,
                 opciones: opciones
@@ -273,42 +271,97 @@ exports.obtenerPreguntas = async (req, res) => {
     }
 }
 
-// Controlador para guardar las respuestas
-exports.postGuardarRespuestas = (request, response) => {
-    const respuestas = request.body;  // Las respuestas vienen en el cuerpo de la solicitud
-
-    // Asegúrate de que la respuesta esté en el formato correcto
-    if (!Array.isArray(respuestas) || respuestas.length === 0) {
-        return response.status(400).send("No se recibieron respuestas válidas");
+exports.getPruebaOtis = (request, response, next) => {
+    if (!request.session.datosPersonalesOtis) {
+        return response.redirect('/aspirante/datos-personales-otis');
     }
 
-    // Guardar las respuestas en la base de datos
-    const queries = respuestas.map((respuesta) => {
-        return db.execute(
-            `INSERT INTO respuestaOtisAspirante (idRespuestaOtis, idAspirante, idGrupo, idPreguntaOtis, idOpcionOtis, idPrueba, tiempoRespuesta)
-            VALUES (UUID(), ?, ?, ?, ?, ?, ?)`,
-            [
-                respuesta.idAspirante || null,
-                respuesta.idGrupo || null,
-                respuesta.idPreguntaOtis || null,
-                respuesta.idOpcionOtis || null,
-                respuesta.idPrueba || null,
-                respuesta.tiempoRespuesta || null
-            ]
-        );
-    });
+    const idPrueba = 5; // Suponiendo que 5 es el ID de la prueba OTIS
 
-    // Ejecutar todas las consultas en paralelo
-    Promise.all(queries)
-        .then(() => {
-            console.log("Respuestas guardadas correctamente");
-            response.status(200).json({ message: "Respuestas enviadas exitosamente" });
+    // Obtener el idGrupo del aspirante para esa prueba
+    PruebaOtis.getGrupoPrueba(request.session.idAspirante, idPrueba)
+        .then(([rows, fieldData]) => {
+            if (rows.length > 0) {
+                request.session.idGrupo = rows[0].idGrupo;
+                request.session.idPrueba = idPrueba;
+                console.log("✅ ID de Grupo y Prueba establecidos:", request.session.idGrupo, idPrueba);
+            } else {
+                console.log("❌ No se encontró grupo para este aspirante y prueba");
+            }
+
+            // Continuar con renderizado de la prueba
+            return PreguntasOtis.fetchPreguntas(); // o como llames a tu función para traer preguntas
+        })
+        .then(([rows, fieldData]) => {
+            const preguntas = rows;
+            response.render('Aspirantes/pruebaOtis', {
+                preguntas: preguntas || [],
+                fase: 1,
+                error: null
+            });
         })
         .catch((error) => {
-            console.error("Error al guardar las respuestas:", error);
-            response.status(500).json({ message: "Error al guardar las respuestas" });
+            console.error("Error al cargar la prueba OTIS:", error);
+            response.render('Aspirantes/pruebaOtis', {
+                preguntas: [],
+                fase: 1,
+                error: 'Error al cargar la prueba OTIS'
+            });
         });
 };
+
+const db = require('../util/database'); // ajusta esto si tienes otro archivo de conexión
+const { v4: uuidv4 } = require('uuid');
+
+exports.postGuardarRespuestas = async (request, response) => {
+    console.log("1. Iniciando controlador postGuardarRespuestasOtis");
+
+    const idAspirante = request.session.idAspirante;
+    const idGrupo = request.session.idGrupo;
+    const idPrueba = request.session.idPrueba;
+
+    if (!idAspirante || !idGrupo || !idPrueba) {
+        console.log("2. Error: Faltan datos en la sesión");
+        return response.redirect('/aspirante/datos-personales-otis');
+    }
+
+    const respuestas = request.body;
+
+    // Mostrar las respuestas recibidas
+    respuestas.forEach(respuesta => {
+        console.log(`Respuesta para la pregunta ${respuesta.idPreguntaOtis}: Opción ${respuesta.idOpcionOtis}, Tiempo: ${respuesta.tiempoRespuesta}`);
+    });
+
+    try {
+        // Armar el array de valores para insertar
+        const values = respuestas.map(r => [
+            uuidv4(), // idRespuestaOtis
+            idAspirante,
+            idGrupo,
+            r.idPreguntaOtis,
+            r.idOpcionOtis,
+            idPrueba,
+            r.tiempoRespuesta
+        ]);
+
+        // Ejecutar la consulta
+        await db.query(
+            `INSERT INTO respuestaOtisAspirante
+            (idRespuestaOtis, idAspirante, idGrupo, idPreguntaOtis, idOpcionOtis, idPrueba, tiempoRespuesta)
+            VALUES ?`, 
+            [values]
+        );
+
+        console.log("✅ Respuestas guardadas correctamente");
+        response.json({ mensaje: "Respuestas guardadas correctamente" });
+
+    } catch (error) {
+        console.error("❌ Error al guardar respuestas:", error);
+        response.status(500).json({ error: "Error al guardar respuestas" });
+    }
+};
+
+
 
 // Procesar datos personales y pasar a la prueba
 exports.postDatosPersonalesColores = (request, response, next) => {
