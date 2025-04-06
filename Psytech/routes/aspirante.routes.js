@@ -34,6 +34,7 @@ router.post('/datos-personales-otis', controller.postDatosPersonalesOtis);
 
 router.get('/prueba-otis', controller.getPruebaOtis);
 router.post('/prueba-otis', controller.obtenerPreguntas);
+router.post('/guardar-selecciones-otis', controller.postGuardarRespuestas);
 
 //router.get('/instrucciones-hartman', controller.get_instrucciones_hartman);
 

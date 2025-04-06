@@ -56,7 +56,28 @@ module.exports = class Prueba{
         });
     }
 
-    static getPreguntasOtis(){}
+    static getPreguntasOtis(){
+        return db.execute(
+            `SELECT * FROM PreguntasOtis`
+        );
+    }
+
+    static saveRespuestas = (idAspirante, idGrupo, idPrueba, respuestas) => {
+        return new Promise((resolve, reject) => {
+            const queries = respuestas.map((respuesta) => {
+                return db.execute(
+                    `INSERT INTO respuestas (idAspirante, idGrupo, idPrueba, idPregunta, respuestaSeleccionada)
+                    VALUES (?, ?, ?, ?, ?)`,
+                    [idAspirante, idGrupo, idPrueba, respuesta.idPregunta, respuesta.respuestaSeleccionada]
+                );
+            });
+    
+            Promise.all(queries)
+                .then(() => resolve())
+                .catch((error) => reject(error));
+        });
+    };
+    
 
     static getPreguntas16PF(){}
 

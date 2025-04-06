@@ -7,6 +7,8 @@ const ConsultarPruebas = require("../models/consultarPruebas.model");
 const PruebaColores = require('../models/prueba.model');
 const Aspirante = require('../models/aspirante.model');
 
+const db = require('../util/database');
+
 //Rutas del portal de los Aspirantes
 exports.getPruebas = (request, response) => {
     ConsultarPruebas.fetchAll(request.session.idAspirante)
@@ -248,7 +250,10 @@ exports.obtenerPreguntas = async (req, res) => {
         const preguntas = preguntasDB.map(pregunta => {
             const opciones = opcionesDB
                 .filter(opcion => opcion.idPreguntaOtis === pregunta.idPreguntaOtis)
-                .map(opcion => opcion.descripcionOpcion);
+                .map(opcion => ({
+                    descripcionOpcion: opcion.descripcionOpcion,
+                    esCorrecta: opcion.esCorrecta
+                }));
 
             const respuestaCorrecta = opcionesDB.find(opcion => 
                 opcion.idPreguntaOtis === pregunta.idPreguntaOtis && opcion.esCorrecta === 1
@@ -267,6 +272,43 @@ exports.obtenerPreguntas = async (req, res) => {
         console.error("Error obteniendo preguntas:", error);
     }
 }
+
+// Controlador para guardar las respuestas
+exports.postGuardarRespuestas = (request, response) => {
+    const respuestas = request.body;  // Las respuestas vienen en el cuerpo de la solicitud
+
+    // Asegúrate de que la respuesta esté en el formato correcto
+    if (!Array.isArray(respuestas) || respuestas.length === 0) {
+        return response.status(400).send("No se recibieron respuestas válidas");
+    }
+
+    // Guardar las respuestas en la base de datos
+    const queries = respuestas.map((respuesta) => {
+        return db.execute(
+            `INSERT INTO respuestaOtisAspirante (idRespuestaOtis, idAspirante, idGrupo, idPreguntaOtis, idOpcionOtis, idPrueba, tiempoRespuesta)
+            VALUES (UUID(), ?, ?, ?, ?, ?, ?)`,
+            [
+                respuesta.idAspirante || null,
+                respuesta.idGrupo || null,
+                respuesta.idPreguntaOtis || null,
+                respuesta.idOpcionOtis || null,
+                respuesta.idPrueba || null,
+                respuesta.tiempoRespuesta || null
+            ]
+        );
+    });
+
+    // Ejecutar todas las consultas en paralelo
+    Promise.all(queries)
+        .then(() => {
+            console.log("Respuestas guardadas correctamente");
+            response.status(200).json({ message: "Respuestas enviadas exitosamente" });
+        })
+        .catch((error) => {
+            console.error("Error al guardar las respuestas:", error);
+            response.status(500).json({ message: "Error al guardar las respuestas" });
+        });
+};
 
 // Procesar datos personales y pasar a la prueba
 exports.postDatosPersonalesColores = (request, response, next) => {

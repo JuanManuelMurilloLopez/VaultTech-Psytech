@@ -13,6 +13,7 @@
 </head>
 <body>
     <div class="container mt-4">
+        <div class="preguntasCaja">
         <h2 class="text-center">Test de aptitud mental OTIS</h2>
         <div class="Temporizador">
             <div class="tiempoTexto">Tiempo restante</div>
@@ -28,16 +29,18 @@
         <div class="optionList"></div>
         <hr>
         <footer>
-            <!-- Boton siguiente-->
-            <button class="sigbtn">Siguiente</button>
-                        
-            <!-- Boton finalizar -->
+            <!-- Botones -->
             <div class="text-end mt-4">
-            <button type="button" class="btn btn-color--secondary">Enviar Respuestas</button>
+                <div class="pregProgreso mt-3"></div>
+                <button class="sigbtn">Siguiente</button>
+
+                <button id="enviarRespuestas">Enviar respuestas</button>
+            </div>
         </footer>
+        </div>
     </div>
     <!-- JS -->
-    <script src="/js/pruebaOtis.js"></script>
+    <script src="/js/aspirantes/pruebaOtis.js"></script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
