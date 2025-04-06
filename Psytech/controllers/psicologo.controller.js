@@ -184,9 +184,27 @@ exports.getEditarGrupo = (request, response, next) => {
     response.render('Psicologos/editarGrupo');
 };
 
-exports.getAspirantes = (request, response, next) => {
-    console.log('Aspirantes por Grupos');
-    response.render('Psicologos/aspirantesGrupo');
+exports.getAspirante = (request, response, next) => {
+    Aspirante.getInformacionAspirante(request.params.idAspirante)
+    .then(([rows, fieldData]) => {
+        const informacionAspirante = rows[0];
+        Aspirante.getMisPruebas(request.params.idAspirante, request.params.idGrupo)
+        .then(([rows, fieldData]) => {
+            const informacionPruebas = rows;
+            console.log("Informacion Aspirantes: ", informacionPruebas);
+            response.render('Psicologos/informacionAspirante', {
+                informacionAspirante: informacionAspirante || [],
+                idGrupo: request.params.idGrupo || null,
+                informacionPruebas: informacionPruebas || [],
+            })
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getImportarAspirantes = (request, response, next) => {
