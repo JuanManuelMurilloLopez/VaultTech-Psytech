@@ -32,6 +32,17 @@ function empezarTemporizador(tiempo) {
             contadorTiempo.textContent = "00:00";
         }
     }
+    if (tiempo < 0) {
+        clearInterval(contTiempo);
+        contadorTiempo.textContent = "00:00";
+    
+        // Enviar las respuestas automáticamente
+        sendRespuestas().then(() => {
+            // Redirigir después de enviar
+            window.location.href = "/prueba-completada";
+        });
+    }
+    
 }
 
 // Tener un tope para no llegar a preguntas de más
@@ -135,6 +146,14 @@ function ensenarPregunta(index) {
     for (let i = 0; i < opcionSelec.length; i++) {
         opcionSelec[i].setAttribute("onclick", "opcionSeleccionada(this)");
     }
+
+     // Ocultar el botón de siguiente si es la última pregunta
+     const botonSiguiente = document.querySelector(".sigbtn");
+     if (index === 5 - 1) {
+         botonSiguiente.classList.add("d-none");
+     } else {
+         botonSiguiente.classList.remove("d-none");
+     }
 }
 
 // Función cuando se selecciona una opción
@@ -169,8 +188,37 @@ enviarRespuestas.classList.add("d-none");
 const idAspirante = sessionStorage.getItem('idAspirante');
 const idGrupo = sessionStorage.getItem('idGrupo');
 
+function guardarUltimaRespuesta() {
+    const opciones = document.querySelectorAll(".option input:checked");
+
+    if (opciones.length === 0) {
+        alert("Selecciona una opción antes de enviar.");
+        return;
+    }
+
+    const inputSeleccionado = opciones[0];
+    const idOpcion = inputSeleccionado.value;
+    const idPregunta = inputSeleccionado.closest(".option").getAttribute("data-idPregunta");
+
+    const tiempoActual = Date.now();
+    const tiempoRespuesta = Math.floor((tiempoActual - tiempoInicioPregunta) / 1000);
+
+    let respuesta = respuestasSeleccionadas.find(r => r.idPreguntaOtis === idPregunta);
+    if (respuesta) {
+        respuesta.idOpcion = idOpcion;
+        respuesta.tiempoRespuesta = tiempoRespuesta;
+    } else {
+        respuestasSeleccionadas.push({
+            idPreguntaOtis: idPregunta,
+            idOpcion: idOpcion,
+            tiempoRespuesta: tiempoRespuesta
+        });
+    }
+}
+
+
 // Función para enviar las respuestas seleccionadas
-function sendRespuestas() {
+async function sendRespuestas() {
     if (respuestasSeleccionadas.length === 0) {
         console.log("No se seleccionaron respuestas.");
         return;
@@ -185,7 +233,7 @@ function sendRespuestas() {
         tiempoRespuesta: respuesta.tiempoRespuesta
     }));    
 
-    // Enviar las respuestas al servidor
+    // Enviar las respuestas a la base de datos
     fetch('/aspirante/guardar-selecciones-otis', {
         method: 'POST',
         headers: {
@@ -195,13 +243,24 @@ function sendRespuestas() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Respuestas enviadas con éxito:', data);
+        if (data.success && data.redirectUrl) {
+            window.location.href = data.redirectUrl;
+        } else {
+            alert('Hubo un problema al enviar las respuestas.');
+        }
     })
     .catch(error => {
         console.error('Error al enviar las respuestas:', error);
-    });
+        alert('Error al enviar las respuestas.');
+    });    
 }
 
 enviarRespuestas.addEventListener("click", function() {
-    sendRespuestas(); 
+    const confirmarEnvio = confirm("¿Estás seguro de que deseas enviar tus respuestas? Una vez enviadas, no podrás cambiarlas.");
+
+    if (confirmarEnvio) {
+        guardarUltimaRespuesta();
+        sendRespuestas();
+    }
 });
+

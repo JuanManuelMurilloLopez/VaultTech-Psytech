@@ -33,6 +33,7 @@ router.post('/datos-personales-otis', controller.postDatosPersonalesOtis);
 
 router.get('/prueba-otis', controller.getPruebaOtis);
 router.post('/prueba-otis', controller.obtenerPreguntas);
+router.post('/prueba-otis', controller.postPruebaOtis);
 router.post('/guardar-selecciones-otis', controller.postGuardarRespuestas);
 router.get('/prueba-completada', controller.getPruebaCompletada);
 

@@ -310,6 +310,10 @@ exports.getPruebaOtis = (request, response, next) => {
         });
 };
 
+exports.postPruebaOtis = (request, response, next) => {
+    response.redirect('/aspirante/prueba-completada');
+};
+
 const db = require('../util/database');
 const { v4: uuidv4 } = require('uuid');
 
@@ -349,6 +353,7 @@ exports.postGuardarRespuestas = async (request, response) => {
     } catch (error) {
         console.error("Error al guardar respuestas:", error);
     }
+    return response.json({ success: true, redirectUrl: '/aspirante/prueba-completada' });
 };
 
 // Procesar datos personales y pasar a la prueba
