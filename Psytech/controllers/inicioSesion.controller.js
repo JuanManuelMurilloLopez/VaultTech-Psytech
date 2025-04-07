@@ -3,6 +3,7 @@ const { OTP } = require('../models/otp.model');
 const crypto = require('crypto');
 const { MailerSend, EmailParams, Sender, Recipient } = require("mailersend");
 
+/*
 // Configuración de MailerSend
 const mailerSend = new MailerSend({
     apiKey: process.env.MAILER_SEND_API_KEY,
@@ -10,6 +11,7 @@ const mailerSend = new MailerSend({
   
   const sentFrom = new Sender("vaultech@test-68zxl27r3v34j905.mlsender.net", "VaultTech");
 
+  */
 exports.getLogin = (request, response, next) => {
     response.render('login');
 };
@@ -47,6 +49,7 @@ exports.getPost = async (request, response) => {
         await OTP.crearOTP(usuarioId.idUsuario, codigoOTP, validez);
 
         request.session.usuario = usuario;
+        /*
         // Enviar correo con MailerSend
         const destinatario = new Recipient(usuarioId.correo, usuario);
 
@@ -57,7 +60,7 @@ exports.getPost = async (request, response) => {
         .setHtml(`<h2>¡Hola ${usuario}!</h2><p>Tu código OTP es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos.</p>`);
 
         await mailerSend.email.send(emailParams);
-
+        */
         console.log('codigoOTP:', codigoOTP);
         response.redirect('/otp');
         } catch (error) {
