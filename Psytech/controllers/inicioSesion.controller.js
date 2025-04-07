@@ -37,6 +37,7 @@ exports.getPost = async (request, response) => {
     try {
         const usuarioData  = await Usuario.fetchOne(usuario);
         const usuarioId = usuarioData[0]; 
+       
 
         if (!usuarioId) {
             return response.send('<script>alert("Usuario no encontrado"); window.location.href = "/login";</script>');
@@ -63,8 +64,7 @@ exports.getPost = async (request, response) => {
         console.log('codigoOTP:', codigoOTP);
         response.redirect('/otp');
         } catch (error) {
-        console.error('Error en postLogin:', error);
-        response.send('<script>alert("Error al generar o enviar el OTP"); window.location.href = "/login";</script>');
+        response.send('<script>alert("El correo asociado al usuario no es válido. Intenta con otro."); window.location.href = "/login";</script>');
     }
 };
 
