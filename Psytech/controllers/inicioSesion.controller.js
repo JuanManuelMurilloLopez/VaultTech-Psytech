@@ -2,7 +2,6 @@ const bcrypt = require('bcryptjs');
 const Usuario = require('../models/usuario.model');
 const { OTP } = require('../models/otp.model');
 const crypto = require('crypto');
-const mail = require('../util/mailer');
 
 exports.getLogin = (request, response, next) => {
     response.render('login');

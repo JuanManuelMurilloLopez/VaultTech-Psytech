@@ -31,7 +31,7 @@ module.exports = class Psicologo {
                         ORDER BY usuarios.nombreUsuario, usuarios.apellidoPaterno`);
   }
 
-  saveCoordinador() {
+  savePsicologo() {
     const usuario = this.usuario || null;
     const estatusUsuario = this.estatusUsuario || 1;
     const nombreUsuario = this.nombreUsuario || null;

@@ -1,4 +1,5 @@
 const Coordinador = require('../models/coordinador.model');
+const Psicologo = require('../models/psicologo.model');
 
 //Rutas de registros de Psicologos y Coordinadores
 exports.getPsicologosRegistrados = (request, response, next) => {
@@ -6,7 +7,41 @@ exports.getPsicologosRegistrados = (request, response, next) => {
 };
 
 exports.getRegistrarPsicologos = (request, response, next) => {
-    response.render('Coordinadores/registrarPsicologo');
+    Psicologo.fetchAll()
+    .then(([rows, fieldData]) => {
+        const psicologos = rows;
+        response.render('Coordinadores/registrarPsicologo', {
+            coordinadores: psicologos || [],
+        });
+    })
+    .catch((error) => {
+        console.log('Error al obtener psicologos:', error);
+    });
+};
+
+exports.postRegistrarPsicologos = (request, response, next) => {
+    const { correo, nombrePsicologo, apellidoPaterno, apellidoMaterno, numero } = request.body;
+   
+    const psicologo = new Psicologo(
+        correo, // usuario
+        1,
+        nombrePsicologo,
+        apellidoPaterno,
+        apellidoMaterno,
+        correo, // correo electronico
+        '+052',
+        numero,
+        2
+    );
+    
+    console.log('Guardando psicologo:', psicologo);
+    psicologo.savePsicologo()
+   .then(() => {
+        exports.getPsicologosRegistrados(request, response, next);
+   })
+   .catch((error) => {
+        console.log('Error al guardar psicologo:', error);
+    });
 };
 
 exports.getEditarPsicologos = (request, response, next) => {

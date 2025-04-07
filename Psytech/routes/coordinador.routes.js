@@ -11,6 +11,7 @@ const controller = require('../controllers/coordinador.controller');
 router.get('/psicologos-registrados', controller.getPsicologosRegistrados);
 
 router.get('/registrar-psicologo', controller.getRegistrarPsicologos);
+router.post('/registrar-psicologo', controller.postRegistrarPsicologos);
 
 router.get('/editar-psicologo', controller.getEditarPsicologos);
 
