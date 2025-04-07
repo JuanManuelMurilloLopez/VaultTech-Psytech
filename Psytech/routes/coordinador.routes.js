@@ -17,6 +17,7 @@ router.get('/editar-psicologo', controller.getEditarPsicologos);
 router.get('/coordinadores-registrados', controller.getCoordinadoresRegistrados);
 
 router.get('/registrar-coordinador', controller.getRegistrarCoordinador);
+router.post('/registrar-coordinador', controller.postRegistrarCoordinador);
 
 router.get('/editar-coordinador', controller.getEditarCoordinador);
 

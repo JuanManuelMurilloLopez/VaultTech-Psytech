@@ -27,40 +27,41 @@
             <div>
                 <h1 class="text-container">REGISTRAR COORDINADOR</h1>
             </div>
-            <div>
-                <!--Input nombre-->
-                <div class="mb-3">
-                    <label class="form-label" for="">Nombre</label>
-                    <input class="form-control" type="text" name="" id="">
+            <form action="/coordinador/registrar-coordinador" method="POST">
+                <div>
+                    <!--Input nombre-->
+                    <div class="mb-3">
+                        <label class="form-label" for="nombreCoordinador">Nombre</label>
+                        <input class="form-control" type="text" name="nombreCoordinador" id="nombreCoordinador">
+                    </div>
+                    <!--Input Apellido Paterno-->
+                    <div class="mb-3">
+                        <label class="form-label" for="apellidoPaterno">Apellido Paterno</label>
+                        <input class="form-control" type="text" name="apellidoPaterno" id="apellidoPaterno">
+                    </div>
+                    <!--Input Apellido Materno-->
+                    <div class="mb-3">
+                        <label class="form-label" for="apellidoMaterno">Apellido Materno</label>
+                        <input class="form-control" type="text" name="apellidoMaterno" id="apellidoMaterno">
+                    </div>
+                    <!--Input Correo-->
+                    <div class="mb-3">
+                        <label class="form-label" for="correo">Correo electrónico</label>
+                        <input class="form-control" type="text" name="correo" id="correo">
+                    </div>
+                    <!--Input Número-->
+                    <div class="mb-3">
+                        <label class="form-label" for="numero">Número de teléfono</label>
+                        <input class="form-control" type="text" name="numero" id="numero">
+                    </div>
+                    
                 </div>
-                <!--Input Apellido Paterno-->
-                <div class="mb-3">
-                    <label class="form-label" for="">Apellido Paterno</label>
-                    <input class="form-control" type="text" name="" id="">
+                <div>
+                    <button type="button" class="btn btn-color--third btn-sm" 
+                    onclick="window.location.href='/coordinador/coordinadores-registrados'">Regresar</button>
+                    <button type="submit" class="btn btn-color--secondary btn-sm">Guardar</button>
                 </div>
-                <!--Input Apellido Materno-->
-                <div class="mb-3">
-                    <label class="form-label" for="">Apellido Materno</label>
-                    <input class="form-control" type="text" name="" id="">
-                </div>
-                <!--Input Correo-->
-                <div class="mb-3">
-                    <label class="form-label" for="">Correo electrónico</label>
-                    <input class="form-control" type="text" name="" id="">
-                </div>
-                <!--Input Número-->
-                <div class="mb-3">
-                    <label class="form-label" for="">Número de teléfono</label>
-                    <input class="form-control" type="text" name="" id="">
-                </div>
-            </div>
-            <div>
-                <button type="button" class="btn btn-color--third btn-sm" 
-                onclick="window.location.href='/coordinador/coordinadores-registrados'">Regresar</button>
-                <button type="button" class="btn btn-color--secondary btn-sm"
-                onclick="confirm('¿Está seguro de guardar los cambios?');
-                window.location.href='/coordinador/coordinadores-registrados'">Guardar</button>
-            </div>
+            </form>
         </div>
     </div>
 
