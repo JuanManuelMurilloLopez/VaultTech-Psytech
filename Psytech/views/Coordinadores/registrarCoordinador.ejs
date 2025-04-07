@@ -59,7 +59,12 @@
                 <div>
                     <button type="button" class="btn btn-color--third btn-sm" 
                     onclick="window.location.href='/coordinador/coordinadores-registrados'">Regresar</button>
-                    <button type="submit" class="btn btn-color--secondary btn-sm">Guardar</button>
+                    <button type="submit" class="btn btn-color--secondary btn-sm" onclick="return confirmarGuardado()">Guardar</button>
+                    <script>
+                    function confirmarGuardado() {
+                        return confirm("¿Estás seguro de guardar?");
+                    }
+                    </script>
                 </div>
             </form>
         </div>
