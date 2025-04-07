@@ -14,46 +14,35 @@ module.exports = class Prueba{
     static saveDatosPersonales(idAspirante, idGrupo, idPrueba, datosPersonales){
         // Ya existen datos?
         return db.execute(`
-            SELECT idDatosPersonales FROM datosPersonales 
+            UPDATE datosPersonales 
+            SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, 
+                puestoSolicitado = ?, fecha = NOW()
             WHERE idGrupo = ? AND idPrueba = ? AND idAspirante = ?
-        `, [idGrupo, idPrueba, idAspirante])
-        .then(([rows]) => {
-            if (rows.length > 0) {
-                // Si ya existen datos, actualizarlos
-                return db.execute(`
-                    UPDATE datosPersonales 
-                    SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, 
-                        puestoSolicitado = ?, fecha = ?
-                    WHERE idGrupo = ? AND idPrueba = ? AND idAspirante = ?
-                `, [
-                    datosPersonales.nombre,
-                    datosPersonales.apellidoPaterno, 
-                    datosPersonales.apellidoMaterno,
-                    datosPersonales.puestoSolicitado,
-                    datosPersonales.fecha,
-                    idGrupo,
-                    idPrueba,
-                    idAspirante
-                ]);
-            } else {
-                // Si no existen, insertarlos
-                return db.execute(`
-                    INSERT INTO datosPersonales 
-                    (idDatosPersonales, idGrupo, idPrueba, idAspirante, nombre, 
-                     apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha)
-                    VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, ?)
-                `, [
-                    idGrupo,
-                    idPrueba,
-                    idAspirante,
-                    datosPersonales.nombre,
-                    datosPersonales.apellidoPaterno, 
-                    datosPersonales.apellidoMaterno,
-                    datosPersonales.puestoSolicitado,
-                    datosPersonales.fecha
-                ]);
-            }
-        });
+        `, [
+            datosPersonales.nombre,
+            datosPersonales.apellidoPaterno, 
+            datosPersonales.apellidoMaterno,
+            datosPersonales.puestoSolicitado,
+            idGrupo,
+            idPrueba,
+            idAspirante
+            ]);
+
+        // INSERT
+        return db.execute(`
+            INSERT INTO datosPersonales 
+            (idDatosPersonales, idGrupo, idPrueba, idAspirante, nombre, 
+            apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha)
+            VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, NOW())
+        `, [
+            idGrupo,
+            idPrueba,
+            idAspirante,
+            datosPersonales.nombre,
+            datosPersonales.apellidoPaterno, 
+            datosPersonales.apellidoMaterno,
+            datosPersonales.puestoSolicitado
+        ]);
     }
 
     static getAreaOtis(){

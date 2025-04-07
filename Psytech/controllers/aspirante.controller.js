@@ -353,6 +353,48 @@ exports.postGuardarRespuestas = async (request, response) => {
             [values]
         );
 
+         // Obtener datos personales desde sesión
+         const datosPersonales = request.session.datosPersonalesOtis || {
+            nombre: "Usuario",
+            apellidoPaterno: "",
+            apellidoMaterno: "",
+            puestoSolicitado: "No especificado",
+            fecha: new Date()
+        };
+
+        // Guardar datos personales
+        await PruebaOtis.saveDatosPersonales(
+            idAspirante,
+            idGrupo,
+            idPrueba,
+            datosPersonales
+        );
+
+        console.log("Datos personales guardados correctamente");
+
+        // Verificar si ya existe el registro en aspirantesGruposPruebas
+        const [rows] = await PruebaOtis.verificarExistencia(
+            idAspirante,
+            idGrupo,
+            idPrueba
+        );
+
+        if (rows.length === 0) {
+            console.log("No existe registro, insertando...");
+            await db.execute(
+                `INSERT INTO aspirantesGruposPruebas (idAspirante, idGrupo, idPrueba, idEstatus)
+                VALUES (?, ?, ?, 2)`,
+                [idAspirante, idGrupo, idPrueba]
+            );
+        } else {
+            console.log("Registro encontrado, actualizando estado...");
+            await PruebaOtis.updateEstatusPrueba(
+                idAspirante,
+                idGrupo,
+                idPrueba
+            );
+        }
+
     } catch (error) {
         console.error("Error al guardar respuestas:", error);
     }

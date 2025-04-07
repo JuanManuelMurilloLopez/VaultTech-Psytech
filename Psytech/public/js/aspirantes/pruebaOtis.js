@@ -75,13 +75,22 @@ document.body.addEventListener("click", (event) => {
             });
         }
 
+        const botonSig = document.querySelector(".sigbtn");
+
         if (pregAcum < preguntas.length - 1) {
             pregAcum++;
             pregNum++;
             ensenarPregunta(pregAcum);
             pregContador(pregNum);
-            verificarMostrarBoton();  // Verificar si mostrar el botón de enviar
-        } else {
+            verificarMostrarBoton();
+
+            // Mostrar el botón si no es la última
+            botonSig.style.visibility = "visible";
+        } 
+
+        // Si ya estamos en la última pregunta, ocultar el botón visualmente
+        if (pregAcum === preguntas.length - 1) {
+            botonSig.style.visibility = "hidden";
             console.log("Preguntas completadas");
         }
     }
