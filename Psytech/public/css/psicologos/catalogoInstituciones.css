@@ -54,11 +54,65 @@
     outline: none;
 }
 
-.btn{
+.card{
+    height: 260px;
+}
+
+.card-title{
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.card-header{
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none;
     padding: 0;
 }
 
-.btn-color--secondary{
+.card-estatus{
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    border-radius: 10px;
+    padding: 5px 20px;
+}
+
+.card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-actions {
+    margin-top: auto;
+}
+
+.card-text{
+    margin: 16px 0;
+}
+
+.card-estatus{
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    border-radius: 10px;
+    padding: 4px 28px;
+}
+.activo{
+    color: #294969;
+    background: #C2EBF3 ;
+}
+
+.inactivo{
+    color: #600000;
+    background: #FECECE;
+}
+
+.registrar-institucion{
     border-radius: 20px;
     font-size: 16px;
     display: flex;
@@ -69,7 +123,20 @@
     color: var(--font-secondary);
 }
 
+.btn-color--secondary{
+    padding: 4px 28px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+    background: var(--secondary);
+    color: var(--font-secondary);
+}
+
 .btn-color--third{
+    padding: 4px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
     background: var(--third);
     color: var(--font-primary);
 }
