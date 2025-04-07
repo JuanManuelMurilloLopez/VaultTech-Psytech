@@ -105,6 +105,14 @@
     font-size: 18px;
   }
   
+/* Area */
+.areaTexto{
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #193858;
+}
+
 /* Pregunta */
 .pregtext {
     font-size: 20px;
@@ -146,5 +154,11 @@
     accent-color: #457ba1;
     width: 18px;
     height: 18px;
+  }
+  
+  .sigbtn {
+    display: flex;
+    justify-content: flex-start; /* Alinea el contenido a la izquierda */
+    align-items: center; /* Centra el contenido verticalmente si es necesario */
   }
   

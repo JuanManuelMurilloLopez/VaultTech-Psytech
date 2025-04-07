@@ -237,32 +237,35 @@ exports.getPruebaOtis = (request, response, next) => {
     response.render('Aspirantes/pruebaOtis');
 };
 
-//Obtener las preguntas y opciones
+//Obtener las areas, preguntas y opciones
 exports.obtenerPreguntas = async (req, res, next) => {
-
     try {
+        const [areasDB] = await PruebaOtis.getAreaOtis();
         const [preguntasDB] = await PruebaOtis.getPreguntasOtis();
         const [opcionesDB] = await OpcionOtis.fetchAll();
 
         const preguntas = preguntasDB.map(pregunta => {
             const opciones = opcionesDB
-            //que las opciones sean del mismo id de la pregunta
-                .filter(opcion => opcion.idPreguntaOtis === pregunta.idPreguntaOtis) 
+                .filter(opcion => opcion.idPreguntaOtis === pregunta.idPreguntaOtis)
                 .map(opcion => ({
                     idOpcionOtis: opcion.idOpcionOtis,
                     descripcionOpcion: opcion.descripcionOpcion,
                     esCorrecta: opcion.esCorrecta
                 }));
 
-            const respuestaCorrecta = opcionesDB.find(opcion => 
+            const respuestaCorrecta = opcionesDB.find(opcion =>
                 opcion.idPreguntaOtis === pregunta.idPreguntaOtis && opcion.esCorrecta === 1
             )?.descripcionOpcion;
+
+            // Buscar el nombre del área por idAreaOtis
+            const area = areasDB.find(a => a.idAreaOtis === pregunta.idAreaOtis);
 
             return {
                 num: pregunta.numeroPregunta,
                 idPreguntaOtis: pregunta.idPreguntaOtis,
                 pregunta: pregunta.preguntaOtis,
                 respuesta: respuestaCorrecta,
+                nombreAreaOtis: area ? area.nombreAreaOtis : "Sin área",
                 opciones: opciones
             };
         });

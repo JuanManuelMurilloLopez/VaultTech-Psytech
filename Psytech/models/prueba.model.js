@@ -56,6 +56,12 @@ module.exports = class Prueba{
         });
     }
 
+    static getAreaOtis(){
+        return db.execute(
+            `SELECT * FROM AreasOtis`
+        );
+    }
+
     static getPreguntasOtis(){
         return db.execute(
             `SELECT * FROM PreguntasOtis`

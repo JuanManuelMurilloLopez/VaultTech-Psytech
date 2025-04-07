@@ -32,9 +32,8 @@
                   </div>                  
             </div> 
         
-            <!-- Seccion de preguntas -->
-            <h5>Preguntas</h5>
-            <hr>
+            <!-- Área de la pregunta -->
+            <div class="areaTexto"></div>
         
             <!-- Preguntas de la prueba OTIS -->
             <div class="pregtext"></div>
@@ -42,9 +41,9 @@
             <hr>
             <footer>
                 <div class="text-end mt-4">                 
-                    <button class="sigbtn">Siguiente</button>
+                    <button class="sigbtn btn btn-color--secondary">Siguiente</button>
 
-                    <button id="enviarRespuestas">Enviar respuestas</button>
+                    <button class="btn btn-color--secondary" id="enviarRespuestas">Enviar respuestas</button>
                 </div>
             </footer>
         </div>
@@ -54,5 +53,35 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Intentar prevenir la navegación hacia atrás
+        window.addEventListener('load', function() {
+          window.history.pushState(null, document.title, window.location.href);
+          window.addEventListener('popstate', function() {
+            window.history.pushState(null, document.title, window.location.href);
+            alert("No es posible regresar a la página anterior durante la prueba.");
+          });
+        });
+      
+        // Beforeunload para advertir al usuario
+        window.addEventListener('beforeunload', function(e) {
+          if (document.querySelector('#colorSelectionForm')?.getAttribute('data-submitting') === 'true') {
+            return;
+          }
+      
+          if (typeof seleccionados !== 'undefined' && seleccionados.length > 0) {
+            const message = "¿Está seguro que desea salir? Su progreso en la prueba se perderá.";
+            e.returnValue = message;
+            return message;
+          }
+        });
+      
+        // Marcar el formulario como en envío cuando se hace submit
+        document.querySelector('#colorSelectionForm')?.addEventListener('submit', function() {
+          this.setAttribute('data-submitting', 'true');
+        });
+    </script>
+    
 </body>
 </html>

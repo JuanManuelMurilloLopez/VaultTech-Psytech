@@ -89,7 +89,7 @@ document.body.addEventListener("click", (event) => {
 
 // Función para verificar si mostrar el botón de enviar respuestas
 function verificarMostrarBoton() {
-    if (pregNum === 5) {  
+    if (pregNum === 75) {  
         enviarRespuestas.classList.remove("d-none");
     }
 }
@@ -116,12 +116,16 @@ async function cargarPreguntas() {
 
 // Función para enseñar cada pregunta junto con su número
 function ensenarPregunta(index) {
+    const areaTexto = document.querySelector(".areaTexto");
     const pregTexto = document.querySelector(".pregtext");
     const optLista = document.querySelector(".optionList");
 
     const pregunta = preguntas[index];
 
     tiempoInicioPregunta = Date.now();
+
+    // Mostrar área
+    areaTexto.innerHTML = `<h5>${pregunta.nombreAreaOtis}</h5><hr>`;
 
     // Mostrar la pregunta
     let pregTag = `<span>${pregunta.num}. ${pregunta.pregunta}</span>`;
@@ -149,7 +153,7 @@ function ensenarPregunta(index) {
 
      // Ocultar el botón de siguiente si es la última pregunta
      const botonSiguiente = document.querySelector(".sigbtn");
-     if (index === 5 - 1) {
+     if (index === pregunta.length - 1) {
          botonSiguiente.classList.add("d-none");
      } else {
          botonSiguiente.classList.remove("d-none");
