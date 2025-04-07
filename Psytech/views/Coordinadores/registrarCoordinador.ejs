@@ -27,7 +27,7 @@
             <div>
                 <h1 class="text-container">REGISTRAR COORDINADOR</h1>
             </div>
-            <form action="/coordinador/registrar-coordinador" method="POST">
+            <form action="/coordinador/registrar-coordinador" method="POST" onsubmit="return validarFormulario()">
                 <div>
                     <!--Input nombre-->
                     <div class="mb-3">
@@ -67,6 +67,27 @@
                     </script>
                 </div>
             </form>
+            <script>
+                function validarFormulario() {
+                    // Validar el correo electrónico
+                    const correo = document.getElementById("correo").value;
+                    const regexCorreo = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+                    if (!regexCorreo.test(correo)) {
+                        alert("Por favor ingresa un correo electrónico válido.");
+                        return false;
+                    }
+                
+                    // Validar el número de teléfono
+                    const numero = document.getElementById("numero").value;
+                    const regexNumero = /^\d{10}$/;  // Solo 10 dígitos
+                    if (!regexNumero.test(numero)) {
+                        alert("El número de teléfono debe tener exactamente 10 dígitos numéricos.");
+                        return false;
+                    }
+                
+                    return true; 
+                }
+            </script>
         </div>
     </div>
 
