@@ -14,29 +14,39 @@
 <body>
     <div class="container mt-4">
         <div class="preguntasCaja">
-        <h2 class="text-center">Test de aptitud mental OTIS</h2>
-        <div class="Temporizador">
-            <div class="tiempoTexto">Tiempo restante</div>
-            <div class="tiempoNumeroSec">30:00</div>
-        </div>
-    
-        <!-- Seccion de preguntas -->
-        <h5>Preguntas</h5>
-        <hr>
-    
-        <!-- Preguntas de la prueba OTIS -->
-        <div class="pregtext"></div>
-        <div class="optionList"></div>
-        <hr>
-        <footer>
-            <!-- Botones -->
-            <div class="text-end mt-4">
-                <div class="pregProgreso mt-3"></div>
-                <button class="sigbtn">Siguiente</button>
+            <div class="cabeceraTest">
+                <h2 class="tituloTest text-center">Test de aptitud mental OTIS</h2>
+                <div class="headerOtis">
+                    <div class="progresoOtis">
+                      <label class="tituloProgreso">Progreso</label>
+                      <span id="textoProgreso">0%</span>
+                      <div class="barraExterna">
+                        <div class="barraInterna" id="barraProgreso"></div>
+                      </div>
+                    </div>
+                  
+                    <div class="temporizadorOtis">
+                      <span class="iconoReloj">⏱</span>
+                      <span class="tiempoRestante" id="tiempoRestante">30:00</span>
+                    </div>
+                  </div>                  
+            </div> 
+        
+            <!-- Seccion de preguntas -->
+            <h5>Preguntas</h5>
+            <hr>
+        
+            <!-- Preguntas de la prueba OTIS -->
+            <div class="pregtext"></div>
+            <div class="optionList"></div>
+            <hr>
+            <footer>
+                <div class="text-end mt-4">                 
+                    <button class="sigbtn">Siguiente</button>
 
-                <button id="enviarRespuestas">Enviar respuestas</button>
-            </div>
-        </footer>
+                    <button id="enviarRespuestas">Enviar respuestas</button>
+                </div>
+            </footer>
         </div>
     </div>
     <!-- JS -->

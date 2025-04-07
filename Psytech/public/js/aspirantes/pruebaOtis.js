@@ -1,5 +1,5 @@
 const preguntasCj = document.querySelector(".preguntasCaja");
-const contadorTiempo = preguntasCj.querySelector(".Temporizador .tiempoNumeroSec");
+const contadorTiempo = preguntasCj.querySelector(".temporizadorOtis .tiempoRestante");
 const respEnviadas = document.querySelector(".enviadasCaja");
 const enviarRespuestas = document.querySelector("#enviarRespuestas"); 
 
@@ -11,10 +11,10 @@ let tiempoInicioPregunta = null;
 
 // Llamar a la funciónes
 cargarPreguntas();
-empezarTemporizador(valorTemporizador);
+cronometro(valorTemporizador);
 
 // Función del temporizador
-function empezarTemporizador(tiempo) {
+function cronometro(tiempo) {
     contTiempo = setInterval(timer, 1000);
     function timer() {
         let minutos = Math.floor(tiempo / 60);
@@ -171,13 +171,18 @@ function opcionSeleccionada(element) {
 
 // Tener un contador de en qué pregunta vas (progreso)
 function pregContador(index) {
-    const progresoAcum = preguntasCj.querySelector(".pregProgreso");
-    if (!progresoAcum) {
-        console.error("No se encontró el elemento con clase .pregProgreso");
+    const barra = document.getElementById("barraProgreso");
+    const texto = document.getElementById("textoProgreso");
+
+    if (!barra || !texto || preguntas.length === 0) {
+        console.error("No se encontró el elemento de progreso o no hay preguntas.");
         return;
     }
-    let progresoTexto = '<span style="display: inline;">' + index + ' de ' + preguntas.length + ' Preguntas</span>';
-    progresoAcum.innerHTML = progresoTexto;
+
+    let porcentaje = Math.floor((index / preguntas.length) * 100);
+
+    barra.style.width = porcentaje + "%";
+    texto.textContent = `${porcentaje}% completado`;
 }
 
 let respuestasSeleccionadas = [];
@@ -215,7 +220,6 @@ function guardarUltimaRespuesta() {
         });
     }
 }
-
 
 // Función para enviar las respuestas seleccionadas
 async function sendRespuestas() {
