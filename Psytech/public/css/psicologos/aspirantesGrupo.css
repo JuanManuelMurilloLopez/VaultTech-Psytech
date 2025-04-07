@@ -25,6 +25,59 @@
     flex-direction: row;
 }
 
+.buscar{
+    flex-grow: 1;
+    height: 48px;
+    border-radius: 30px;
+    border: solid 2px #919191;
+    margin-right: 60px;
+}
+
+.buscar:focus-within{
+    border: 4px #7fc1ff solid;
+}
+
+.barra{
+    display: flex;
+    justify-content: space-between;
+    margin: 0 10px;
+    align-items: center;
+    height: 48px;
+}
+
+.barra input{
+    border: none;
+    background-color: inherit;
+    padding: 0 8px 0 0;
+    font-size: 16px;
+    flex-grow: 1;
+    outline: none;
+}
+
+.registrar-aspirante{
+    border-radius: 20px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 32px;
+    background: var(--secondary);
+    color: var(--font-secondary);
+    margin-right: 30px;
+}
+
+.importar-aspirante{
+    border-radius: 20px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 32px;
+    background: var(--secondary);
+    color: var(--font-secondary);
+}
+
+
 .btn-color--primary{
     background: var(--primary);
     color: var(--font-primary);
