@@ -25,8 +25,8 @@ CREATE TABLE OTP (
     idOTP INT AUTO_INCREMENT PRIMARY KEY,
     idUsuario VARCHAR(36),
     codigo INT,
-    validez timestamp, --timestamp actual + 5 minutos
-    usado BOOLEAN
+    validez timestamp, -- timestamp actual + 5 minutos
+    usado BOOLEAN,
     FOREIGN KEY (idUsuario) REFERENCES usuarios(idUsuario)
 );
 

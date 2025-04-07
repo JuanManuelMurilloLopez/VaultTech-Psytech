@@ -3,9 +3,10 @@ const bcrypt = require('bcryptjs');
 
 
 class Usuario {
-  constructor(usuario, contrasenia, rol) {
+  constructor(idUsuario, correo, usuario, rol) {
+    this.idUsuario = idUsuario;
+    this.correo = correo;
     this.usuario = usuario;
-    this.contrasenia = contrasenia;
     this.rol = rol;
   }
 
@@ -19,19 +20,21 @@ class Usuario {
       
       return filas;
     } catch (error) {
-      console.error('Error en recuperarUno:', error);
+      console.error('Error en fetchOne:', error);
       throw error;
     }
   };
 
-  static getIdAspirante(usuario){
-    return db.execute(`SELECT IdAspirante 
-      FROM Aspirantes 
-      WHERE IdUsuario = 
-        (SELECT IdUsuario FROM Usuarios WHERE idUsuario = ?)`, 
+
+  static getIdAspirante(usuario) {
+    return db.execute(
+        `SELECT idAspirante 
+         FROM aspirantes 
+         WHERE idUsuario = ?`, 
         [usuario]
-      );
+    );
   }
 }
+
 
 module.exports = Usuario;
