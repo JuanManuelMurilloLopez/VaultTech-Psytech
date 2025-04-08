@@ -1,19 +1,20 @@
 const Usuario = require('../models/usuario.model');
 const { OTP } = require('../models/otp.model');
 const crypto = require('crypto');
-const { MailerSend, EmailParams, Sender, Recipient } = require("mailersend");
+//const { MailerSend, EmailParams, Sender, Recipient } = require("mailersend");
 
-
+/*
 // Configuración de MailerSend
 const mailerSend = new MailerSend({
     apiKey: process.env.MAILER_SEND_API_KEY,
   });
   
   const sentFrom = new Sender("vaultech@test-68zxl27r3v34j905.mlsender.net", "VaultTech");
-
+*/
 exports.getLogin = (request, response, next) => {
     response.render('login');
 };
+
 
 exports.getOtp = (request, response, next) => {
     const usuario = request.session.usuario;
