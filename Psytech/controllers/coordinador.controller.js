@@ -3,7 +3,16 @@ const Psicologo = require('../models/psicologo.model');
 
 //Rutas de registros de Psicologos y Coordinadores
 exports.getPsicologosRegistrados = (request, response, next) => {
-    response.render('Coordinadores/listaPsicologos');
+    Psicologo.fetchAll()
+    .then(([rows, fieldData]) => {
+        const listaPsicologos = rows;
+        response.render('Coordinadores/listaPsicologos',{
+            listaPsicologos: listaPsicologos || [],
+        });
+    })
+    .catch((error) => {
+        console.log('Error al obtener psicologos:', error);
+    });
 };
 
 exports.getRegistrarPsicologos = (request, response, next) => {
@@ -11,7 +20,7 @@ exports.getRegistrarPsicologos = (request, response, next) => {
     .then(([rows, fieldData]) => {
         const psicologos = rows;
         response.render('Coordinadores/registrarPsicologo', {
-            coordinadores: psicologos || [],
+            psicologos: psicologos || [],
         });
     })
     .catch((error) => {
