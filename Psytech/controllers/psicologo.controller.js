@@ -5,6 +5,8 @@ const Institucion = require('../models/institucion.model');
 const Grupo = require('../models/grupo.model');
 const TipoInstitucion = require('../models/tipoInstitucion.model');
 const Prueba = require('../models/prueba.model');
+const { request, response } = require('express');
+const Cuadernillo = require('../models/cuadernilloOtis.model');
 const CatalogoPruebas = require('../models/catalogoPruebas.model');
 
 //Rutas del portal de los Psicologos
@@ -74,7 +76,6 @@ exports.getGrupos = (request, response, next) => {
     .catch();
     
 };
-
 
 // Registrar Nuevo Grupo
 // Get
@@ -155,7 +156,6 @@ exports.getRegistrarGrupo = (req, res, next) => {
   };
   
 
-
 exports.getInformacionGrupo = (request, response, next) => {
     Grupo.fetchOne(request.params.idGrupo)
     .then(([rows, fieldData]) => {
@@ -178,7 +178,6 @@ exports.getInformacionGrupo = (request, response, next) => {
     });
     
 }
-
 
 exports.getEditarGrupo = (request, response, next) => {
     console.log('Editar Grupo');
@@ -234,7 +233,6 @@ exports.getRegistrarAspirantes = (request, response, next) => {
     
 };
 
-
 exports.postRegistrarAspirantes = (request, response, next) => {
     const aspirante = new Aspirante(request.body);
     aspirante.save(request.params.idGrupo)
@@ -270,9 +268,6 @@ exports.postRegistrarAspirantes = (request, response, next) => {
     })
 };
 
-
-
-
 exports.getEditarAspirantes = (request, response, next) => {
     console.log('Editar Aspirante');
     response.render('Psicologos/editarAspirante');
@@ -297,6 +292,82 @@ exports.getPruebaOtis = (request, response, next) => {
 
 exports.getPruebaColores = (request, response, next) => {
     response.send('Prueba Colores');
+};
+
+// Controlador para manejar la obtención del cuadernillo de respuestas OTIS.
+exports.getCuadernilloOtis = (request, response, next) => {
+    // Obtiene los datos personales del aspirante
+    Prueba.getDatosPersonalesAspirante(request.params.idGrupo, request.params.idAspirante)
+    .then(([rows, fieldData]) => {
+        const datosPersonales = rows;
+        // Obtiene las respuestas correctas del aspirante
+        Cuadernillo.getRespuestasCorrectas(request.params.idGrupo, request.params.idAspirante)
+        .then(([rows, fieldData]) => {
+            const respuestasCorrectas = rows[0].RespuestasCorrectas;
+            // Obtiene el tiempo total que tomo el aspirante para completar la prueba
+            Cuadernillo.getTiempoTotal(request.params.idGrupo, request.params.idAspirante)
+            .then(([rows, fieldData]) => {
+                const tiempoTotal = rows[0].Tiempo;
+                // Obtiene las preguntas, opciones y la respuesta del aspirante
+                Cuadernillo.getRespuestasOtisAspirante(request.params.idGrupo, request.params.idAspirante)
+                .then(([rows, fieldData]) => {
+                    const preguntasAgrupadas = {};
+
+                    rows.forEach(row => {
+                        // Creamos el objeto de pregunta si este no existe
+                        if (!preguntasAgrupadas[row.idPreguntaOtis]) {
+                            preguntasAgrupadas[row.idPreguntaOtis] = {
+                                idPreguntaOtis: row.idPreguntaOtis,
+                                numeroPregunta: row.numeroPregunta,
+                                preguntaOtis: row.preguntaOtis,
+                                opciones: [],
+                                esCorrecta: false,
+                                tiempoRespuesta: 0,
+                                contestada: null
+                            };
+                        }
+                        // Vamos añadiendo las opciones de la pregunta correspondiente
+                        preguntasAgrupadas[row.idPreguntaOtis].opciones.push({
+                            idOpcionOtis: row.idOpcionOtis,
+                            opcionOtis: row.opcionOtis,
+                            descripcionOpcion: row.descripcionOpcion,
+                            esCorrecta: row.esCorrecta === 1, 
+                            seleccionada: row.opcionSeleccionada === 1
+                        });
+
+                        if (row.opcionSeleccionada === 1) {
+                            preguntasAgrupadas[row.idPreguntaOtis].tiempoRespuesta = row.tiempoRespuesta;
+                            preguntasAgrupadas[row.idPreguntaOtis].contestada = true;
+                            preguntasAgrupadas[row.idPreguntaOtis].esCorrecta = row.esCorrecta === 1;
+
+                        }
+
+                        if(!preguntasAgrupadas[row.idPreguntaOtis].contestada){
+                            preguntasAgrupadas[row.idPreguntaOtis].esCorrecta = null;
+                        }
+                    })
+
+                    const respuestasAspitanteOtis = Object.values(preguntasAgrupadas);
+
+                    response.render('Psicologos/cuadernilloRespuestasOtis.ejs', {
+                        datosPersonales: datosPersonales || [],
+                        respuestasCorrectas: respuestasCorrectas || 0,
+                        tiempoTotal: tiempoTotal || 0,
+                        respuestasAspitanteOtis: respuestasAspitanteOtis || [],
+                    });
+
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }).catch((error) => {
+                console.log(error);
+            });
+        }).catch((error) => {
+            console.log(error);
+        });
+    }).catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getAnalisisOtis = (request, response, next) => {

@@ -27,104 +27,58 @@
     flex-direction: row;
 }
 
-.aspirante-info{
-    display: flex;
-    align-items: baseline;
+.buscar{
+    flex-grow: 1;
+    height: 48px;
+    border-radius: 30px;
+    border: solid 2px #919191;
+    margin-right: 60px;
 }
 
-.aspirante-titulo{
-    font-weight: 600;
-    font-size: 28px;
-    margin-right: 5px;
+.buscar:focus-within{
+    border: 4px #7fc1ff solid;
 }
 
-.aspirante-info{
-    font-weight: 500;
-    font-size: 28px;
-}
-
-.datos-personales{
-    display: flex;
-    align-items: baseline;
-}
-
-.datos-titulo{
-    font-weight: 600;
-    font-size: 24px;
-    margin-right: 5px;
-}
-
-.datos-info{
-    font-weight: 500;
-    font-size: 24px;
-}
-
-.document-titulo{
-    font-weight: 500;
-    font-size: 24px;
-}
-
-.document-icon{
-    height: 3rem;
-}
-
-.card-title{
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-}
-
-.card-header{
-    background: #fff;
+.barra{
     display: flex;
     justify-content: space-between;
+    margin: 0 10px;
     align-items: center;
-    border-bottom: none;
-    padding: 0;
+    height: 48px;
 }
 
-.card-body{
-    padding: 20px;
+.barra input{
+    border: none;
+    background-color: inherit;
+    padding: 0 8px 0 0;
+    font-size: 16px;
+    flex-grow: 1;
+    outline: none;
 }
 
-.card-estatus{
-    font-size: 14px;
-    font-weight: 400;
-    font-style: normal;
-    border-radius: 10px;
-    padding: 5px 20px;
-}
-
-.prueba-completada{
-    color: #024400;
-    background: #C7F3C2;
-}
-
-.prueba-pendiente{
-    color: #294969;
-    background: #C2EBF3;
-}
-
-.prueba-vencida{
-    color: #600000;
-    background: #FECECE;
-}
-
-.prueba-progreso{
-    color: #000000;
-    background: #d5d5d5;
-}
-
-.card-text{
-    margin: 16px 0;
-}
-
-.btn-danger{
-    background: #C30101;
+.registrar-aspirante{
     border-radius: 20px;
-    padding: 0 40px;
-    margin-left: 60px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 32px;
+    background: var(--secondary);
+    color: var(--font-secondary);
+    margin-right: 30px;
 }
+
+.importar-aspirante{
+    border-radius: 20px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 32px;
+    background: var(--secondary);
+    color: var(--font-secondary);
+}
+
 
 .btn-color--primary{
     background: var(--primary);

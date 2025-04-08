@@ -26,73 +26,104 @@
 }
 
 .text-center{
-    font-size: 36px;
+    font-size: 40px;
     font-style: normal;
+    font-weight: 500;
+}
+
+.titulo-seccion {
+    color: var(--secondary);
+    font-size: 24px;
     font-weight: 600;
 }
 
-.card-title{
+.datos-personales {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.dato-titulo{
+    color: var(--secondary);
     font-size: 20px;
-    font-style: normal;
+    font-weight: 500;
+}
+
+.dato{
+    color: #000;
+    font-size: 20px;
+}
+
+.datos-secundarios {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.resultado-titulo{
+    font-size: 24px;
+    font-weight: 500;
+    margin-right: 14px;
+}
+
+.resultado{
+    font-size: 20px;
     font-weight: 400;
 }
 
-.card-header{
-    background: #fff;
+.correcta{
+    color: #000;
+}
+
+.incorrecta{
+    color: #C30101;
+}
+
+.no-contestada{
+    color: #000;
+}
+
+.respuesta-titulo{
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    border-bottom: none;
-    padding: 0;
 }
 
-.card-estatus{
-    font-size: 14px;
+.respuesta-decs{
+    font-size: 20px;
     font-weight: 400;
-    font-style: normal;
-    border-radius: 10px;
-    padding: 5px 20px;
+    max-width: 70%;
 }
 
-.card-text{
-    margin: 16px 0;
-}
-
-.card-estatus{
-    font-size: 14px;
+.respuesta-tiempo{
+    font-size: 18px;
     font-weight: 400;
-    font-style: normal;
-    border-radius: 10px;
-    padding: 4px 28px;
-}
-.activo{
-    color: #294969;
-    background: #C2EBF3 ;
 }
 
-.inactivo{
-    color: #600000;
-    background: #FECECE;
+.opcion{
+    display: flex;
+    gap: 20px;  
 }
 
-.btn{
-    padding: 0;
+.opcion p{
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.fixed-bottom-buttons {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    z-index: 1000;
 }
 
 .btn-color--secondary{
-    padding: 4px 28px;
-    border-radius: 10px;
-    font-size: 14px;
-    text-align: center;
     background: var(--secondary);
     color: var(--font-secondary);
 }
-
 .btn-color--third{
-    padding: 4px 24px;
-    border-radius: 10px;
-    font-size: 14px;
-    text-align: center;
     background: var(--third);
     color: var(--font-primary);
 }
