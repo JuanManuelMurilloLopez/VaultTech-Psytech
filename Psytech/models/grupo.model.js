@@ -69,7 +69,7 @@ module.exports = class Grupo {
   static getAspirantes(idGrupo){
     return db.execute(`
         SELECT usuarios.nombreUsuario, usuarios.apellidoPaterno, 
-        usuarios.apellidoMaterno
+        usuarios.apellidoMaterno, aspirantes.idAspirante
         FROM usuarios, aspirantes, gruposAspirantes
         WHERE aspirantes.idUsuario = usuarios.idUsuario
         AND aspirantes.idAspirante = gruposAspirantes.idAspirante
