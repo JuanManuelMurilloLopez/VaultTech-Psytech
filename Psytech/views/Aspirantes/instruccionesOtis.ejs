@@ -52,7 +52,10 @@
         
         <div class="d-flex justify-content-between mt-5">
             <a href="/aspirante/mis-pruebas" class="btn btn-secondary">Regresar</a>
-            <button type="button" class="btn btn-color--secondary" onclick="window.location.href='/aspirante/datos-personales-otis'">Iniciar Prueba</button>
+
+            <form action="/aspirante/instrucciones-otis" method="POST">
+                <button type="submit" class="btn btn-color--secondary">Iniciar Prueba</button>
+            </form>
         </div>
 
     </div>
