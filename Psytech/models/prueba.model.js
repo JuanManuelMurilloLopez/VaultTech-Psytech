@@ -14,7 +14,7 @@ module.exports = class Prueba{
     // Obtiene los datos personales de un aspirante según el grupo y la prueba OTIS.
     static getDatosPersonalesAspirante(idGrupo, idAspirante){
         return db.execute(`SELECT nombre, apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha 
-            FROM datosPersonales 
+            FROM datospersonales 
             WHERE idAspirante = ? 
             AND idPrueba = 5
             AND idGrupo = ?`, [idAspirante, idGrupo])
@@ -23,7 +23,7 @@ module.exports = class Prueba{
     static saveDatosPersonales(idAspirante, idGrupo, idPrueba, datosPersonales){
         // Ya existen datos?
         return db.execute(`
-            UPDATE datosPersonales 
+            UPDATE datospersonales 
             SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, 
                 puestoSolicitado = ?, fecha = NOW()
             WHERE idGrupo = ? AND idPrueba = ? AND idAspirante = ?
@@ -39,7 +39,7 @@ module.exports = class Prueba{
 
         // INSERT
         return db.execute(`
-            INSERT INTO datosPersonales 
+            INSERT INTO datospersonales 
             (idDatosPersonales, idGrupo, idPrueba, idAspirante, nombre, 
             apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha)
             VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, NOW())
@@ -56,13 +56,13 @@ module.exports = class Prueba{
 
     static getAreaOtis(){
         return db.execute(
-            `SELECT * FROM AreasOtis`
+            `SELECT * FROM areasotis`
         );
     }
 
     static getPreguntasOtis(){
         return db.execute(
-            `SELECT * FROM PreguntasOtis`
+            `SELECT * FROM preguntasotis`
         );
     }
 
@@ -114,7 +114,7 @@ module.exports = class Prueba{
         for (let i = 0; i < seleccion.length; i++) {
             promesas.push(
                 db.execute(
-                    `INSERT INTO seleccionesColores 
+                    `INSERT INTO seleccionescolores 
                     (idSeleccionColores, idPrueba, idAspirante, idGrupo, idColor, posicion, fase) 
                     VALUES (UUID(), ?, ?, ?, ?, ?, ?)`,
                     [idPrueba, idAspirante, idGrupo, seleccion[i].idColor, i, fase]
@@ -130,7 +130,7 @@ module.exports = class Prueba{
     static getGrupoPrueba(idAspirante, idPrueba){
         return db.execute(`
             SELECT idGrupo 
-            FROM aspirantesGruposPruebas 
+            FROM aspirantesgrupospruebas 
             WHERE idAspirante = ? AND idPrueba = ?
         `, [idAspirante, idPrueba]);       
     }
@@ -138,7 +138,7 @@ module.exports = class Prueba{
     static getEstatusPrueba(idAspirante, idGrupo, idPrueba){
         return db.execute(
             `SELECT idEstatus 
-            FROM aspirantesGruposPruebas 
+            FROM aspirantesgrupospruebas
             WHERE idAspirante = ? AND idGrupo = ? AND idPrueba = ?`,
             [idAspirante, idGrupo, idPrueba]
         );       
@@ -147,7 +147,7 @@ module.exports = class Prueba{
     // Actualizar estado de prueba
     static updateEstatusPrueba(idAspirante, idGrupo, idPrueba, idEstatus = 1) {
         return db.execute(
-            `UPDATE aspirantesGruposPruebas 
+            `UPDATE aspirantesgrupospruebas
             SET idEstatus = ? 
             WHERE idAspirante = ? AND idGrupo = ? AND idPrueba = ?`,
             [idEstatus, idAspirante, idGrupo, idPrueba]
@@ -156,7 +156,7 @@ module.exports = class Prueba{
 
     static verificarExistencia(idAspirante, idGrupo, idPrueba) {
         return db.execute(
-            `SELECT * FROM aspirantesGruposPruebas 
+            `SELECT * FROM aspirantesgrupospruebas 
             WHERE idAspirante = ? AND idGrupo = ? AND idPrueba = ?`,
             [idAspirante, idGrupo, idPrueba]
         );

@@ -14,7 +14,7 @@ module.exports = class RespuestaOtisAspirante {
 
     save() {
         const sql = `
-            INSERT INTO RespuestasOtisAspirantes
+            INSERT INTO respuestasotisaspirantes
             (idAspirante, idGrupo, idPreguntaOtis, idOpcionOtis, idPrueba, respuestaAbierta, tiempoRespuesta)
             VALUES (?, ?, ?, ?, ?, ?, ?)`;
 

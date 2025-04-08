@@ -11,7 +11,7 @@ module.exports = class OpcionOtis {
 
     static fetchAll() {
         return db.execute(
-            `SELECT * FROM OpcionesOtis`
+            `SELECT * FROM opcionesotis`
         );
     }
 }

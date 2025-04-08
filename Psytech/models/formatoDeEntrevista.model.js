@@ -8,14 +8,14 @@ module.exports = class FormatoEntrevista{
     static fetchAll(){
         return db.execute(
             `SELECT * 
-            FROM preguntasFormatoEntrevista`
+            FROM preguntasformatoentrevista`
         );
     }
 
     saveRespuestaAspirante() {
         // Sintaxis para insertar arrays de arrays
         const sql = `
-            INSERT INTO aspirantesPreguntasFormatoEntrevista 
+            INSERT INTO aspirantespreguntasformatoentrevista 
             (idAspirante, idPreguntaFormatoEntrevista, respuestaAspirante) 
             VALUES ?`;
 

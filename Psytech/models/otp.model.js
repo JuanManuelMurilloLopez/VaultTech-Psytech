@@ -39,7 +39,7 @@ class OTP {
       const idUsuario = await Usuario.fetchOne(usuario);
 
       await db.execute(
-        'INSERT INTO OTP (idUsuario, codigo, validez, usado) VALUES (?, ?, ?, false)',
+        'INSERT INTO otp (idUsuario, codigo, validez, usado) VALUES (?, ?, ?, false)',
         [idUsuario, codigo, validez]
       );
     } catch (error) {
@@ -54,7 +54,7 @@ class OTP {
             throw new Error('ID de usuario no proporcionado');
         }
         const [filas] = await db.execute(
-            'SELECT * FROM OTP WHERE idUsuario = ? AND usado = false AND validez > NOW() ORDER BY validez DESC LIMIT 1',
+            'SELECT * FROM otp WHERE idUsuario = ? AND usado = false AND validez > NOW() ORDER BY validez DESC LIMIT 1',
             [idUsuario]
         );
         return filas.length > 0 ? filas[0] : null;
@@ -67,7 +67,7 @@ class OTP {
   static async usarOTP(idOTP) {
     try {
       await db.execute(
-        'UPDATE OTP SET usado = true WHERE idOTP = ?',
+        'UPDATE otp SET usado = true WHERE idOTP = ?',
         [idOTP]
       );
     } catch (error) {

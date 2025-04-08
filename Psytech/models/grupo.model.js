@@ -60,8 +60,8 @@ module.exports = class Grupo {
   static fetchOne(idGrupo){
     return db.execute(`
         SELECT *, nombreNivelAcademico
-        FROM grupos, nivelAcademico
-        WHERE grupos.idNivelAcademico = nivelAcademico.idNivelAcademico
+        FROM grupos, nivelacademico
+        WHERE grupos.idNivelAcademico = nivelacademico.idNivelAcademico
         AND grupos.idGrupo = ?
       `, [idGrupo])
   }
@@ -71,9 +71,9 @@ module.exports = class Grupo {
         SELECT usuarios.nombreUsuario, usuarios.apellidoPaterno, 
         usuarios.apellidoMaterno, usuarios.estatusUsuario,
         aspirantes.idAspirante
-        FROM usuarios, aspirantes, gruposAspirantes
+        FROM usuarios, aspirantes, gruposaspirantes
         WHERE aspirantes.idUsuario = usuarios.idUsuario
-        AND aspirantes.idAspirante = gruposAspirantes.idAspirante
+        AND aspirantes.idAspirante = gruposaspirantes.idAspirante
         AND gruposAspirantes.idGrupo = ?
         ORDER BY usuarios.nombreUsuario, usuarios.estatusUsuario;
       `, [idGrupo])
@@ -82,7 +82,7 @@ module.exports = class Grupo {
   static getInformacionGruposPruebas(idGrupo){
     return db.execute(`
         SELECT idPrueba, fechaLimite
-        FROM gruposPruebas
+        FROM grupospruebas
         WHERE idGrupo = ?
       `, [idGrupo])
   }
@@ -92,7 +92,7 @@ module.exports = class Grupo {
   }
 
   static getNiveles() {
-    return db.execute('SELECT idNivelAcademico, nombreNivelAcademico FROM nivelAcademico');
+    return db.execute('SELECT idNivelAcademico, nombreNivelAcademico FROM nivelacademico');
   }
 
   static getPruebas() {
@@ -126,7 +126,7 @@ module.exports = class Grupo {
 
     const inserts = pruebasSeleccionadas.map(idPrueba => {
       return db.execute(
-        `INSERT INTO gruposPruebas (idGrupo, idPrueba, fechaAsignacion, fechaLimite) VALUES ((SELECT idGrupo FROM grupos WHERE grupos.nombreGrupo = ?), ?, CURRENT_DATE(), ?)`,
+        `INSERT INTO grupospruebas (idGrupo, idPrueba, fechaAsignacion, fechaLimite) VALUES ((SELECT idGrupo FROM grupos WHERE grupos.nombreGrupo = ?), ?, CURRENT_DATE(), ?)`,
         [this.nombreGrupo, idPrueba, this.fechaLimite]
       );
     });
