@@ -7,6 +7,7 @@ const TipoInstitucion = require('../models/tipoInstitucion.model');
 const Prueba = require('../models/prueba.model');
 const { request, response } = require('express');
 const Cuadernillo = require('../models/cuadernilloOtis.model');
+const CatalogoPruebas = require('../models/catalogoPruebas.model');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
@@ -183,9 +184,27 @@ exports.getEditarGrupo = (request, response, next) => {
     response.render('Psicologos/editarGrupo');
 };
 
-exports.getAspirantes = (request, response, next) => {
-    console.log('Aspirantes por Grupos');
-    response.render('Psicologos/aspirantesGrupo');
+exports.getAspirante = (request, response, next) => {
+    Aspirante.getInformacionAspirante(request.params.idAspirante)
+    .then(([rows, fieldData]) => {
+        const informacionAspirante = rows[0];
+        Aspirante.getMisPruebas(request.params.idAspirante, request.params.idGrupo)
+        .then(([rows, fieldData]) => {
+            const informacionPruebas = rows;
+            console.log("Informacion Aspirantes: ", informacionPruebas);
+            response.render('Psicologos/informacionAspirante', {
+                informacionAspirante: informacionAspirante || [],
+                idGrupo: request.params.idGrupo || null,
+                informacionPruebas: informacionPruebas || [],
+            })
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getImportarAspirantes = (request, response, next) => {
@@ -254,9 +273,16 @@ exports.getEditarAspirantes = (request, response, next) => {
     response.render('Psicologos/editarAspirante');
 };
 
+// CATÁLOGO PRUEBAS
 exports.getCatalogoPruebas = (request, response, next) => {
-    console.log('Catalogo pruebas');
-    response.render('Psicologos/catalogoPruebas');
+    CatalogoPruebas.fetchAll()
+    .then(([rows, fieldData]) => {
+        const arregloPruebas = rows;
+        response.render('Psicologos/catalogoPruebas', {arregloPruebas: arregloPruebas || []});
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getPruebaOtis = (request, response, next) => {

@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+:root{
+    --primary: #95B6BC;
+    --secondary: #294969;
+    --third: #C1C1C1;
+    --font-primary: #000;
+    --font-secondary: #fff;
+    --primary-hover: #7BA1A8;
+    --secondary-hover: #193858;
+    --third-hover:#B1B1B1;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Lato", sans-serif;
+    box-sizing: border-box;
+}
+
+.main{
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    transition: all 0.35s ease-in-out;
+    display: flex;
+    flex-direction: row;
+}
+
+.aspirante-info{
+    display: flex;
+    align-items: baseline;
+}
+
+.aspirante-titulo{
+    font-weight: 600;
+    font-size: 28px;
+    margin-right: 5px;
+}
+
+.aspirante-info{
+    font-weight: 500;
+    font-size: 28px;
+}
+
+.datos-personales{
+    display: flex;
+    align-items: baseline;
+}
+
+.datos-titulo{
+    font-weight: 600;
+    font-size: 24px;
+    margin-right: 5px;
+}
+
+.datos-info{
+    font-weight: 500;
+    font-size: 24px;
+}
+
+.document-titulo{
+    font-weight: 500;
+    font-size: 24px;
+}
+
+.document-icon{
+    height: 3rem;
+}
+
+.card-title{
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.card-header{
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none;
+    padding: 0;
+}
+
+.card-body{
+    padding: 20px;
+}
+
+.card-estatus{
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    border-radius: 10px;
+    padding: 5px 20px;
+}
+
+.prueba-completada{
+    color: #024400;
+    background: #C7F3C2;
+}
+
+.prueba-pendiente{
+    color: #294969;
+    background: #C2EBF3;
+}
+
+.prueba-vencida{
+    color: #600000;
+    background: #FECECE;
+}
+
+.prueba-progreso{
+    color: #000000;
+    background: #d5d5d5;
+}
+
+.card-text{
+    margin: 16px 0;
+}
+
+.btn{
+    padding: 0;
+}
+
+.btn-danger{
+    background: #C30101;
+    border-radius: 20px;
+    padding: 0 40px;
+    margin-left: 60px;
+}
+
+.btn-color--primary{
+    background: var(--primary);
+    color: var(--font-primary);
+}
+
+.btn-color--secondary{
+    border-radius: 20px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 32px;
+    background: var(--secondary);
+    color: var(--font-secondary);
+    margin-left: 40px;
+}
+
+.btn-color--third{
+    background: var(--third);
+    color: var(--font-primary);
+}
+
+.btn-color--third:hover{
+    background: var(--third-hover);
+    color: var(--font-primary);
+}
+
+.btn-color--secondary:hover{
+    background: var(--secondary-hover);
+    color: var(--font-secondary);
+}
+
+.btn-color--primary:hover{
+    background: var(--primary-hover);
+    color: var(--font-primary);
+}

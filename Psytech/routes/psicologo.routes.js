@@ -35,7 +35,8 @@ router.get('/editar-grupo', controller.getEditarGrupo);
 // Vista con la información de cierto grupo
 router.get('/informacion-grupos/:idGrupo', controller.getInformacionGrupo)
 
-router.get('/aspirantes', controller.getAspirantes);
+// Vista con la información de un aspirante
+router.get('/aspirantes/:idAspirante/:idGrupo', controller.getAspirante);
 
 router.get('/importar-aspirantes', controller.getImportarAspirantes);
 
