@@ -3,6 +3,12 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const dotenv = require("dotenv");
+const helmet = require("helmet");
+const compression = require("compression");
+const https = require("https");
+const fs = require("fs");
+
+
 
 dotenv.config();
 
@@ -15,6 +21,12 @@ app.use(session({
     saveUninitialized: true,
     cookie: { secure: false } 
 }));
+
+app.use(helmet());
+app.use(compression());
+
+const certificate = fs.readFileSync("../../certs/server.cert");
+const privateKey = fs.readFileSync("../../certs/server.key");
 
 // Servir archivos estaticos desde public
 app.use(express.static(path.join(__dirname, 'public')));
@@ -62,7 +74,9 @@ app.use('/aspirante', rutasAspirante);
 const rutasPsicologo = require('./routes/psicologo.routes');
 app.use('/psicologo', rutasPsicologo);
 
+https.createServer({key: privateKey, cert: certificate, passphrase: process.env.SSL_PASSPHRASE}, app).listen(process.env.PORT || 5050);
+
 // Iniciar servidor en el puerto 5050
-app.listen(5050, () => {
-    console.log("Servidor corriendo en http://localhost:5050");
-});
+//app.listen(5050, () => {
+//    console.log("Servidor corriendo en http://localhost:5050");
+//});
