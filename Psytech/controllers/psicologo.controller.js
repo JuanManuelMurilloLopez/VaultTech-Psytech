@@ -5,6 +5,9 @@ const Institucion = require('../models/institucion.model');
 const Grupo = require('../models/grupo.model');
 const TipoInstitucion = require('../models/tipoInstitucion.model');
 const Prueba = require('../models/prueba.model');
+const { request, response } = require('express');
+const Cuadernillo = require('../models/cuadernilloOtis.model');
+const CatalogoPruebas = require('../models/catalogoPruebas.model');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
@@ -73,7 +76,6 @@ exports.getGrupos = (request, response, next) => {
     .catch();
     
 };
-
 
 // Registrar Nuevo Grupo
 // Get
@@ -151,9 +153,8 @@ exports.getRegistrarGrupo = (req, res, next) => {
           res.send('Error al registrar grupo');
         }
       });
-  };
+};
   
-
 
 exports.getInformacionGrupo = (request, response, next) => {
     Grupo.fetchOne(request.params.idGrupo)
@@ -178,15 +179,159 @@ exports.getInformacionGrupo = (request, response, next) => {
     
 }
 
-
 exports.getEditarGrupo = (request, response, next) => {
-    console.log('Editar Grupo');
-    response.render('Psicologos/editarGrupo');
+    const idGrupo = request.params.idGrupo;
+    
+    // Información del grupo a editar
+    Promise.all([
+        Grupo.fetchOne(idGrupo),
+        Grupo.getNiveles(),
+        Grupo.getPruebas(),
+        Grupo.getPruebasAsignadas(idGrupo)
+    ])
+    .then(([grupoData, niveles, pruebas, pruebasAsignadas]) => {
+        const grupo = grupoData[0][0];
+        
+        if (!grupo) {
+            return response.redirect('/psicologo/lista-grupos');
+        }
+        
+        // Sacar informacion del ciclo escolar (semestre y año)
+        let semestre = '';
+        if (grupo.cicloEscolar) {
+            if (grupo.cicloEscolar.includes('Febrero/Julio')) {
+                semestre = 'Febrero/Julio';
+            } else if (grupo.cicloEscolar.includes('Agosto/Diciembre')) {
+                semestre = 'Agosto/Diciembre';
+            }
+        }
+        
+        // Obtener lista de pruebas ya asignadas al grupo
+        const pruebasSeleccionadas = pruebasAsignadas[0].map(p => p.idPrueba.toString());
+        const fechaLimite = pruebasAsignadas[0].length > 0 ? pruebasAsignadas[0][0].fechaLimite : null;
+        
+        // Convertir fecha limite a YYYY-MM-DD
+        let fechaLimiteFormateada = null;
+        if (fechaLimite) {
+            const fecha = new Date(fechaLimite);
+            fechaLimiteFormateada = fecha.toISOString().split('T')[0];
+        }
+        
+        response.render('Psicologos/editarGrupo', {
+            grupo: grupo,
+            listadoNiveles: niveles[0],
+            listadoPruebas: pruebas[0],
+            pruebasSeleccionadas: pruebasSeleccionadas,
+            fechaLimite: fechaLimiteFormateada,
+            semestre: semestre,
+            error: '',
+            idGrupo: idGrupo
+        });
+    })
+    .catch((error) => {
+        console.log('Error al cargar formulario de editar grupo:', error);
+        response.status(500).send('Error al cargar formulario de editar');
+    });
 };
 
-exports.getAspirantes = (request, response, next) => {
-    console.log('Aspirantes por Grupos');
-    response.render('Psicologos/aspirantesGrupo');
+exports.postEditarGrupo = (request, response, next) => {
+    const idGrupo = request.params.idGrupo;
+    const {
+        nombreGrupo,
+        carrera,
+        semestre,
+        anio,
+        idNivelAcademico,
+        pruebasSeleccionadas,
+        fechaLimite,
+        estatusGrupo
+    } = request.body;
+    
+    // Ciclo escolar semestre y año
+    const cicloEscolar = `${semestre} ${anio}`;
+    
+    // El grupo existe?
+    Grupo.fetchOne(idGrupo)
+    .then(([rows]) => {
+        if (rows.length === 0) {
+            return response.status(404).send('Grupo no encontrado');
+        }
+        
+        // Si existe, actualizarlo
+        return Grupo.update(
+            idGrupo,
+            nombreGrupo,
+            carrera,
+            cicloEscolar,
+            anio,
+            idNivelAcademico,
+            estatusGrupo === 'true' || estatusGrupo === true
+        )
+        .then(() => {
+            // Actualizar las pruebas asignadas
+            return Grupo.actualizarPruebasAsignadas(idGrupo, pruebasSeleccionadas, fechaLimite);
+        })
+        .then(() => {
+            // Obetener idInstitucion para redirigir a la lista de grupos
+            return Grupo.fetchOne(idGrupo)
+                .then(([grupo]) => {
+                    // Red a la pag de grupos de esa institucion
+                    response.redirect(`/psicologo/grupos/${grupo[0].idInstitucion}`);
+                });
+        })
+    })
+    .catch(error => {
+        console.log('Error al actualizar grupo:', error);
+        
+        // En error, cargar de nuevo el formulario con los datos
+        Promise.all([
+            Grupo.fetchOne(idGrupo),
+            Grupo.getNiveles(),
+            Grupo.getPruebas()
+        ])
+        .then(([grupoData, niveles, pruebas]) => {
+            response.render('Psicologos/editarGrupo', {
+                grupo: grupoData[0][0],
+                listadoNiveles: niveles[0],
+                listadoPruebas: pruebas[0],
+                pruebasSeleccionadas: Array.isArray(pruebasSeleccionadas) ? pruebasSeleccionadas : [pruebasSeleccionadas],
+                fechaLimite: fechaLimite,
+                semestre: semestre,
+                error: 'Error al actualizar el grupo. Por favor, intente de nuevo.',
+                idGrupo: idGrupo
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            response.status(500).send('Error al procesar la solicitud');
+        });
+    });
+};
+
+
+
+exports.getAspirante = (request, response, next) => {
+    Aspirante.getInformacionAspirante(request.params.idAspirante)
+    .then(([rows, fieldData]) => {
+        const informacionAspirante = rows[0];
+        Aspirante.getMisPruebas(request.params.idAspirante, request.params.idGrupo)
+        .then(([rows, fieldData]) => {
+            const informacionPruebas = rows; 
+            response.render('Psicologos/informacionAspirante', {
+                informacionAspirante: informacionAspirante || [],
+                idGrupo: request.params.idGrupo || null,
+                informacionPruebas: informacionPruebas || [],
+                aspirante: request.params.idAspirante || null,
+            })
+
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getImportarAspirantes = (request, response, next) => {
@@ -214,7 +359,6 @@ exports.getRegistrarAspirantes = (request, response, next) => {
 
     
 };
-
 
 exports.postRegistrarAspirantes = (request, response, next) => {
     const aspirante = new Aspirante(request.body);
@@ -251,17 +395,21 @@ exports.postRegistrarAspirantes = (request, response, next) => {
     })
 };
 
-
-
-
 exports.getEditarAspirantes = (request, response, next) => {
     console.log('Editar Aspirante');
     response.render('Psicologos/editarAspirante');
 };
 
+// CATÁLOGO PRUEBAS
 exports.getCatalogoPruebas = (request, response, next) => {
-    console.log('Catalogo pruebas');
-    response.render('Psicologos/catalogoPruebas');
+    CatalogoPruebas.fetchAll()
+    .then(([rows, fieldData]) => {
+        const arregloPruebas = rows;
+        response.render('Psicologos/catalogoPruebas', {arregloPruebas: arregloPruebas || []});
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getPruebaOtis = (request, response, next) => {
@@ -271,6 +419,84 @@ exports.getPruebaOtis = (request, response, next) => {
 
 exports.getPruebaColores = (request, response, next) => {
     response.send('Prueba Colores');
+};
+
+// Controlador para manejar la obtención del cuadernillo de respuestas OTIS.
+exports.getCuadernilloOtis = (request, response, next) => {
+    // Obtiene los datos personales del aspirante
+    Prueba.getDatosPersonalesAspirante(request.params.idGrupo, request.params.idAspirante)
+    .then(([rows, fieldData]) => {
+        const datosPersonales = rows;
+        // Obtiene las respuestas correctas del aspirante
+        Cuadernillo.getRespuestasCorrectas(request.params.idGrupo, request.params.idAspirante)
+        .then(([rows, fieldData]) => {
+            const respuestasCorrectas = rows[0].RespuestasCorrectas;
+            // Obtiene el tiempo total que tomo el aspirante para completar la prueba
+            Cuadernillo.getTiempoTotal(request.params.idGrupo, request.params.idAspirante)
+            .then(([rows, fieldData]) => {
+                const tiempoTotal = rows[0].Tiempo;
+                // Obtiene las preguntas, opciones y la respuesta del aspirante
+                Cuadernillo.getRespuestasOtisAspirante(request.params.idGrupo, request.params.idAspirante)
+                .then(([rows, fieldData]) => {
+                    const preguntasAgrupadas = {};
+
+                    rows.forEach(row => {
+                        // Creamos el objeto de pregunta si este no existe
+                        if (!preguntasAgrupadas[row.idPreguntaOtis]) {
+                            preguntasAgrupadas[row.idPreguntaOtis] = {
+                                idPreguntaOtis: row.idPreguntaOtis,
+                                numeroPregunta: row.numeroPregunta,
+                                preguntaOtis: row.preguntaOtis,
+                                opciones: [],
+                                esCorrecta: false,
+                                tiempoRespuesta: 0,
+                                contestada: null
+                            };
+                        }
+                        // Vamos añadiendo las opciones de la pregunta correspondiente
+                        preguntasAgrupadas[row.idPreguntaOtis].opciones.push({
+                            idOpcionOtis: row.idOpcionOtis,
+                            opcionOtis: row.opcionOtis,
+                            descripcionOpcion: row.descripcionOpcion,
+                            esCorrecta: row.esCorrecta === 1, 
+                            seleccionada: row.opcionSeleccionada === 1
+                        });
+
+                        if (row.opcionSeleccionada === 1) {
+                            preguntasAgrupadas[row.idPreguntaOtis].tiempoRespuesta = row.tiempoRespuesta;
+                            preguntasAgrupadas[row.idPreguntaOtis].contestada = true;
+                            preguntasAgrupadas[row.idPreguntaOtis].esCorrecta = row.esCorrecta === 1;
+
+                        }
+
+                        if(!preguntasAgrupadas[row.idPreguntaOtis].contestada){
+                            preguntasAgrupadas[row.idPreguntaOtis].esCorrecta = null;
+                        }
+                    })
+
+                    const respuestasAspitanteOtis = Object.values(preguntasAgrupadas);
+                    
+                    response.render('Psicologos/cuadernilloRespuestasOtis.ejs', {
+                        datosPersonales: datosPersonales || [],
+                        respuestasCorrectas: respuestasCorrectas || 0,
+                        tiempoTotal: tiempoTotal || 0,
+                        respuestasAspitanteOtis: respuestasAspitanteOtis || [],
+                        aspirante: request.params.idAspirante || null,
+                        grupo: request.params.idGrupo || null,
+                    });
+
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }).catch((error) => {
+                console.log(error);
+            });
+        }).catch((error) => {
+            console.log(error);
+        });
+    }).catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getAnalisisOtis = (request, response, next) => {

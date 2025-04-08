@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 </head>
 
-<body class="bg-light">
+<body>
 
     <div class="main">
 
@@ -36,47 +36,65 @@
             <p>Ciclo Escolar: <%= grupo.cicloEscolar %></p>
             <p>Nivel Académico: <%= grupo.nombreNivelAcademico %></p>
     
-            <h1 class="text-center">ASPIRANTES</h1>
+            <h1 class="text-center">ASPIRANTES</h1><br><br>
     
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <!-- Campo Buscar -->
-                            <div class="form-floating mb-3">
-                                <input type="" class="form-control" id="" placeholder="">
-                                <label for="">Buscar</label>
-                            </div>
-    
-                            <br>
-    
-                            <!-- Lista Aspirantes-->
-                            <div class="list-group">
-                                <% for(aspirante of aspirantes) { %>
-                                    <a href="" class="list-group-item list-group-item-action" >
-                                        <%= (aspirante.nombreUsuario + " " + 
-                                        aspirante.apellidoPaterno + " " + 
-                                        aspirante.apellidoMaterno) %>
-                                    </a>
-                                <% } %>
-                            </div>
-                        </div>
+
+            <!-- Campo Buscar -->
+            <div class="d-flex mb-5">
+                <div class="buscar">
+                    <div class="barra">
+                        <input type="text" id="buscar" name="buscar" placeholder="Buscar">
+                        <img src="/images/search.svg" alt="buscar">
                     </div>
                 </div>
-            </div>
-            <br>
-            
-            <!-- Botones de navegación "Importr y Registrar, Regresar" -->
-            <button type="button" class="btn btn-color--secondary"
-            onclick="window.location.href=
-            '/psicologo/importar-aspirantes'"
-            >Importar Aspirante</button>
-    
-            <button type="button" class="btn btn-color--secondary"
-            onclick="window.location.href=
-            '/psicologo/registrar-aspirantes/<%= grupo.idGrupo %>'"
-            >Registrar Aspirante</button><br>
+                
+                <a href="/psicologo/registrar-aspirantes/<%= grupo.idGrupo %>" 
+                class="registrar-aspirante">
+                    Registrar Aspirante
+                </a>
 
+                <a href="/psicologo/importar-aspirantes" 
+                class="importar-aspirante">
+                    Importar Aspirante
+                </a>
+            </div>
+
+            <br>
+
+            <!-- Tabla Aspirantes-->
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Apellido Paterno</th>
+                        <th scope="col">Apellido Materno</th>
+                        <th scope="col">Estatus</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <% for(aspirante of aspirantes) { %>
+                        <tr>
+                            <td><%= aspirante.nombreUsuario %></td>
+                            <td><%= aspirante.apellidoPaterno %></td>
+                            <td><%= aspirante.apellidoMaterno %></td>
+                            <td>
+                                <% if(aspirante.estatusUsuario == 1){ %>
+                                    <span class="activo">
+                                        <%= "Activo" %> 
+                                    </span>
+                                <%} else { %> 
+                                    <span class="inactivo">
+                                        <%= "Inactivo" %>
+                                    </span>
+                                <% } %>
+                            </td>
+                            <td><a href="/psicologo/aspirantes/<%= aspirante.idAspirante %>/<%= grupo.idGrupo %>">Ver Aspirante</a></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+            <br>
         
         <button type="button" class="btn btn-color--third"
         onclick="window.location.href=

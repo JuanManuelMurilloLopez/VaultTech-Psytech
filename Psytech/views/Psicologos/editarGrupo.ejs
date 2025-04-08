@@ -4,11 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Grupos</title>
+    <title>Editar Grupo - <%= grupo.nombreGrupo %></title>
     <!-- Bootstrap CSS -->
-    <link href=
-    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Link css -->
     <link rel="stylesheet" href="/css/psicologos/editarGrupo.css">
     <!-- CSS navside -->
@@ -28,110 +26,137 @@
       <%- include('../includes/_buttonCerrarSesion.ejs') %>
 
       <h1 class="text-center">EDITAR GRUPO</h1>
-  
-      <!-- Campo Nombre -->
-      <div class="form-floating mb-3">
-        <input type="" class="form-control" id="" placeholder="">
-        <label for="">Nombre</label>
-      </div>
-  
-      <!-- Campo Carrera -->
-      <div class="form-floating mb-3">
-        <input type="" class="form-control" id="" placeholder="">
-        <label for="">Carrera / Postgrado</label>
-      </div>
-  
-  
-      <!-- Campo Año -->
-      <select class="form-select" aria-label="Default select example">
-        <option selected>Año / Generación</option>
-        <option value="1">2021</option>
-        <option value="2">2022</option>
-        <option value="3">2023</option>
-      </select>
-  
-  
-      <br>
-  
-  
-      <!-- Campo Semestre -->
-      <select class="form-select" aria-label="Default select example">
-        <option selected>Semestre</option>
-        <option value="1">Feb / Jun</option>
-        <option value="2">Ago / Dic</option>
-      </select>
-
-
-      <br>
-      <h3>Estatus: </h3>
-      <button type="button" class="btn btn-info">Activa</button>
-      <button type="button" class="btn btn-danger">Desactivar</button>
-      <p></p>
-  
-  
-      <h4>Asignar pruebas</h4>
-      <p>Selecciona las pruebas que quieres asignar al grupo</p>
-  
-  
-      <!-- Checkbox de pruebas-->
-      <div class="form-check-inline">
-          <input class="form-check-input" type="checkbox" value="" id="Otis">
-          <label class="form-check-label" for="Otis">
-            Otis
-          </label>
-      </div>
-      <div class="form-check-inline">
-          <input class="form-check-input" type="checkbox" value="" id="Terman">
-          <label class="form-check-label" for="Terman">
-            Terman
-          </label>
-      </div>
-      <div class="form-check-inline">
-          <input class="form-check-input" type="checkbox" value="" id="Luscher">
-          <label class="form-check-label" for="Luscher">
-            Luscher
-          </label>
-      </div>
-      <div class="form-check-inline">
-          <input class="form-check-input" type="checkbox" value="" id="16_PF">
-          <label class="form-check-label" for="16_PF">
-            16 PF
-          </label>
-      </div>
-      <div class="form-check-inline">
-          <input class="form-check-input" type="checkbox" value="" id="Kostick">
-          <label class="form-check-label" for="Kostick">
-            Kostick
-          </label>
-      </div>
-      <div class="form-check-inline">
-          <input class="form-check-input" type="checkbox" value="" id="Hartman">
-          <label class="form-check-label" for="Hartman">
-            Hartman
-          </label>
-      </div>
-  
-  
-      <br>
-      <p></p>
-  
-  
-      <!-- Botones de navegación "Regresar y Guardar" -->
-      <button type="button" class="btn btn-color--third"
-      onclick="window.location.href=
-      '/psicologo/grupos'"
-      >Regresar</button>
-  
-  
-      <button type="button" class="btn btn-color--secondary"
-      onclick="confirm('¿Está seguro de guardar los cambios?'),
-      window.location.href=
-      '/psicologo/grupos'"
-      >Guardar</button>
+      
+      <% if (error && error.length > 0) { %>
+        <div class="alert alert-danger">
+            <%= error %>
+        </div>
+      <% } %>
+      
+      <form action="/psicologo/editar-grupo/<%= idGrupo %>" method="POST">
+          <!-- Campo Nombre -->
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="nombreGrupo" name="nombreGrupo" placeholder="Nombre del grupo" value="<%= grupo.nombreGrupo %>" required>
+            <label for="nombreGrupo">Nombre</label>
+          </div>
+      
+          <!-- Campo Carrera -->
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="carrera" name="carrera" placeholder="Carrera / Postgrado" value="<%= grupo.carrera %>" required>
+            <label for="carrera">Carrera / Postgrado</label>
+          </div>
+      
+          <!-- Campo Año -->
+          <select class="form-select mb-3" aria-label="Año / Generación" id="anio" name="anio" required>
+            <option value="" disabled>Año / Generación</option>
+            <option value="2021" <%= grupo.anioGeneracion == 2021 ? 'selected' : '' %>>2021</option>
+            <option value="2022" <%= grupo.anioGeneracion == 2022 ? 'selected' : '' %>>2022</option>
+            <option value="2023" <%= grupo.anioGeneracion == 2023 ? 'selected' : '' %>>2023</option>
+            <option value="2024" <%= grupo.anioGeneracion == 2024 ? 'selected' : '' %>>2024</option>
+          </select>
+      
+          <!-- Campo Semestre -->
+          <select class="form-select mb-3" aria-label="Semestre" id="semestre" name="semestre" required>
+            <option value="" disabled>Semestre</option>
+            <option value="Febrero/Julio" <%= semestre === 'Febrero/Julio' ? 'selected' : '' %>>Feb / Jul</option>
+            <option value="Agosto/Diciembre" <%= semestre === 'Agosto/Diciembre' ? 'selected' : '' %>>Ago / Dic</option>
+          </select>
+          
+          <!-- Campo Nivel Académico -->
+          <select class="form-select mb-3" aria-label="Nivel Académico" id="idNivelAcademico" name="idNivelAcademico" required>
+            <option value="" disabled>Nivel Académico</option>
+            <% for(const nivel of listadoNiveles) { %>
+              <option value="<%= nivel.idNivelAcademico %>" <%= grupo.idNivelAcademico == nivel.idNivelAcademico ? 'selected' : '' %>>
+                <%= nivel.nombreNivelAcademico %>
+              </option>
+            <% } %>
+          </select>
+    
+          <!-- Estatus del grupo -->
+          <div class="mb-3">
+            <h3>Estatus: </h3>
+            <div class="d-flex gap-2 align-items-center">
+              <button type="button" id="estatusActivoBtn" class="btn <%= grupo.estatusGrupo ? 'btn-info' : 'btn-outline-info' %>">Activa</button>
+              <button type="button" id="estatusInactivoBtn" class="btn <%= !grupo.estatusGrupo ? 'btn-danger' : 'btn-outline-danger' %>">Desactivar</button>
+              <input type="hidden" id="estatusGrupo" name="estatusGrupo" value="<%= grupo.estatusGrupo %>">
+            </div>
+          </div>
+      
+          <!-- Selección de pruebas -->
+          <div class="mb-3">
+            <h4>Asignar pruebas</h4>
+            <p>Selecciona las pruebas que quieres asignar al grupo junto con la fecha límite para responder las pruebas</p>
+          
+            <!-- Checkbox de pruebas-->
+            <div class="d-flex flex-wrap gap-3 mb-3">
+              <% for (const prueba of listadoPruebas) { %>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" 
+                         name="pruebasSeleccionadas" 
+                         value="<%= prueba.idPrueba %>" 
+                         id="prueba<%= prueba.idPrueba %>"
+                         <%= pruebasSeleccionadas.includes(prueba.idPrueba.toString()) ? 'checked' : '' %>>
+                  <label class="form-check-label" for="prueba<%= prueba.idPrueba %>">
+                    <%= prueba.nombre %>
+                  </label>
+                </div>
+              <% } %>
+            </div>
+          </div>
+          
+          <!-- Fecha límite -->
+          <div class="form-floating mb-4">
+            <input type="date" class="form-control" id="fechaLimite" name="fechaLimite" value="<%= fechaLimite %>" required>
+            <label for="fechaLimite">Fecha límite</label>
+          </div>
+      
+          <!-- Botones de navegación "Regresar y Guardar" -->
+          <div class="d-flex justify-content-between mb-4">
+            <button type="button" class="btn btn-color--third" 
+                   onclick="window.location.href='/psicologo/informacion-grupos/<%= idGrupo %>'">Regresar</button>
+            <button type="submit" class="btn btn-color--secondary">Guardar</button>
+          </div>
+      </form>
     </div>
   </div>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Incluir el script del navside -->
-    <script src="/js/_navside.js"></script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Incluir el script del navside -->
+  <script src="/js/_navside.js"></script>
+  
+  <script>
+    // Script toggle de estatus
+    document.addEventListener('DOMContentLoaded', function() {
+        const estatusActivoBtn = document.getElementById('estatusActivoBtn');
+        const estatusInactivoBtn = document.getElementById('estatusInactivoBtn');
+        const estatusInput = document.getElementById('estatusGrupo');
+        
+        // Funcion para actualizar el estatus
+        function cambiarEstatus(activo) {
+            if (activo) {
+                estatusActivoBtn.classList.remove('btn-outline-info');
+                estatusActivoBtn.classList.add('btn-info');
+                estatusInactivoBtn.classList.remove('btn-danger');
+                estatusInactivoBtn.classList.add('btn-outline-danger');
+            } else {
+                estatusActivoBtn.classList.remove('btn-info');
+                estatusActivoBtn.classList.add('btn-outline-info');
+                estatusInactivoBtn.classList.remove('btn-outline-danger');
+                estatusInactivoBtn.classList.add('btn-danger');
+            }
+            estatusInput.value = activo;
+        }
+        
+        // Eventos botones de estatus
+        estatusActivoBtn.addEventListener('click', function() {
+            cambiarEstatus(true);
+        });
+        
+        estatusInactivoBtn.addEventListener('click', function() {
+            cambiarEstatus(false);
+        });
+    });
+  </script>
 </body>
+</html>

@@ -29,7 +29,6 @@ exports.getPruebasPendientes = (request, response, next) => {
     ConsultarPruebas.fetchAllPendientes(request.session.idAspirante)
     .then(([rows, fieldData]) => {
         const pruebasPendientes  = rows;
-        console.log(pruebasPendientes)
         response.render('Aspirantes/pruebasPendientes',{
             pruebasPendientes: pruebasPendientes || [],
         });
@@ -42,7 +41,18 @@ exports.getPruebasPendientes = (request, response, next) => {
 };
 
 exports.getPruebasCompletadas = (request, response, next) => {
-    response.render('Aspirantes/pruebasCompletadas');
+    ConsultarPruebas.fetchAllCompletadas(request.session.idAspirante)
+    .then(([rows, fieldData]) => {
+        const pruebasCompletadas  = rows;
+        response.render('Aspirantes/pruebasCompletadas',{
+            pruebasCompletadas: pruebasCompletadas || [],
+        });
+        
+    })
+
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getCargarExpedientes = (request, response, next) => {
@@ -347,11 +357,53 @@ exports.postGuardarRespuestas = async (request, response) => {
 
         // Insertar valores en la tabla respuestaOtisAspirante
         await db.query(
-            `INSERT INTO respuestaOtisAspirante
+            `INSERT INTO respuestaotisaspirante
             (idRespuestaOtis, idAspirante, idGrupo, idPreguntaOtis, idOpcionOtis, idPrueba, tiempoRespuesta)
             VALUES ?`, 
             [values]
         );
+
+         // Obtener datos personales desde sesión
+         const datosPersonales = request.session.datosPersonalesOtis || {
+            nombre: "Usuario",
+            apellidoPaterno: "",
+            apellidoMaterno: "",
+            puestoSolicitado: "No especificado",
+            fecha: new Date()
+        };
+
+        // Guardar datos personales
+        await PruebaOtis.saveDatosPersonales(
+            idAspirante,
+            idGrupo,
+            idPrueba,
+            datosPersonales
+        );
+
+        console.log("Datos personales guardados correctamente");
+
+        // Verificar si ya existe el registro en aspirantesGruposPruebas
+        const [rows] = await PruebaOtis.verificarExistencia(
+            idAspirante,
+            idGrupo,
+            idPrueba
+        );
+
+        if (rows.length === 0) {
+            console.log("No existe registro, insertando...");
+            await db.execute(
+                `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
+                VALUES (?, ?, ?, 2)`,
+                [idAspirante, idGrupo, idPrueba]
+            );
+        } else {
+            console.log("Registro encontrado, actualizando estado...");
+            await PruebaOtis.updateEstatusPrueba(
+                idAspirante,
+                idGrupo,
+                idPrueba
+            );
+        }
 
     } catch (error) {
         console.error("Error al guardar respuestas:", error);
@@ -531,7 +583,7 @@ exports.postGuardarSeleccionesColores = (request, response) => {
                 if (rows.length === 0) {
                     console.log("11. No existe registro, insertando...");
                     return db.execute(
-                        `INSERT INTO aspirantesGruposPruebas (idAspirante, idGrupo, idPrueba, idEstatus)
+                        `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
                         VALUES (?, ?, ?, 2)`,
                         [request.session.idAspirante, idGrupo, idPrueba]
                     );

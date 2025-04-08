@@ -2,6 +2,9 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const app = express();
 
@@ -33,7 +36,7 @@ const fileStorage = multer.diskStorage({
         callback(null, 'public/expedientes');
     },
     filename: (request, file, callback) => {
-        callback(null, file.originalname + new Date().toISOString().substring(0, 10));
+        callback(null,request.session.idAspirante + new Date().getMilliseconds()  + file.originalname);
     },
 });
 

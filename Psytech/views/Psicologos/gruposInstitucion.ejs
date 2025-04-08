@@ -89,7 +89,7 @@
     
                                     <a href="/psicologo/informacion-grupos/<%= grupo.idGrupo %> " class="btn btn-color--secondary w-100">Ver grupo</a>
     
-                                    <a href="/psicologo/editar-grupo/ " class="btn btn-color--third w-100">Editar</a>
+                                    <a href="/psicologo/editar-grupo/<%= grupo.idGrupo %>" class="btn btn-color--third w-100">Editar</a>
     
                                 </div>
     
@@ -111,8 +111,27 @@
             <br>
         </div>
     </div>
+
+    <script>
+        if (document.referrer.includes('/psicologo/editar-grupo/')) {
+          // Elemento de alerta
+          const alertDiv = document.createElement('div');
+          alertDiv.className = 'alert alert-success alert-dismissible fade show';
+          alertDiv.setAttribute('role', 'alert');
+          alertDiv.innerHTML = `
+            El grupo se ha actualizado correctamente.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          `;
+          
+          // Pone la alerta al principio del contenedor
+          const container = document.querySelector('.container');
+          container.insertBefore(alertDiv, container.firstChild.nextSibling);
+          
+        }
+      </script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Incluir el script del navside -->
     <script src="/js/_navside.js"></script>
+
 </body>

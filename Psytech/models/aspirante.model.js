@@ -17,8 +17,8 @@ module.exports = class Aspirante {
     }
     save(idGrupo){
         return db.execute(`
-            CALL RegistrarAspiranteEnGrupo 
-            (?, ?, ?, ?, ?, ?, ?, 'Aspirante', ?, ?, ?, ?)
+            CALL registraraspiranteengrupo 
+            (?, ?, ?, ?, ?, ?, ?, 'aspirante', ?, ?, ?, ?)
             `
             , [this.usuario, this.nombreUsuario, 
                 this.apellidoPaterno, this.apellidoMaterno, this.correo, 
@@ -29,17 +29,17 @@ module.exports = class Aspirante {
     getIdAspirante(idGrupo){
         return db.execute(`
             SELECT aspirantes.idAspirante
-            FROM aspirantes, usuarios, gruposAspirantes
+            FROM aspirantes, usuarios, gruposaspirantes
             WHERE aspirantes.idUsuario = usuarios.idUsuario
             AND usuarios.usuario = ?
-            AND aspirantes.idAspirante = gruposAspirantes.idAspirante
-            AND gruposAspirantes.idGrupo = ?
+            AND aspirantes.idAspirante = gruposaspirantes.idAspirante
+            AND gruposaspirantes.idGrupo = ?
             `, [this.usuario, idGrupo])
     }
 
     vincularPrueba(idAspirante, idGrupo, prueba){
         return db.execute(`
-                INSERT INTO aspirantesGruposPruebas
+                INSERT INTO aspirantesgrupospruebas
                 VALUES (?, ?, ?, 2, CURRENT_DATE(), ?)
             `, [idGrupo, prueba.idPrueba, idAspirante, prueba.fechaLimite.toISOString().substring(0, 10)])
     }
@@ -66,6 +66,27 @@ module.exports = class Aspirante {
                 SET cv = ?
                 WHERE idAspirante = ?
             `, [rutaCv, idAspirante])
+    }
+
+    static getInformacionAspirante(idAspirante){
+        return db.execute(`
+                SELECT *
+                FROM aspirantes, usuarios, paises, estados
+                WHERE aspirantes.idUsuario = usuarios.idUsuario
+                AND idAspirante = ?
+                AND aspirantes.idPais = paises.idPais
+                AND aspirantes.idEstado = estados.idEstado
+            `, [idAspirante]);
+    }
+
+    static getMisPruebas(idAspirante, idGrupo){
+        return db.execute(`
+                SELECT nombre, nombreEstatus, fechaLimite
+                FROM vistapruebasaspirantes vpa, grupos
+                WHERE idAspirante = ?
+                AND vpa.nombreGrupo = grupos.nombreGrupo
+                AND idGrupo = ?
+            `,[idAspirante, idGrupo]);
     }
 
 }

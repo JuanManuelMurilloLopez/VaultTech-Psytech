@@ -55,33 +55,22 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Intentar prevenir la navegación hacia atrás
-        window.addEventListener('load', function() {
-          window.history.pushState(null, document.title, window.location.href);
-          window.addEventListener('popstate', function() {
-            window.history.pushState(null, document.title, window.location.href);
-            alert("No es posible regresar a la página anterior durante la prueba.");
-          });
+      // Bloquear boton de regresar
+      window.addEventListener('load', function () {
+        history.pushState(null, '', location.href);
+        window.addEventListener('popstate', function () {
+          history.pushState(null, '', location.href);
+          alert('No puedes regresar durante la prueba.');
         });
-      
-        // Beforeunload para advertir al usuario
-        window.addEventListener('beforeunload', function(e) {
-          if (document.querySelector('#colorSelectionForm')?.getAttribute('data-submitting') === 'true') {
-            return;
-          }
-      
-          if (typeof seleccionados !== 'undefined' && seleccionados.length > 0) {
-            const message = "¿Está seguro que desea salir? Su progreso en la prueba se perderá.";
-            e.returnValue = message;
-            return message;
-          }
-        });
-      
-        // Marcar el formulario como en envío cuando se hace submit
-        document.querySelector('#colorSelectionForm')?.addEventListener('submit', function() {
-          this.setAttribute('data-submitting', 'true');
-        });
-    </script>
+      });
     
+      //Advertir si intenta cerrar la ventana o hacer refresh
+      window.addEventListener('beforeunload', function (e) {
+        const message = '¿Está seguro que desea salir?';
+        e.preventDefault();
+        e.returnValue = message;
+        return message;
+      });
+    </script>
 </body>
 </html>
