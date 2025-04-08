@@ -316,13 +316,14 @@ exports.getAspirante = (request, response, next) => {
         const informacionAspirante = rows[0];
         Aspirante.getMisPruebas(request.params.idAspirante, request.params.idGrupo)
         .then(([rows, fieldData]) => {
-            const informacionPruebas = rows;
-            console.log("Informacion Aspirantes: ", informacionPruebas);
+            const informacionPruebas = rows; 
             response.render('Psicologos/informacionAspirante', {
                 informacionAspirante: informacionAspirante || [],
                 idGrupo: request.params.idGrupo || null,
                 informacionPruebas: informacionPruebas || [],
+                aspirante: request.params.idAspirante || null,
             })
+
         })
         .catch((error) => {
             console.log(error);
@@ -474,12 +475,14 @@ exports.getCuadernilloOtis = (request, response, next) => {
                     })
 
                     const respuestasAspitanteOtis = Object.values(preguntasAgrupadas);
-
+                    
                     response.render('Psicologos/cuadernilloRespuestasOtis.ejs', {
                         datosPersonales: datosPersonales || [],
                         respuestasCorrectas: respuestasCorrectas || 0,
                         tiempoTotal: tiempoTotal || 0,
                         respuestasAspitanteOtis: respuestasAspitanteOtis || [],
+                        aspirante: request.params.idAspirante || null,
+                        grupo: request.params.idGrupo || null,
                     });
 
                 }).catch((error) => {
