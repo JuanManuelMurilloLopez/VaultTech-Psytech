@@ -74,7 +74,7 @@ module.exports = class Grupo {
         FROM usuarios, aspirantes, gruposaspirantes
         WHERE aspirantes.idUsuario = usuarios.idUsuario
         AND aspirantes.idAspirante = gruposaspirantes.idAspirante
-        AND gruposAspirantes.idGrupo = ?
+        AND gruposaspirantes.idGrupo = ?
         ORDER BY usuarios.nombreUsuario, usuarios.estatusUsuario;
       `, [idGrupo])
   }
