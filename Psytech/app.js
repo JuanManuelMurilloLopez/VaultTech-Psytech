@@ -72,7 +72,7 @@ app.use('/aspirante', rutasAspirante);
 const rutasPsicologo = require('./routes/psicologo.routes');
 app.use('/psicologo', rutasPsicologo);
 
-https.createServer({key: privateKey, cert: certificate}, app).listen(process.env.PORT || 5050);
+https.createServer({key: privateKey, cert: certificate, passphrase: process.env.SSL_PASSPHRASE}, app).listen(process.env.PORT || 5050);
 
 //https.createServer({key: privateKey, cert: certificate}, app).listen(process.env.PORT || 5050);
 
