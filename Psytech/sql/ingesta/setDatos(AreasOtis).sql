@@ -4,4 +4,4 @@ INSERT INTO AreasOtis (nombreAreaOtis) VALUES
 ('Raciocinio'), -- 2
 ('Comprensión Espacial'), -- 3
 ('Fluidez Verbal'), -- 4
-('Habilidad Numartica'); -- 5
+('Habilidad Numérica'); -- 5

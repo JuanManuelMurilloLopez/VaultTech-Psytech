@@ -98,7 +98,7 @@ document.body.addEventListener("click", (event) => {
 
 // Función para verificar si mostrar el botón de enviar respuestas
 function verificarMostrarBoton() {
-    if (pregNum === 75) {  
+    if (pregNum === preguntas.length) {  
         enviarRespuestas.classList.remove("d-none");
     }
 }
