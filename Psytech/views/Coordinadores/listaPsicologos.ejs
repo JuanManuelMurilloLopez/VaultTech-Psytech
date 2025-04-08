@@ -29,18 +29,18 @@
                 <h1 class="text-container">PSICÓLOGOS REGISTRADOS</h1>
             </div>
             
-            <div>
-                <!-- Campo Buscar -->
-                <div class="mb-3">
-                    <label for="buscar" class="form-label">Buscar</label>
-                    <input type="text" id="buscar" name="buscar" 
-                    class="form-control" required>
+            <div class="d-flex mb-5">
+                <div class="buscar">
+                    <div class="barra">
+                        <input type="text" id="buscar" name="buscar" placeholder="Buscar">
+                        <img src="/images/search.svg" alt="buscar">
+                    </div>
                 </div>
-    
-                <!-- Boton Registrar -->
-                <div>
-                    <button type="button" class="btn btn-color--secondary btn-sm" onclick="window.location.href='/coordinador/registrar-psicologo'">Registrar nuevo</button>
-                </div>
+                
+                <a href="/coordinador/registrar-psicologo" 
+                class="btn btn-color--secondary registrar-institucion">
+                    Registrar Nuevo
+                </a>
             </div>
     
             <table class="table">
@@ -55,55 +55,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td colspan="4">Lusia Fernanda</td>
-                        <td colspan="4">Valdez Guillén</td></t>
-                        <td colspan="4">ferdivaldez@gmail.com</td>
-                        <td colspan="4">4424576724</td>
-                        <td colspan="4">Activo</td>
-                        <td colspan="4">
-                            <button type="button" class="btn btn-color--third btn-sm" 
-                            onclick="window.location.href='/coordinador/editar-psicologo'">Editar</button>
-                        </td>
-                    </tr>
-    
-                    <tr>
-                        <td colspan="4">Juan Manuel</td>
-                        <td colspan="4">Murillo Lopez</td></t>
-                        <td colspan="4">JuanmanuelLopez@gmail.com</td>
-                        <td colspan="4">4424326732</td>
-                        <td colspan="4">Activo</td>
-                        <td colspan="4">
-                            <button type="button" class="btn btn-color--third btn-sm" 
-                            onclick="window.location.href='/coordinador/editar-psicologo'">Editar</button>
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td colspan="4">Liliana</td>
-                        <td colspan="4">Valdovinos Catarino</td></t>
-                        <td colspan="4">LiliValdovinos@gmail.com</td>
-                        <td colspan="4">4422546761</td>
-                        <td colspan="4">Activo</td>
-                        <td colspan="4">
-                            <button type="button" class="btn btn-color--third btn-sm" 
-                            onclick="window.location.href='/coordinador/editar-psicologo'">Editar</button>
-                        </td>
-                    </tr>
-    
-                    <tr>
-                        <td colspan="4">Emilia</td>
-                        <td colspan="4">Cardenas Lobaton</td></t>
-                        <td colspan="4">EmiCardenas@gmail.com</td>
-                        <td colspan="4">4421768369</td>
-                        <td colspan="4">Activo</td>
-                        <td colspan="4">
-                            <button type="button" class="btn btn-color--third btn-sm" 
-                            onclick="window.location.href='/coordinador/editar-psicologo'">Editar</button>
-                        </td>
-                    </tr>
+                    <% for (let psicologo of listaPsicologos) { %>
+                        <tr>
+                            <td colspan="4"><%= psicologo.nombreUsuario %></td>
+                            <td colspan="4"><%= psicologo.apellidoPaterno %> <%= psicologo.apellidoMaterno %></td>
+                            <td colspan="4"><%= psicologo.correo %></td>
+                            <td colspan="4"><%= psicologo.lada %> <%= psicologo.numeroTelefono %></td>
+                            <td colspan="4">
+                                <%= psicologo.estatusUsuario === 1 ? "Activo" : "Inactivo" %>
+                            </td>
+                            <td colspan="4">
+                                <button type="button" class="btn btn-color--third btn-sm" 
+                                onclick="window.location.href='/coordinador/editar-psicologo/<%= psicologo.idUsuario %>'">Editar</button>
+                            </td>
+                        </tr>
+                    <% } %>
                 </tbody>
-            </table>       
+            </table>
+              
         </div>
     </div>
 
