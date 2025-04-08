@@ -38,7 +38,7 @@ module.exports = class Psicologo {
     const apellidoPaterno = this.apellidoPaterno || null;
     const apellidoMaterno = this.apellidoMaterno || null;
     const correo = this.correo || null;
-    const lada = this.lada || '+052';
+    const lada = this.lada || null;
     const numeroTelefono = this.numeroTelefono || null;
     const idRol = this.idRol || 2; 
 

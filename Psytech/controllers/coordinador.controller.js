@@ -29,7 +29,7 @@ exports.getRegistrarPsicologos = (request, response, next) => {
 };
 
 exports.postRegistrarPsicologos = (request, response, next) => {
-    const { correo, nombrePsicologo, apellidoPaterno, apellidoMaterno, numero } = request.body;
+    const { correo, nombrePsicologo, apellidoPaterno, apellidoMaterno, lada, numero } = request.body;
    
     const psicologo = new Psicologo(
         correo, // usuario
@@ -38,7 +38,7 @@ exports.postRegistrarPsicologos = (request, response, next) => {
         apellidoPaterno,
         apellidoMaterno,
         correo, // correo electronico
-        '+052',
+        lada,
         numero,
         2
     );
@@ -85,7 +85,7 @@ exports.getRegistrarCoordinador = (request, response, next) => {
 
 
 exports.postRegistrarCoordinador = (request, response, next) => {
-    const { correo, nombreCoordinador, apellidoPaterno, apellidoMaterno, numero } = request.body;
+    const { correo, nombreCoordinador, apellidoPaterno, apellidoMaterno, lada, numero } = request.body;
    
     const coordinador = new Coordinador(
         correo, // usuario
@@ -94,7 +94,7 @@ exports.postRegistrarCoordinador = (request, response, next) => {
         apellidoPaterno,
         apellidoMaterno,
         correo, // correo electronico
-        '+052',
+        lada,
         numero,
         1
     );
