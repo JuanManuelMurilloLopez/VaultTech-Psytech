@@ -1,10 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 
 :root{
+    --primary: #95B6BC;
     --secondary: #294969;
     --third: #C1C1C1;
     --font-primary: #000;
     --font-secondary: #fff;
+    --primary-hover: #7BA1A8;
     --secondary-hover: #193858;
     --third-hover:#B1B1B1;
 }
@@ -25,37 +27,10 @@
     flex-direction: row;
 }
 
-.buscar{
-    flex-grow: 1;
-    height: 48px;
-    border-radius: 30px;
-    border: solid 2px #919191;
-    margin-right: 60px;
-}
-
-.buscar:focus-within{
-    border: 4px #7fc1ff solid;
-}
-
-.barra{
-    display: flex;
-    justify-content: space-between;
-    margin: 0 20px;
-    align-items: center;
-    height: 48px;
-}
-
-.barra input{
-    border: none;
-    background-color: inherit;
-    padding: 0 8px 0 0;
-    font-size: 16px;
-    flex-grow: 1;
-    outline: none;
-}
-
-.card{
-    height: 260px;
+.text-center{
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 600;
 }
 
 .card-title{
@@ -73,6 +48,10 @@
     padding: 0;
 }
 
+.card-body{
+    padding: 20px;
+}
+
 .card-estatus{
     font-size: 14px;
     font-weight: 400;
@@ -81,62 +60,48 @@
     padding: 5px 20px;
 }
 
-.card-body {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
+.prueba-completada{
+    color: #024400;
+    background: #C7F3C2;
 }
 
-.card-actions {
-    margin-top: auto;
+.prueba-pendiente{
+    color: #294969;
+    background: #C2EBF3;
+}
+
+.prueba-vencida{
+    color: #600000;
+    background: #FECECE;
+}
+
+.prueba-progreso{
+    color: #000000;
+    background: #d5d5d5;
 }
 
 .card-text{
     margin: 16px 0;
 }
 
-.card-estatus{
-    font-size: 14px;
-    font-weight: 400;
-    font-style: normal;
+.btn{
     border-radius: 10px;
-    padding: 4px 28px;
-}
-.activo{
-    color: #294969;
-    background: #C2EBF3 ;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 20px;
 }
 
-.inactivo{
-    color: #600000;
-    background: #FECECE;
-}
-
-.registrar-institucion{
-    border-radius: 20px;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 32px;
-    background: var(--secondary);
-    color: var(--font-secondary);
+.btn-color--primary{
+    background: var(--primary);
+    color: var(--font-primary);
 }
 
 .btn-color--secondary{
-    padding: 4px 28px;
-    border-radius: 10px;
-    font-size: 14px;
-    text-align: center;
     background: var(--secondary);
     color: var(--font-secondary);
 }
 
 .btn-color--third{
-    padding: 4px 24px;
-    border-radius: 10px;
-    font-size: 14px;
-    text-align: center;
     background: var(--third);
     color: var(--font-primary);
 }
@@ -149,4 +114,9 @@
 .btn-color--secondary:hover{
     background: var(--secondary-hover);
     color: var(--font-secondary);
+}
+
+.btn-color--primary:hover{
+    background: var(--primary-hover);
+    color: var(--font-primary);
 }

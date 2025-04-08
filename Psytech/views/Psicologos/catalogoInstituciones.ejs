@@ -40,7 +40,7 @@
                 </div>
                 
                 <a href="/psicologo/registrar-institucion" 
-                class="btn btn-color--secondary registrar-institucion">
+                class="btn registrar-institucion">
                     Registrar Nueva
                 </a>
             </div>
@@ -51,27 +51,35 @@
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title"><%= institucion.nombreInstitucion %></h5>
-                                <span class="badge rounded-pill text-bg-info">
-                                    <% if(institucion.estatusInstitucion == 1){ %>
-                                        <%= "Activo" %> 
+                                <div class="card-header">
+                                    <h5 class="card-title w-50"><%= institucion.nombreInstitucion %></h5>
+                                    <% if(grupo.estatusGrupo == 1){ %>
+                                        <span class="card-estatus activo">
+                                            <%= "Activa" %> 
+                                        </span>
                                     <%} else { %> 
-                                        <%= "Inactivo" %>
+                                        <span class="card-estatus inactivo">
+                                            <%= "Inactiva" %>
+                                        </span>
                                     <% } %>
-                                </span>
+                                </div>
                                 <p class="card-text">Tipo de Institución: <%= institucion.nombreTipoInstitucion %></p>
                                 <p class="card-text">Número de grupos: <%= institucion.numeroGrupos %></p>
-                                <a href="/psicologo/grupos/<%= institucion.idInstitucion %> " class="btn btn-color--secondary w-100">Ver Institución</a>
-                                <a href="/psicologo/editar-institucion" class="btn btn-color--third w-100">Editar</a>
+                                <div class="card-actions d-flex justify-content-between mt-auto"">
+                                    <a class="btn btn-color--secondary " 
+                                    href="/psicologo/grupos/<%= institucion.idInstitucion %>">Ver Institución</a>
+                                    <a class="btn btn-color--third" href="/psicologo/editar-institucion">Editar</a>
+                                </div>
                             </div>
+
                         </div>
+
                     </div>
                 <% } %>
-                
-    
-            </div>
+            </div> <br><br>
     
         </div>
+
     </div>
 
     <!-- Bootstrap JS -->

@@ -68,4 +68,25 @@ module.exports = class Aspirante {
             `, [rutaCv, idAspirante])
     }
 
+    static getInformacionAspirante(idAspirante){
+        return db.execute(`
+                SELECT *
+                FROM aspirantes, usuarios, paises, estados
+                WHERE aspirantes.idUsuario = usuarios.idUsuario
+                AND idAspirante = ?
+                AND aspirantes.idPais = paises.idPais
+                AND aspirantes.idEstado = estados.idEstado
+            `, [idAspirante]);
+    }
+
+    static getMisPruebas(idAspirante, idGrupo){
+        return db.execute(`
+                SELECT nombre, nombreEstatus, fechaLimite
+                FROM vistaPruebasAspirantes vpa, grupos
+                WHERE idAspirante = ?
+                AND vpa.nombreGrupo = grupos.nombreGrupo
+                AND idGrupo = ?
+            `,[idAspirante, idGrupo]);
+    }
+
 }

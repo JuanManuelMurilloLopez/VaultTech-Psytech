@@ -29,14 +29,14 @@ router.post('/registrar-grupo/:idInstitucion', controller.postRegistrarGrupo);
 // Vista con los grupos de cierta institución
 router.get('/grupos/:idInstitucion', controller.getGrupos);
 
-
 // Formulario para editar grupos
 router.get('/editar-grupo', controller.getEditarGrupo);
 
 // Vista con la información de cierto grupo
 router.get('/informacion-grupos/:idGrupo', controller.getInformacionGrupo)
 
-router.get('/aspirantes', controller.getAspirantes);
+// Vista con la información de un aspirante
+router.get('/aspirantes/:idAspirante/:idGrupo', controller.getAspirante);
 
 router.get('/importar-aspirantes', controller.getImportarAspirantes);
 
@@ -55,6 +55,9 @@ router.get('/prueba-otis', controller.getPruebaOtis);
 
 // Vista con la información de la prueba Colores
 router.get('/prueba-colores', controller.getPruebaColores);
+
+// Cuadernillo de respuestas de la prueba OTIS por aspirante
+router.get('/cuadernillo-Otis/:idGrupo/:idAspirante', controller.getCuadernilloOtis);
 
 // Vista con el análisis de la prueba otis del aspirante
 router.get('/analisis-otis/:idGrupo/:idAspirante', controller.getAnalisisOtis);

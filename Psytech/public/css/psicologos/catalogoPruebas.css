@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
 :root{
     --primary: #95B6BC;
     --secondary: #294969;
@@ -53,4 +55,63 @@
 .btn-color--primary:hover{
     background: var(--primary-hover);
     color: var(--font-primary);
+}
+
+/* Estilos para el titulo "PRUEBAS"  */
+h1.text-center {
+    margin: 30px 0;
+    font-weight: bold;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Grid de pruebas */
+.pruebas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin: 40px 0;
+}
+
+.prueba-card {
+    border: 1px solid #e9e9e9;
+    border-radius: 8px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    transition: transform 0.3s ease;
+}
+
+.prueba-card:hover {
+    transform: translateY(-5px);
+}
+
+.prueba-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.prueba-description {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .pruebas-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .pruebas-grid {
+        grid-template-columns: 1fr;
+    }
 }
