@@ -138,4 +138,70 @@ module.exports = class Grupo {
       .then(() => this.savePruebasSeleccionadas(pruebasSeleccionadas));
   }
 
+
+  // EDITAR GRUPO
+  // Actualizar un grupo que ya existe
+  static update(idGrupo, nombreGrupo, carrera, cicloEscolar, anioGeneracion, idNivelAcademico, estatusGrupo) {
+    return db.execute(
+      `UPDATE grupos 
+       SET nombreGrupo = ?, 
+           carrera = ?, 
+           cicloEscolar = ?, 
+           anioGeneracion = ?, 
+           idNivelAcademico = ?, 
+           estatusGrupo = ? 
+       WHERE idGrupo = ?`,
+      [nombreGrupo, carrera, cicloEscolar, anioGeneracion, idNivelAcademico, estatusGrupo, idGrupo]
+    );
+  }
+
+  // Obtener las pruebas asignadas a un grupo
+  static getPruebasAsignadas(idGrupo) {
+    return db.execute(
+      `SELECT gp.idGrupo, gp.idPrueba, p.nombre, gp.fechaAsignacion, gp.fechaLimite 
+       FROM grupospruebas gp
+       JOIN pruebas p ON gp.idPrueba = p.idPrueba
+       WHERE gp.idGrupo = ?`,
+      [idGrupo]
+    );
+  }
+
+  // Actualizar las pruebas asignadas a un grupo
+  static actualizarPruebasAsignadas(idGrupo, pruebasSeleccionadas, fechaLimite) {
+    // Si no se pusieron pruebas no hacer nada
+    if (!pruebasSeleccionadas) {
+      return Promise.resolve();
+    }
+
+    // Convertir pruebas seleccionadas a arreglo si no lo son
+    if (!Array.isArray(pruebasSeleccionadas)) {
+      pruebasSeleccionadas = [pruebasSeleccionadas];
+    }
+
+    // Eliminamos asignaciones anteriores
+    return db.execute(
+      'DELETE FROM grupospruebas WHERE idGrupo = ?',
+      [idGrupo]
+    ).then(() => {
+      // Si no hay terminar
+      if (pruebasSeleccionadas.length === 0) {
+        return Promise.resolve();
+      }
+      
+      const promises = [];
+      const fechaActual = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+      
+      for (const idPrueba of pruebasSeleccionadas) {
+        promises.push(
+          db.execute(
+            'INSERT INTO grupospruebas (idGrupo, idPrueba, fechaAsignacion, fechaLimite) VALUES (?, ?, ?, ?)',
+            [idGrupo, idPrueba, fechaActual, fechaLimite]
+          )
+        );
+      }
+      
+      return Promise.all(promises);
+    });
+  }
+
 }

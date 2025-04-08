@@ -152,7 +152,7 @@ exports.getRegistrarGrupo = (req, res, next) => {
           res.send('Error al registrar grupo');
         }
       });
-  };
+};
   
 
 
@@ -180,10 +180,137 @@ exports.getInformacionGrupo = (request, response, next) => {
 }
 
 
+// EDITAR GRUPO
 exports.getEditarGrupo = (request, response, next) => {
-    console.log('Editar Grupo');
-    response.render('Psicologos/editarGrupo');
+    const idGrupo = request.params.idGrupo;
+    
+    // Información del grupo a editar
+    Promise.all([
+        Grupo.fetchOne(idGrupo),
+        Grupo.getNiveles(),
+        Grupo.getPruebas(),
+        Grupo.getPruebasAsignadas(idGrupo)
+    ])
+    .then(([grupoData, niveles, pruebas, pruebasAsignadas]) => {
+        const grupo = grupoData[0][0];
+        
+        if (!grupo) {
+            return response.redirect('/psicologo/lista-grupos');
+        }
+        
+        // Sacar informacion del ciclo escolar (semestre y año)
+        let semestre = '';
+        if (grupo.cicloEscolar) {
+            if (grupo.cicloEscolar.includes('Febrero/Julio')) {
+                semestre = 'Febrero/Julio';
+            } else if (grupo.cicloEscolar.includes('Agosto/Diciembre')) {
+                semestre = 'Agosto/Diciembre';
+            }
+        }
+        
+        // Obtener lista de pruebas ya asignadas al grupo
+        const pruebasSeleccionadas = pruebasAsignadas[0].map(p => p.idPrueba.toString());
+        const fechaLimite = pruebasAsignadas[0].length > 0 ? pruebasAsignadas[0][0].fechaLimite : null;
+        
+        // Convertir fecha limite a YYYY-MM-DD
+        let fechaLimiteFormateada = null;
+        if (fechaLimite) {
+            const fecha = new Date(fechaLimite);
+            fechaLimiteFormateada = fecha.toISOString().split('T')[0];
+        }
+        
+        response.render('Psicologos/editarGrupo', {
+            grupo: grupo,
+            listadoNiveles: niveles[0],
+            listadoPruebas: pruebas[0],
+            pruebasSeleccionadas: pruebasSeleccionadas,
+            fechaLimite: fechaLimiteFormateada,
+            semestre: semestre,
+            error: '',
+            idGrupo: idGrupo
+        });
+    })
+    .catch((error) => {
+        console.log('Error al cargar formulario de editar grupo:', error);
+        response.status(500).send('Error al cargar formulario de editar');
+    });
 };
+
+exports.postEditarGrupo = (request, response, next) => {
+    const idGrupo = request.params.idGrupo;
+    const {
+        nombreGrupo,
+        carrera,
+        semestre,
+        anio,
+        idNivelAcademico,
+        pruebasSeleccionadas,
+        fechaLimite,
+        estatusGrupo
+    } = request.body;
+    
+    // Ciclo escolar semestre y año
+    const cicloEscolar = `${semestre} ${anio}`;
+    
+    // El grupo existe?
+    Grupo.fetchOne(idGrupo)
+    .then(([rows]) => {
+        if (rows.length === 0) {
+            return response.status(404).send('Grupo no encontrado');
+        }
+        
+        // Si existe, actualizarlo
+        return Grupo.update(
+            idGrupo,
+            nombreGrupo,
+            carrera,
+            cicloEscolar,
+            anio,
+            idNivelAcademico,
+            estatusGrupo === 'true' || estatusGrupo === true
+        )
+        .then(() => {
+            // Actualizar las pruebas asignadas
+            return Grupo.actualizarPruebasAsignadas(idGrupo, pruebasSeleccionadas, fechaLimite);
+        })
+        .then(() => {
+            // Obetener idInstitucion para redirigir a la lista de grupos
+            return Grupo.fetchOne(idGrupo)
+                .then(([grupo]) => {
+                    // Red a la pag de grupos de esa institucion
+                    response.redirect(`/psicologo/grupos/${grupo[0].idInstitucion}`);
+                });
+        })
+    })
+    .catch(error => {
+        console.log('Error al actualizar grupo:', error);
+        
+        // En error, cargar de nuevo el formulario con los datos
+        Promise.all([
+            Grupo.fetchOne(idGrupo),
+            Grupo.getNiveles(),
+            Grupo.getPruebas()
+        ])
+        .then(([grupoData, niveles, pruebas]) => {
+            response.render('Psicologos/editarGrupo', {
+                grupo: grupoData[0][0],
+                listadoNiveles: niveles[0],
+                listadoPruebas: pruebas[0],
+                pruebasSeleccionadas: Array.isArray(pruebasSeleccionadas) ? pruebasSeleccionadas : [pruebasSeleccionadas],
+                fechaLimite: fechaLimite,
+                semestre: semestre,
+                error: 'Error al actualizar el grupo. Por favor, intente de nuevo.',
+                idGrupo: idGrupo
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            response.status(500).send('Error al procesar la solicitud');
+        });
+    });
+};
+
+
 
 exports.getAspirantes = (request, response, next) => {
     console.log('Aspirantes por Grupos');
@@ -251,9 +378,6 @@ exports.postRegistrarAspirantes = (request, response, next) => {
         console.log(error);
     })
 };
-
-
-
 
 exports.getEditarAspirantes = (request, response, next) => {
     console.log('Editar Aspirante');
