@@ -15,85 +15,102 @@
     <div class="container mt-4">
         <h2 class="text-center">Test de aptitud mental OTIS</h2>
         <hr>
+        <div class="datosCaja activeInfo">
+            <!-- Datos Personales -->
+            <div class="tituloDatos">Datos personales</div>
+            <hr>
+            <div class="row gx-3 mb-3">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" placeholder="Nombre">
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" placeholder="Apellido Paterno">
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" placeholder="Apellido Materno">
+                </div>
+            </div>
+            <div class="row gx-3 mb-3">
+                <div class="col-md-2">
+                    <input type="number" class="form-control" placeholder="Edad">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select">
+                        <option>Género</option>
+                        <option>Masculino</option>
+                        <option>Femenino</option>
+                        <option>No binario</option>
+                        <option>Prefiero no decirlo</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select">
+                        <option>Escolaridad</option>
+                        <option>Licenciatura</option>
+                        <option>Maestría</option>
+                        <option>Doctorado</option>
+                        <option>Otro</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" placeholder="Puesto solicitado">
+                </div>
+            </div>
+            <hr>
+            <button class="btnDatosContinuar">Continuar</button>
 
-        <!-- Datos Personales -->
-        <h5>Datos personales</h5>
-        <hr>
-        <div class="row gx-3 mb-3">
-            <div class="col-md-4">
-                <input type="text" class="form-control" placeholder="Nombre">
-            </div>
-            <div class="col-md-4">
-                <input type="text" class="form-control" placeholder="Apellido Paterno">
-            </div>
-            <div class="col-md-4">
-                <input type="text" class="form-control" placeholder="Apellido Materno">
-            </div>
-        </div>
-        <div class="row gx-3 mb-3">
-            <div class="col-md-2">
-                <input type="number" class="form-control" placeholder="Edad">
-            </div>
-            <div class="col-md-3">
-                <select class="form-select">
-                    <option>Género</option>
-                    <option>Masculino</option>
-                    <option>Femenino</option>
-                    <option>No binario</option>
-                    <option>Prefiero no decirlo</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <select class="form-select">
-                    <option>Escolaridad</option>
-                    <option>Licenciatura</option>
-                    <option>Maestría</option>
-                    <option>Doctorado</option>
-                    <option>Otro</option>
-                </select>
-            </div>
-            <div class="col-md-4">
-                <input type="text" class="form-control" placeholder="Puesto solicitado">
-            </div>
-        </div>
-
-        <!-- Seccion de preguntas -->
-        <h5>Preguntas</h5>
-        <hr>
-        
-        <!-- Preguntas de la prueba OTIS -->
-        <div class="mb-3">
-            <p><strong>1. El opuesto de amor es.....?</strong></p>
-            <div class="form-check"><input class="form-check-input" type="radio" name="q1"><label class="form-check-label">1. grado</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="q1"><label class="form-check-label">2. enojo</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="q1"><label class="form-check-label">3. odio</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="q1"><label class="form-check-label">4. extraño</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="q1"><label class="form-check-label">5. novio</label></div>
-        </div>
-
-        <div class="mb-3">
-            <p><strong>2. Decir que las piedras piensan es.....?</strong></p>
-            <div class="form-check"><input class="form-check-input" type="radio" name="q2"><label class="form-check-label">1. absurdo</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="q2"><label class="form-check-label">2. engañoso</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="q2"><label class="form-check-label">3. improbable</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="q2"><label class="form-check-label">4. injusto</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="q2"><label class="form-check-label">5. malo</label></div>
-        </div>
-
-        <div class="mb-3">
-            <p><strong>3. El oro vale más que la plata porque es.....?</strong></p>
-            <div class="form-check"><input class="form-check-input" type="radio" name="q3"><label class="form-check-label">1. más pesado</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="q3"><label class="form-check-label">2. más escaso</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="q3"><label class="form-check-label">3. más amarillo</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="q3"><label class="form-check-label">4. más duro</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="q3"><label class="form-check-label">5. más hermoso</label></div>
-        </div>
-
-        <!-- Boton finalizar -->
-        <div class="text-end mt-4">
-            <button type="button" class="btn btn-color--secondary" onclick="window.location.href='/Aspirante/mis-pruebas'">Terminar</button>
         </div>
     </div>
+    
+        <div class="container mt-4">
+            <div class="preguntasCaja">
+                <!-- Temporizador -->
+                <div class="Temporizador">
+                    <div class="tiempoTexto">Tiempo restante</div>
+                    <div class="tiempoNumeroSec">30:00</div>
+                </div>
+    
+                <!-- Seccion de preguntas -->
+                <h5>Preguntas</h5>
+                <hr>
+    
+                <!-- Preguntas de la prueba OTIS -->
+                <div class="pregtext"></div>
+                <div class="optionList"></div>
+
+                <hr>
+                <footer>
+                    <div class="pregProgreso">
+                    
+                    </div>
+                    <!-- Boton anterior-->
+                    <button class="antbtn">Anterior</button>
+                    <!-- Boton siguiente-->
+                    <button class="sigbtn">Siguiente</button>
+                        
+                    <!-- Boton finalizar -->
+                    <div class="text-end mt-4">
+                        <button type="button" class="btn btn-color--secondary">Enviar Respuestas</button>
+                    </div>
+                </footer>
+                
+            </div>
+        </div>
+       
+        <!-- Respuestas enviadas -->
+        <div class="enviadasCaja">
+            <h3>Tus respuestas han sido enviadas con exito</h3>
+            <!-- Boton finalizar -->
+            <div class="text-end mt-4">
+                <button type="button" class="btn btn-color--secondary" onclick="window.location.href='/Aspirante/mis-pruebas'">Pagina de Inicio</button>
+            </div>
+        </div>
+
+    <!-- JS -->
+    <script src="/js/pruebaOtis.js"></script>
+    <!--<script src="/js/preguntasPruebaOtis.js"></script>-->
+
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

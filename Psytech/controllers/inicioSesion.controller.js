@@ -1,15 +1,29 @@
-const bcrypt = require('bcryptjs');
 const Usuario = require('../models/usuario.model');
+const { OTP } = require('../models/otp.model');
+const crypto = require('crypto');
+const { MailerSend, EmailParams, Sender, Recipient } = require("mailersend");
+
+
+// Configuración de MailerSend
+const mailerSend = new MailerSend({
+    apiKey: process.env.MAILER_SEND_API_KEY,
+  });
+  
+  const sentFrom = new Sender("vaultech@test-68zxl27r3v34j905.mlsender.net", "VaultTech");
 
 exports.getLogin = (request, response, next) => {
-    console.log('Login PSICODX');
     response.render('login');
 };
 
-exports.getPost = async (request, response) => {
-    const { usuario, contrasenia, terminos } = request.body;
+exports.getOtp = (request, response, next) => {
+    const usuario = request.session.usuario;
+    response.render('otp', { usuario });
+};
 
-    // Verificar si el checkbox está marcado
+exports.getPost = async (request, response) => {
+    const {usuario} = request.body;
+
+    /* Verificar si el checkbox está marcado
     if (!terminos) {
         return response.send(`
             <script>
@@ -18,57 +32,78 @@ exports.getPost = async (request, response) => {
             </script>
         `);
     }
+    */
 
     try {
-        // Buscar usuario en la base de datos
-        const [usuarios] = await Usuario.fetchOne(usuario);
+        const usuarioData  = await Usuario.fetchOne(usuario);
+        const usuarioId = usuarioData[0]; 
+
+        if (!usuarioId) {
+            return response.send('<script>alert("Usuario no encontrado"); window.location.href = "/login";</script>');
+        }
+
+        const codigoOTP = crypto.randomInt(100000, 999999);
+        const validez = new Date(Date.now() + 5 * 60000);
+
+        await OTP.crearOTP(usuarioId.idUsuario, codigoOTP, validez);
+
+        request.session.usuario = usuario;
+        /*
+        // Enviar correo con MailerSend
+        const destinatario = new Recipient(usuarioId.correo, usuario);
+
+        const emailParams = new EmailParams()
+        .setFrom(sentFrom)
+        .setTo([destinatario])
+        .setSubject("Tu código OTP para ingresar")
+        .setHtml(`<h2>¡Hola ${usuario}!</h2><p>Tu código OTP es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos.</p>`);
+
+        await mailerSend.email.send(emailParams);
+        */
+        console.log('codigoOTP:', codigoOTP);
+        response.redirect('/otp');
+        } catch (error) {
+        console.error('Error en postLogin:', error);
+        response.send('<script>alert("Error al generar o enviar el OTP"); window.location.href = "/login";</script>');
+    }
+};
+
+exports.verificarOTP = async (request, response) => {
+    const { otp } = request.body;
+    const usuario = request.session.usuario;
+    
+    try {
+        const usuarioData  = await Usuario.fetchOne(usuario);
+        const usuarioId = usuarioData[0].idUsuario;
+        if (!usuarioId) {
+            return res.send('<script>alert("Usuario no encontrado"); window.location.href = "/login";</script>');
+        }
         
-        if (!usuarios) {
-            return response.send(`
-                <script>
-                    alert('Usuario no encontrado');
-                    window.location.href = '/login';
-                </script>
-            `);
-        }
+        const otpData = await OTP.obtenerOTP(usuarioId);
+  
+      if (!otpData || otpData.codigo !== parseInt(otp)) {
+        return response.send('<script>alert("OTP incorrecto o vencido"); window.location.href = "/otp";</script>');
+      }
+  
+      await OTP.usarOTP(otpData.idOTP);
+      
+      request.session.user = usuarioData[0].idUsuario;
+      request.session.rol = usuarioData[0].idRol;
 
-        if (!contrasenia || !usuarios.contrasenia){
-            return response.send(`
-                <script>
-                    alert('Contraseña no válida');
-                    window.location.href = '/login';
-                </script>
-            `);
-        }
-
-        // Comparar contraseñas
-        // const contraseniaValida = await bcrypt.compare(contrasenia, usuarios.contrasenia);
-        const contraseniaValida = true;
-        if (!contraseniaValida) { 
-            return response.send(`
-                <script>
-                    alert('Contraseña incorrecta');
-                    window.location.href = '/login';
-                </script>
-            `);
-        }
-
-        // Guardar la sesión del usuario
-        request.session.user = usuarios.idUsuario;
-        request.session.rol = usuarios.idRol;
-
-        // Redirigir según el rol
-        switch (usuarios.idRol) {  
+        switch (usuarioData[0].idRol) {  
             case 3:
                 Usuario.getIdAspirante(request.session.user)
-                .then(([rows,fieldData]) => {
-                    request.session.idAspirante = rows[0].IdAspirante;
-                    return response.redirect('/aspirante/mis-pruebas');
+                .then(([rows, fieldData]) => {
+                    if (rows.length > 0) {
+                        request.session.idAspirante = rows[0].idAspirante;
+                        return response.redirect('/aspirante/mis-pruebas');
+                    }
                 })
                 .catch((error) => {
                     console.log(error);
+                    return response.status(500).send("Error en el servidor");
                 })
-                break
+                break;
             case 1:
                 return response.redirect('/coordinador/psicologos-registrados');
             case 2:
@@ -76,23 +111,18 @@ exports.getPost = async (request, response) => {
             default:
                 return response.status(400).send("Rol no reconocido");
         }
-    } catch (error) {
-        return response.send(`
-            <script>
-                alert('Error en el servidor');
-                window.location.href = '/login';
-            </script>
-        `);
-    }
-};
 
+    } catch (error) {
+      console.error('Error al verificar OTP:', error);
+      response.send('<script>alert("Error al verificar OTP"); window.location.href = "/otp";</script>');
+    }
+  };
 
 exports.getLogout = ((request, response) => {
     request.session.destroy((err) => {
         if (err) {
             return response.status(500).send('Error al cerrar sesión');
         }
-        // Después de destruir la sesión, redirige al login
         response.redirect('/login');
     });
 });

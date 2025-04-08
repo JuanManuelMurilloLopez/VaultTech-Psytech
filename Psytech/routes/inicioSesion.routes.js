@@ -9,6 +9,10 @@ router.get('/login', controller.getLogin);
 
 router.post('/login', controller.getPost);
 
+router.get('/otp', controller.getOtp);
+
+router.post('/otp', controller.verificarOTP);
+
 router.get('/logout', controller.getLogout);
 
 module.exports = router;
