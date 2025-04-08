@@ -76,6 +76,8 @@ app.use('/psicologo', rutasPsicologo);
 
 https.createServer({key: privateKey, cert: certificate, passphrase: process.env.SSL_PASSPHRASE}, app).listen(process.env.PORT || 5050);
 
+//https.createServer({key: privateKey, cert: certificate}, app).listen(process.env.PORT || 5050);
+
 // Iniciar servidor en el puerto 5050
 //app.listen(5050, () => {
 //    console.log("Servidor corriendo en http://localhost:5050");
