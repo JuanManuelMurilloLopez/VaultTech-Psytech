@@ -58,7 +58,16 @@ exports.getEditarPsicologos = (request, response, next) => {
 };
 
 exports.getCoordinadoresRegistrados = (request, response, next) => {
-    response.render('Coordinadores/listaCoordinadores');
+    Coordinador.fetchAll()
+    .then(([rows, fieldData]) => {
+        const listaCoordinadores = rows;
+        response.render('Coordinadores/listaCoordinadores',{
+            listaCoordinadores: listaCoordinadores || [],
+        });
+    })
+    .catch((error) => {
+        console.log('Error al obtener coordinador:', error);
+    });
 };
 
 exports.getRegistrarCoordinador = (request, response, next) => {
