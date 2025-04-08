@@ -10,3 +10,5 @@ Thumbs.db
 
 #For passwords
 .env
+
+Caddyfile

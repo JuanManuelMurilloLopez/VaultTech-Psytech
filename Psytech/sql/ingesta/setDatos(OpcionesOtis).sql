@@ -592,7 +592,7 @@ VALUES
 
 
 -- Opciones para la pregunta 61: En la serie de números, que aparece aquí debajo, cuente todos los 5 que están delante de un 7, ¿Cuántos son?
-7 5 3 5 7 2 3 7 5 6 7 7 2 5 7 3 4 7 7 5 2 0 7 5 7 8 3 7 2 5 1 7 9 6 5 7
+-- 7 5 3 5 7 2 3 7 5 6 7 7 2 5 7 3 4 7 7 5 2 0 7 5 7 8 3 7 2 5 1 7 9 6 5 7
 INSERT INTO opcionesOtis (idOpcionOtis, idPreguntaOtis, opcionOtis, descripcionOpcion, esCorrecta)
 VALUES
 (UUID(), (SELECT idPreguntaOtis FROM preguntasOtis WHERE numeroPregunta = 61 AND idPrueba = 5), 1, '2', FALSE),

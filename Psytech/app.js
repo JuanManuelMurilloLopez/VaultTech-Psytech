@@ -12,7 +12,8 @@ const app = express();
 app.use(session({
     secret: 'claveTemporal',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: { secure: false } 
 }));
 
 // Servir archivos estaticos desde public
@@ -35,7 +36,7 @@ const fileStorage = multer.diskStorage({
         callback(null, 'public/expedientes');
     },
     filename: (request, file, callback) => {
-        callback(null, file.originalname + new Date().toISOString().substring(0, 10));
+        callback(null,request.session.idAspirante + new Date().getMilliseconds()  + file.originalname);
     },
 });
 
