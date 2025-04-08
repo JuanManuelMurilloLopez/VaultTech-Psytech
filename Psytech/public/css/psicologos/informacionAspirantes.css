@@ -119,6 +119,10 @@
     margin: 16px 0;
 }
 
+.btn{
+    padding: 0;
+}
+
 .btn-danger{
     background: #C30101;
     border-radius: 20px;
@@ -132,8 +136,15 @@
 }
 
 .btn-color--secondary{
+    border-radius: 20px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 32px;
     background: var(--secondary);
     color: var(--font-secondary);
+    margin-left: 40px;
 }
 
 .btn-color--third{
