@@ -48,7 +48,7 @@ exports.getPost = async (request, response) => {
         await OTP.crearOTP(usuarioId.idUsuario, codigoOTP, validez);
 
         request.session.usuario = usuario;
-        /*
+        
         // Enviar correo con MailerSend
         const destinatario = new Recipient(usuarioId.correo, usuario);
 
@@ -59,7 +59,7 @@ exports.getPost = async (request, response) => {
         .setHtml(`<h2>¡Hola ${usuario}!</h2><p>Tu código OTP es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos.</p>`);
 
         await mailerSend.email.send(emailParams);
-        */
+        
         console.log('codigoOTP:', codigoOTP);
         response.redirect('/otp');
         } catch (error) {
