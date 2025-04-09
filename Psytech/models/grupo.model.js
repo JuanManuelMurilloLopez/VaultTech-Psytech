@@ -204,5 +204,12 @@ module.exports = class Grupo {
       return Promise.all(promises);
     });
   }
-
+  
+  // Metodo para actualizar solo el estado del grupo
+  static updateEstatus(idGrupo, estatusGrupo) {
+    return db.execute(
+      'UPDATE grupos SET estatusGrupo = ? WHERE idGrupo = ?',
+      [estatusGrupo, idGrupo]
+    );
+  }
 }

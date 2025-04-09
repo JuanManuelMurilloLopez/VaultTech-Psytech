@@ -34,6 +34,9 @@ router.get('/grupos/:idInstitucion', controller.getGrupos);
 router.get('/editar-grupo/:idGrupo', controller.getEditarGrupo);
 router.post('/editar-grupo/:idGrupo', controller.postEditarGrupo);
 
+// EDITA SOLO ESTATUS DE GRUPO
+router.post('/actualizar-estatus-grupo/:idGrupo', controller.postActualizarEstatusGrupo);
+
 // Vista con la información de cierto grupo
 router.get('/informacion-grupos/:idGrupo', controller.getInformacionGrupo)
 
