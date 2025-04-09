@@ -15,7 +15,7 @@ module.exports = class Grupo {
   static fetchAll(){
     return db.execute(`SELECT grupos.idGrupo, institucion.nombreInstitucion,
                       grupos.nombreGrupo, grupos.estatusGrupo, grupos.carrera,
-                      grupos.anioGeneracion, grupos.cicloEscolar,
+                      grupos.anioGeneracion, grupos.cicloEscolar, grupos.idInstitucion,
                       COUNT(gruposaspirantes.idAspirante) as numeroAspirantes 
                       FROM grupos
                       JOIN institucion ON 

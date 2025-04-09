@@ -21,6 +21,8 @@ module.exports = class Prueba{
     }
 
     static saveDatosPersonales(idAspirante, idGrupo, idPrueba, datosPersonales){
+        
+        /*
         // Ya existen datos?
         return db.execute(`
             UPDATE datospersonales 
@@ -36,6 +38,8 @@ module.exports = class Prueba{
             idPrueba,
             idAspirante
             ]);
+            */
+
 
         // INSERT
         return db.execute(`

@@ -167,6 +167,7 @@ exports.getInformacionGrupo = (request, response, next) => {
             response.render('Psicologos/informacionGrupo.ejs', {
                 grupo: grupo || null,
                 aspirantes: aspirantes || [],
+                idInstitucion: request.params.idInstitucion || null,
             })
         })
         .catch((error) => {
@@ -225,7 +226,8 @@ exports.getEditarGrupo = (request, response, next) => {
             fechaLimite: fechaLimiteFormateada,
             semestre: semestre,
             error: '',
-            idGrupo: idGrupo
+            idGrupo: idGrupo,
+            idInstitucion: request.params.idInstitucion || null,
         });
     })
     .catch((error) => {
@@ -322,6 +324,7 @@ exports.getAspirante = (request, response, next) => {
                 idGrupo: request.params.idGrupo || null,
                 informacionPruebas: informacionPruebas || [],
                 aspirante: request.params.idAspirante || null,
+                idInstitucion: request.params.idInstitucion || null,
             })
 
         })
@@ -351,6 +354,7 @@ exports.getRegistrarAspirantes = (request, response, next) => {
                 paises: paises || [],
                 estados: estados || [],
                 idGrupo: request.params.idGrupo,
+                idInstitucion: request.params.idInstitucion,
             });
         })
         .catch((error) => {console.log(error)});
@@ -483,6 +487,7 @@ exports.getCuadernilloOtis = (request, response, next) => {
                         respuestasAspitanteOtis: respuestasAspitanteOtis || [],
                         aspirante: request.params.idAspirante || null,
                         grupo: request.params.idGrupo || null,
+                        idInstitucion: request.params.idInstitucion || null,
                     });
 
                 }).catch((error) => {
@@ -510,7 +515,10 @@ exports.getAnalisisOtis = (request, response, next) => {
             console.log("Puntaje Bruto: ", puntajeBruto);
             response.render('Psicologos/analisisOtis.ejs', {
                 informacionAnalisis: informacionAnalisis || [],
-                puntajeBruto: puntajeBruto || 0
+                puntajeBruto: puntajeBruto || 0,
+                idAspirante: request.params.idAspirante || null,
+                idGrupo: request.params.idGrupo || null,
+                idInstitucion: request.params.idInstitucion || null,
             })
         })
         .catch((error) => {
