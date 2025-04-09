@@ -249,8 +249,8 @@ exports.postEditarGrupo = (request, response, next) => {
         estatusGrupo
     } = request.body;
     
-    // Ciclo escolar semestre y año
-    const cicloEscolar = `${semestre} ${anio}`;
+    // Convertir estatusGrupo a booleano
+    const estatus = estatusGrupo === 'true';
     
     // El grupo existe?
     Grupo.fetchOne(idGrupo)
@@ -259,57 +259,74 @@ exports.postEditarGrupo = (request, response, next) => {
             return response.status(404).send('Grupo no encontrado');
         }
         
+        const grupoOriginal = rows[0];
+        
+        // Ciclo escolar semestre y año
+        const cicloEscolar = `${semestre} ${anio}`;
+        
         // Si existe, actualizarlo
-        return Grupo.update(
-            idGrupo,
-            nombreGrupo,
-            carrera,
-            cicloEscolar,
-            anio,
-            idNivelAcademico,
-            estatusGrupo === 'true' || estatusGrupo === true
-        )
+        let updatePromise;
+        
+        if (
+            nombreGrupo === grupoOriginal.nombreGrupo &&
+            carrera === grupoOriginal.carrera &&
+            cicloEscolar === grupoOriginal.cicloEscolar &&
+            parseInt(anio) === grupoOriginal.anioGeneracion &&
+            parseInt(idNivelAcademico) === grupoOriginal.idNivelAcademico &&
+            estatus !== (grupoOriginal.estatusGrupo === 1)
+        ) {
+            // Solo cambio el estatus, usar updateEstatus
+            updatePromise = Grupo.updateEstatus(idGrupo, estatus);
+        } else {
+            // Si se cambio mas que solo el estatus usar update completo
+            updatePromise = Grupo.update(
+                idGrupo,
+                nombreGrupo,
+                carrera,
+                cicloEscolar,
+                anio,
+                idNivelAcademico,
+                estatus
+            );
+        }
+        
+        return updatePromise
         .then(() => {
             // Actualizar las pruebas asignadas
             return Grupo.actualizarPruebasAsignadas(idGrupo, pruebasSeleccionadas, fechaLimite);
         })
         .then(() => {
-            // Obetener idInstitucion para redirigir a la lista de grupos
+            // Obtener idInstitucion para redirigir a la lista de grupos
             return Grupo.fetchOne(idGrupo)
                 .then(([grupo]) => {
                     // Red a la pag de grupos de esa institucion
                     response.redirect(`/psicologo/grupos/${grupo[0].idInstitucion}`);
                 });
-        })
+        });
     })
     .catch(error => {
         console.log('Error al actualizar grupo:', error);
-        
-        // En error, cargar de nuevo el formulario con los datos
-        Promise.all([
-            Grupo.fetchOne(idGrupo),
-            Grupo.getNiveles(),
-            Grupo.getPruebas()
-        ])
-        .then(([grupoData, niveles, pruebas]) => {
-            response.render('Psicologos/editarGrupo', {
-                grupo: grupoData[0][0],
-                listadoNiveles: niveles[0],
-                listadoPruebas: pruebas[0],
-                pruebasSeleccionadas: Array.isArray(pruebasSeleccionadas) ? pruebasSeleccionadas : [pruebasSeleccionadas],
-                fechaLimite: fechaLimite,
-                semestre: semestre,
-                error: 'Error al actualizar el grupo. Por favor, intente de nuevo.',
-                idGrupo: idGrupo
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            response.status(500).send('Error al procesar la solicitud');
-        });
     });
 };
 
+// Actualizar solo el estatus del grupo
+exports.postActualizarEstatusGrupo = (request, response, next) => {
+    const idGrupo = request.params.idGrupo;
+    const { estatusGrupo } = request.body;
+    
+    // Convertir el valor a booleano
+    const nuevoEstatus = estatusGrupo === 'true';
+    
+    Grupo.updateEstatus(idGrupo, nuevoEstatus)
+        .then(() => {
+            // Redireccionar a la pag de lista de grupos
+            response.redirect('/psicologo/lista-grupos');
+        })
+        .catch(error => {
+            console.log('Error al actualizar estado del grupo:', error);
+            response.status(500).send('Error al actualizar el estado del grupo');
+        });
+};
 
 
 exports.getAspirante = (request, response, next) => {
