@@ -21,6 +21,35 @@ app.use(session({
 }));
 
 app.use(helmet());
+
+// Configuración de política CSP
+app.use(
+    helmet.contentSecurityPolicy({
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: [
+          "'self'",
+          "https://cdn.jsdelivr.net",
+          "'unsafe-inline'"
+        ],
+        styleSrc: [
+          "'self'",
+          "https://cdn.jsdelivr.net",
+          "https://fonts.googleapis.com",
+          "'unsafe-inline'"
+        ],
+        fontSrc: [
+          "'self'",
+          "https://fonts.gstatic.com"
+        ],
+        connectSrc: ["'self'"],
+        imgSrc: ["'self'", "data:"],
+        objectSrc: ["'none'"],
+        upgradeInsecureRequests: [],
+      },
+    })
+);
+
 app.use(compression());
 
 const certificate = fs.readFileSync("../../certs/server.cert");
@@ -72,11 +101,11 @@ app.use('/aspirante', rutasAspirante);
 const rutasPsicologo = require('./routes/psicologo.routes');
 app.use('/psicologo', rutasPsicologo);
 
-https.createServer({key: privateKey, cert: certificate, passphrase: process.env.SSL_PASSPHRASE}, app).listen(process.env.PORT || 5050);
+// https.createServer({key: privateKey, cert: certificate, passphrase: process.env.SSL_PASSPHRASE}, app).listen(process.env.PORT || 5050);
 
 //https.createServer({key: privateKey, cert: certificate}, app).listen(process.env.PORT || 5050);
 
 // Iniciar servidor en el puerto 5050
-//app.listen(5050, () => {
-//    console.log("Servidor corriendo en http://localhost:5050");
-//});
+app.listen(5050, () => {
+    console.log("Servidor corriendo en http://localhost:5050");
+});
