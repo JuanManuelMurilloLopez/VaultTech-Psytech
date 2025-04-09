@@ -1,4 +1,4 @@
-INSERT INTO AreasOtis (nombreAreaOtis) VALUES
+INSERT INTO areasotis (nombreAreaOtis) VALUES
 
 ('Comprensión Verbal'), -- 1
 ('Raciocinio'), -- 2

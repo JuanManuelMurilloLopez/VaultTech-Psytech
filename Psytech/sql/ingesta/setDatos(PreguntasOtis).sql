@@ -1,4 +1,4 @@
-INSERT INTO preguntasOtis (idPreguntaOtis, idPrueba, numeroPregunta, preguntaOtis, idAreaOtis) VALUES
+INSERT INTO preguntasotis (idPreguntaOtis, idPrueba, numeroPregunta, preguntaOtis, idAreaOtis) VALUES
 (UUID(), 5, 1, '¿Qué expresa mejor lo que es un martillo?', 1),
 (UUID(), 5, 2, '¿Cuál de estas cinco palabras significa lo contrario de GANAR?', 1),
 (UUID(), 5, 3, 'La hierba es para la vaca lo que el pan es para…', 2),
