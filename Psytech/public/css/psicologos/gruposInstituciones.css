@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 :root{
     --primary: #95B6BC;
     --secondary: #294969;
@@ -25,6 +26,100 @@
     flex-direction: row;
 }
 
+.buscar{
+    flex-grow: 1;
+    height: 48px;
+    border-radius: 30px;
+    border: solid 2px #919191;
+    margin-right: 60px;
+}
+
+.buscar:focus-within{
+    border: 4px #7fc1ff solid;
+}
+
+.barra{
+    display: flex;
+    justify-content: space-between;
+    margin: 0 20px;
+    align-items: center;
+    height: 48px;
+}
+
+.barra input{
+    border: none;
+    background-color: inherit;
+    padding: 0 8px 0 0;
+    font-size: 16px;
+    flex-grow: 1;
+    outline: none;
+}
+
+.card-title{
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.card-header{
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none;
+    padding: 0;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-actions {
+    margin-top: auto;
+}
+
+.card-text{
+    margin: 16px 0;
+}
+
+.card-estatus{
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: 10px;
+    padding: 4px 32px;
+}
+
+.estatus{
+    border-radius: 10px;
+    padding: 0 32px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-left: 20px;
+}
+
+.activo{
+    color: #294969;
+    background: #C2EBF3 ;
+}
+
+.inactivo{
+    color: #600000;
+    background: #FECECE;
+}
+
+.registrar-grupo{
+    border-radius: 20px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 32px;
+    background: var(--secondary);
+    color: var(--font-secondary);
+}
 
 .btn-color--primary{
     background: var(--primary);
