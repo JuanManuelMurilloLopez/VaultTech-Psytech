@@ -1,10 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
 :root{
-    --primary: #95B6BC;
     --secondary: #294969;
     --third: #C1C1C1;
     --font-primary: #000;
     --font-secondary: #fff;
-    --primary-hover: #7BA1A8;
     --secondary-hover: #193858;
     --third-hover:#B1B1B1;
 }
@@ -25,9 +25,52 @@
     flex-direction: row;
 }
 
-.btn-color--primary{
-    background: var(--primary);
-    color: var(--font-primary);
+.btn-info{
+    background: #C2EBF3;
+    color: #294969;
+    border-color: #C2EBF3;
+}
+
+.btn-info:hover{
+    background: #C2EBF3;
+    color: #294969;
+    border-color: #C2EBF3;
+}
+
+.btn:first-child:active{
+    background: #C2EBF3;
+    color: #294969;
+    border-color: #294969;
+}
+
+.btn-outline-info{
+    color: #294969;
+    border-color: #193858;
+}
+
+.btn-outline-info:hover{
+    background: #C2EBF3;
+    color: #294969;
+    border-color: #C2EBF3;
+}
+
+.btn-danger{
+    background: #C30101;
+    color: #fff;
+}
+
+.btn-danger:hover{
+    background: #C30101;
+    color: #fff;
+}
+
+.btn-outline-danger{
+    color: #C30101;
+}
+
+.btn-outline-danger:hover{
+    background: #C30101;
+    color: #fff;
 }
 
 .btn-color--secondary{
@@ -48,9 +91,4 @@
 .btn-color--secondary:hover{
     background: var(--secondary-hover);
     color: var(--font-secondary);
-}
-
-.btn-color--primary:hover{
-    background: var(--primary-hover);
-    color: var(--font-primary);
 }

@@ -28,7 +28,7 @@
             <!-- Boton de cerrar sesión -->
             <%- include('../includes/_buttonCerrarSesion.ejs') %>
 
-            <h1 class="text-center">INFORMACION ASPIRANTE</h1><br><br>
+            <h3 class="text-center">INFORMACION ASPIRANTE</h3><br>
 
             <div class="aspirante-info">
                 <h4 class="aspirante-titulo"> Nombre del aspirante: </h4>
@@ -42,8 +42,8 @@
             <br>
 
             <div>
-                <div class="d-flex">
-                    <h2>Datos personales</h2>
+                <div class="d-flex align-items-center">
+                    <h4>Datos personales</h4>
                     <button class="btn btn-danger">Editar</button>
                 </div>
                 <hr>
@@ -75,9 +75,9 @@
             </div><br>
 
             <div>
-                <h2>Documentación</h2>
+                <h4>Documentación</h4>
                 <hr>
-                <div class="d-flex">
+                <div class="d-flex align-items-center">
                     <img class="document-icon" src="/images/document.svg" alt="ícono de documento">
                     <p class="document-titulo">CV</p>
                     <% if (informacionAspirante.cv != null) { %>
@@ -86,7 +86,7 @@
                         >Ver</button>
                     <% } %> 
                 </div><br><br>
-                <div class="d-flex">
+                <div class="d-flex align-items-center">
                     <img class="document-icon" src="/images/document.svg" alt="ícono de documento">
                     <p class="document-titulo">Kardex</p>
                     <% if (informacionAspirante.kardex != null) { %>
@@ -98,9 +98,9 @@
             </div><br>
 
             <div>
-                <h2>Entrevista Individual</h2>
+                <h4>Entrevista Individual</h4>
                 <hr>
-                <div class="d-flex">
+                <div class="d-flex align-items-center">
                     <img class="document-icon" src="/images/document.svg" alt="ícono de documento">
                     <p class="document-titulo">Formato de entrevista</p>
                     <button class="btn btn-color--secondary">Ver</button>
@@ -108,7 +108,7 @@
             </div><br>
 
             <div>
-                <h2>Pruebas</h2>
+                <h4>Pruebas</h4>
                 <hr>
                 <div class="row g-4 mt-4">
                     <% for(prueba of informacionPruebas) { %>
@@ -145,14 +145,13 @@
                                     <% if (prueba.nombreEstatus === 'Completada') { %>
                                         <div class="d-flex justify-content-between">
                                             <!-- CAMBIO CODIGO: href ruta -->
-                                             <% console.log("ID grupo: ", idGrupo) %>
+                                            <% console.log("ID grupo: ", idGrupo) %>
                                             <a href="<%= rutaPrueba %>/<%= idGrupo %>/<%= aspirante %>/<%= idInstitucion %>" class="btn btn-color--secondary">Ver resultados</a>
                                         </div> 
                                     <% } else {%>
                                         <div class="d-flex justify-content-between">
                                         </div>
                                     <% } %>
-    
                                 </div>
                             </div>
                         </div>
@@ -162,7 +161,7 @@
 
         <a class="btn btn-color--third"
         href='/psicologo/informacion-grupos/<%= idGrupo %>/<%= idInstitucion %> '
-        >Regresar</a>
+        >Regresar</a><br><br>
     </div>
     
     <!-- Bootstrap JS -->

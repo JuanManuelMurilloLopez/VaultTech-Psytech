@@ -1,12 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 
 :root{
-    --primary: #95B6BC;
     --secondary: #294969;
     --third: #C1C1C1;
     --font-primary: #000;
     --font-secondary: #fff;
-    --primary-hover: #7BA1A8;
     --secondary-hover: #193858;
     --third-hover:#B1B1B1;
 }
@@ -34,13 +32,13 @@
 
 .aspirante-titulo{
     font-weight: 600;
-    font-size: 28px;
+    font-size: 20px;
     margin-right: 5px;
 }
 
 .aspirante-info{
     font-weight: 500;
-    font-size: 28px;
+    font-size: 20px;
 }
 
 .datos-personales{
@@ -50,18 +48,17 @@
 
 .datos-titulo{
     font-weight: 600;
-    font-size: 24px;
     margin-right: 5px;
 }
 
 .datos-info{
     font-weight: 500;
-    font-size: 24px;
 }
 
 .document-titulo{
     font-weight: 500;
-    font-size: 24px;
+    font-size: 20px;
+    margin-top: 10px;
 }
 
 .document-icon{
@@ -126,43 +123,38 @@
 .btn-danger{
     background: #C30101;
     border-radius: 20px;
-    padding: 0 40px;
+    padding: 2px 32px;
     margin-left: 60px;
 }
 
-.btn-color--primary{
-    background: var(--primary);
-    color: var(--font-primary);
+.btn-danger:hover{
+    background: #990202;
 }
 
 .btn-color--secondary{
     border-radius: 20px;
-    font-size: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 32px;
+    padding: 2px 32px;
     background: var(--secondary);
     color: var(--font-secondary);
     margin-left: 40px;
 }
 
 .btn-color--third{
+    border-radius: 10px;
+    padding: 8px 32px;
     background: var(--third);
     color: var(--font-primary);
 }
 
 .btn-color--third:hover{
-    background: var(--third-hover);
+    background: #a7a7a7;
     color: var(--font-primary);
 }
 
 .btn-color--secondary:hover{
-    background: var(--secondary-hover);
+    background: #0e2945;;
     color: var(--font-secondary);
-}
-
-.btn-color--primary:hover{
-    background: var(--primary-hover);
-    color: var(--font-primary);
 }

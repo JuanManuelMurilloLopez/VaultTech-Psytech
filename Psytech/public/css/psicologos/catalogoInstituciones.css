@@ -73,14 +73,6 @@
     padding: 0;
 }
 
-.card-estatus{
-    font-size: 14px;
-    font-weight: 400;
-    font-style: normal;
-    border-radius: 10px;
-    padding: 5px 20px;
-}
-
 .card-body {
     padding: 20px;
     display: flex;
@@ -102,6 +94,7 @@
     border-radius: 10px;
     padding: 4px 28px;
 }
+
 .activo{
     color: #294969;
     background: #C2EBF3 ;

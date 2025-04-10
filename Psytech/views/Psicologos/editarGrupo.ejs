@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 </head>
 
-<body class="bg-light">
+<body>
 
   <div class="main">
     <!-- Navside -->
@@ -25,7 +25,8 @@
       <!-- Boton de cerrar sesión -->
       <%- include('../includes/_buttonCerrarSesion.ejs') %>
 
-      <h1 class="text-center">EDITAR GRUPO</h1>
+      <h2 class="text-center">EDITAR GRUPO</h2>
+      <hr><br>
       
       <% if (error && error.length > 0) { %>
         <div class="alert alert-danger">
@@ -47,36 +48,38 @@
           </div>
       
           <!-- Campo Año -->
-          <select class="form-select mb-3" aria-label="Año / Generación" id="anio" name="anio" required>
-            <option value="" disabled>Año / Generación</option>
-            <option value="2021" <%= grupo.anioGeneracion == 2021 ? 'selected' : '' %>>2021</option>
-            <option value="2022" <%= grupo.anioGeneracion == 2022 ? 'selected' : '' %>>2022</option>
-            <option value="2023" <%= grupo.anioGeneracion == 2023 ? 'selected' : '' %>>2023</option>
-            <option value="2024" <%= grupo.anioGeneracion == 2024 ? 'selected' : '' %>>2024</option>
-          </select>
+          <div class="form-floating mb-3">
+            <input type="number" class="form-control" id="anio" name="anio" placeholder="Año de generación" value="<%= grupo.anioGeneracion %>" required>
+            <label for="anio">Año de Generación</label>
+          </div>
       
           <!-- Campo Semestre -->
-          <select class="form-select mb-3" aria-label="Semestre" id="semestre" name="semestre" required>
-            <option value="" disabled>Semestre</option>
-            <option value="Febrero/Julio" <%= semestre === 'Febrero/Julio' ? 'selected' : '' %>>Feb / Jul</option>
-            <option value="Agosto/Diciembre" <%= semestre === 'Agosto/Diciembre' ? 'selected' : '' %>>Ago / Dic</option>
-          </select>
+          <div class="form-floating mb-3">
+            <select class="form-select mb-3" aria-label="Semestre" id="semestre" name="semestre" required>
+              <option value="Febrero/Julio" <%= semestre === 'Febrero/Julio' ? 'selected' : '' %>>Feb / Jul</option>
+              <option value="Agosto/Diciembre" <%= semestre === 'Agosto/Diciembre' ? 'selected' : '' %>>Ago / Dic</option>
+            </select>
+            <label for="semestre">Semestre</label>
+          </div>
           
           <!-- Campo Nivel Académico -->
-          <select class="form-select mb-3" aria-label="Nivel Académico" id="idNivelAcademico" name="idNivelAcademico" required>
-            <option value="" disabled>Nivel Académico</option>
-            <% for(const nivel of listadoNiveles) { %>
-              <option value="<%= nivel.idNivelAcademico %>" <%= grupo.idNivelAcademico == nivel.idNivelAcademico ? 'selected' : '' %>>
-                <%= nivel.nombreNivelAcademico %>
-              </option>
-            <% } %>
-          </select>
+          <div class="form-floating mb-3">
+            <select class="form-select mb-3" aria-label="Nivel Académico" id="idNivelAcademico" name="idNivelAcademico" required>
+              <option value="" disabled>Nivel Académico</option>
+              <% for(const nivel of listadoNiveles) { %>
+                <option value="<%= nivel.idNivelAcademico %>" <%= grupo.idNivelAcademico == nivel.idNivelAcademico ? 'selected' : '' %>>
+                  <%= nivel.nombreNivelAcademico %>
+                </option>
+              <% } %>
+            </select>
+            <label for="idNivelAcademico">Nivel académico</label>
+          </div>
     
           <!-- Estatus del grupo -->
           <div class="mb-3">
-            <h3>Estatus: </h3>
-            <div class="d-flex gap-2 align-items-center">
-              <button type="button" id="estatusActivoBtn" class="btn <%= grupo.estatusGrupo ? 'btn-info' : 'btn-outline-info' %>">Activa</button>
+            <h4 class="mb-3">Estatus: </h4>
+            <div class="d-flex gap-2 align-items-center ">
+              <button type="button" id="estatusActivoBtn" class="me-2 btn <%= grupo.estatusGrupo ? 'btn-info' : 'btn-outline-info' %>">Activa</button>
               <button type="button" id="estatusInactivoBtn" class="btn <%= !grupo.estatusGrupo ? 'btn-danger' : 'btn-outline-danger' %>">Desactivar</button>
               <input type="hidden" id="estatusGrupo" name="estatusGrupo" value="<%= grupo.estatusGrupo %>">
             </div>
@@ -84,7 +87,7 @@
       
           <!-- Selección de pruebas -->
           <div class="mb-3">
-            <h4>Asignar pruebas</h4>
+            <h4 class="mb-3">Asignar pruebas</h4>
             <p>Selecciona las pruebas que quieres asignar al grupo junto con la fecha límite para responder las pruebas</p>
           
             <!-- Checkbox de pruebas-->
@@ -92,10 +95,10 @@
               <% for (const prueba of listadoPruebas) { %>
                 <div class="form-check form-check-inline">
                   <input class="form-check-input" type="checkbox" 
-                         name="pruebasSeleccionadas" 
-                         value="<%= prueba.idPrueba %>" 
-                         id="prueba<%= prueba.idPrueba %>"
-                         <%= pruebasSeleccionadas.includes(prueba.idPrueba.toString()) ? 'checked' : '' %>>
+                    name="pruebasSeleccionadas" 
+                    value="<%= prueba.idPrueba %>" 
+                    id="prueba<%= prueba.idPrueba %>"
+                    <%= pruebasSeleccionadas.includes(prueba.idPrueba.toString()) ? 'checked' : '' %>>
                   <label class="form-check-label" for="prueba<%= prueba.idPrueba %>">
                     <%= prueba.nombre %>
                   </label>
