@@ -30,8 +30,10 @@ app.use(
         scriptSrc: [
           "'self'",
           "https://cdn.jsdelivr.net",
-          "'unsafe-inline'"
+          "'unsafe-inline'",
+          "'unsafe-hashes'"
         ],
+        scriptSrcAttr: ["'self'", "'unsafe-inline'"],
         styleSrc: [
           "'self'",
           "https://cdn.jsdelivr.net",
