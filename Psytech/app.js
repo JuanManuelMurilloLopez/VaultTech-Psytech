@@ -33,7 +33,7 @@ app.use(
           "'unsafe-inline'",
           "'unsafe-hashes'"
         ],
-        scriptSrcAttr: ["'self'", "'unsafe-inline'"],
+        scriptSrcAttr: ["'unsafe-inline'"],
         styleSrc: [
           "'self'",
           "https://cdn.jsdelivr.net",
