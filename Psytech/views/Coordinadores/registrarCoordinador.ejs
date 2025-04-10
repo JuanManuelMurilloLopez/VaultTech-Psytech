@@ -27,40 +27,76 @@
             <div>
                 <h1 class="text-container">REGISTRAR COORDINADOR</h1>
             </div>
-            <div>
-                <!--Input nombre-->
-                <div class="mb-3">
-                    <label class="form-label" for="">Nombre</label>
-                    <input class="form-control" type="text" name="" id="">
+            <form action="/coordinador/registrar-coordinador" method="POST" onsubmit="return validarFormulario()">
+                <div>
+                    <!--Input nombre-->
+                    <div class="mb-3">
+                        <label class="form-label" for="nombreCoordinador">Nombre</label>
+                        <input class="form-control" type="text" name="nombreCoordinador" id="nombreCoordinador" required>
+                    </div>
+                    <!--Input Apellido Paterno-->
+                    <div class="mb-3">
+                        <label class="form-label" for="apellidoPaterno">Apellido Paterno</label>
+                        <input class="form-control" type="text" name="apellidoPaterno" id="apellidoPaterno" required>
+                    </div>
+                    <!--Input Apellido Materno-->
+                    <div class="mb-3">
+                        <label class="form-label" for="apellidoMaterno">Apellido Materno</label>
+                        <input class="form-control" type="text" name="apellidoMaterno" id="apellidoMaterno">
+                    </div>
+                    <!--Input Correo-->
+                    <div class="mb-3">
+                        <label class="form-label" for="correo">Correo electrónico</label>
+                        <input class="form-control" type="text" name="correo" id="correo" required>
+                    </div>
+                    <!--Input Lada-->
+                    <div class="mb-3">
+                        <label class="form-label" for="lada">Lada telefónica</label>
+                        <div class="input-group">
+                            <span class="input-group-text">+</span>
+                            <input class="form-control" type="text" name="lada" id="lada" required>
+                        </div>
+                    </div>                    
+                    <!--Input Número-->
+                    <div class="mb-3">
+                        <label class="form-label" for="numero">Número de teléfono</label>
+                        <input class="form-control" type="text" name="numero" id="numero" required >
+                    </div>
+                    
                 </div>
-                <!--Input Apellido Paterno-->
-                <div class="mb-3">
-                    <label class="form-label" for="">Apellido Paterno</label>
-                    <input class="form-control" type="text" name="" id="">
+                <div>
+                    <a class="btn btn-color--third btn-sm" 
+                    href="/coordinador/coordinadores-registrados"
+                    >Regresar</a>
+                    <button type="submit" class="btn btn-color--secondary btn-sm" onclick="return confirmarGuardado()">Guardar</button>
+                    <script>
+                    function confirmarGuardado() {
+                        return confirm("¿Estás seguro de guardar?");
+                    }
+                    </script>
                 </div>
-                <!--Input Apellido Materno-->
-                <div class="mb-3">
-                    <label class="form-label" for="">Apellido Materno</label>
-                    <input class="form-control" type="text" name="" id="">
-                </div>
-                <!--Input Correo-->
-                <div class="mb-3">
-                    <label class="form-label" for="">Correo electrónico</label>
-                    <input class="form-control" type="text" name="" id="">
-                </div>
-                <!--Input Número-->
-                <div class="mb-3">
-                    <label class="form-label" for="">Número de teléfono</label>
-                    <input class="form-control" type="text" name="" id="">
-                </div>
-            </div>
-            <div>
-                <button type="button" class="btn btn-color--third btn-sm" 
-                onclick="window.location.href='/coordinador/coordinadores-registrados'">Regresar</button>
-                <button type="button" class="btn btn-color--secondary btn-sm"
-                onclick="confirm('¿Está seguro de guardar los cambios?');
-                window.location.href='/coordinador/coordinadores-registrados'">Guardar</button>
-            </div>
+            </form>
+            <script>
+                function validarFormulario() {
+                    // Validar el correo electrónico
+                    const correo = document.getElementById("correo").value;
+                    const regexCorreo = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+                    if (!regexCorreo.test(correo)) {
+                        alert("Por favor ingresa un correo electrónico válido.");
+                        return false;
+                    }
+                
+                    // Validar el número de teléfono
+                    const numero = document.getElementById("numero").value;
+                    const regexNumero = /^\d{10}$/;  // Solo 10 dígitos
+                    if (!regexNumero.test(numero)) {
+                        alert("El número de teléfono debe tener exactamente 10 dígitos numéricos.");
+                        return false;
+                    }
+                
+                    return true; 
+                }
+            </script>
         </div>
     </div>
 

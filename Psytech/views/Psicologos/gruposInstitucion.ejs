@@ -89,11 +89,13 @@
                                 <p class="card-text">Año de Generación: <%= grupo.anioGeneracion %></p>
                                 <p class="card-text">Semestre: <%= grupo.cicloEscolar %></p>
                                 <p class="card-text">Número de aspirantes: <%= grupo.numeroAspirantes %></p>
+    
                                 <div class="card-actions d-flex justify-content-between mt-auto">
-                                    <a href="/psicologo/informacion-grupos/<%= grupo.idGrupo %>" 
+                                    <a href="/psicologo/informacion-grupos/<%= grupo.idGrupo %>/<%= idInstitucion %>" 
                                         class="btn btn-color--secondary">Ver grupo
                                     </a>
-                                    <a href="/psicologo/editar-grupo/" 
+    
+                                    <a href="/psicologo/editar-grupo/<%= grupo.idGrupo %>/<%= idInstitucion %>" 
                                         class="btn btn-color--third">Editar
                                     </a>
                                 </div>
@@ -107,14 +109,32 @@
     
             <br>
             <!-- Botones de navegación Grupo, Edicion, Regresar" -->
-            <button type="button" class="btn btn-color--third"
-            onclick="window.location.href=
-            '/psicologo/catalogo-instituciones'">Regresar</button>
+            <a class="btn btn-color--third"
+            href="/psicologo/catalogo-instituciones">Regresar</a>
             <br>
         </div>
     </div><br><br>
+
+    <script>
+        if (document.referrer.includes('/psicologo/editar-grupo/')) {
+          // Elemento de alerta
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success alert-dismissible fade show';
+            alertDiv.setAttribute('role', 'alert');
+            alertDiv.innerHTML = `
+                El grupo se ha actualizado correctamente.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            // Pone la alerta al principio del contenedor
+            const container = document.querySelector('.container');
+            container.insertBefore(alertDiv, container.firstChild.nextSibling);
+            
+        }
+    </script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Incluir el script del navside -->
     <script src="/js/_navside.js"></script>
+
 </body>

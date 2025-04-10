@@ -55,3 +55,15 @@
     background: var(--primary-hover);
     color: var(--font-primary);
 }
+
+.barra {
+    position: relative;
+}
+
+.barra img {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 20px;
+}

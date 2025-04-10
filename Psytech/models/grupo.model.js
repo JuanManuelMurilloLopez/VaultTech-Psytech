@@ -15,7 +15,7 @@ module.exports = class Grupo {
   static fetchAll(){
     return db.execute(`SELECT grupos.idGrupo, institucion.nombreInstitucion,
                       grupos.nombreGrupo, grupos.estatusGrupo, grupos.carrera,
-                      grupos.anioGeneracion, grupos.cicloEscolar,
+                      grupos.anioGeneracion, grupos.cicloEscolar, grupos.idInstitucion,
                       COUNT(gruposaspirantes.idAspirante) as numeroAspirantes 
                       FROM grupos
                       JOIN institucion ON 
@@ -60,8 +60,8 @@ module.exports = class Grupo {
   static fetchOne(idGrupo){
     return db.execute(`
         SELECT *, nombreNivelAcademico
-        FROM grupos, nivelAcademico
-        WHERE grupos.idNivelAcademico = nivelAcademico.idNivelAcademico
+        FROM grupos, nivelacademico
+        WHERE grupos.idNivelAcademico = nivelacademico.idNivelAcademico
         AND grupos.idGrupo = ?
       `, [idGrupo])
   }
@@ -71,10 +71,10 @@ module.exports = class Grupo {
         SELECT usuarios.nombreUsuario, usuarios.apellidoPaterno, 
         usuarios.apellidoMaterno, usuarios.estatusUsuario,
         aspirantes.idAspirante
-        FROM usuarios, aspirantes, gruposAspirantes
+        FROM usuarios, aspirantes, gruposaspirantes
         WHERE aspirantes.idUsuario = usuarios.idUsuario
-        AND aspirantes.idAspirante = gruposAspirantes.idAspirante
-        AND gruposAspirantes.idGrupo = ?
+        AND aspirantes.idAspirante = gruposaspirantes.idAspirante
+        AND gruposaspirantes.idGrupo = ?
         ORDER BY usuarios.nombreUsuario, usuarios.estatusUsuario;
       `, [idGrupo])
   }
@@ -82,7 +82,7 @@ module.exports = class Grupo {
   static getInformacionGruposPruebas(idGrupo){
     return db.execute(`
         SELECT idPrueba, fechaLimite
-        FROM gruposPruebas
+        FROM grupospruebas
         WHERE idGrupo = ?
       `, [idGrupo])
   }
@@ -92,7 +92,7 @@ module.exports = class Grupo {
   }
 
   static getNiveles() {
-    return db.execute('SELECT idNivelAcademico, nombreNivelAcademico FROM nivelAcademico');
+    return db.execute('SELECT idNivelAcademico, nombreNivelAcademico FROM nivelacademico');
   }
 
   static getPruebas() {
@@ -126,7 +126,7 @@ module.exports = class Grupo {
 
     const inserts = pruebasSeleccionadas.map(idPrueba => {
       return db.execute(
-        `INSERT INTO gruposPruebas (idGrupo, idPrueba, fechaAsignacion, fechaLimite) VALUES ((SELECT idGrupo FROM grupos WHERE grupos.nombreGrupo = ?), ?, CURRENT_DATE(), ?)`,
+        `INSERT INTO grupospruebas (idGrupo, idPrueba, fechaAsignacion, fechaLimite) VALUES ((SELECT idGrupo FROM grupos WHERE grupos.nombreGrupo = ?), ?, CURRENT_DATE(), ?)`,
         [this.nombreGrupo, idPrueba, this.fechaLimite]
       );
     });
@@ -139,4 +139,77 @@ module.exports = class Grupo {
       .then(() => this.savePruebasSeleccionadas(pruebasSeleccionadas));
   }
 
+
+  // EDITAR GRUPO
+  // Actualizar un grupo que ya existe
+  static update(idGrupo, nombreGrupo, carrera, cicloEscolar, anioGeneracion, idNivelAcademico, estatusGrupo) {
+    return db.execute(
+      `UPDATE grupos 
+       SET nombreGrupo = ?, 
+           carrera = ?, 
+           cicloEscolar = ?, 
+           anioGeneracion = ?, 
+           idNivelAcademico = ?, 
+           estatusGrupo = ? 
+       WHERE idGrupo = ?`,
+      [nombreGrupo, carrera, cicloEscolar, anioGeneracion, idNivelAcademico, estatusGrupo, idGrupo]
+    );
+  }
+
+  // Obtener las pruebas asignadas a un grupo
+  static getPruebasAsignadas(idGrupo) {
+    return db.execute(
+      `SELECT gp.idGrupo, gp.idPrueba, p.nombre, gp.fechaAsignacion, gp.fechaLimite 
+       FROM grupospruebas gp
+       JOIN pruebas p ON gp.idPrueba = p.idPrueba
+       WHERE gp.idGrupo = ?`,
+      [idGrupo]
+    );
+  }
+
+  // Actualizar las pruebas asignadas a un grupo
+  static actualizarPruebasAsignadas(idGrupo, pruebasSeleccionadas, fechaLimite) {
+    // Si no se pusieron pruebas no hacer nada
+    if (!pruebasSeleccionadas) {
+      return Promise.resolve();
+    }
+
+    // Convertir pruebas seleccionadas a arreglo si no lo son
+    if (!Array.isArray(pruebasSeleccionadas)) {
+      pruebasSeleccionadas = [pruebasSeleccionadas];
+    }
+
+    // Eliminamos asignaciones anteriores
+    return db.execute(
+      'DELETE FROM grupospruebas WHERE idGrupo = ?',
+      [idGrupo]
+    ).then(() => {
+      // Si no hay terminar
+      if (pruebasSeleccionadas.length === 0) {
+        return Promise.resolve();
+      }
+      
+      const promises = [];
+      const fechaActual = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+      
+      for (const idPrueba of pruebasSeleccionadas) {
+        promises.push(
+          db.execute(
+            'INSERT INTO grupospruebas (idGrupo, idPrueba, fechaAsignacion, fechaLimite) VALUES (?, ?, ?, ?)',
+            [idGrupo, idPrueba, fechaActual, fechaLimite]
+          )
+        );
+      }
+      
+      return Promise.all(promises);
+    });
+  }
+  
+  // Metodo para actualizar solo el estado del grupo
+  static updateEstatus(idGrupo, estatusGrupo) {
+    return db.execute(
+      'UPDATE grupos SET estatusGrupo = ? WHERE idGrupo = ?',
+      [estatusGrupo, idGrupo]
+    );
+  }
 }

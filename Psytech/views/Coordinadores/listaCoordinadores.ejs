@@ -29,45 +29,49 @@
                 <h1 class="text-container">COORDINADORES REGISTRADOS</h1>
             </div>
             
-            <div>
-                <!-- Campo Buscar -->
-                <div class="mb-3">
-                    <label for="buscar" class="form-label">Buscar</label>
-                    <input type="text" id="buscar" name="buscar" 
-                    class="form-control" required>
+            <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-2">
+                <!-- Barra de búsqueda -->
+                <div class="flex-grow-1 position-relative">
+                    <input type="text" id="buscar" name="buscar" class="form-control w-100" placeholder="Buscar">
+                    <img src="/images/search.svg" alt="buscar" 
+                         style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); height: 20px; cursor: pointer;">
                 </div>
-    
-                <!-- Boton Registrar -->
+            
+                <!-- Botón Registrar Nuevo -->
                 <div>
-                    <button type="button" class="btn btn-color--secondary btn-sm" 
-                        onclick="window.location.href='/coordinador/registrar-coordinador'">Registrar nuevo
-                    </button>
+                    <a href="/coordinador/registrar-coordinador" class="btn btn-color--secondary">
+                        Registrar Nuevo
+                    </a>
                 </div>
-            </div>
+            </div>      
     
             <table class="table">
                 <thead class="table-light">
                     <tr>
                         <th colspan="4">Nombre</th>
-                        <th colspan="4">Apellido</th>
+                        <th colspan="4">Apellidos</th>
                         <th colspan="4">Correo</th>
                         <th colspan="4">Número</th>
                         <th colspan="4">Estatus</th>
-                        <th colspan="4">...</th>
+                        <th colspan="4"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td colspan="4">Lusia Fernanda</td>
-                        <td colspan="4">Valdez Guillén</td></t>
-                        <td colspan="4">ferdivaldez</td>
-                        <td colspan="4">4424576724</td>
-                        <td colspan="4">Activo</td>
-                        <td colspan="4">
-                            <button type="button" class="btn btn-color--third btn-sm" 
-                            onclick="window.location.href='/coordinador/editar-coordinador'">Editar</button>
-                        </td>
-                    </tr>
+                    <% for (let coordinador of listaCoordinadores) { %>
+                        <tr>
+                            <td colspan="4"><%= coordinador.nombreUsuario %></td>
+                            <td colspan="4"><%= coordinador.apellidoPaterno %> <%= coordinador.apellidoMaterno %></td>
+                            <td colspan="4"><%= coordinador.correo %></td>
+                            <td colspan="4"><%= coordinador.lada %> <%= coordinador.numeroTelefono %></td>
+                            <td colspan="4">
+                                <%= coordinador.estatusUsuario === 1 ? "Activo" : "Inactivo" %>
+                            </td>
+                            <td colspan="4">
+                                <button type="button" class="btn btn-color--third btn-sm" 
+                                onclick="window.location.href='/coordinador/editar-coordinador/<%= coordinador.idUsuario %>'">Editar</button>
+                            </td>
+                        </tr>
+                    <% } %>
                 </tbody>
             </table>
         </div>

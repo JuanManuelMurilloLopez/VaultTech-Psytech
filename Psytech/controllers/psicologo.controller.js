@@ -153,7 +153,7 @@ exports.getRegistrarGrupo = (req, res, next) => {
           res.send('Error al registrar grupo');
         }
       });
-  };
+};
   
 
 exports.getInformacionGrupo = (request, response, next) => {
@@ -167,6 +167,7 @@ exports.getInformacionGrupo = (request, response, next) => {
             response.render('Psicologos/informacionGrupo.ejs', {
                 grupo: grupo || null,
                 aspirantes: aspirantes || [],
+                idInstitucion: request.params.idInstitucion || null,
             })
         })
         .catch((error) => {
@@ -180,9 +181,153 @@ exports.getInformacionGrupo = (request, response, next) => {
 }
 
 exports.getEditarGrupo = (request, response, next) => {
-    console.log('Editar Grupo');
-    response.render('Psicologos/editarGrupo');
+    const idGrupo = request.params.idGrupo;
+    
+    // Información del grupo a editar
+    Promise.all([
+        Grupo.fetchOne(idGrupo),
+        Grupo.getNiveles(),
+        Grupo.getPruebas(),
+        Grupo.getPruebasAsignadas(idGrupo)
+    ])
+    .then(([grupoData, niveles, pruebas, pruebasAsignadas]) => {
+        const grupo = grupoData[0][0];
+        
+        if (!grupo) {
+            return response.redirect('/psicologo/lista-grupos');
+        }
+        
+        // Sacar informacion del ciclo escolar (semestre y año)
+        let semestre = '';
+        if (grupo.cicloEscolar) {
+            if (grupo.cicloEscolar.includes('Febrero/Julio')) {
+                semestre = 'Febrero/Julio';
+            } else if (grupo.cicloEscolar.includes('Agosto/Diciembre')) {
+                semestre = 'Agosto/Diciembre';
+            }
+        }
+        
+        // Obtener lista de pruebas ya asignadas al grupo
+        const pruebasSeleccionadas = pruebasAsignadas[0].map(p => p.idPrueba.toString());
+        const fechaLimite = pruebasAsignadas[0].length > 0 ? pruebasAsignadas[0][0].fechaLimite : null;
+        
+        // Convertir fecha limite a YYYY-MM-DD
+        let fechaLimiteFormateada = null;
+        if (fechaLimite) {
+            const fecha = new Date(fechaLimite);
+            fechaLimiteFormateada = fecha.toISOString().split('T')[0];
+        }
+        
+        response.render('Psicologos/editarGrupo', {
+            grupo: grupo,
+            listadoNiveles: niveles[0],
+            listadoPruebas: pruebas[0],
+            pruebasSeleccionadas: pruebasSeleccionadas,
+            fechaLimite: fechaLimiteFormateada,
+            semestre: semestre,
+            error: '',
+            idGrupo: idGrupo,
+            idInstitucion: request.params.idInstitucion || null,
+        });
+    })
+    .catch((error) => {
+        console.log('Error al cargar formulario de editar grupo:', error);
+        response.status(500).send('Error al cargar formulario de editar');
+    });
 };
+
+exports.postEditarGrupo = (request, response, next) => {
+    const idGrupo = request.params.idGrupo;
+    const {
+        nombreGrupo,
+        carrera,
+        semestre,
+        anio,
+        idNivelAcademico,
+        pruebasSeleccionadas,
+        fechaLimite,
+        estatusGrupo
+    } = request.body;
+    
+    // Convertir estatusGrupo a booleano
+    const estatus = estatusGrupo === 'true';
+    
+    // El grupo existe?
+    Grupo.fetchOne(idGrupo)
+    .then(([rows]) => {
+        if (rows.length === 0) {
+            return response.status(404).send('Grupo no encontrado');
+        }
+        
+        const grupoOriginal = rows[0];
+        
+        // Ciclo escolar semestre y año
+        const cicloEscolar = `${semestre} ${anio}`;
+        
+        // Si existe, actualizarlo
+        let updatePromise;
+        
+        if (
+            nombreGrupo === grupoOriginal.nombreGrupo &&
+            carrera === grupoOriginal.carrera &&
+            cicloEscolar === grupoOriginal.cicloEscolar &&
+            parseInt(anio) === grupoOriginal.anioGeneracion &&
+            parseInt(idNivelAcademico) === grupoOriginal.idNivelAcademico &&
+            estatus !== (grupoOriginal.estatusGrupo === 1)
+        ) {
+            // Solo cambio el estatus, usar updateEstatus
+            updatePromise = Grupo.updateEstatus(idGrupo, estatus);
+        } else {
+            // Si se cambio mas que solo el estatus usar update completo
+            updatePromise = Grupo.update(
+                idGrupo,
+                nombreGrupo,
+                carrera,
+                cicloEscolar,
+                anio,
+                idNivelAcademico,
+                estatus
+            );
+        }
+        
+        return updatePromise
+        .then(() => {
+            // Actualizar las pruebas asignadas
+            return Grupo.actualizarPruebasAsignadas(idGrupo, pruebasSeleccionadas, fechaLimite);
+        })
+        .then(() => {
+            // Obtener idInstitucion para redirigir a la lista de grupos
+            return Grupo.fetchOne(idGrupo)
+                .then(([grupo]) => {
+                    // Red a la pag de grupos de esa institucion
+                    response.redirect(`/psicologo/grupos/${grupo[0].idInstitucion}`);
+                });
+        });
+    })
+    .catch(error => {
+        console.log('Error al actualizar grupo:', error);
+    });
+};
+
+// Actualizar solo el estatus del grupo
+exports.postActualizarEstatusGrupo = (request, response, next) => {
+    const idGrupo = request.params.idGrupo;
+    const { estatusGrupo } = request.body;
+    
+    // Convertir el valor a booleano
+    const nuevoEstatus = estatusGrupo === 'true';
+    
+    Grupo.updateEstatus(idGrupo, nuevoEstatus)
+        .then(() => {
+            // Redireccionar a la pag de lista de grupos
+            response.redirect('/psicologo/lista-grupos');
+        })
+        .catch(error => {
+            console.log('Error al actualizar estado del grupo:', error);
+            response.status(500).send('Error al actualizar el estado del grupo');
+        });
+};
+
 
 exports.getAspirante = (request, response, next) => {
     Aspirante.getInformacionAspirante(request.params.idAspirante)
@@ -190,13 +335,15 @@ exports.getAspirante = (request, response, next) => {
         const informacionAspirante = rows[0];
         Aspirante.getMisPruebas(request.params.idAspirante, request.params.idGrupo)
         .then(([rows, fieldData]) => {
-            const informacionPruebas = rows;
-            console.log("Informacion Aspirantes: ", informacionPruebas);
+            const informacionPruebas = rows; 
             response.render('Psicologos/informacionAspirante', {
                 informacionAspirante: informacionAspirante || [],
                 idGrupo: request.params.idGrupo || null,
                 informacionPruebas: informacionPruebas || [],
+                aspirante: request.params.idAspirante || null,
+                idInstitucion: request.params.idInstitucion || null,
             })
+
         })
         .catch((error) => {
             console.log(error);
@@ -224,6 +371,7 @@ exports.getRegistrarAspirantes = (request, response, next) => {
                 paises: paises || [],
                 estados: estados || [],
                 idGrupo: request.params.idGrupo,
+                idInstitucion: request.params.idInstitucion,
             });
         })
         .catch((error) => {console.log(error)});
@@ -348,12 +496,15 @@ exports.getCuadernilloOtis = (request, response, next) => {
                     })
 
                     const respuestasAspitanteOtis = Object.values(preguntasAgrupadas);
-
+                    
                     response.render('Psicologos/cuadernilloRespuestasOtis.ejs', {
                         datosPersonales: datosPersonales || [],
                         respuestasCorrectas: respuestasCorrectas || 0,
                         tiempoTotal: tiempoTotal || 0,
                         respuestasAspitanteOtis: respuestasAspitanteOtis || [],
+                        aspirante: request.params.idAspirante || null,
+                        grupo: request.params.idGrupo || null,
+                        idInstitucion: request.params.idInstitucion || null,
                     });
 
                 }).catch((error) => {
@@ -381,7 +532,10 @@ exports.getAnalisisOtis = (request, response, next) => {
             console.log("Puntaje Bruto: ", puntajeBruto);
             response.render('Psicologos/analisisOtis.ejs', {
                 informacionAnalisis: informacionAnalisis || [],
-                puntajeBruto: puntajeBruto || 0
+                puntajeBruto: puntajeBruto || 0,
+                idAspirante: request.params.idAspirante || null,
+                idGrupo: request.params.idGrupo || null,
+                idInstitucion: request.params.idInstitucion || null,
             })
         })
         .catch((error) => {
