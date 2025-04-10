@@ -15,7 +15,7 @@
     <!-- CSS cerrar sesión -->
     <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 </head>
-<body class="bg-light">
+<body>
 
   <div class="main">
 
@@ -32,6 +32,9 @@
       </div>
     <% } %>
     
+    <br>
+    <h2 class="text-center">REGISTRAR NUEVO GRUPO</h2>
+    <hr><br>
 
     <form action="/psicologo/registrar-grupo/<%= idInstitucion %>"  method="POST">
 
@@ -87,16 +90,19 @@
       <!-- Fecha Límite para las pruebas -->
       <div class="mb-3 mt-3">
         <label for="fechaLimite" class="form-label">Fecha límite para contestar las pruebas</label>
-        <input type="date" class="form-control" id="fechaLimite" name="fechaLimite" required>
+        <input type="date" class="form-control fecha" name="fechaLimite" required>
       </div>
-
 
       <!-- Botones -->
       <div class="mt-4">
-        <a href="/psicologo/grupos/<%= idInstitucion %>" class="btn btn-secondary">Regresar</a>
-        <button type="submit" class="btn btn-primary" onclick="return confirm('¿Está seguro de guardar los cambios?')">Guardar</button>
+        <a href="/psicologo/grupos/<%= idInstitucion %>" class="btn btn-color--third me-5">Regresar</a>
+
+        <button type="submit" class="btn btn-color--secondary" 
+          onclick="return confirm('¿Está seguro de guardar los cambios?')">
+          Guardar
+        </button>
       </div>
-    </form>
+    </form><br><br>
 
   </div>
 
