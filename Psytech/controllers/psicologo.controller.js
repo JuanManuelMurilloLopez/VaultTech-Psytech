@@ -249,63 +249,61 @@ exports.postEditarGrupo = (request, response, next) => {
         estatusGrupo
     } = request.body;
     
-    // Convertir estatusGrupo a booleano
-    const estatus = estatusGrupo === 'true';
+    console.log("estatusGrupo recibido:", estatusGrupo); 
     
-    // El grupo existe?
+    // Cambiar estatusGrupo a 1 (activo) o 0 (inactivo) para guardarlo en la base de datos
+    // Si no se manda un nuevo valor, usar el mismo estatus que ya tenía
+    let estatus;
+    
+    // Checar el valor actual del grupo
     Grupo.fetchOne(idGrupo)
     .then(([rows]) => {
         if (rows.length === 0) {
             return response.status(404).send('Grupo no encontrado');
         }
         
-        const grupoOriginal = rows[0];
+        const grupoActual = rows[0];
+        console.log("Estatus actual del grupo:", grupoActual.estatusGrupo);
+        
+        // Si no se manda el estatusGrupo desde el formulario dejar el que ya estaba
+        if (estatusGrupo === undefined || estatusGrupo === null) {
+            estatus = grupoActual.estatusGrupo;
+        } else {
+            // Convertir a 1 o 0 segun el valor recibido
+            estatus = estatusGrupo === 'true' ? 1 : 0;
+        }
+        
+        console.log("Estatus que se usará:", estatus);
         
         // Ciclo escolar semestre y año
         const cicloEscolar = `${semestre} ${anio}`;
         
-        // Si existe, actualizarlo
-        let updatePromise;
-        
-        if (
-            nombreGrupo === grupoOriginal.nombreGrupo &&
-            carrera === grupoOriginal.carrera &&
-            cicloEscolar === grupoOriginal.cicloEscolar &&
-            parseInt(anio) === grupoOriginal.anioGeneracion &&
-            parseInt(idNivelAcademico) === grupoOriginal.idNivelAcademico &&
-            estatus !== (grupoOriginal.estatusGrupo === 1)
-        ) {
-            // Solo cambio el estatus, usar updateEstatus
-            updatePromise = Grupo.updateEstatus(idGrupo, estatus);
-        } else {
-            // Si se cambio mas que solo el estatus usar update completo
-            updatePromise = Grupo.update(
-                idGrupo,
-                nombreGrupo,
-                carrera,
-                cicloEscolar,
-                anio,
-                idNivelAcademico,
-                estatus
-            );
-        }
-        
-        return updatePromise
-        .then(() => {
-            // Actualizar las pruebas asignadas
-            return Grupo.actualizarPruebasAsignadas(idGrupo, pruebasSeleccionadas, fechaLimite);
-        })
-        .then(() => {
-            // Obtener idInstitucion para redirigir a la lista de grupos
-            return Grupo.fetchOne(idGrupo)
-                .then(([grupo]) => {
-                    // Red a la pag de grupos de esa institucion
-                    response.redirect(`/psicologo/grupos/${grupo[0].idInstitucion}`);
-                });
-        });
+        // Actualizar el grupo con el estatus correcto
+        return Grupo.update(
+            idGrupo,
+            nombreGrupo,
+            carrera,
+            cicloEscolar,
+            anio,
+            idNivelAcademico,
+            estatus
+        );
+    })
+    .then(() => {
+        // Actualizar las pruebas asignadas
+        return Grupo.actualizarPruebasAsignadas(idGrupo, pruebasSeleccionadas, fechaLimite);
+    })
+    .then(() => {
+        // Obtener idInstitucion para red a la lista de grupos
+        return Grupo.fetchOne(idGrupo);
+    })
+    .then(([grupo]) => {
+        // Red a la pag de grupos de esa institucion
+        response.redirect(`/psicologo/grupos/${grupo[0].idInstitucion}`);
     })
     .catch(error => {
         console.log('Error al actualizar grupo:', error);
+        response.status(500).send('Error al actualizar el grupo');
     });
 };
 

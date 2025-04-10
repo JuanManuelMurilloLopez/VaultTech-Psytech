@@ -81,7 +81,7 @@
             <div class="d-flex gap-2 align-items-center ">
               <button type="button" id="estatusActivoBtn" class="me-2 btn <%= grupo.estatusGrupo ? 'btn-info' : 'btn-outline-info' %>">Activa</button>
               <button type="button" id="estatusInactivoBtn" class="btn <%= !grupo.estatusGrupo ? 'btn-danger' : 'btn-outline-danger' %>">Desactivar</button>
-              <input type="hidden" id="estatusGrupo" name="estatusGrupo" value="<%= grupo.estatusGrupo %>">
+              <input type="hidden" id="estatusGrupo" name="estatusGrupo" value="<%= grupo.estatusGrupo === 1 ? 'true' : 'false' %>">
             </div>
           </div>
       
