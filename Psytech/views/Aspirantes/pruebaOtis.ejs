@@ -64,13 +64,6 @@
         });
       });
     
-      //Advertir si intenta cerrar la ventana o hacer refresh
-      window.addEventListener('beforeunload', function (e) {
-        const message = '¿Está seguro que desea salir?';
-        e.preventDefault();
-        e.returnValue = message;
-        return message;
-      });
     </script>
 </body>
 </html>

@@ -20,11 +20,9 @@ module.exports = class Prueba{
             AND idGrupo = ?`, [idAspirante, idGrupo])
     }
 
-    static saveDatosPersonales(idAspirante, idGrupo, idPrueba, datosPersonales){
-        
-        /*
-        // Ya existen datos?
-        return db.execute(`
+    static async saveDatosPersonales(idAspirante, idGrupo, idPrueba, datosPersonales) {
+        // Intentar actualizar primero
+        const [result] = await db.execute(`
             UPDATE datospersonales 
             SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, 
                 puestoSolicitado = ?, fecha = NOW()
@@ -37,26 +35,28 @@ module.exports = class Prueba{
             idGrupo,
             idPrueba,
             idAspirante
-            ]);
-            */
-
-
-        // INSERT
-        return db.execute(`
-            INSERT INTO datospersonales 
-            (idDatosPersonales, idGrupo, idPrueba, idAspirante, nombre, 
-            apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha)
-            VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, NOW())
-        `, [
-            idGrupo,
-            idPrueba,
-            idAspirante,
-            datosPersonales.nombre,
-            datosPersonales.apellidoPaterno, 
-            datosPersonales.apellidoMaterno,
-            datosPersonales.puestoSolicitado
         ]);
-    }
+    
+        // Si no se actualizó ningún registro, hacer INSERT
+        if (result.affectedRows === 0) {
+            return db.execute(`
+                INSERT INTO datospersonales 
+                (idDatosPersonales, idGrupo, idPrueba, idAspirante, nombre, 
+                apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha)
+                VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, NOW())
+            `, [
+                idGrupo,
+                idPrueba,
+                idAspirante,
+                datosPersonales.nombre,
+                datosPersonales.apellidoPaterno, 
+                datosPersonales.apellidoMaterno,
+                datosPersonales.puestoSolicitado
+            ]);
+        }
+    
+        return result;
+    }    
 
     static getAreaOtis(){
         return db.execute(

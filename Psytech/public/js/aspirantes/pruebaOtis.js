@@ -49,28 +49,21 @@ function cronometro(tiempo) {
 document.body.addEventListener("click", (event) => {
     if (event.target.classList.contains("sigbtn")) {
         const opciones = document.querySelectorAll(".option input:checked");
-
-        if (opciones.length === 0) {
-            alert("Selecciona una opción antes de continuar.");
-            return;
-        }
-
         const inputSeleccionado = opciones[0];
-        const idOpcion = inputSeleccionado.value;
-        const idPregunta = inputSeleccionado.closest(".option").getAttribute("data-idPregunta");
+        const idPregunta = document.querySelector(".option").getAttribute("data-idPregunta");
 
         const tiempoActual = Date.now();
         const tiempoRespuesta = Math.floor((tiempoActual - tiempoInicioPregunta) / 1000); // segundos
 
-        // Buscar si ya existe y actualizar o agregar
         let respuesta = respuestasSeleccionadas.find(r => r.idPreguntaOtis === idPregunta);
+
         if (respuesta) {
-            respuesta.idOpcion = idOpcion;
+            respuesta.idOpcion = inputSeleccionado ? inputSeleccionado.value : null;
             respuesta.tiempoRespuesta = tiempoRespuesta;
         } else {
             respuestasSeleccionadas.push({
                 idPreguntaOtis: idPregunta,
-                idOpcion: idOpcion,
+                idOpcion: inputSeleccionado ? inputSeleccionado.value : null,
                 tiempoRespuesta: tiempoRespuesta
             });
         }
@@ -84,11 +77,9 @@ document.body.addEventListener("click", (event) => {
             pregContador(pregNum);
             verificarMostrarBoton();
 
-            // Mostrar el botón si no es la última
             botonSig.style.visibility = "visible";
-        } 
+        }
 
-        // Si ya estamos en la última pregunta, ocultar el botón visualmente
         if (pregAcum === preguntas.length - 1) {
             botonSig.style.visibility = "hidden";
             console.log("Preguntas completadas");
@@ -207,16 +198,12 @@ const idAspirante = sessionStorage.getItem('idAspirante');
 const idGrupo = sessionStorage.getItem('idGrupo');
 
 function guardarUltimaRespuesta() {
-    const opciones = document.querySelectorAll(".option input:checked");
+    const contenedorPregunta = document.querySelector(".option input")?.closest(".option");
+    if (!contenedorPregunta) return;
 
-    if (opciones.length === 0) {
-        alert("Selecciona una opción antes de enviar.");
-        return;
-    }
-
-    const inputSeleccionado = opciones[0];
-    const idOpcion = inputSeleccionado.value;
-    const idPregunta = inputSeleccionado.closest(".option").getAttribute("data-idPregunta");
+    const idPregunta = contenedorPregunta.getAttribute("data-idPregunta");
+    const inputSeleccionado = document.querySelector(".option input:checked");
+    const idOpcion = inputSeleccionado ? inputSeleccionado.value : null;
 
     const tiempoActual = Date.now();
     const tiempoRespuesta = Math.floor((tiempoActual - tiempoInicioPregunta) / 1000);
