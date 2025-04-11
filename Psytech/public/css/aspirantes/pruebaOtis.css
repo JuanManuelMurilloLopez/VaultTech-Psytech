@@ -1,4 +1,5 @@
-:root{
+/* Botones Colores */
+  :root{
     --primary: #95B6BC;
     --secondary: #294969;
     --third: #C1C1C1;
@@ -7,80 +8,6 @@
     --primary-hover: #7BA1A8;
     --secondary-hover: #193858;
     --third-hover:#B1B1B1;
-}
-
-.datosCaja{
-    opacity: 0;
-    pointer-events: none;
-}
-
-.datosCaja.activeInfo{
-    z-index: 5;
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.tituloDatos{
-    font-size: 25px;
-    color: var(--secondary);
-    font-weight: 600;
-}
-
-.btnDatosContinuar button{
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.sigbtn button{
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.antbtn button{
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.preguntasCaja{
-    opacity: 0;
-    pointer-events: none;
-}
-
-.preguntasCaja.activeQuiz{
-    z-index: 5;
-    opacity: 1;
-    pointer-events: auto;
-    transform: translate(0%, -50%) scale(1);
-}
-
-footer .pregProgreso {
-    display: flex;
-    user-select: none;
-    padding: 0 5px;
-}
-
-.enviadasCaja{
-    opacity: 0;
-    pointer-events: none;
-}
-
-.option {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 5px;
-}
-
-.option input {
-    cursor: pointer;
 }
 
 .btn-color--primary{
@@ -112,3 +39,126 @@ footer .pregProgreso {
     background: var(--primary-hover);
     color: var(--font-primary);
 }
+
+.headerOtis {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 12px 20px;
+    border-radius: 10px;
+  }
+  
+  .progresoOtis {
+    flex-grow: 1;
+    max-width: 80%;
+  }
+  
+  .progresoLabel {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  
+  .tituloProgreso {
+    font-weight: 600;
+    font-size: 18px; /* más grande */
+  }
+  
+  #textoProgreso {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .barraExterna {
+    background-color: #e0edf1;
+    height: 16px; /* más alta */
+    border-radius: 8px;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .barraInterna {
+    height: 100%;
+    width: 0%;
+    background-color: #76a9c3;
+    border-radius: 8px;
+    transition: width 0.3s ease;
+  }
+  
+  .temporizadorOtis {
+    background-color: #e0edf1;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 16px; /* más grande */
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  
+  .iconoReloj {
+    margin-right: 6px;
+    font-size: 18px;
+  }
+  
+/* Area */
+.areaTexto{
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #193858;
+}
+
+/* Pregunta */
+.pregtext {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Lista de opciones */
+  .optionList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+  }
+  
+  /* Contenedor de cada opción */
+  .option-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 2px solid #e1eaf4;
+    border-radius: 8px;
+    transition: border-color 0.2s;
+    font-size: 16px;
+    background-color: #fff;
+    cursor: pointer;
+  }
+  
+  /* Hover bonito */
+  .option-item:hover {
+    border-color: #76a9c3;
+    background-color: #f5fbff;
+  }
+  
+  /* Estilo del radio */
+  .option-item input[type="radio"] {
+    accent-color: #457ba1;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .sigbtn {
+    display: flex;
+    justify-content: flex-start; /* Alinea el contenido a la izquierda */
+    align-items: center; /* Centra el contenido verticalmente si es necesario */
+  }
+  

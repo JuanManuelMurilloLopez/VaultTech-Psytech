@@ -5,6 +5,8 @@ const EstadoCivil = require('../models/estadoCivil.model');
 const Familiar = require('../models/formularioFamiliares.model');
 const ConsultarPruebas = require("../models/consultarPruebas.model");
 const PruebaColores = require('../models/prueba.model');
+const PruebaOtis = require('../models/prueba.model');
+const OpcionOtis = require('../models/opcionOtis.model.js');
 const Aspirante = require('../models/aspirante.model');
 
 //Rutas del portal de los Aspirantes
@@ -198,6 +200,10 @@ exports.getIntruccionesOtis = (request, response, next) => {
     response.render('Aspirantes/instruccionesOtis');
 };
 
+exports.postInstruccionesOtis = (req, res) => {
+    res.redirect('/aspirante/datos-personales-otis');
+};
+
 // Mostrar instrucciones colores
 exports.getInstruccionesColores = (request, response, next) => {
     response.render('Aspirantes/instruccionesColores');
@@ -206,15 +212,203 @@ exports.getInstruccionesColores = (request, response, next) => {
 exports.postInstruccionesColores = (req, res) => {
     res.redirect('/aspirante/datos-personales-colores');
 };
-  
+
+// Formulario datos personales
+exports.getDatosPersonalesOtis = (request, response, next) => {
+    response.render('Aspirantes/datosPersonalesOtis');
+};
+
+exports.getDatosPersonalesColores = (request, response, next) => {
+    response.render('Aspirantes/datosPersonalesColores');
+};
+
+exports.get_respuestas_enviadas = (request, response, next) => {
+    response.send('Respuestas enviadas');
+};
+
+// Procesar datos personales y pasar a la prueba
+exports.postDatosPersonalesOtis = (request, response, next) => {
+    const { nombre, apellidoPaterno, apellidoMaterno, puestoSolicitado } = request.body;
+    
+    // Guardar en la sesion
+    request.session.datosPersonalesOtis = {
+        nombre,
+        apellidoPaterno,
+        apellidoMaterno,
+        puestoSolicitado,
+        fecha: new Date()
+    };
+    
+    // Redirigir a la prueba
+    response.redirect('/aspirante/prueba-otis');
+};
 
 exports.getPruebaOtis = (request, response, next) => {
     response.render('Aspirantes/pruebaOtis');
 };
 
-// Formulario datos personales
-exports.getDatosPersonalesColores = (request, response, next) => {
-    response.render('Aspirantes/datosPersonalesColores');
+//Obtener las areas, preguntas y opciones
+exports.obtenerPreguntas = async (req, res, next) => {
+    try {
+        const [areasDB] = await PruebaOtis.getAreaOtis();
+        const [preguntasDB] = await PruebaOtis.getPreguntasOtis();
+        const [opcionesDB] = await OpcionOtis.fetchAll();
+
+        const preguntas = preguntasDB.map(pregunta => {
+            const opciones = opcionesDB
+                .filter(opcion => opcion.idPreguntaOtis === pregunta.idPreguntaOtis)
+                .map(opcion => ({
+                    idOpcionOtis: opcion.idOpcionOtis,
+                    descripcionOpcion: opcion.descripcionOpcion,
+                    esCorrecta: opcion.esCorrecta
+                }));
+
+            const respuestaCorrecta = opcionesDB.find(opcion =>
+                opcion.idPreguntaOtis === pregunta.idPreguntaOtis && opcion.esCorrecta === 1
+            )?.descripcionOpcion;
+
+            // Buscar el nombre del área por idAreaOtis
+            const area = areasDB.find(a => a.idAreaOtis === pregunta.idAreaOtis);
+
+            return {
+                num: pregunta.numeroPregunta,
+                idPreguntaOtis: pregunta.idPreguntaOtis,
+                pregunta: pregunta.preguntaOtis,
+                respuesta: respuestaCorrecta,
+                nombreAreaOtis: area ? area.nombreAreaOtis : "Sin área",
+                opciones: opciones
+            };
+        });
+
+        return res.json({ preguntas });
+    } catch (error) {
+        console.error("Error obteniendo preguntas:", error);
+    }
+}
+
+// Obtener toda la prueba
+exports.getPruebaOtis = (request, response, next) => {
+    if (!request.session.datosPersonalesOtis) {
+        return response.redirect('/aspirante/datos-personales-otis');
+    }
+
+    const idPrueba = 5;
+
+    // Obtener el idGrupo y idPrueba por la sesión
+    PruebaOtis.getGrupoPrueba(request.session.idAspirante, idPrueba)
+        .then(([rows, fieldData]) => {
+            if (rows.length > 0) {
+                request.session.idGrupo = rows[0].idGrupo;
+                request.session.idPrueba = idPrueba;
+            } else {
+                console.log("No se encontró grupo para este aspirante y prueba");
+            }
+
+            // Función para obtener las preguntas del model
+            return PruebaOtis.getPreguntasOtis();
+        })
+        .then(([rows, fieldData]) => {
+            const preguntas = rows;
+            response.render('Aspirantes/pruebaOtis', {
+                preguntas: preguntas || [],
+                error: null
+            });
+        })
+        .catch((error) => {
+            console.error("Error al cargar la prueba OTIS:", error);
+            response.render('Aspirantes/pruebaOtis', {
+                preguntas: [],
+                error: 'Error al cargar la prueba OTIS'
+            });
+        });
+};
+
+exports.postPruebaOtis = (request, response, next) => {
+    response.redirect('/aspirante/prueba-completada');
+};
+
+const db = require('../util/database');
+const { v4: uuidv4 } = require('uuid');
+
+exports.postGuardarRespuestas = async (request, response) => {
+
+    const idAspirante = request.session.idAspirante;
+    const idGrupo = request.session.idGrupo;
+    const idPrueba = request.session.idPrueba;
+
+    // Si no se encuentra el idAspirante
+    if (!request.session.idAspirante) {
+        return response.redirect('/aspirante/datos-personales-otis');
+    }
+
+    const respuestas = request.body;
+
+    try {
+        // Armar el array de valores para insertar
+        const values = respuestas.map(r => [
+            uuidv4(), // para generar el idRespuestaOtis
+            idAspirante,
+            idGrupo,
+            r.idPreguntaOtis,
+            r.idOpcionOtis,
+            idPrueba,
+            r.tiempoRespuesta
+        ]);
+
+        // Insertar valores en la tabla respuestaOtisAspirante
+        await db.query(
+            `INSERT INTO respuestaotisaspirante
+            (idRespuestaOtis, idAspirante, idGrupo, idPreguntaOtis, idOpcionOtis, idPrueba, tiempoRespuesta)
+            VALUES ?`, 
+            [values]
+        );
+
+         // Obtener datos personales desde sesión
+         const datosPersonales = request.session.datosPersonalesOtis || {
+            nombre: "Usuario",
+            apellidoPaterno: "",
+            apellidoMaterno: "",
+            puestoSolicitado: "No especificado",
+            fecha: new Date()
+        };
+
+        // Guardar datos personales
+        await PruebaOtis.saveDatosPersonales(
+            idAspirante,
+            idGrupo,
+            idPrueba,
+            datosPersonales
+        );
+
+        console.log("Datos personales guardados correctamente");
+
+        // Verificar si ya existe el registro en aspirantesGruposPruebas
+        const [rows] = await PruebaOtis.verificarExistencia(
+            idAspirante,
+            idGrupo,
+            idPrueba
+        );
+
+        if (rows.length === 0) {
+            console.log("No existe registro, insertando...");
+            await db.execute(
+                `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
+                VALUES (?, ?, ?, 2)`,
+                [idAspirante, idGrupo, idPrueba]
+            );
+        } else {
+            console.log("Registro encontrado, actualizando estado...");
+            await PruebaOtis.updateEstatusPrueba(
+                idAspirante,
+                idGrupo,
+                idPrueba
+            );
+        }
+
+    } catch (error) {
+        console.error("Error al guardar respuestas:", error);
+    }
+    return response.json({ success: true, redirectUrl: '/aspirante/prueba-completada' });
 };
 
 // Procesar datos personales y pasar a la prueba
@@ -389,7 +583,7 @@ exports.postGuardarSeleccionesColores = (request, response) => {
                 if (rows.length === 0) {
                     console.log("11. No existe registro, insertando...");
                     return db.execute(
-                        `INSERT INTO aspirantesGruposPruebas (idAspirante, idGrupo, idPrueba, idEstatus)
+                        `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
                         VALUES (?, ?, ?, 2)`,
                         [request.session.idAspirante, idGrupo, idPrueba]
                     );

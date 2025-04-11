@@ -3,6 +3,10 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const dotenv = require("dotenv");
+const helmet = require("helmet");
+const compression = require("compression");
+const https = require("https");
+const fs = require("fs");
 
 dotenv.config();
 
@@ -12,8 +16,46 @@ const app = express();
 app.use(session({
     secret: 'claveTemporal',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: { secure: false } 
 }));
+
+app.use(helmet());
+
+// Configuración de política CSP
+app.use(
+    helmet.contentSecurityPolicy({
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: [
+          "'self'",
+          "https://cdn.jsdelivr.net",
+          "'unsafe-inline'",
+          "'unsafe-hashes'"
+        ],
+        scriptSrcAttr: ["'unsafe-inline'"],
+        styleSrc: [
+          "'self'",
+          "https://cdn.jsdelivr.net",
+          "https://fonts.googleapis.com",
+          "'unsafe-inline'"
+        ],
+        fontSrc: [
+          "'self'",
+          "https://fonts.gstatic.com"
+        ],
+        connectSrc: ["'self'"],
+        imgSrc: ["'self'", "data:"],
+        objectSrc: ["'none'"],
+        upgradeInsecureRequests: [],
+      },
+    })
+);
+
+app.use(compression());
+
+const certificate = fs.readFileSync("../../certs/server.cert");
+const privateKey = fs.readFileSync("../../certs/server.key");
 
 // Servir archivos estaticos desde public
 app.use(express.static(path.join(__dirname, 'public')));
@@ -35,7 +77,7 @@ const fileStorage = multer.diskStorage({
         callback(null, 'public/expedientes');
     },
     filename: (request, file, callback) => {
-        callback(null, file.originalname + new Date().toISOString().substring(0, 10));
+        callback(null,request.session.idAspirante + new Date().getMilliseconds()  + file.originalname);
     },
 });
 
@@ -60,6 +102,10 @@ app.use('/aspirante', rutasAspirante);
 
 const rutasPsicologo = require('./routes/psicologo.routes');
 app.use('/psicologo', rutasPsicologo);
+
+// https.createServer({key: privateKey, cert: certificate, passphrase: process.env.SSL_PASSPHRASE}, app).listen(process.env.PORT || 5050);
+
+//https.createServer({key: privateKey, cert: certificate}, app).listen(process.env.PORT || 5050);
 
 // Iniciar servidor en el puerto 5050
 app.listen(5050, () => {

@@ -14,58 +14,80 @@ module.exports = class Prueba{
     // Obtiene los datos personales de un aspirante según el grupo y la prueba OTIS.
     static getDatosPersonalesAspirante(idGrupo, idAspirante){
         return db.execute(`SELECT nombre, apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha 
-            FROM datosPersonales 
+            FROM datospersonales 
             WHERE idAspirante = ? 
             AND idPrueba = 5
             AND idGrupo = ?`, [idAspirante, idGrupo])
     }
 
-    static saveDatosPersonales(idAspirante, idGrupo, idPrueba, datosPersonales){
-        // Ya existen datos?
-        return db.execute(`
-            SELECT idDatosPersonales FROM datosPersonales 
+    static async saveDatosPersonales(idAspirante, idGrupo, idPrueba, datosPersonales) {
+        // Intentar actualizar primero
+        const [result] = await db.execute(`
+            UPDATE datospersonales 
+            SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, 
+                puestoSolicitado = ?, fecha = NOW()
             WHERE idGrupo = ? AND idPrueba = ? AND idAspirante = ?
-        `, [idGrupo, idPrueba, idAspirante])
-        .then(([rows]) => {
-            if (rows.length > 0) {
-                // Si ya existen datos, actualizarlos
-                return db.execute(`
-                    UPDATE datosPersonales 
-                    SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, 
-                        puestoSolicitado = ?, fecha = ?
-                    WHERE idGrupo = ? AND idPrueba = ? AND idAspirante = ?
-                `, [
-                    datosPersonales.nombre,
-                    datosPersonales.apellidoPaterno, 
-                    datosPersonales.apellidoMaterno,
-                    datosPersonales.puestoSolicitado,
-                    datosPersonales.fecha,
-                    idGrupo,
-                    idPrueba,
-                    idAspirante
-                ]);
-            } else {
-                // Si no existen, insertarlos
-                return db.execute(`
-                    INSERT INTO datosPersonales 
-                    (idDatosPersonales, idGrupo, idPrueba, idAspirante, nombre, 
-                     apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha)
-                    VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, ?)
-                `, [
-                    idGrupo,
-                    idPrueba,
-                    idAspirante,
-                    datosPersonales.nombre,
-                    datosPersonales.apellidoPaterno, 
-                    datosPersonales.apellidoMaterno,
-                    datosPersonales.puestoSolicitado,
-                    datosPersonales.fecha
-                ]);
-            }
-        });
+        `, [
+            datosPersonales.nombre,
+            datosPersonales.apellidoPaterno, 
+            datosPersonales.apellidoMaterno,
+            datosPersonales.puestoSolicitado,
+            idGrupo,
+            idPrueba,
+            idAspirante
+        ]);
+    
+        // Si no se actualizó ningún registro, hacer INSERT
+        if (result.affectedRows === 0) {
+            return db.execute(`
+                INSERT INTO datospersonales 
+                (idDatosPersonales, idGrupo, idPrueba, idAspirante, nombre, 
+                apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha)
+                VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, NOW())
+            `, [
+                idGrupo,
+                idPrueba,
+                idAspirante,
+                datosPersonales.nombre,
+                datosPersonales.apellidoPaterno, 
+                datosPersonales.apellidoMaterno,
+                datosPersonales.puestoSolicitado
+            ]);
+        }
+    
+        return result;
+    }    
+
+    static getAreaOtis(){
+        return db.execute(
+            `SELECT * FROM areasotis`
+        );
     }
 
-    static getPreguntasOtis(){}
+    static getPreguntasOtis(){
+        return db.execute(
+            `SELECT * FROM preguntasotis`
+        );
+    }
+
+    static saveRespuestas = (idAspirante, idGrupo, idPrueba, respuestas) => {
+        const promesas = [];
+
+        for(let i=0; i < respuestas.length; i++){
+            promesas.push(
+                db.execute(
+                    `INSERT INTO respuestaotisaspirante 
+                    (idRespuestaOtis, idAspirante, idGrupo, idPreguntaOtis, idOpcionOtis, idPrueba, tiempoRespuesta)
+                    VALUES (?, ?, ?, ?, ?)`,
+                    [idPrueba, idAspirante, idGrupo, respuestas.idPregunta, respuestas.idOpcionOtis, respuestas.tiempoRespuesta] 
+                ).catch((error) => {
+                    console.error(`Error al insertar la respuesta ${i}:`, error);
+                    throw error;
+                })
+            );
+        }
+        return Promise.all(promesas);
+    };               
 
     static getPreguntas16PF(){}
 
@@ -96,7 +118,7 @@ module.exports = class Prueba{
         for (let i = 0; i < seleccion.length; i++) {
             promesas.push(
                 db.execute(
-                    `INSERT INTO seleccionesColores 
+                    `INSERT INTO seleccionescolores 
                     (idSeleccionColores, idPrueba, idAspirante, idGrupo, idColor, posicion, fase) 
                     VALUES (UUID(), ?, ?, ?, ?, ?, ?)`,
                     [idPrueba, idAspirante, idGrupo, seleccion[i].idColor, i, fase]
@@ -106,14 +128,13 @@ module.exports = class Prueba{
                 })
             );
         }
-        
         return Promise.all(promesas);
     }
 
     static getGrupoPrueba(idAspirante, idPrueba){
         return db.execute(`
             SELECT idGrupo 
-            FROM aspirantesGruposPruebas 
+            FROM aspirantesgrupospruebas 
             WHERE idAspirante = ? AND idPrueba = ?
         `, [idAspirante, idPrueba]);       
     }
@@ -121,7 +142,7 @@ module.exports = class Prueba{
     static getEstatusPrueba(idAspirante, idGrupo, idPrueba){
         return db.execute(
             `SELECT idEstatus 
-            FROM aspirantesGruposPruebas 
+            FROM aspirantesgrupospruebas
             WHERE idAspirante = ? AND idGrupo = ? AND idPrueba = ?`,
             [idAspirante, idGrupo, idPrueba]
         );       
@@ -130,7 +151,7 @@ module.exports = class Prueba{
     // Actualizar estado de prueba
     static updateEstatusPrueba(idAspirante, idGrupo, idPrueba, idEstatus = 1) {
         return db.execute(
-            `UPDATE aspirantesGruposPruebas 
+            `UPDATE aspirantesgrupospruebas
             SET idEstatus = ? 
             WHERE idAspirante = ? AND idGrupo = ? AND idPrueba = ?`,
             [idEstatus, idAspirante, idGrupo, idPrueba]
@@ -139,7 +160,7 @@ module.exports = class Prueba{
 
     static verificarExistencia(idAspirante, idGrupo, idPrueba) {
         return db.execute(
-            `SELECT * FROM aspirantesGruposPruebas 
+            `SELECT * FROM aspirantesgrupospruebas 
             WHERE idAspirante = ? AND idGrupo = ? AND idPrueba = ?`,
             [idAspirante, idGrupo, idPrueba]
         );

@@ -109,8 +109,8 @@
                 <div class="row g-4">
                     <div class="col-md-12">
                         <h3 class="fw-bolder">Resultados por Área</h3>
-                </div>
-                    <canvas id="graficaAreas" class="col-md-4"></canvas>
+                    </div>
+                    <canvas id="graficaAreas" class="col-md-4"></canvas>    
                     <table class="table table-bordered col-md-4">
                         <thead class="table-dark">
                             <tr>
@@ -131,11 +131,10 @@
                 
             </div>
 
-            <div>
-                <button type="button" class="btn btn-color--third"
-                onclick="window.location.href=
-                ''"
-                >Regresar</button>
+            <div><%=  %>
+                <a class="btn btn-color--third"
+                href="/psicologo/cuadernillo-otis/<%= idGrupo %>/<%= idAspirante %>/<%= idInstitucion %>"
+                >Regresar</a>
             </div>
             
             
@@ -188,8 +187,12 @@
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     y: {
+                        min: 0,
+                        max: 100,
                         beginAtZero: true
                     }
                 }
@@ -204,8 +207,8 @@
                 datasets: [{
                     label: 'Respuestas',
                     data: [<%= puntajeBruto %>, <%= respuestasIncorrectas %>, <%= sinRespuesta %>],
-                    backgroundColor: backgroundColors,
-                    borderColor: borderColors,
+                    backgroundColor: ['rgba(146, 208, 80, 1)', 'rgba(255, 102, 0, 1)', 'rgba(255, 0, 0, 1)'],
+                    borderColor: ['rgba(146, 208, 80, 1)', 'rgba(255, 102, 0, 1)', 'rgba(255, 0, 0, 1)'],
                     borderWidth: 1
                 }]
             },

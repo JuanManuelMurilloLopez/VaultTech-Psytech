@@ -18,7 +18,7 @@
 </head>
 
 
-<body class="bg-light">
+<body>
 
     <div class="main">
 
@@ -30,73 +30,77 @@
             <!-- Boton de cerrar sesión -->
             <%- include('../includes/_buttonCerrarSesion.ejs') %>
 
-            <h3><%= informacionInstitucion.nombreInstitucion %></h3>
-            <h4>Estatus:</h4>
-            <span class="badge text-bg-info"><% if(informacionInstitucion.estatusInstitucion == 1){ %>
-                                                <%= "Activa" %> 
-                                            <%} else { %> 
-                                                <%= "Inactiva" %>
-                                            <% } %></span>
             <br>
-            <h4>Tipo de Institución: <%= informacionInstitucion.nombreTipoInstitucion %></h4>
+            <h4><%= informacionInstitucion.nombreInstitucion %></h4><br>
+            <div class="d-flex">
+                <h5>Estatus: </h5>
+                <% if(informacionInstitucion.estatusInstitucion == 1){ %>
+                    <span class="estatus activo">
+                        <%= "Activa" %>
+                    </span>
+                <%} else { %> 
+                    <span class="card-estatus inactivo">
+                        <p><%= "Inactiva" %></p>
+                    </span>
+                <% } %>
+            </div>
+            <br>
+            <h5>Tipo de Institución: <%= informacionInstitucion.nombreTipoInstitucion %></h5>
             <br>
             <h1 class="text-center">GRUPOS REGISTRADOS</h1>
+            <hr><br>
         
-            <!-- Campo Buscar -->
-            <div class="form-floating mb-3">
-                <input type="" class="form-control" id="" placeholder="">
-                <label for="">Buscar</label>
+            <div class="d-flex mb-5">
+                <!-- Campo Buscar -->
+                <div class="buscar">
+                    <div class="barra">
+                        <input type="text" id="buscar" name="buscar" placeholder="Buscar">
+                        <img src="/images/search.svg" alt="buscar">
+                    </div>
+                </div>
+        
+                <!-- Boton de navegación "Registrar nuevao grupo" -->
+                <a href="/psicologo/registrar-grupo/<%= idInstitucion %> " 
+                    class="btn registrar-grupo">
+                    Registrar Nuevo
+                </a>
             </div>
-    
-    
-            <!-- Boton de navegación "Registrar nuevao grupo" -->
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <a href="/psicologo/registrar-grupo/<%= idInstitucion %> " class="btn btn-color--secondary w-100">Registrar Nuevo</a>
-            </div>
-    
-    
+
             <div class="row g-4 mt-4">
     
                 <% for(grupo of arregloGrupos) { %>
-                    
+                    <!-- Tarjetas Grupos -->
                     <div class="col-md-4">
-    
                         <div class="card">
-    
                             <div class="card-body">
-    
-                                <div class="card-title">
-    
-                                    <p><%= grupo.nombreGrupo %></p>
-    
-                                    <span class="badge rounded-pill text-bg-info"><% if(grupo.estatusGrupo == 1){ %>
-                                        <%= "Activo" %> 
+                                <div class="card-header">
+                                    <h5 class="card-title w-50"><%= grupo.nombreGrupo %></h5>
+                                    <% if(grupo.estatusGrupo == 1){ %>
+                                        <span class="card-estatus activo">
+                                            <%= "Activo" %> 
+                                        </span>
                                     <%} else { %> 
-                                        <%= "Inactivo" %>
-                                    <% } %></span>
-    
+                                        <span class="card-estatus inactivo">
+                                            <%= "Inactivo" %>
+                                        </span>
+                                    <% } %>
                                 </div>
-    
                                 <p class="card-text">Carrera: <%= grupo.carrera %></p>
-    
                                 <p class="card-text">Año de Generación: <%= grupo.anioGeneracion %></p>
-    
                                 <p class="card-text">Semestre: <%= grupo.cicloEscolar %></p>
-    
                                 <p class="card-text">Número de aspirantes: <%= grupo.numeroAspirantes %></p>
     
-                                <div>
+                                <div class="card-actions d-flex justify-content-between mt-auto">
+                                    <a href="/psicologo/informacion-grupos/<%= grupo.idGrupo %>/<%= idInstitucion %>" 
+                                        class="btn btn-color--secondary">Ver grupo
+                                    </a>
     
-                                    <a href="/psicologo/informacion-grupos/<%= grupo.idGrupo %> " class="btn btn-color--secondary w-100">Ver grupo</a>
-    
-                                    <a href="/psicologo/editar-grupo/ " class="btn btn-color--third w-100">Editar</a>
-    
+                                    <a href="/psicologo/editar-grupo/<%= grupo.idGrupo %>/<%= idInstitucion %>" 
+                                        class="btn btn-color--third">Editar
+                                    </a>
                                 </div>
-    
                             </div>    
-    
                         </div>
-    
                     </div>
     
                 <% } %>
@@ -105,14 +109,32 @@
     
             <br>
             <!-- Botones de navegación Grupo, Edicion, Regresar" -->
-            <button type="button" class="btn btn-color--third"
-            onclick="window.location.href=
-            '/psicologo/catalogo-instituciones'">Regresar</button>
+            <a class="btn btn-color--third"
+            href="/psicologo/catalogo-instituciones">Regresar</a>
             <br>
         </div>
-    </div>
+    </div><br><br>
+
+    <script>
+        if (document.referrer.includes('/psicologo/editar-grupo/')) {
+          // Elemento de alerta
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success alert-dismissible fade show';
+            alertDiv.setAttribute('role', 'alert');
+            alertDiv.innerHTML = `
+                El grupo se ha actualizado correctamente.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            // Pone la alerta al principio del contenedor
+            const container = document.querySelector('.container');
+            container.insertBefore(alertDiv, container.firstChild.nextSibling);
+            
+        }
+    </script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Incluir el script del navside -->
     <script src="/js/_navside.js"></script>
+
 </body>

@@ -29,19 +29,25 @@ router.post('/registrar-grupo/:idInstitucion', controller.postRegistrarGrupo);
 // Vista con los grupos de cierta institución
 router.get('/grupos/:idInstitucion', controller.getGrupos);
 
-// Formulario para editar grupos
-router.get('/editar-grupo', controller.getEditarGrupo);
+
+// EDITAR GRUPOS
+router.get('/editar-grupo/:idGrupo/:idInstitucion', controller.getEditarGrupo);
+router.post('/editar-grupo/:idGrupo', controller.postEditarGrupo);
+
+// EDITA SOLO ESTATUS DE GRUPO
+router.post('/actualizar-estatus-grupo/:idGrupo', controller.postActualizarEstatusGrupo);
 
 // Vista con la información de cierto grupo
-router.get('/informacion-grupos/:idGrupo', controller.getInformacionGrupo)
+router.get('/informacion-grupos/:idGrupo/:idInstitucion', controller.getInformacionGrupo)
 
-router.get('/aspirantes', controller.getAspirantes);
+// Vista con la información de un aspirante
+router.get('/aspirantes/:idAspirante/:idGrupo/:idInstitucion', controller.getAspirante);
 
 router.get('/importar-aspirantes', controller.getImportarAspirantes);
 
 // Formulario para crear nuevos aspirantes
-router.get('/registrar-aspirantes/:idGrupo', controller.getRegistrarAspirantes);
-router.post('/registrar-aspirantes/:idGrupo', controller.postRegistrarAspirantes);
+router.get('/registrar-aspirantes/:idGrupo/:idInstitucion', controller.getRegistrarAspirantes);
+router.post('/registrar-aspirantes/:idGrupo/:idInstitucion', controller.postRegistrarAspirantes);
 
 // Formulario para editar aspirantes
 router.get('/editar-aspirantes', controller.getEditarAspirantes);
@@ -56,10 +62,10 @@ router.get('/prueba-otis', controller.getPruebaOtis);
 router.get('/prueba-colores', controller.getPruebaColores);
 
 // Cuadernillo de respuestas de la prueba OTIS por aspirante
-router.get('/cuadernillo-Otis/:idGrupo/:idAspirante', controller.getCuadernilloOtis);
+router.get('/cuadernillo-otis/:idGrupo/:idAspirante/:idInstitucion', controller.getCuadernilloOtis);
 
 // Vista con el análisis de la prueba otis del aspirante
-router.get('/analisis-otis/:idGrupo/:idAspirante', controller.getAnalisisOtis);
+router.get('/analisis-otis/:idGrupo/:idAspirante/:idInstitucion', controller.getAnalisisOtis);
 
 router.get('/analisis-colores', controller.getAnalisisColores);
 
