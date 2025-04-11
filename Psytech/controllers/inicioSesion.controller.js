@@ -9,7 +9,7 @@ const mailerSend = new MailerSend({
     apiKey: process.env.MAILER_SEND_API_KEY,
   });
   
-  const sentFrom = new Sender("vaultech@test-68zxl27r3v34j905.mlsender.net", "VaultTech");
+  const sentFrom = new Sender("vaulttech@laing.mx ", "Psytech");
 
 exports.getLogin = (request, response, next) => {
     response.render('login');
