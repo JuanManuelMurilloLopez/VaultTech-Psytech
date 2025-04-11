@@ -128,9 +128,9 @@
 }
 
 #graficaAreas {
-    width: 100% !important;
+    width: 50px !important;
     max-width: 800px;
-    height: 400px !important;
+    height: 300px !important;
     display: block;
     margin: auto;
 }

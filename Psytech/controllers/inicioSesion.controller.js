@@ -9,7 +9,7 @@ const mailerSend = new MailerSend({
     apiKey: process.env.MAILER_SEND_API_KEY,
   });
   
-  const sentFrom = new Sender("vaultech@test-68zxl27r3v34j905.mlsender.net", "VaultTech");
+  const sentFrom = new Sender("vaulttech@laing.mx ", "Psytech");
 
 exports.getLogin = (request, response, next) => {
     response.render('login');
@@ -48,7 +48,7 @@ exports.getPost = async (request, response) => {
         await OTP.crearOTP(usuarioId.idUsuario, codigoOTP, validez);
 
         request.session.usuario = usuario;
-        /*
+        
         // Enviar correo con MailerSend
         const destinatario = new Recipient(usuarioId.correo, usuario);
 
@@ -59,7 +59,7 @@ exports.getPost = async (request, response) => {
         .setHtml(`<h2>¡Hola ${usuario}!</h2><p>Tu código OTP es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos.</p>`);
 
         await mailerSend.email.send(emailParams);
-        */
+        
         console.log('codigoOTP:', codigoOTP);
         response.redirect('/otp');
         } catch (error) {
@@ -80,15 +80,12 @@ exports.verificarOTP = async (request, response) => {
         }
         
         const otpData = await OTP.obtenerOTP(usuarioId);
-    /*
+
       if (!otpData || otpData.codigo !== parseInt(otp)) {
         return response.send('<script>alert("OTP incorrecto o vencido"); window.location.href = "/otp";</script>');
       }
-    */
 
-      if (!otpData || 111111 !== parseInt(otp)) {
-        return response.send('<script>alert("OTP incorrecto o vencido"); window.location.href = "/otp";</script>');
-      }
+
 
       await OTP.usarOTP(otpData.idOTP);
       
@@ -131,3 +128,7 @@ exports.getLogout = ((request, response) => {
         response.redirect('/login');
     });
 });
+
+exports.getInicio = ((request, response) => {
+    response.redirect('/login');
+})

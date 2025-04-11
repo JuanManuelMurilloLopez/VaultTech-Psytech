@@ -234,7 +234,7 @@ module.exports = class Grupo {
             for (const idPrueba of pruebasEliminadas) {
               promises.push(
                 db.execute(
-                  'DELETE FROM aspirantesGruposPruebas WHERE idAspirante = ? AND idGrupo = ? AND idPrueba = ?',
+                  'DELETE FROM aspirantesgrupospruebas WHERE idAspirante = ? AND idGrupo = ? AND idPrueba = ?',
                   [aspirante.idAspirante, idGrupo, idPrueba]
                 )
               );
@@ -248,7 +248,7 @@ module.exports = class Grupo {
             for (const idPrueba of pruebasNuevas) {
               promises.push(
                 db.execute(
-                  'INSERT IGNORE INTO aspirantesGruposPruebas (idAspirante, idGrupo, idPrueba, idEstatus, fechaAsignacion, fechaLimite) VALUES (?, ?, ?, 2, ?, ?)',
+                  'INSERT IGNORE INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus, fechaAsignacion, fechaLimite) VALUES (?, ?, ?, 2, ?, ?)',
                   [aspirante.idAspirante, idGrupo, idPrueba, fechaActual, fechaLimite]
                 )
               );
