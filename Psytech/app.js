@@ -30,6 +30,7 @@ app.use(
         scriptSrc: [
           "'self'",
           "https://cdn.jsdelivr.net",
+          "https://cdnjs.cloudflare.com",
           "'unsafe-inline'",
           "'unsafe-hashes'"
         ],

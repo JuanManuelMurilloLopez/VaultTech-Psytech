@@ -166,3 +166,7 @@ h1, h4 {
     min-width: 250px;
 }
 
+.escalado {
+    transform: scale(0.7);
+    transform-origin: top left;
+  }
