@@ -131,3 +131,7 @@ exports.getLogout = ((request, response) => {
         response.redirect('/login');
     });
 });
+
+exports.getInicio = ((request, response) => {
+    response.redirect('/login');
+})
