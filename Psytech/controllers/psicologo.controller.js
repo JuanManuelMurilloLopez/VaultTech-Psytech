@@ -8,6 +8,7 @@ const Prueba = require('../models/prueba.model');
 const { request, response } = require('express');
 const Cuadernillo = require('../models/cuadernilloOtis.model');
 const CatalogoPruebas = require('../models/catalogoPruebas.model');
+const CuadernilloColores = require('../models/cuadernilloColores.model');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
@@ -541,6 +542,39 @@ exports.getAnalisisOtis = (request, response, next) => {
         });
     })
     .catch((error) => {
+        console.log(error);
+    });
+};
+
+
+// CUADERNILLO COLORES
+exports.getCuadernilloColores = (request, response, next) => {
+    // Obtener los datos personales del aspirante
+    Prueba.getDatosPersonalesAspirante(request.params.idGrupo, request.params.idAspirante)
+    .then(([rows, fieldData]) => {
+        const datosPersonales = rows;
+        
+        // Obtener todas las selecciones de colores
+        CuadernilloColores.getSeleccionesColores(request.params.idGrupo, request.params.idAspirante)
+        .then(([rows, fieldData]) => {
+            // Separar las selecciones por fase
+            const seleccionesFase1 = rows.filter(row => row.fase === 1)
+                                        .sort((a, b) => a.posicion - b.posicion);
+            const seleccionesFase2 = rows.filter(row => row.fase === 2)
+                                        .sort((a, b) => a.posicion - b.posicion);
+            
+            response.render('Psicologos/cuadernilloColores.ejs', {
+                datosPersonales: datosPersonales || [],
+                seleccionesFase1: seleccionesFase1 || [],
+                seleccionesFase2: seleccionesFase2 || [],
+                aspirante: request.params.idAspirante || null,
+                grupo: request.params.idGrupo || null,
+                idInstitucion: request.params.idInstitucion || null,
+            });
+        }).catch((error) => {
+            console.log(error);
+        });
+    }).catch((error) => {
         console.log(error);
     });
 };
