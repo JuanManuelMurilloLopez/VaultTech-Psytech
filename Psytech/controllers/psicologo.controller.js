@@ -8,6 +8,7 @@ const Prueba = require('../models/prueba.model');
 const { request, response } = require('express');
 const Cuadernillo = require('../models/cuadernilloOtis.model');
 const CatalogoPruebas = require('../models/catalogoPruebas.model');
+const CuadernilloColores = require('../models/cuadernilloColores.model');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
@@ -249,63 +250,61 @@ exports.postEditarGrupo = (request, response, next) => {
         estatusGrupo
     } = request.body;
     
-    // Convertir estatusGrupo a booleano
-    const estatus = estatusGrupo === 'true';
+    console.log("estatusGrupo recibido:", estatusGrupo); 
     
-    // El grupo existe?
+    // Cambiar estatusGrupo a 1 (activo) o 0 (inactivo) para guardarlo en la base de datos
+    // Si no se manda un nuevo valor, usar el mismo estatus que ya tenía
+    let estatus;
+    
+    // Checar el valor actual del grupo
     Grupo.fetchOne(idGrupo)
     .then(([rows]) => {
         if (rows.length === 0) {
             return response.status(404).send('Grupo no encontrado');
         }
         
-        const grupoOriginal = rows[0];
+        const grupoActual = rows[0];
+        console.log("Estatus actual del grupo:", grupoActual.estatusGrupo);
+        
+        // Si no se manda el estatusGrupo desde el formulario dejar el que ya estaba
+        if (estatusGrupo === undefined || estatusGrupo === null) {
+            estatus = grupoActual.estatusGrupo;
+        } else {
+            // Convertir a 1 o 0 segun el valor recibido
+            estatus = estatusGrupo === 'true' ? 1 : 0;
+        }
+        
+        console.log("Estatus que se usará:", estatus);
         
         // Ciclo escolar semestre y año
         const cicloEscolar = `${semestre} ${anio}`;
         
-        // Si existe, actualizarlo
-        let updatePromise;
-        
-        if (
-            nombreGrupo === grupoOriginal.nombreGrupo &&
-            carrera === grupoOriginal.carrera &&
-            cicloEscolar === grupoOriginal.cicloEscolar &&
-            parseInt(anio) === grupoOriginal.anioGeneracion &&
-            parseInt(idNivelAcademico) === grupoOriginal.idNivelAcademico &&
-            estatus !== (grupoOriginal.estatusGrupo === 1)
-        ) {
-            // Solo cambio el estatus, usar updateEstatus
-            updatePromise = Grupo.updateEstatus(idGrupo, estatus);
-        } else {
-            // Si se cambio mas que solo el estatus usar update completo
-            updatePromise = Grupo.update(
-                idGrupo,
-                nombreGrupo,
-                carrera,
-                cicloEscolar,
-                anio,
-                idNivelAcademico,
-                estatus
-            );
-        }
-        
-        return updatePromise
-        .then(() => {
-            // Actualizar las pruebas asignadas
-            return Grupo.actualizarPruebasAsignadas(idGrupo, pruebasSeleccionadas, fechaLimite);
-        })
-        .then(() => {
-            // Obtener idInstitucion para redirigir a la lista de grupos
-            return Grupo.fetchOne(idGrupo)
-                .then(([grupo]) => {
-                    // Red a la pag de grupos de esa institucion
-                    response.redirect(`/psicologo/grupos/${grupo[0].idInstitucion}`);
-                });
-        });
+        // Actualizar el grupo con el estatus correcto
+        return Grupo.update(
+            idGrupo,
+            nombreGrupo,
+            carrera,
+            cicloEscolar,
+            anio,
+            idNivelAcademico,
+            estatus
+        );
+    })
+    .then(() => {
+        // Actualizar las pruebas asignadas
+        return Grupo.actualizarPruebasAsignadas(idGrupo, pruebasSeleccionadas, fechaLimite);
+    })
+    .then(() => {
+        // Obtener idInstitucion para red a la lista de grupos
+        return Grupo.fetchOne(idGrupo);
+    })
+    .then(([grupo]) => {
+        // Red a la pag de grupos de esa institucion
+        response.redirect(`/psicologo/grupos/${grupo[0].idInstitucion}`);
     })
     .catch(error => {
         console.log('Error al actualizar grupo:', error);
+        response.status(500).send('Error al actualizar el grupo');
     });
 };
 
@@ -547,6 +546,38 @@ exports.getAnalisisOtis = (request, response, next) => {
     });
 };
 
+// CUADERNILLO COLORES
+exports.getCuadernilloColores = (request, response, next) => {
+    // Obtener los datos personales del aspirante
+    Prueba.getDatosPersonalesAspirante(request.params.idGrupo, request.params.idAspirante)
+    .then(([rows, fieldData]) => {
+        const datosPersonales = rows;
+        
+        // Obtener todas las selecciones de colores
+        CuadernilloColores.getSeleccionesColores(request.params.idGrupo, request.params.idAspirante)
+        .then(([rows, fieldData]) => {
+            // Separar las selecciones por fase
+            const seleccionesFase1 = rows.filter(row => row.fase === 1)
+                                        .sort((a, b) => a.posicion - b.posicion);
+            const seleccionesFase2 = rows.filter(row => row.fase === 2)
+                                        .sort((a, b) => a.posicion - b.posicion);
+            
+            response.render('Psicologos/cuadernilloColores.ejs', {
+                datosPersonales: datosPersonales || [],
+                seleccionesFase1: seleccionesFase1 || [],
+                seleccionesFase2: seleccionesFase2 || [],
+                aspirante: request.params.idAspirante || null,
+                grupo: request.params.idGrupo || null,
+                idInstitucion: request.params.idInstitucion || null,
+            });
+        }).catch((error) => {
+            console.log(error);
+        });
+    }).catch((error) => {
+        console.log(error);
+    });
+};
+
 exports.getAnalisisColores = async (request, response, next) => {
     try {
         const [rows] = await Prueba.getRespuestasColores(request.params.idAspirante, request.params.idGrupo);
@@ -584,6 +615,7 @@ exports.getAnalisisColores = async (request, response, next) => {
     } catch (error) {
         console.error('Error al obtener análisis de colores:', error);
     }
+
 };
 
 

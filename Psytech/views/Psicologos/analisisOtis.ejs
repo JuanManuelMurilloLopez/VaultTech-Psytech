@@ -109,8 +109,8 @@
                 <div class="row g-4">
                     <div class="col-md-12">
                         <h3 class="fw-bolder">Resultados por Área</h3>
-                </div>
-                    <canvas id="graficaAreas" class="col-md-4"></canvas>
+                    </div>
+                    <canvas id="graficaAreas" class="col-md-4"></canvas>    
                     <table class="table table-bordered col-md-4">
                         <thead class="table-dark">
                             <tr>
@@ -187,8 +187,12 @@
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     y: {
+                        min: 0,
+                        max: 100,
                         beginAtZero: true
                     }
                 }
