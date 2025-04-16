@@ -579,6 +579,7 @@ exports.getCuadernilloColores = (request, response, next) => {
 };
 
 exports.getAnalisisColores = async (request, response, next) => {
+    const { idGrupo, idAspirante, idInstitucion } = request.params;
     try {
         const [rows] = await Prueba.getRespuestasColores(request.params.idAspirante, request.params.idGrupo);
 
@@ -588,36 +589,45 @@ exports.getAnalisisColores = async (request, response, next) => {
             3: { nombre: 'Verde', significado: 'Productividad', tipo: 'Laboral' },
             4: { nombre: 'Rojo', significado: 'Empuje/Agresividad', tipo: 'Laboral' },
             5: { nombre: 'Amarillo', significado: 'Sociabilidad', tipo: 'Laboral' },
-            6: { nombre: 'Morado', significado: 'Creatividad', tipo: 'Laboral' }, // comodín
+            6: { nombre: 'Morado', significado: 'Creatividad', tipo: 'Laboral' },
             7: { nombre: 'Café', significado: 'Vigor', tipo: 'No laboral' },
             8: { nombre: 'Negro', significado: 'Satisfacción', tipo: 'No laboral' },
         };
 
-        const resultado = [];
+        const resultadosFase1 = [];
+        const resultadosFase2 = [];
 
         rows.forEach(({ fase, idColor, posicion }) => {
             let porcentaje = 90 - (posicion * 10);
-            if (porcentaje === 50) porcentaje = 40; // Saltar el 50
+            if (porcentaje <= 50) porcentaje -= 10;
 
             const info = colores[idColor] || { nombre: 'Desconocido', significado: '', tipo: 'Desconocido' };
 
-            resultado.push({
+            const resultado = {
                 color: info.nombre,
                 significado: info.significado,
                 tipo: info.tipo,
                 porcentaje
-            });
+            };
+
+            if (fase === 1) {
+                resultadosFase1.push(resultado);
+            } else if (fase === 2) {
+                resultadosFase2.push(resultado);
+            }
         });
 
-        console.log('Resultado final:', resultado); // Verifica el resultado final
-
-        response.render('Psicologos/analisisColores.ejs', { resultado });
+        response.render('Psicologos/analisisColores.ejs', {
+            resultadosFase1,
+            resultadosFase2,
+            idGrupo, 
+            idAspirante,
+            idInstitucion
+        });
     } catch (error) {
         console.error('Error al obtener análisis de colores:', error);
     }
-
 };
-
 
 exports.getRespuestasOtis = (request, response, next) => {
     console.log('Respuestas Otis');

@@ -13,7 +13,7 @@
 
 
     <!-- Link css -->
-    <link rel="stylesheet" href="/css/psicologos/analisisOtis.css">
+    <link rel="stylesheet" href="/css/psicologos/analisisColores.css">
     <!-- CSS navside -->
     <link rel="stylesheet" href="/css/includeCss/_navsidePsicologo.css">
     <!-- CSS cerrar sesión -->
@@ -27,33 +27,50 @@
             <%- include('../includes/_buttonCerrarSesion.ejs') %>
             <h1 class="text-center">Analisis Prueba Colores</h1> <br>
             <div class="row">
-                <h3 class="fw-bolder">Análisis por Color</h3>
+                <h3 class="fw-bolder">Personalidad y Adaptación al medio</h3>
             </div>
             
-            <div class="row g-4">
-                <div class="row g-4">
-                    <div class="col-md-12">
-                        <canvas id="graficaColores" class="col-md-4"></canvas>
-                        <div class="tabla-colores">
-                            <table class="table table-bordered col-md-4">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>Significado</th>
-                                        <th>Porcentaje</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% for (let color of resultado) { %>
-                                            <tr>
-                                                <td><%= color.significado %></td>
-                                                <td><%= color.porcentaje %>%</td>
-                                            </tr>
+            <div class="row g-4 align-items-start">
+                <div class="col-md-7">
+                    <canvas id="graficaMixta"></canvas>
+                </div>
+                <div class="col-md-5">
+                    <div class="tabla-colores">
+                        <table class="table table-bordered">            
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Significado</th>
+                                    <th>Personalidad</th>
+                                    <th>Adaptación al medio</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <% 
+                                    // Obtener todos los significados únicos
+                                    const significadosUnicos = [...new Set([
+                                        ...resultadosFase1.map(c => c.significado),
+                                        ...resultadosFase2.map(c => c.significado)
+                                    ])];
+                            
+                                    for (let significado of significadosUnicos) {
+                                        const personalidad = resultadosFase1.find(c => c.significado === significado);
+                                        const adaptacion = resultadosFase2.find(c => c.significado === significado);
+                                    %>
+                                        <tr>
+                                            <td><%= significado %></td>
+                                            <td><%= personalidad ? personalidad.porcentaje + '%' : '0%' %></td>
+                                            <td><%= adaptacion ? adaptacion.porcentaje + '%' : '0%' %></td>
+                                        </tr>
                                     <% } %>
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>                            
                     </div>
                 </div>
+            </div>
+            <div><%=  %>
+                <a class="btn btn-color--third boton-regresar-abajo"
+                href="/psicologo/cuadernillo-colores/<%= idGrupo %>/<%= idAspirante %>/<%= idInstitucion %>"
+                >Regresar</a>
             </div>
         </div>
         
@@ -66,32 +83,36 @@
     <script src="/js/_navside.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     <script>
-        const coloresData = <%- JSON.stringify(resultado) %>;
+        const datosFase1 = <%- JSON.stringify(resultadosFase1) %>; // Personalidad
+        const datosFase2 = <%- JSON.stringify(resultadosFase2) %>; // Adaptación al medio
 
-        const significados = [...new Set(coloresData.map(c => c.significado))];
+        // Obtener todos los significados únicos
+        const todosSignificados = [
+            ...new Set([
+                ...datosFase1.map(c => c.significado),
+                ...datosFase2.map(c => c.significado)
+            ])
+        ];
 
-        const personalidadData = significados.map(significado => {
-            const item = coloresData.find(c => c.significado === significado && c.tipo === 'Laboral');
+        const personalidadData = todosSignificados.map(significado => {
+            const item = datosFase1.find(c => c.significado === significado);
             return item ? item.porcentaje : 0;
         });
 
-        const adaptacionData = significados.map(significado => {
-            const item = coloresData.find(c => c.significado === significado && c.tipo === 'No laboral');
+        const adaptacionData = todosSignificados.map(significado => {
+            const item = datosFase2.find(c => c.significado === significado);
             return item ? item.porcentaje : 0;
         });
 
-    
-        const ctxColores = document.getElementById('graficaColores');
-    
-        const mixedChart = new Chart(ctxColores, {
-            type: 'bar',
+        const ctx = document.getElementById('graficaMixta');
+        const mixedChart = new Chart(ctx, {
             data: {
-                labels: significados,
+                labels: todosSignificados,
                 datasets: [
                     {
-                        type: 'bar', 
+                        type: 'bar',
                         label: 'Personalidad',
                         data: personalidadData,
                         backgroundColor: 'rgba(0, 102, 204, 0.7)',
@@ -102,22 +123,29 @@
                         type: 'bar',
                         label: 'Adaptación al medio',
                         data: adaptacionData,
-                        backgroundColor: 'rgba(100, 149, 237, 0.7)',
                         borderColor: 'rgba(100, 149, 237, 1)',
+                        backgroundColor: 'rgba(100, 149, 237, 0.3)',
                         borderWidth: 1
                     }
                 ]
             },
             options: {
-
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Comparación: Personalidad vs Adaptación al medio'
+                    }
+                },
                 scales: {
                     y: {
+                        min: 0,
                         beginAtZero: true,
                         max: 100
                     }
                 }
             }
         });
-    </script>    
+    </script>
 
 </body>

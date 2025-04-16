@@ -63,14 +63,6 @@
     font-weight: 600;
 }
 
-#graficaColores{
-    width: 100% !important;
-    max-width: 800px;
-    height: 400px !important;
-    display: block;
-    margin: auto;
-}
-
 .table {
     width: 100%;
     max-width: 400px;
@@ -104,4 +96,23 @@ h1, h4 {
     flex: 1;
     max-width: 30%;
     min-width: 250px;
+}
+
+#graficaMixta {
+    width: 100% !important;
+    height: 400px !important;
+    display: block;
+    margin: 0 auto;
+}
+
+.tabla-colores {
+    overflow-x: auto;
+    padding: 10px;
+}
+
+.container .boton-regresar-abajo {
+    position: fixed;
+    bottom: 20px;
+    left: 250px;
+    z-index: 999;
 }
