@@ -552,14 +552,14 @@ exports.getAnalisisColores = async (request, response, next) => {
         const [rows] = await Prueba.getRespuestasColores(request.params.idAspirante, request.params.idGrupo);
        
         const colores = {
-            0: { nombre: 'Gris', significado: 'Participación', tipo: 'Laboral' },
-            1: { nombre: 'Azul', significado: 'Paciencia', tipo: 'Laboral' },
-            2: { nombre: 'Verde', significado: 'Productividad', tipo: 'Laboral' },
-            3: { nombre: 'Rojo', significado: 'Empuje/Agresividad', tipo: 'Laboral' },
-            4: { nombre: 'Amarillo', significado: 'Sociabilidad', tipo: 'Laboral' },
-            5: { nombre: 'Morado', significado: 'Creatividad', tipo: 'Laboral' }, // comodín
-            6: { nombre: 'Café', significado: 'Vigor', tipo: 'No laboral' },
-            7: { nombre: 'Negro', significado: 'Satisfacción', tipo: 'No laboral' },
+            1: { nombre: 'Gris', significado: 'Participación', tipo: 'Laboral' },
+            2: { nombre: 'Azul', significado: 'Paciencia', tipo: 'Laboral' },
+            3: { nombre: 'Verde', significado: 'Productividad', tipo: 'Laboral' },
+            4: { nombre: 'Rojo', significado: 'Empuje/Agresividad', tipo: 'Laboral' },
+            5: { nombre: 'Amarillo', significado: 'Sociabilidad', tipo: 'Laboral' },
+            6: { nombre: 'Morado', significado: 'Creatividad', tipo: 'Laboral' }, // comodín
+            7: { nombre: 'Café', significado: 'Vigor', tipo: 'No laboral' },
+            8: { nombre: 'Negro', significado: 'Satisfacción', tipo: 'No laboral' },
         };
 
         const resultado = [];
@@ -578,10 +578,9 @@ exports.getAnalisisColores = async (request, response, next) => {
 
         console.log('Resultado final:', resultado); // Verifica el resultado final
 
-        response.json({ resultado });
+        response.render('Psicologos/analisisColores.ejs', { resultado });
     } catch (error) {
         console.error('Error al obtener análisis de colores:', error);
-        response.status(500).json({ error: 'Error al procesar análisis de colores' });
     }
 };
 

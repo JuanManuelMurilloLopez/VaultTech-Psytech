@@ -26,15 +26,6 @@
         <div class="container">
             <%- include('../includes/_buttonCerrarSesion.ejs') %>
             <h1 class="text-center">Analisis Prueba Colores</h1> <br>
-            <h4 class="text-center nombre-aspirante">Nombre del aspirante:
-                 <%= informacionAnalisis[0].nombreUsuario +  " " +
-                 informacionAnalisis[0].apellidoPaterno + " " +
-                 informacionAnalisis[0].apellidoMaterno %>
-                </h4> <br>
-            <br>
-
-
-
         </div>
     
 
@@ -63,6 +54,13 @@
             </table>
         </div>
     </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Incluir el script del navside -->
+    <script src="/js/_navside.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <script>
         // Tomar los resultados de la respuesta
