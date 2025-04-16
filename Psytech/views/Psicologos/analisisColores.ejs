@@ -26,34 +26,37 @@
         <div class="container">
             <%- include('../includes/_buttonCerrarSesion.ejs') %>
             <h1 class="text-center">Analisis Prueba Colores</h1> <br>
-        </div>
-    
-
-        <div class="row g-4">
-            <div class="col-md-12">
+            <div class="row">
                 <h3 class="fw-bolder">Análisis por Color</h3>
             </div>
-            <canvas id="graficaColores" class="col-md-8"></canvas>
-            <table class="table table-bordered col-md-4">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Color</th>
-                        <th>Significado</th>
-                        <th>Porcentaje</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% for (let color of resultado) { %>
-                        <tr>
-                            <td><%= color.color %></td>
-                            <td><%= color.significado %></td>
-                            <td><%= color.porcentaje %>%</td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
+            
+            <div class="analisis-container">
+                <canvas id="graficaColores"></canvas>
+            
+                <div class="tabla-colores">
+                    <table class="table table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Color</th>
+                                <th>Significado</th>
+                                <th>Porcentaje</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (let color of resultado) { %>
+                                    <tr>
+                                        <td><%= color.color %></td>
+                                        <td><%= color.significado %></td>
+                                        <td><%= color.porcentaje %>%</td>
+                                    </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -63,39 +66,60 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <script>
-        // Tomar los resultados de la respuesta
         const coloresData = <%- JSON.stringify(resultado) %>;
     
-        // Extraer etiquetas (colores) y valores (porcentajes)
-        const labelsColores = coloresData.map(color => color.color);
-        const dataColores = coloresData.map(color => color.porcentaje);
+        // Agrupamos por significado (labels), y dividimos en dos datasets
+        const significados = [...new Set(coloresData.map(c => c.significado))];
     
-        // Configurar la gráfica de barras
+        const personalidadData = significados.map(significado => {
+            const item = coloresData.find(c => c.significado === significado && c.tipo === 'Laboral');
+            return item ? item.porcentaje : 0;
+        });
+    
+        const adaptacionData = significados.map(significado => {
+            const item = coloresData.find(c => c.significado === significado && c.tipo === 'No laboral');
+            return item ? item.porcentaje : 0;
+        });
+    
         const ctxColores = document.getElementById('graficaColores');
     
         new Chart(ctxColores, {
             type: 'bar',
             data: {
-                labels: labelsColores,
-                datasets: [{
-                    label: 'Porcentaje por Color',
-                    data: dataColores,
-                    backgroundColor: ['rgba(146, 208, 80, 1)', 'rgba(84, 129, 53, 1)', 'rgba(0, 176, 240, 1)', 'rgba(255, 102, 0, 1)', 'rgba(255, 0, 0, 1)', 
-                                      'rgba(255, 255, 0, 1)', 'rgba(128, 0, 0, 1)', 'rgba(0, 0, 0, 1)', 'rgba(255, 255, 255, 1)'], // Colores de fondo
-                    borderColor: ['rgba(146, 208, 80, 1)', 'rgba(84, 129, 53, 1)', 'rgba(0, 176, 240, 1)', 'rgba(255, 102, 0, 1)', 'rgba(255, 0, 0, 1)', 
-                                  'rgba(255, 255, 0, 1)', 'rgba(128, 0, 0, 1)', 'rgba(0, 0, 0, 1)', 'rgba(255, 255, 255, 1)'], // Colores de borde
-                    borderWidth: 1
-                }]
+                labels: significados,
+                datasets: [
+                    {
+                        label: 'Personalidad',
+                        data: personalidadData,
+                        backgroundColor: 'rgba(0, 123, 255, 0.7)',
+                        borderColor: 'rgba(0, 123, 255, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Adaptación al medio',
+                        data: adaptacionData,
+                        backgroundColor: 'rgba(40, 167, 69, 0.7)',
+                        borderColor: 'rgba(40, 167, 69, 1)',
+                        borderWidth: 1
+                    }
+                ]
             },
             options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Análisis de Colores por Significado'
+                    }
+                },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        max: 100
                     }
                 }
             }
         });
-    </script>
-    
+    </script>    
 
 </body>

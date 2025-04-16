@@ -550,7 +550,7 @@ exports.getAnalisisOtis = (request, response, next) => {
 exports.getAnalisisColores = async (request, response, next) => {
     try {
         const [rows] = await Prueba.getRespuestasColores(request.params.idAspirante, request.params.idGrupo);
-       
+
         const colores = {
             1: { nombre: 'Gris', significado: 'Participación', tipo: 'Laboral' },
             2: { nombre: 'Azul', significado: 'Paciencia', tipo: 'Laboral' },
@@ -565,7 +565,9 @@ exports.getAnalisisColores = async (request, response, next) => {
         const resultado = [];
 
         rows.forEach(({ fase, idColor, posicion }) => {
-            const porcentaje = 90 - (posicion * 10);
+            let porcentaje = 90 - (posicion * 10);
+            if (porcentaje === 50) porcentaje = 40; // Saltar el 50
+
             const info = colores[idColor] || { nombre: 'Desconocido', significado: '', tipo: 'Desconocido' };
 
             resultado.push({
