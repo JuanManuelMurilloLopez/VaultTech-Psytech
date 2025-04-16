@@ -581,7 +581,17 @@ exports.getCuadernilloColores = (request, response, next) => {
 exports.getAnalisisColores = async (request, response, next) => {
     const { idGrupo, idAspirante, idInstitucion } = request.params;
     try {
-        const [rows] = await Prueba.getRespuestasColores(request.params.idAspirante, request.params.idGrupo);
+        // Obtener selecciones de colores
+        const [seleccionesColoresRows] = await CuadernilloColores.getSeleccionesColores(idGrupo, idAspirante);
+        
+        // Separar selecciones por fases
+        const seleccionesFase1 = seleccionesColoresRows.filter(row => row.fase === 1)
+                                    .sort((a, b) => a.posicion - b.posicion);
+        const seleccionesFase2 = seleccionesColoresRows.filter(row => row.fase === 2)
+                                    .sort((a, b) => a.posicion - b.posicion);
+        
+        
+        const [rows] = await Prueba.getRespuestasColores(idAspirante, idGrupo);
 
         const colores = {
             1: { nombre: 'Gris', significado: 'Participación', tipo: 'Laboral' },
@@ -618,6 +628,10 @@ exports.getAnalisisColores = async (request, response, next) => {
         });
 
         response.render('Psicologos/analisisColores.ejs', {
+            
+            seleccionesFase1: seleccionesFase1 || [],
+            seleccionesFase2: seleccionesFase2 || [],
+            
             resultadosFase1,
             resultadosFase2,
             idGrupo, 

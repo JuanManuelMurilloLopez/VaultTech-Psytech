@@ -116,3 +116,53 @@ h1, h4 {
     left: 250px;
     z-index: 999;
 }
+
+/* Fases colores */
+.titulo-seccion {
+    color: var(--secondary);
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 1.5rem;
+}
+
+.prueba-colores-container {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.fase-titulo {
+    font-size: 1.8rem;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    color: var(--secondary);
+}
+
+.colores-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap; 
+    gap: 30px;
+    margin-bottom: 50px;
+    width: 100%;
+}
+
+.color-item-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80px;
+}
+
+.color-box {
+    width: 80px;
+    height: 80px;
+    border: 1px solid #ddd;
+    border-radius: 10px; 
+}
+
+.color-number {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-top: 10px;
+}
