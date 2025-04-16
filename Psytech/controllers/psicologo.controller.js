@@ -547,9 +547,56 @@ exports.getAnalisisOtis = (request, response, next) => {
     });
 };
 
-exports.getAnalisisColores = (request, response, next) => {
-    response.send('Analisis Colores');
+exports.getAnalisisColores = async (request, response, next) => {
+    try {
+        console.log('Params recibidos:', request.params);
+
+        const [rows] = await Prueba.getRespuestasColores(request.params.idAspirante, request.params.idGrupo);
+        console.log('Datos crudos desde la base:', rows);
+
+        const colores = {
+            0: { nombre: 'Gris', significado: 'Participación', tipo: 'Laboral' },
+            1: { nombre: 'Azul', significado: 'Paciencia', tipo: 'Laboral' },
+            2: { nombre: 'Verde', significado: 'Productividad', tipo: 'Laboral' },
+            3: { nombre: 'Rojo', significado: 'Empuje/Agresividad', tipo: 'Laboral' },
+            4: { nombre: 'Amarillo', significado: 'Sociabilidad', tipo: 'Laboral' },
+            5: { nombre: 'Morado', significado: 'Creatividad', tipo: 'Laboral' }, // comodín
+            6: { nombre: 'Café', significado: 'Vigor', tipo: 'No laboral' },
+            7: { nombre: 'Negro', significado: 'Satisfacción', tipo: 'No laboral' },
+        };
+
+        const resultado = {
+            fase1: [],
+            fase2: [],
+        };
+
+        rows.forEach(({ fase, idColor, posicion }) => {
+            const porcentaje = 90 - (posicion * 10);
+            const info = colores[idColor] || { nombre: 'Desconocido', significado: '', tipo: 'Desconocido' };
+
+            const interpretado = {
+                color: info.nombre,
+                significado: info.significado,
+                tipo: info.tipo,
+                porcentaje,
+                nivel: fase === 1 ? 'Nivel de personalidad' : 'Nivel de adaptación al medio'
+            };
+
+            console.log(`Fase ${fase} - Interpretado:`, interpretado); 
+
+            if (fase === 1) resultado.fase1.push(interpretado);
+            else if (fase === 2) resultado.fase2.push(interpretado);
+        });
+
+        console.log('Resultado final:', resultado);
+
+        response.json(resultado);
+    } catch (error) {
+        console.error('Error al obtener análisis de colores:', error);
+        response.status(500).json({ error: 'Error al procesar análisis de colores' });
+    }
 };
+
 
 exports.getRespuestasOtis = (request, response, next) => {
     console.log('Respuestas Otis');

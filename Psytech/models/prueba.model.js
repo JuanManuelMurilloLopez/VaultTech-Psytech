@@ -220,4 +220,13 @@ module.exports = class Prueba{
             `, [idAspirante, idGrupo]);
     }
 
+    static getRespuestasColores(idAspirante, idGrupo) {
+        return db.execute(`
+            SELECT fase, idColor, posicion
+            FROM seleccionescolores
+            WHERE idAspirante = ? AND idGrupo = ?
+            ORDER BY fase, posicion
+        `, [idAspirante, idGrupo]);
+    }    
+
 }
