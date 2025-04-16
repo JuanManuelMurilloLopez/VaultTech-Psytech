@@ -1,4 +1,3 @@
-/* cuadernilloColores.css */
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;1,100;1,300;1,400;1,700;1,900&display=swap');
 
 :root {
@@ -26,9 +25,10 @@
 }
 
 .container {
-    margin-left: 250px;
+    flex: 1;
     padding: 20px 40px;
-    width: calc(100% - 250px);
+    margin: 0 auto;
+    width: 100%;
     transition: margin-left 0.5s;
 }
 
@@ -93,8 +93,10 @@
 .colores-row {
     display: flex;
     justify-content: center;
+    flex-wrap: nowrap; 
     gap: 30px;
     margin-bottom: 50px;
+    width: 100%;
 }
 
 .color-item-container {
@@ -102,7 +104,6 @@
     flex-direction: column;
     align-items: center;
     width: 80px;
-    margin: 0 5px;
 }
 
 .color-box {
