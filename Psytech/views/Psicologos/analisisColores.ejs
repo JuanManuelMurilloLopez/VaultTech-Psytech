@@ -30,31 +30,33 @@
                 <h3 class="fw-bolder">Análisis por Color</h3>
             </div>
             
-            <div class="analisis-container">
-                <canvas id="graficaColores"></canvas>
-            
-                <div class="tabla-colores">
-                    <table class="table table-bordered">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Color</th>
-                                <th>Significado</th>
-                                <th>Porcentaje</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% for (let color of resultado) { %>
+            <div class="row g-4">
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <canvas id="graficaColores" class="col-md-4"></canvas>
+                        <div class="tabla-colores">
+                            <table class="table table-bordered col-md-4">
+                                <thead class="table-dark">
                                     <tr>
-                                        <td><%= color.color %></td>
-                                        <td><%= color.significado %></td>
-                                        <td><%= color.porcentaje %>%</td>
+                                        <th>Significado</th>
+                                        <th>Porcentaje</th>
                                     </tr>
-                            <% } %>
-                        </tbody>
-                    </table>
+                                </thead>
+                                <tbody>
+                                    <% for (let color of resultado) { %>
+                                            <tr>
+                                                <td><%= color.significado %></td>
+                                                <td><%= color.porcentaje %>%</td>
+                                            </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        
     </div>
 
 
@@ -107,13 +109,7 @@
                 ]
             },
             options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Análisis de Colores por Significado'
-                    }
-                },
+
                 scales: {
                     y: {
                         beginAtZero: true,

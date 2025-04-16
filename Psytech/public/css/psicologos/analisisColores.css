@@ -41,30 +41,67 @@
     color: var(--font-secondary);
 }
 
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Lato", sans-serif;
+    box-sizing: border-box;
+}
 
-.analisis-container {
+.main{
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    transition: all 0.35s ease-in-out;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 2rem;
-    padding: 1rem;
+    flex-direction: row;
 }
 
-#graficaColores {
+.text-center{
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 600;
+}
+
+#graficaColores{
+    width: 100% !important;
+    max-width: 800px;
+    height: 400px !important;
+    display: block;
+    margin: auto;
+}
+
+.table {
     width: 100%;
-    max-width: 500px;
-    height: auto;
-}
-
-.tabla-colores {
     max-width: 400px;
-    width: 100%;
+    margin: 0 auto;
 }
 
-@media (max-width: 768px) {
-    .analisis-container {
-        flex-direction: column;
-        align-items: center;
-    }
+.table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px;
+}
+
+.table-sm {
+    font-size: 0.9rem;
+}
+
+h1, h4 {
+    margin-bottom: 15px;
+}
+
+
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-wrap: wrap;
+}
+
+
+.col-md-4 {
+    flex: 1;
+    max-width: 30%;
+    min-width: 250px;
 }
