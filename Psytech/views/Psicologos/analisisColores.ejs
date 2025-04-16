@@ -20,6 +20,84 @@
     <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 
 </head>
-<body>
+<body class="">
+    <div class="main">
+        <%- include('../includes/_navsidePsicologo.ejs') %>
+        <div class="container">
+            <%- include('../includes/_buttonCerrarSesion.ejs') %>
+            <h1 class="text-center">Analisis Prueba Colores</h1> <br>
+            <h4 class="text-center nombre-aspirante">Nombre del aspirante:
+                 <%= informacionAnalisis[0].nombreUsuario +  " " +
+                 informacionAnalisis[0].apellidoPaterno + " " +
+                 informacionAnalisis[0].apellidoMaterno %>
+                </h4> <br>
+            <br>
+
+
+
+        </div>
     
+
+        <div class="row g-4">
+            <div class="col-md-12">
+                <h3 class="fw-bolder">Análisis por Color</h3>
+            </div>
+            <canvas id="graficaColores" class="col-md-8"></canvas>
+            <table class="table table-bordered col-md-4">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Color</th>
+                        <th>Significado</th>
+                        <th>Porcentaje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let color of resultado) { %>
+                        <tr>
+                            <td><%= color.color %></td>
+                            <td><%= color.significado %></td>
+                            <td><%= color.porcentaje %>%</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        // Tomar los resultados de la respuesta
+        const coloresData = <%- JSON.stringify(resultado) %>;
+    
+        // Extraer etiquetas (colores) y valores (porcentajes)
+        const labelsColores = coloresData.map(color => color.color);
+        const dataColores = coloresData.map(color => color.porcentaje);
+    
+        // Configurar la gráfica de barras
+        const ctxColores = document.getElementById('graficaColores');
+    
+        new Chart(ctxColores, {
+            type: 'bar',
+            data: {
+                labels: labelsColores,
+                datasets: [{
+                    label: 'Porcentaje por Color',
+                    data: dataColores,
+                    backgroundColor: ['rgba(146, 208, 80, 1)', 'rgba(84, 129, 53, 1)', 'rgba(0, 176, 240, 1)', 'rgba(255, 102, 0, 1)', 'rgba(255, 0, 0, 1)', 
+                                      'rgba(255, 255, 0, 1)', 'rgba(128, 0, 0, 1)', 'rgba(0, 0, 0, 1)', 'rgba(255, 255, 255, 1)'], // Colores de fondo
+                    borderColor: ['rgba(146, 208, 80, 1)', 'rgba(84, 129, 53, 1)', 'rgba(0, 176, 240, 1)', 'rgba(255, 102, 0, 1)', 'rgba(255, 0, 0, 1)', 
+                                  'rgba(255, 255, 0, 1)', 'rgba(128, 0, 0, 1)', 'rgba(0, 0, 0, 1)', 'rgba(255, 255, 255, 1)'], // Colores de borde
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+    
+
 </body>
