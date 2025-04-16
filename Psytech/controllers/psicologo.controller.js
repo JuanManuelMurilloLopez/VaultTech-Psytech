@@ -444,7 +444,7 @@ exports.getPruebaColores = (request, response, next) => {
 // Controlador para manejar la obtención del cuadernillo de respuestas OTIS.
 exports.getCuadernilloOtis = (request, response, next) => {
     // Obtiene los datos personales del aspirante
-    Prueba.getDatosPersonalesAspirante(request.params.idGrupo, request.params.idAspirante)
+    Prueba.getDatosPersonalesAspiranteOtis(request.params.idGrupo, request.params.idAspirante)
     .then(([rows, fieldData]) => {
         const datosPersonales = rows;
         // Obtiene las respuestas correctas del aspirante
@@ -550,7 +550,7 @@ exports.getAnalisisOtis = (request, response, next) => {
 // CUADERNILLO COLORES
 exports.getCuadernilloColores = (request, response, next) => {
     // Obtener los datos personales del aspirante
-    Prueba.getDatosPersonalesAspirante(request.params.idGrupo, request.params.idAspirante)
+    Prueba.getDatosPersonalesAspiranteColores(request.params.idGrupo, request.params.idAspirante)
     .then(([rows, fieldData]) => {
         const datosPersonales = rows;
         
