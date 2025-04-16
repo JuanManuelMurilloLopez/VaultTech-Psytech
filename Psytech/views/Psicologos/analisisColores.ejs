@@ -67,39 +67,41 @@
     
     <script>
         const coloresData = <%- JSON.stringify(resultado) %>;
-    
-        // Agrupamos por significado (labels), y dividimos en dos datasets
+
         const significados = [...new Set(coloresData.map(c => c.significado))];
-    
+
         const personalidadData = significados.map(significado => {
             const item = coloresData.find(c => c.significado === significado && c.tipo === 'Laboral');
             return item ? item.porcentaje : 0;
         });
-    
+
         const adaptacionData = significados.map(significado => {
             const item = coloresData.find(c => c.significado === significado && c.tipo === 'No laboral');
             return item ? item.porcentaje : 0;
         });
+
     
         const ctxColores = document.getElementById('graficaColores');
     
-        new Chart(ctxColores, {
+        const mixedChart = new Chart(ctxColores, {
             type: 'bar',
             data: {
                 labels: significados,
                 datasets: [
                     {
+                        type: 'bar', 
                         label: 'Personalidad',
                         data: personalidadData,
-                        backgroundColor: 'rgba(0, 123, 255, 0.7)',
-                        borderColor: 'rgba(0, 123, 255, 1)',
+                        backgroundColor: 'rgba(0, 102, 204, 0.7)',
+                        borderColor: 'rgba(0, 102, 204, 1)',
                         borderWidth: 1
                     },
                     {
+                        type: 'bar',
                         label: 'Adaptación al medio',
                         data: adaptacionData,
-                        backgroundColor: 'rgba(40, 167, 69, 0.7)',
-                        borderColor: 'rgba(40, 167, 69, 1)',
+                        backgroundColor: 'rgba(100, 149, 237, 0.7)',
+                        borderColor: 'rgba(100, 149, 237, 1)',
                         borderWidth: 1
                     }
                 ]

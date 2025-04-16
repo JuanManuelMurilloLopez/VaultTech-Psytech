@@ -41,31 +41,30 @@
     color: var(--font-secondary);
 }
 
+
+.analisis-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+#graficaColores {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+}
+
+.tabla-colores {
+    max-width: 400px;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
     .analisis-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 2rem;
-        padding: 2rem;
+        flex-direction: column;
+        align-items: center;
     }
-
-    #graficaColores {
-        flex: 1 1 60%;
-        min-width: 300px;
-        max-width: 700px;
-    }
-
-    .tabla-colores {
-        flex: 1 1 35%;
-        min-width: 250px;
-    }
-
-    .table th, .table td {
-        text-align: center;
-        vertical-align: middle;
-    }
-
-    h1, h3 {
-        text-align: center;
-    }
+}
