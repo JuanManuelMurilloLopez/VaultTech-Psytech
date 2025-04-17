@@ -124,6 +124,40 @@
                     </div>
                 </div>
             </div>
+
+            <% if (Array.isArray(parejas) && parejas.length > 0) { %>
+                <h5 class="mb-0">Parejas naturales</h5>
+                <ul class="list-group list-group-flush">
+                <% parejas
+                    .filter(par => par.tipo === 'natural')
+                    .forEach(par => {
+                        const [color1, color2] = par.pareja.split('-');
+                        const zona1 = par.zonas.fase1;
+                        const zona2 = par.zonas.fase2;
+                        const zonasStr = zona1 === zona2 ? zona1 : `${zona1} / ${zona2}`;
+                %>
+                    <li class="list-group-item">
+                        Pareja: <%= color1 %> + <%= color2 %>, Zonas: <%= zonasStr %>
+                    </li>
+                <% }); %>
+                </ul>
+            
+                <ul class="list-group list-group-flush">
+                <% parejas
+                    .filter(par => par.tipo === 'disociada')
+                    .forEach(par => {
+                        const [color1, color2] = par.pareja.split('-');
+                        const zona1 = par.zonas.fase1;
+                        const zona2 = par.zonas.fase2;
+                        const zonasStr = zona1 === zona2 ? zona1 : `${zona1} / ${zona2}`;
+                %>
+                    <li class="list-group-item">
+                        Pareja: <%= color1 %> + <%= color2 %>, Zonas: <%= zonasStr %>
+                    </li>
+                <% }); %>
+                </ul>
+            <% } %>            
+
             <div class="boton-container">
                 <a class="btn btn-color--third boton-regresar-abajo"
                 href="/psicologo/cuadernillo-colores/<%= idGrupo %>/<%= idAspirante %>/<%= idInstitucion %>"

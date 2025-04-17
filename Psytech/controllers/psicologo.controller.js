@@ -578,6 +578,48 @@ exports.getCuadernilloColores = (request, response, next) => {
     });
 };
 
+function obtenerZona(posicion) {
+    if (posicion <= 1) return '+';
+    if (posicion <= 3) return 'X';
+    if (posicion <= 5) return '=';
+    return '-';
+}
+
+function obtenerParejasConZona(selecciones) {
+    const pares = new Map();
+    for (let i = 0; i < selecciones.length - 1; i++) {
+        const a = selecciones[i];
+        const b = selecciones[i + 1];
+        const clave = [a.numeroColor, b.numeroColor].sort((x, y) => x - y).join('-');
+        const zona = obtenerZona(a.posicion) + '-' + obtenerZona(b.posicion);
+        pares.set(clave, { zonas: new Set([zona]) });
+    }
+    return pares;
+}
+
+function obtenerParejasClasificadas(seleccionesFase1, seleccionesFase2) {
+    const paresF1 = obtenerParejasConZona(seleccionesFase1);
+    const paresF2 = obtenerParejasConZona(seleccionesFase2);
+
+    const parejas = [];
+
+    for (let [clave, datosF1] of paresF1) {
+        if (paresF2.has(clave)) {
+            const datosF2 = paresF2.get(clave);
+            const zonasF1 = [...datosF1.zonas][0];
+            const zonasF2 = [...datosF2.zonas][0];
+
+            parejas.push({
+                pareja: clave,
+                tipo: zonasF1 === zonasF2 ? 'natural' : 'disociada',
+                zonas: { fase1: zonasF1, fase2: zonasF2 }
+            });
+        }
+    }
+
+    return parejas;
+}
+
 exports.getAnalisisColores = async (request, response, next) => {
     const { idGrupo, idAspirante, idInstitucion } = request.params;
     try {
@@ -586,10 +628,13 @@ exports.getAnalisisColores = async (request, response, next) => {
         
         // Separar selecciones por fase
         const seleccionesFase1 = seleccionesColoresRows.filter(row => row.fase === 1)
-                                    .sort((a, b) => a.posicion - b.posicion);
+        .sort((a, b) => a.posicion - b.posicion);
         const seleccionesFase2 = seleccionesColoresRows.filter(row => row.fase === 2)
-                                    .sort((a, b) => a.posicion - b.posicion);
-        
+        .sort((a, b) => a.posicion - b.posicion);
+
+        // Calcular parejas naturales
+        const parejas = obtenerParejasClasificadas(seleccionesFase1, seleccionesFase2);
+
         // Obtener resultados de análisis
         const [rows] = await Prueba.getRespuestasColores(idAspirante, idGrupo);
 
@@ -642,6 +687,7 @@ exports.getAnalisisColores = async (request, response, next) => {
             resultadosFase2,
             movilidad,
             interpretacionMovilidad,
+            parejas,
             idGrupo, 
             idAspirante,
             idInstitucion
