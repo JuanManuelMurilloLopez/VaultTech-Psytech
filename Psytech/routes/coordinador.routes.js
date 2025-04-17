@@ -13,7 +13,7 @@ router.get('/psicologos-registrados', controller.getPsicologosRegistrados);
 router.get('/registrar-psicologo', controller.getRegistrarPsicologos);
 router.post('/registrar-psicologo', controller.postRegistrarPsicologos);
 
-router.get('/editar-psicologo/:idUsuario', controller.getEditarPsicologos);
+router.get('/editar-psicologo/:idUsuario', controller.getEditarPsicologo);
 
 router.get('/coordinadores-registrados', controller.getCoordinadoresRegistrados);
 

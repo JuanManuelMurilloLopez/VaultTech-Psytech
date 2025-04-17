@@ -32,6 +32,15 @@ module.exports = class Coordinador {
                         ORDER BY usuarios.nombreUsuario, usuarios.apellidoPaterno`);
   }
 
+  static fetchOne(idUsuario) {
+    return db.execute(
+      `SELECT *
+       FROM usuarios
+       WHERE idUsuario = ? AND idRol = 1`,
+      [idUsuario]
+    );
+  }  
+
   saveCoordinador() {
     const usuario = this.usuario || null;
     const estatusUsuario = this.estatusUsuario || 1;

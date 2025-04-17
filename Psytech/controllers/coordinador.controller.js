@@ -77,6 +77,7 @@ exports.getEditarPsicologo = (request, response, next) => {
 
         response.render('Coordinadores/editarPsicologo', {
             psicologo: psicologo,
+            idUsuario: psicologo.idUsuario,
             error: '',
         });
     })
@@ -224,6 +225,7 @@ exports.getEditarCoordinador = (request, response, next) => {
 
         response.render('Coordinadores/editarCoordinador', {
             coordinador: coordinador,
+            idUsuario: coordinador.idUsuario,
             error: '',
         });
     })
@@ -259,7 +261,7 @@ exports.postEditarCoordinador = (request, response, next) => {
             ? usuarioActual.estatusUsuario
             : (estatusUsuario === 'true' ? 1 : 0);
 
-        return Psicologo.update(
+        return Coordinador.update(
             idUsuario,
             usuario,
             estatus,
