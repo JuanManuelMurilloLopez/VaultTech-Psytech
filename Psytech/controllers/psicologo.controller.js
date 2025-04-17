@@ -581,17 +581,27 @@ exports.getCuadernilloColores = (request, response, next) => {
 exports.getAnalisisColores = async (request, response, next) => {
     const { idGrupo, idAspirante, idInstitucion } = request.params;
     try {
-        // Obtener selecciones de colores
+        // Obtener selecciones de colores completas
         const [seleccionesColoresRows] = await CuadernilloColores.getSeleccionesColores(idGrupo, idAspirante);
         
-        // Separar selecciones por fases
+        // Separar selecciones por fase
         const seleccionesFase1 = seleccionesColoresRows.filter(row => row.fase === 1)
                                     .sort((a, b) => a.posicion - b.posicion);
         const seleccionesFase2 = seleccionesColoresRows.filter(row => row.fase === 2)
                                     .sort((a, b) => a.posicion - b.posicion);
         
-        
+        // Obtener resultados de análisis
         const [rows] = await Prueba.getRespuestasColores(idAspirante, idGrupo);
+
+        // Calcular movilidad
+        const movilidad = calcularMovilidad(seleccionesFase1, seleccionesFase2);
+        
+        // Interpretar resultado de movilidad
+        const interpretacionMovilidad = interpretarMovilidad(movilidad);
+
+        // Inicializar arrays para resultadosFase1 y resultadosFase2
+        const resultadosFase1 = [];
+        const resultadosFase2 = [];
 
         const colores = {
             1: { nombre: 'Gris', significado: 'Participación', tipo: 'Laboral' },
@@ -603,9 +613,6 @@ exports.getAnalisisColores = async (request, response, next) => {
             7: { nombre: 'Café', significado: 'Vigor', tipo: 'No laboral' },
             8: { nombre: 'Negro', significado: 'Satisfacción', tipo: 'No laboral' },
         };
-
-        const resultadosFase1 = [];
-        const resultadosFase2 = [];
 
         rows.forEach(({ fase, idColor, posicion }) => {
             let porcentaje = 90 - (posicion * 10);
@@ -628,20 +635,72 @@ exports.getAnalisisColores = async (request, response, next) => {
         });
 
         response.render('Psicologos/analisisColores.ejs', {
-            
             seleccionesFase1: seleccionesFase1 || [],
             seleccionesFase2: seleccionesFase2 || [],
-            
             resultadosFase1,
             resultadosFase2,
+            movilidad,
+            interpretacionMovilidad,
             idGrupo, 
             idAspirante,
             idInstitucion
         });
     } catch (error) {
         console.error('Error al obtener análisis de colores:', error);
+        response.status(500).send('Error al obtener análisis de colores');
     }
 };
+
+// Calcular la movilidad
+function calcularMovilidad(seleccionesFase1, seleccionesFase2) {
+    let positivosTotales = 0;
+    let negativosTotales = 0;
+    
+    const posicionesFase1 = {};
+    seleccionesFase1.forEach(seleccion => {
+        posicionesFase1[seleccion.idColor] = seleccion.posicion;
+    });
+    
+    // Comparar con las posiciones en la fase 2
+    seleccionesFase2.forEach(seleccion => {
+        const posicionFase1 = posicionesFase1[seleccion.idColor];
+        const posicionFase2 = seleccion.posicion;
+        const desplazamiento = posicionFase1 - posicionFase2;
+        
+        // Positivo = mover a la derecha 
+        if (desplazamiento < 0) {
+            positivosTotales += Math.abs(desplazamiento);
+        } 
+        // Negativo = mover a la izquierda 
+        else if (desplazamiento > 0) {
+            negativosTotales += desplazamiento;
+        }
+    });
+    
+    return {
+        positivos: positivosTotales,
+        negativos: negativosTotales
+    };
+}
+
+// Interpretar el resultado de movilidad
+function interpretarMovilidad(movilidad) {
+    const totalPositivos = movilidad.positivos;
+    const totalNegativos = movilidad.negativos;
+    const valorAbsoluto = Math.max(totalPositivos, totalNegativos);
+    
+    if (totalPositivos === 0 && totalNegativos === 0) {
+        return "RIGIDEZ (TERCO)";
+    } else if (valorAbsoluto <= 1) {
+        return "PERSONA DE MENTE ABIERTA Y DISPUESTA AL DIÁLOGO";
+    } else if (valorAbsoluto <= 2) {
+        return "PERSONA DISPUESTA A DIALOGAR (MENOR GRADO)";
+    } else if (valorAbsoluto <= 3) {
+        return "PERSONA DISPUESTA A DIALOGAR (MUCHO MENOR GRADO)";
+    } else {
+        return "PERSONA INESTABLE"; 
+    }
+}
 
 exports.getRespuestasOtis = (request, response, next) => {
     console.log('Respuestas Otis');

@@ -55,6 +55,28 @@
                 </div>
             </div>
             
+            <!-- Seccion de movilidad -->
+            <div class="movilidad-container">
+                <h5 class="titulo-seccion">Análisis de Movilidad</h5>
+                <hr>
+                
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header text-white">
+                                <h5 class="card-title mb-0">Resultado de Movilidad</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">Positivos: +<%= movilidad.positivos %></p>
+                                <p class="card-text">Negativos: -<%= movilidad.negativos %></p>
+                                <h4 class="resultado-movilidad">MOVILIDAD = (+<%= movilidad.positivos %> -<%= movilidad.negativos %>)</h4>
+                                <h3 class="interpretacion-movilidad"><%= interpretacionMovilidad %></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="row">
                 <h3 class="fw-bolder">Personalidad y Adaptación al medio</h3>
             </div>
@@ -96,7 +118,7 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div class="boton-container">
                 <a class="btn btn-color--third boton-regresar-abajo"
                 href="/psicologo/cuadernillo-colores/<%= idGrupo %>/<%= idAspirante %>/<%= idInstitucion %>"
                 >Regresar</a>

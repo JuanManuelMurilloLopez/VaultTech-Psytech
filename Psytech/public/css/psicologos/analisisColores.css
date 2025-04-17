@@ -7,6 +7,8 @@
     --font-secondary: #fff;
     --secondary-hover: #193858;
     --third-hover:#B1B1B1;
+    --movilidad-header: #728575;
+    --movilidad-text: #000;
 }
 
 .btn{
@@ -110,11 +112,20 @@ h1, h4 {
     padding: 10px;
 }
 
+.boton-container {
+    width: 100%;
+    text-align: left;
+    margin-top: 60px;
+    margin-bottom: 40px;
+    padding-left: 15px; 
+}
+
 .container .boton-regresar-abajo {
-    position: fixed;
-    bottom: 20px;
-    left: 250px;
-    z-index: 999;
+    position: static;
+    display: inline-block;
+    font-size: 16px;
+    padding: 6px 24px;
+    z-index: 1;
 }
 
 /* Fases colores */
@@ -165,4 +176,33 @@ h1, h4 {
     font-size: 2rem;
     font-weight: 600;
     margin-top: 10px;
+}
+
+/* Estilos para la seccion de movilidad */
+.movilidad-container {
+    margin-top: 40px;
+    margin-bottom: 80px; 
+}
+
+.movilidad-container .card-header {
+    background-color: var(--movilidad-header) !important;
+}
+
+.movilidad-container .card-text {
+    font-weight: bold;
+}
+
+.resultado-movilidad {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--movilidad-text);
+    margin-top: 20px;
+}
+
+.interpretacion-movilidad {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #62868C;
+    margin-top: 10px;
+    text-align: center;
 }
