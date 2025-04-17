@@ -222,7 +222,7 @@ exports.getEditarCoordinador = (request, response, next) => {
         }
 
         const coordinador = rows[0];
-
+        
         response.render('Coordinadores/editarCoordinador', {
             coordinador: coordinador,
             idUsuario: coordinador.idUsuario,
@@ -256,21 +256,31 @@ exports.postEditarCoordinador = (request, response, next) => {
         }
 
         const usuarioActual = rows[0];
-        
+
         estatus = (estatusUsuario === undefined || estatusUsuario === null)
             ? usuarioActual.estatusUsuario
             : (estatusUsuario === 'true' ? 1 : 0);
 
-        return Coordinador.update(
+        const valores = {
+            usuario: usuario || null,
+            nombreUsuario: nombreUsuario || null,
+            apellidoPaterno: apellidoPaterno || null,
+            apellidoMaterno: apellidoMaterno || null,
+            correo: correo || null,
+            lada: lada || null,
+            numeroTelefono: numeroTelefono || null,
+        };
+
+        return Psicologo.update(
             idUsuario,
-            usuario,
+            valores.usuario,
             estatus,
-            nombreUsuario,
-            apellidoPaterno,
-            apellidoMaterno,
-            correo,
-            lada,
-            numeroTelefono
+            valores.nombreUsuario,
+            valores.apellidoPaterno,
+            valores.apellidoMaterno,
+            valores.correo,
+            valores.lada,
+            valores.numeroTelefono
         );
     })
     .then(() => {
@@ -280,6 +290,7 @@ exports.postEditarCoordinador = (request, response, next) => {
         console.log('Error al actualizar coordinador:', error);
     });
 };
+
 
 exports.postActualizarEstatusCoordinador = (request, response, next) => {
     const idUsuario = request.params.idUsuario;

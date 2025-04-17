@@ -33,51 +33,52 @@
                     <%= error %>
                 </div>
             <% } %>
-            <form action="/coordinador/editar-coordinador/<%= idUsuario %>" method="POST">
+            <form action="/coordinador/editar-coordinador/<%= coordinador.idUsuario %>" method="POST">
                 <div>
                     <!--Input nombre-->
                     <div class="mb-3">
-                        <label class="form-label" for="">Nombre</label>
-                        <input class="form-control" type="text" name="" id="">
+                        <label class="form-label" for="nombreUsuario">Nombre</label>
+                        <input class="form-control" type="text" name="nombreUsuario" id="nombreUsuario" value="<%= coordinador.nombreUsuario %>" required>
                     </div>
                     <!--Input Apellido Paterno-->
                     <div class="mb-3">
-                        <label class="form-label" for="">Apellido Paterno</label>
-                        <input class="form-control" type="text" name="" id="">
+                        <label class="form-label" for="apellidoPaterno">Apellido Paterno</label>
+                        <input class="form-control" type="text" name="apellidoPaterno" id="apellidoPaterno" value="<%= coordinador.apellidoPaterno %>" required>
                     </div>
                     <!--Input Apellido Materno-->
                     <div class="mb-3">
-                        <label class="form-label" for="">Apellido Materno</label>
-                        <input class="form-control" type="text" name="" id="">
+                        <label class="form-label" for="apellidoMaterno">Apellido Materno</label>
+                        <input class="form-control" type="text" name="apellidoMaterno" id="apellidoMaterno" value="<%= coordinador.apellidoMaterno %>" required>
                     </div>
                     <!--Input Correo-->
                     <div class="mb-3">
-                        <label class="form-label" for="">Correo electrónico</label>
-                        <input class="form-control" type="text" name="" id="">
+                        <label class="form-label" for="correo">Correo electrónico</label>
+                        <input class="form-control" type="email" name="correo" id="correo" value="<%= coordinador.correo %>" required>
                     </div>
                     <!--Input Número-->
                     <div class="mb-3">
-                        <label class="form-label" for="">Número de teléfono</label>
-                        <input class="form-control" type="text" name="" id="">
+                        <label class="form-label" for="numeroTelefono">Número de teléfono</label>
+                        <input class="form-control" type="text" name="numeroTelefono" id="numeroTelefono" value="<%= coordinador.numeroTelefono %>" required>
                     </div>
                 </div>
+            
                 <!-- Estatus del coordinador -->
                 <div class="mb-3">
                     <h4 class="mb-3">Estatus: </h4>
-                    <div class="d-flex gap-2 align-items-center ">
-                    <button type="button" id="estatusActivoBtn" class="me-2 btn <%= coordinador.estatusUsuario ? 'btn-info' : 'btn-outline-info' %>">Activa</button>
-                    <button type="button" id="estatusInactivoBtn" class="btn <%= !coordinador.estatusUsuario ? 'btn-danger' : 'btn-outline-danger' %>">Desactivar</button>
-                    <input type="hidden" id="estatusUsuario" name="estatusUsuario" value="<%= coordinador.estatusUsuario === 1 ? 'true' : 'false' %>">
+                    <div class="d-flex gap-2 align-items-center">
+                        <button type="button" id="estatusActivoBtn" class="me-2 btn <%= coordinador.estatusUsuario ? 'btn-info' : 'btn-outline-info' %>">Activa</button>
+                        <button type="button" id="estatusInactivoBtn" class="btn <%= !coordinador.estatusUsuario ? 'btn-danger' : 'btn-outline-danger' %>">Desactivar</button>
+                        <input type="hidden" id="estatusUsuario" name="estatusUsuario" value="<%= coordinador.estatusUsuario === 1 ? 'true' : 'false' %>">
                     </div>
                 </div>
+            
                 <!-- Botones de navegación "Regresar y Guardar" -->
                 <div class="d-flex justify-content-between mb-4">
-                    <a class="btn btn-color--third" 
-                    href="/coordinador/coordinadores-registrados"
-                    >Regresar</a>
+                    <a class="btn btn-color--third" href="/coordinador/coordinadores-registrados">Regresar</a>
                     <button type="submit" class="btn btn-color--secondary">Guardar</button>
                 </div>
             </form>
+            
         </div>
     </div>
 
