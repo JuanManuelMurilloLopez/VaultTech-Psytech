@@ -28,6 +28,13 @@
             <div>
                 <h1 class="text-container">EDITAR INFORMACIÓN DE PSICÓLOGO</h1>
             </div>
+            
+            <% if (error && error.length > 0) { %>
+                <div class="alert alert-danger">
+                    <%= error %>
+                </div>
+            <% } %>
+
             <div>
                 <!--Input nombre-->
                 <div class="mb-3">
