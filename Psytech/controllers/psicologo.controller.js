@@ -636,23 +636,45 @@ function obtenerParejasClasificadas(seleccionesFase1, seleccionesFase2) {
     const paresF2 = obtenerParejasConZona(seleccionesFase2);
 
     const parejas = [];
+    const artificialesAgregadas = new Set();
 
     for (let [clave, datosF1] of paresF1) {
         if (paresF2.has(clave)) {
             const datosF2 = paresF2.get(clave);
-            const zonasF1 = [...datosF1.zonas][0]; 
-            const zonasF2 = [...datosF2.zonas][0];
+            const zonaF1 = [...datosF1.zonas][0];
+            const zonaF2 = [...datosF2.zonas][0];
 
-            parejas.push({
-                pareja: clave,
-                tipo: zonasF1 === zonasF2 ? 'natural' : 'disociada',
-                zonas: { fase1: zonasF1, fase2: zonasF2 }
-            });
+            if (zonaF1 === zonaF2) {
+                if (
+                    (zonaF1 === '+-+' || zonaF1 === '=-=' || zonaF1 === '---' || zonaF1 === 'X-X') &&
+                    !artificialesAgregadas.has(zonaF1)
+                ) {
+                    parejas.push({
+                        pareja: clave,
+                        tipo: 'artificial',
+                        zonas: { fase1: zonaF1, fase2: zonaF2 }
+                    });
+                    artificialesAgregadas.add(zonaF1);
+                } else {
+                    parejas.push({
+                        pareja: clave,
+                        tipo: 'natural',
+                        zonas: { fase1: zonaF1, fase2: zonaF2 }
+                    });
+                }
+            } else {
+                parejas.push({
+                    pareja: clave,
+                    tipo: 'disociada',
+                    zonas: { fase1: zonaF1, fase2: zonaF2 }
+                });
+            }
         }
     }
 
     return parejas;
 }
+
 
 exports.getAnalisisColores = async (request, response, next) => {
     const { idGrupo, idAspirante, idInstitucion } = request.params;
