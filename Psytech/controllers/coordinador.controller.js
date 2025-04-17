@@ -113,16 +113,26 @@ exports.postEditarPsicologo = (request, response, next) => {
             ? usuarioActual.estatusUsuario
             : (estatusUsuario === 'true' ? 1 : 0);
 
+        const valores = {
+            usuario: usuario || null,
+            nombreUsuario: nombreUsuario || null,
+            apellidoPaterno: apellidoPaterno || null,
+            apellidoMaterno: apellidoMaterno || null,
+            correo: correo || null,
+            lada: lada || null,
+            numeroTelefono: numeroTelefono || null,
+        };
+
         return Psicologo.update(
             idUsuario,
-            usuario,
+            valores.usuario,
             estatus,
-            nombreUsuario,
-            apellidoPaterno,
-            apellidoMaterno,
-            correo,
-            lada,
-            numeroTelefono
+            valores.nombreUsuario,
+            valores.apellidoPaterno,
+            valores.apellidoMaterno,
+            valores.correo,
+            valores.lada,
+            valores.numeroTelefono
         );
     })
     .then(() => {
@@ -222,7 +232,7 @@ exports.getEditarCoordinador = (request, response, next) => {
         }
 
         const coordinador = rows[0];
-        
+
         response.render('Coordinadores/editarCoordinador', {
             coordinador: coordinador,
             idUsuario: coordinador.idUsuario,
@@ -271,7 +281,7 @@ exports.postEditarCoordinador = (request, response, next) => {
             numeroTelefono: numeroTelefono || null,
         };
 
-        return Psicologo.update(
+        return Coordinador.update(
             idUsuario,
             valores.usuario,
             estatus,

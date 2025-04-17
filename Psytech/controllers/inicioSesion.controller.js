@@ -78,6 +78,10 @@ exports.verificarOTP = async (request, response) => {
         if (!usuarioId) {
             return res.send('<script>alert("Usuario no encontrado"); window.location.href = "/login";</script>');
         }
+
+        if (usuarioId.estatusUsuario === 0) {
+            return response.send('<script>alert("Tu cuenta está desactivada. Contacta al administrador."); window.location.href = "/login";</script>');
+        }
         
         const otpData = await OTP.obtenerOTP(usuarioId);
 

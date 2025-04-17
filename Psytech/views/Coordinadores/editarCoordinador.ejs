@@ -55,6 +55,13 @@
                         <label class="form-label" for="correo">Correo electrónico</label>
                         <input class="form-control" type="email" name="correo" id="correo" value="<%= coordinador.correo %>" required>
                     </div>
+                    <!-- Input oculto de usuario -->
+                    <input type="hidden" name="usuario" id="usuario" value="<%= coordinador.correo %>">  
+                    <!--Input Lada-->
+                    <div class="mb-3">
+                        <label class="form-label" for="lada">Lada</label>
+                        <input class="form-control" type="text" name="lada" id="lada" value="<%= coordinador.lada || '+052' %>">
+                    </div>
                     <!--Input Número-->
                     <div class="mb-3">
                         <label class="form-label" for="numeroTelefono">Número de teléfono</label>
@@ -88,6 +95,11 @@
     <script src="/js/_navside.js"></script>
 
     <script>
+         // Cada que se edita el correo, también se actualiza el valor del campo usuario
+        document.getElementById('correo').addEventListener('input', function (e) {
+            document.getElementById('usuario').value = e.target.value;
+        });
+        
         // Script toggle de estatus
         document.addEventListener('DOMContentLoaded', function() {
             const estatusActivoBtn = document.getElementById('estatusActivoBtn');

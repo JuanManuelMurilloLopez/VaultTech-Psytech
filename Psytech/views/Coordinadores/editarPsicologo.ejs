@@ -28,54 +28,64 @@
             <div>
                 <h1 class="text-container">EDITAR INFORMACIÓN DE PSICÓLOGO</h1>
             </div>
-            
+
             <% if (error && error.length > 0) { %>
                 <div class="alert alert-danger">
                     <%= error %>
                 </div>
             <% } %>
-
-            <div>
-                <!--Input nombre-->
-                <div class="mb-3">
-                    <label class="form-label" for="">Nombre</label>
-                    <input class="form-control" type="text" name="" id="">
-                </div>
-                <!--Input Apellido Paterno-->
-                <div class="mb-3">
-                    <label class="form-label" for="">Apellido Paterno</label>
-                    <input class="form-control" type="text" name="" id="">
-                </div>
-                <!--Input Apellido Materno-->
-                <div class="mb-3">
-                    <label class="form-label" for="">Apellido Materno</label>
-                    <input class="form-control" type="text" name="" id="">
-                </div>
-                <!--Input Correo-->
-                <div class="mb-3">
-                    <label class="form-label" for="">Correo electrónico</label>
-                    <input class="form-control" type="text" name="" id="">
-                </div>
-                <!--Input Número-->
-                <div class="mb-3">
-                    <label class="form-label" for="">Número de teléfono</label>
-                    <input class="form-control" type="text" name="" id="">
-                </div>
-            </div>
-            <div>
-                <p>Estatus:</p>
+            <form action="/coordinador/editar-psicologo/<%= psicologo.idUsuario %>" method="POST">
                 <div>
-                    <p>Activa</p>
+                    <!--Input nombre-->
+                    <div class="mb-3">
+                        <label class="form-label" for="nombreUsuario">Nombre</label>
+                        <input class="form-control" type="text" name="nombreUsuario" id="nombreUsuario" value="<%= psicologo.nombreUsuario %>" required>
+                    </div>
+                    <!--Input Apellido Paterno-->
+                    <div class="mb-3">
+                        <label class="form-label" for="apellidoPaterno">Apellido Paterno</label>
+                        <input class="form-control" type="text" name="apellidoPaterno" id="apellidoPaterno" value="<%= psicologo.apellidoPaterno %>" required>
+                    </div>
+                    <!--Input Apellido Materno-->
+                    <div class="mb-3">
+                        <label class="form-label" for="apellidoMaterno">Apellido Materno</label>
+                        <input class="form-control" type="text" name="apellidoMaterno" id="apellidoMaterno" value="<%= psicologo.apellidoMaterno %>" required>
+                    </div>
+                    <!--Input Correo-->
+                    <div class="mb-3">
+                        <label class="form-label" for="correo">Correo electrónico</label>
+                        <input class="form-control" type="email" name="correo" id="correo" value="<%= psicologo.correo %>" required>
+                    </div>
+                    <!-- Input oculto de usuario -->
+                    <input type="hidden" name="usuario" id="usuario" value="<%= psicologo.correo %>">  
+                    <!--Input Lada-->
+                    <div class="mb-3">
+                        <label class="form-label" for="lada">Lada</label>
+                        <input class="form-control" type="text" name="lada" id="lada" value="<%= psicologo.lada || '+052' %>">
+                    </div>
+                    <!--Input Número-->
+                    <div class="mb-3">
+                        <label class="form-label" for="numeroTelefono">Número de teléfono</label>
+                        <input class="form-control" type="text" name="numeroTelefono" id="numeroTelefono" value="<%= psicologo.numeroTelefono %>" required>
+                    </div>
                 </div>
-                <button type="button" class="btn btn-color--third btn-sm">Desactivar</button>
-            </div>
-            <div>
-                <button type="button" class="btn btn-color--third btn-sm" 
-                onclick="window.location.href='/coordinador/psicologos-registrados'">Regresar</button>
-                <button type="button" class="btn btn-color--secondary btn-sm"
-                onclick="confirm('¿Está seguro de guardar los cambios?');
-                window.location.href='/coordinador/psicologos-registrados'">Guardar</button>
-            </div>
+            
+                <!-- Estatus del psicólogo -->
+                <div class="mb-3">
+                    <h4 class="mb-3">Estatus: </h4>
+                    <div class="d-flex gap-2 align-items-center">
+                        <button type="button" id="estatusActivoBtn" class="me-2 btn <%= psicologo.estatusUsuario ? 'btn-info' : 'btn-outline-info' %>">Activa</button>
+                        <button type="button" id="estatusInactivoBtn" class="btn <%= !psicologo.estatusUsuario ? 'btn-danger' : 'btn-outline-danger' %>">Desactivar</button>
+                        <input type="hidden" id="estatusUsuario" name="estatusUsuario" value="<%= psicologo.estatusUsuario === 1 ? 'true' : 'false' %>">
+                    </div>
+                </div>
+            
+                <!-- Botones de navegación "Regresar y Guardar" -->
+                <div class="d-flex justify-content-between mb-4">
+                    <a class="btn btn-color--third" href="/coordinador/psicologos-registrados">Regresar</a>
+                    <button type="submit" class="btn btn-color--secondary">Guardar</button>
+                </div>
+            </form>            
         </div>
     </div>
 
