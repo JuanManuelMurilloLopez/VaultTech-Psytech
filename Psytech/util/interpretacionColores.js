@@ -538,14 +538,759 @@ considera fundamental.
 
 //-----------------------------------------------------------------------------------------------------------
 
+// X 4
+`Es atraído por todo lo nuevo, moderno o misterioso. 
+Propenso a aburrirse fácilmente con la monotonía de lo tradicional 
+y lo corriente.`
+
+// X 4 X 0
+`Busca una solución a los problemas o ansiedades presentes, 
+pero encuentra difícil decidirse por el camino apropiado a seguir.`
+
+// X 4 X 1
+`El ambiente le impacta rápidamente y le conmueven con facilidad los 
+sentimientos de los demás. Busca relaciones congeniales y una ocupación 
+que se las proporcione.`
+
+// X 4 X 2
+`Espera obtener una posición y un prestigio mayores, de modo que pueda 
+procurarse todas aquellas cosas de las que ha tenido que privarse.`
+
+// X 4 X 3
+`Activo, desenvuelto e inquieto. Se siente frustrado por la lentitud con 
+que los acontecimientos se desarrollan según las líneas previstas. Esto le 
+lleva a irritación, inconstancia y falta de perseverancia en buscar un 
+objetivo concreto.`
+
+// X 4 X 5
+`Imaginativo y sensible; busca una salida para estas cualidades, 
+especialmente en compañía de alguien que sea también sensible. Lo 
+insólito y la aventura con rapidez despiertan en él interés y entusiasmo.`
+
+// X 4 X 6
+`Inseguro. Busca enraizarse, estabilizarse, asegurarse sentimentalmente 
+y encontrar un ambiente que le provea de mayor tranquilidad y le cause menos 
+problemas.`
+
+// X 4 X 7
+`La situación presente contiene elementos críticos o peligrosos para 
+los que es una necesidad imperiosa encontrar algún tipo de solución. 
+Esto puede llevarle a decisiones imprevistas e incluso precipitadas. 
+Es terco; rechaza cualquier consejo de los demás. (El grupo + es un intento 
+de compensar éste y otros conflictos.)`
 
 //-----------------------------------------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------------------------------------
+// X 5
+`Busca expresar su necesidad de identificación en una atmósfera 
+sensible e íntima donde una delicadeza estética y sentimental pueda 
+proveer de protección y educación.`
+
+// X 5 X 0
+`Busca una unión íntima y comprensiva en una atmósfera de intimidad 
+compartida, para ponerse a salvo de ansiedades y conflictos.`
+
+// X 5 X 1
+`Busca compartir una unión íntima y comprensiva en una atmósfera 
+estética de paz y ternura.`
+
+// X 5 X 2
+`Lucha para mejorar su imagen a los ojos de los demás y así conseguir 
+que éstos acepten y estén de acuerdo con sus necesidades y deseos.`
+
+// X 5 X 3
+`Participa con facilidad en todo lo que lleve consigo emociones o 
+estimulación. Quiere sentirse excitado.`
+
+// X 5 X 4
+`Imaginativo y sensible; busca una salida para estas cualidades, 
+especialmente en compañía de alguien que sea también sensible. 
+Lo insólito y la aventura con rapidez despiertan en él interés y entusiasmo.`
+
+// X 5 X 6
+`Sensual. Se inclina por las cosas que proporcionen satisfacción a 
+los sentidos, pero rechaza todo lo que sea de mal gusto, vulgar y ordinario.`
+
+// X 5 X 7
+`Necesita e insiste en tener una asociación íntima y comprensiva o, 
+al menos, algún método de satisfacer la compulsión de sentirse identificado.`
 
 //-----------------------------------------------------------------------------------------------------------
 
+// X 6
+`Se siente desasosegado e inseguro en la situación presente. 
+Necesita mayor seguridad y un ambiente más afectuoso o que 
+imponga un esfuerzo físico menor. (El grupo + es un intento de 
+compensar éste y otros conflictos.)`
+
+// X 6 X 0
+`Es incapaz de esforzarse lo suficiente para lograr sus objetivos. 
+Se siente olvidado y desea mayor seguridad, cordialidad y menos problemas. 
+(El grupo + es un intento de compensar éste y otros conflictos.)`
+
+// X 6 X 1
+`Evita esfuerzos excesivos; necesita enraizarse en la seguridad y 
+apacibilidad de la amistad. Puede encontrarse mal físicamente, 
+necesitando que se lo trate con gentileza y consideración.`
+
+// X 6 X 2
+`Tiene dificultad en hacer frente a las exigencias que se le presentan. 
+Le parece que se le está pidiendo que haga un esfuerzo excesivo y desea 
+que la situación se resuelva.`
+
+// X 6 X 3
+`Progresa con dificultad y no quiere esforzarse más. Busca condiciones 
+más confortables donde pueda evitar todo lo que le molesta.`
+
+// X 6 X 4
+`Inseguro. Busca enraizarse, estabilizarse, asegurarse sentimentalmente 
+y encontrar un ambiente que le provea de mayor tranquilidad y le cause 
+menos problemas, pero o no quiere o es incapaz de esforzarse.`
+
+// X 6 X 5
+`Sensual. Se inclina por las cosas que proporcionen satisfacción a los 
+sentidos, pero rechaza todo lo que sea de mal gusto, vulgar y ordinario.`
+
+// X 6 X 7
+`Una enfermedad física, una sobretensión o una aflicción sentimental le 
+han golpeado duramente. Su autoestima ha disminuido y ahora necesita 
+condiciones apacibles y un trato considerado que le permitan recuperarse. 
+(El grupo + es un intento de compensar éste y otros conflictos.)`
+
+//-----------------------------------------------------------------------------------------------------------
+
+// X 7
+`Conflictos e insatisfacciones de todo tipo, refuerzan la necesidad de 
+las compensaciones indicadas por el grupo +.`
+
+// X 7 X 0
+`Insatisfecho. La necesidad de escapar del compromiso prolongado con 
+su ambiente actual le obliga a encontrar alguna solución. 
+(El grupo + indica el método compensatorio que con toda probabilidad 
+será adoptado.)`
+
+// X 7 X 1
+`Necesita paz y tranquilidad. Desea la intimidad y fidelidad de una 
+pareja a quien pueda pedir una especial consideración y un afecto 
+incuestionable. Si no consigue lo que solicita, es capaz de encerrarse 
+dentro de sí y aislarse completamente. (Los requisitos que exige del 
+ambiente o de su compañero están indicados en el grupo +.)`
+
+// X 7 X 2
+`No sólo considera que sus exigencias son mínimas, sino también que 
+son imperativas. Se aferra a ellas con tenacidad y no cede un ápice. 
+(El grupo + es un intento de compensar éste y otros conflictos.)`
+
+// X 7 X 3
+`Se siente obstaculizado en sus deseos e impedido de obtener todo 
+lo que considera fundamental. (El grupo + es un intento de compensar 
+éste y otros conflictos.)`
+
+// X 7 X 4
+`La situación presente contiene elementos críticos ó peligrosos 
+para los que es una necesidad imperiosa encontrar algún tipo de solución. 
+Esto puede llevarle a decisiones imprevistas e incluso precipitadas. 
+Es terco; rechaza cualquier consejo de los demás. (El grupo + es un 
+intento de compensar éste y otros conflictos.)`
+
+// X 7 X 5
+`Necesita e insiste en tener una asociación íntima y comprensiva o, 
+al menos, algún método de satisfacer la compulsión de sentirse identificado.`
+
+// X 7 X 6
+`Una enfermedad física, una sobretensión ó una aflicción sentimental 
+le han golpeado duramente. Su autoestima ha disminuido y ahora necesita 
+condiciones apacibles y un trato considerado que le permitan recuperarse. 
+(El grupo + es un intento de compensar éste y otros conflictos.)`
+
+//-----------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
+
+// = 0
+`Quiere participar y verse envuelto en asuntos, pero trata de 
+resguardarse de conflictos y molestias de modo que la tensión se reduzca.`
+
+// = 0 = 1
+`Sus asociaciones raras veces llegan a alcanzar la medida 
+correspondiente a sus grandes expectativas sentimentales y su 
+necesidad de ser apreciado; esto le lleva a desilusionarse 
+(a menudo característico de la fijación con la madre, tomando la forma 
+de un fuerte vínculo maternal o de resentimiento hacia ella). 
+Tiene reservas mentales y tiende a permanecer aislado y desvinculado 
+sentimentalmente.`
+
+// = 0 = 2
+`Cree que recibe menos de la que merece pero que tendrá que 
+conformarse y sacar el mejor provecho posible de esta situación.`
+
+// = 0 = 3
+`Se siente indiferente, cercado y ansioso. Considera que las 
+circunstancias le están forzando a refrenar sus deseos. 
+Quiere evitar un conflicto abierto con los demás y tener paz y tranquilidad.`
+
+// = 0 = 4
+`Exigente y muy especial en las relaciones con su pareja o con 
+sus íntimos; sin embargo, tiene cuidado en evitar cualquier conflicto 
+abierto ya que esto podría reducir las probabilidades de llevar a 
+cabo sus esperanzas e ideas.`
+
+// = 0 = 5
+`Es egocéntrico y, por lo tanto, fácilmente se siente ofendido.`
+
+// = 0 = 6
+`Quiere estar vinculado sentimentalmente con alguien y es capaz 
+de lograr satisfacción de la actividad sexual.`
+
+// = 0 = 7
+`Las circunstancias son tales que por el momento se siente forzado 
+a hacer componendas; así evita la pérdida de afecto y de participación total.`
+
+//-----------------------------------------------------------------------------------------------------------
+
+// = 1
+`Permanece desvinculado sentimentalmente, aún cuando se encuentre 
+relacionado con una asociación íntima.`
+
+// = 1 = 0
+`Tiene grandes exigencias sentimentales y quiere relacionarse en 
+una asociación íntima, pero sin gran profundidad de sentimiento.`
+
+// = 1 = 2
+`Cree que no está recibiendo lo que se le debe y que no es 
+adecuadamente comprendido ni apreciado en su justo valor. 
+Juzga que está obligado a conformarse; las asociaciones íntimas 
+lo dejan sin ninguna sensación de relación afectiva.`
+
+// = 1 = 3
+`Se siente interceptado y desgraciado a causa de las dificultades 
+que tiene en conseguir el nivel básico de colaboración y 
+armonía que desea.`
+
+// = 1 = 4
+`Es impositivo en sus exigencias sentimentales y muy especial 
+en su elección de pareja. Su deseo de independencia afectiva le 
+impide todo tipo de asociación profunda.`
+
+// = 1 = 5
+`Es egocéntrico y, por lo tanto, fácilmente se siente ofendido, 
+dejándole este estado muy alejado de vínculos.`
+
+// = 1 = 6
+`Es capaz de lograr satisfacción física de la actividad sexual, 
+pero está inclinado a retraerse sentimentalmente, lo cual le 
+impide llegar a asociarse con profundidad.`
+
+// = 1 = 7
+`Inhibe sus sentimientos. Se siente forzado a hacer componendas, 
+lo cual le dificulta formar vínculos afectivos estables.`
+
+//-----------------------------------------------------------------------------------------------------------
+
+// = 2
+`La situación le impide establecerse según su conveniencia, 
+pero cree que debe sacar el mejor provecho posible de todas 
+las cosas tal como se le presentan.`
+
+// = 2 = 0
+`Es muy cuidadoso de evitar conflictos abiertos debido a su 
+inadmisible falta de confianza; cree que debe sacar el mejor 
+provecho posible de todas las cosas tal como se le presentan.`
+
+// = 2 = 1
+`Cree que no está recibiendo lo que se le debe y que no es 
+adecuadamente comprendido ni apreciado en su justo valor. 
+Juzga que está obligado a conformarse; las asociaciones íntimas 
+lo dejan sin ninguna sensación de relación afectiva.`
+
+// = 2 = 3
+`Se siente desgraciado por la resistencia que encuentra siempre 
+que trata de hacer valer sus derechos. Está indignando y resentido 
+por culpa de estas contrariedades, pero cede por apatía y hace las 
+adaptaciones necesarias para sentirse en paz y con tranquilidad.`
+
+// = 2 = 4
+`Juzga que soporta una carga de problemas que es bastante superior 
+a lo que en justicia le corresponde. Sin embargo, permanece firme 
+en sus objetivos y trata de superar sus dificultades comportándose 
+de un modo flexible y acomodaticio.`
+
+// = 2 = 5
+`Cree que recibe menos de lo que merece y que no hay nadie en quien 
+pueda apoyarse para conseguir un trato empático y comprensivo. Se 
+siente ofendido con facilidad por sentimientos contenidos pero se 
+da cuenta de que debe sacar el mejor provecho posible de las cosas 
+tal como se le presentan.`
+
+// = 2 = 6
+`Tiene la impresión de que es muy poco más lo que puede hacer 
+sobre sus problemas y dificultades presentes y que debe sacar 
+el mejor provecho posible de las cosas tal como se le presentan. 
+Es capaz de lograr satisfacción física de la actividad sexual.`
+
+// = 2 = 7
+`Las circunstancias le están forzando a buscar componendas, 
+a refrenarse en sus exigencias y esperanzas y abstenerse por 
+el momento de algunas de las cosas que quiere.`
+
+//-----------------------------------------------------------------------------------------------------------
+
+// = 3
+`Trata de tranquilizarse y desembrollarse después de un periodo 
+de sobreexcitación que lo ha dejado indiferente y carente de energía. 
+Necesita paz y tranquilidad: si esto se le niega, se vuelve irritable.`
+
+// = 3 = 0
+`Está preocupado con los obstáculos que enfrenta y sin humor para 
+todo tipo de actividad o petición que se le solicite. Necesita paz, 
+tranquilidad y evitar todo lo que pueda procurarle mayores problemas.`
+
+// = 3 = 1
+`Se siente interceptado y desgraciado a causa de las dificultades 
+que tiene en conseguir el nivel básico de colaboración y armonía que desea.`
+
+// = 3 = 2
+`Se siente desgraciado por la resistencia que encuentra siempre 
+que trata de hacer valer sus derechos. Empero, cree que puede hacer 
+muy poco al respecto y que debe sacar el mejor provecho posible 
+de la situación.`
+
+// = 3 = 4
+`Quiere ampliar su campo de actividades e insiste en que sus 
+esperanzas e ideas son realistas. Está preocupado temiendo que 
+se le pueda impedir hacer lo que quiere; necesita tanto condiciones 
+apacibles como una reafirmación tranquila donde le sea posible 
+restablecer su confianza.`
+
+// = 3 = 5
+`Se angustia cuando sus necesidades o sus deseos son mal entendidos; 
+cree que no tiene a nadie en quien confiar ni apoyarse. Es egocéntrico 
+y, por lo tanto, fácilmente se siente ofendido.`
+
+// = 3 = 6
+`Se siente atrapado en una situación angustiosa e incómoda, 
+y busca el modo de conseguir un alivio. Es capaz de lograr 
+satisfacción de la actividad sexual.`
+
+// = 3 = 7
+`Las circunstancias son restrictivas y le resultan un impedimento, 
+forzándolo a abstenerse por el momento de algunos goces y placeres.`
+
+//-----------------------------------------------------------------------------------------------------------
+
+// = 4
+`Se apega a la creencia de que sus esperanzas e ideas son realistas, 
+pero necesita ánimo y reafirmación. Aplica normas muy estrictas 
+para la elección de su pareja y quiere garantías contra cualquier 
+pérdida o decepción.`
+
+// = 4 = 0
+`Quiere estar vinculado sentimentalmente con alguien, pero es 
+exigente y muy especial con la elección de su pareja y en las 
+relaciones con sus íntimos. Necesita reafirmación y tiene cuidado 
+de evitar cualquier conflicto abierto ya que esto podría reducir 
+las probabilidades de llevar a cabo sus esperanzas.`
+
+// = 4 = 1
+`Es impositivo en sus exigencias sentimentales, en especial 
+durante los momentos de intimidad, dejándolo de este modo frustrado 
+en su deseo de una perfecta unión.`
+
+// = 4 = 2
+`Juzga que soporta una carga de problemas que es bastante superior 
+a lo que en justicia le corresponde. Sin embargo, permanece firme 
+en sus objetivos y trata de superar sus dificultades comportándose 
+de un modo flexible y acomodaticio.`
+
+// = 4 = 3
+`Quiere ampliar su campo de actividades e insiste en que sus 
+esperanzas e ideas son realistas. Está preocupado temiendo que se 
+le pueda impedir hacer lo que quiere; necesita tanto condiciones 
+apacibles como una reafirmación tranquila donde le sea posible 
+restablecer su confianza.`
+
+// = 4 = 5
+`Insiste en que sus esperanzas e ideas son realistas, pero necesita 
+reafirmación y ánimo. Es egocéntrico y, por lo tanto, fácilmente se 
+siente ofendido.`
+
+// = 4 = 6
+`Aplica normas muy estrictas para la elección de su pareja y busca 
+una perfección muy poco realista en su vida sexual.`
+
+// = 4 = 7
+`Insiste en que sus objetivos son realistas y se aferra con 
+obstinación a ellos, aun cuando las circunstancias lo están forzando 
+a buscar componendas. Aplica normas muy estrictas en la elección de su pareja.`
+
+//-----------------------------------------------------------------------------------------------------------
+
+// = 5
+`Es egocéntrico y, por lo tanto, fácilmente se siente ofendido. 
+Es sensible y sentimental, pero lo oculta a todos excepto a aquellos 
+que le son muy íntimos.`
+
+// = 5 = 0
+`Quiere estar vinculado sentimentalmente con alguien puesto que se 
+siente aislado y solo. Es egocéntrico y, por lo tanto, fácilmente se 
+siente ofendido.`
+
+// = 5 = 1
+`Se siente aislado y solo pero es demasiado reservado para llegar a 
+formar vínculos profundos. Es egocéntrico y, por lo tanto, se siente 
+fácilmente ofendido.`
+
+// = 5 = 2
+`Cree que recibe menos de lo que merece y que no hay nadie en quien 
+pueda apoyarse para conseguir un trato empático y comprensivo. 
+Se siente ofendido con facilidad por sentimientos contenidos y 
+por su egocentrismo, pero se da cuenta de que debe sacar el mejor 
+provecho posible de las cosas tal como se le presentan.`
+
+// = 5 = 3
+`Se angustia cuando sus necesidades o sus deseos son mal entendidos; 
+cree que no tiene a nadie en quien confiar ni apoyarse. Es egocéntrico 
+y, por lo tanto, fácilmente se siente ofendido.`
+
+// = 5 = 4
+`Insiste en que sus esperanzas e ideas son realistas, pero necesita 
+reafirmación y ánimo. Es egocéntrico y, por lo tanto, fácilmente se 
+siente ofendido.`
+
+// = 5 = 6
+`Es egocéntrico y, por lo tanto, fácilmente se siente ofendido. 
+Es capaz de lograr satisfacción física en la actividad sexual, pero 
+tiende a ser frío sentimentalmente.`
+
+// = 5 = 7
+`Las condiciones son tales que no se atreve a vincularse íntimamente 
+con alguien sin mantener ciertas reservas mentales.`
+
+//-----------------------------------------------------------------------------------------------------------
+
+// = 6
+`Es capaz de lograr satisfacción de la actividad sexual.`
+
+// = 6 = 0
+`Quiere estar vinculado sentimentalmente con alguien y es capaz de 
+lograr satisfacción de la actividad sexual, pero trata de evitar conflictos.`
+
+// = 6 = 1
+`Es capaz de lograr satisfacción física de la actividad sexual, 
+pero está desasosegado e inclinado a retraerse sentimentalmente, 
+lo cual le impide llegar a asociarse con profundidad.`
+
+// = 6 = 2
+`Tiene la impresión de que es muy poco más lo que puede hacer sobre 
+sus problemas y dificultades presentes y que debe sacar el mejor 
+provecho posible de las cosas tal como se le presentan. Es capaz de 
+lograr satisfacción física de la actividad sexual.`
+
+// = 6 = 3
+`Se siente atrapado en una situación angustiosa e incómoda, y busca 
+el modo de conseguir un alivio. Es capaz de lograr satisfacción de la 
+actividad sexual, en tanto no exista turbulencia o agitación emocional.`
+
+// = 6 = 4
+`Aplica normas muy estrictas para la elección de su pareja y busca una 
+perfección muy poco realista en su vida sexual.`
+
+// = 6 = 5
+`Es egocéntrico y, por lo tanto, fácilmente se siente ofendido. 
+Es capaz de lograr satisfacción física de la actividad sexual, pero 
+tiende a ser frío sentimentalmente.`
+
+// = 6 = 7
+`Las circunstancias lo están forzando a buscar componendas y a 
+abstenerse por el momento de algunos placeres. Es capaz de lograr 
+satisfacción física de la actividad sexual.`
+
+//-----------------------------------------------------------------------------------------------------------
+
+// = 7
+`Cree que ciertas cosas se le interponen en su camino y que las 
+circunstancias le están forzando a buscar componendas y abstenerse 
+por el momento de algunos placeres.`
+
+// = 7 = 0
+`Las circunstancias son tales que por el momento se siente forzado 
+a hacer componendas; así evita la pérdida de afecto y de participación total.`
+
+// = 7 = 1
+`Inhibe sus sentimientos. Se siente forzado a hacer componendas, 
+lo cual le dificulta formar vínculos afectivos estables.`
+
+// = 7 = 2
+`Las circunstancias le están forzando a buscar componendas, a 
+refrenarse en sus exigencias y esperanzas y abstenerse por el 
+momento de algunas de las cosas que quiere.`
+
+// = 7 = 3
+`Las circunstancias son restrictivas y le resultan un impedimento, 
+forzándolo a abstenerse por el momento de algunos goces y placeres.`
+
+// = 7 = 4
+`Insiste en que sus objetivos son realistas y se aferra con 
+obstinación a ellos, aun cuando las circunstancias lo están forzando 
+a buscar componendas. Aplica normas muy estrictas en la elección de su pareja.`
+
+// = 7 = 5
+`Las condiciones son tales que no se atreve a vincularse íntimamente 
+con alguien sin mantener ciertas reservas mentales.`
+
+// = 7 = 6
+`Las circunstancias lo están forzando a buscar componendas y a 
+abstenerse por el momento de algunos placeres. Es capaz de lograr 
+satisfacción física de la actividad sexual.`
+
+//-----------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
+
+// -0
+`Interpretación fisiológica: Muestra impaciencia y agitación (en 
+el lugar octavo, y especialmente cuando es clasificado como "ansiedad").
+Interpretación psicológica: Cree que la vida tiene mucho más que ofrecer 
+y que existen todavía muchas cosas importantes por realizar; es decir, 
+que se debe sacar provecho de la vida lo más intensamente posible. 
+Como resultado, persigue sus objetivos con vehemente intensidad y se 
+apega a las cosas. Se compromete en profundidad y corre el riesgo de 
+ser incapaz de ver todo con la objetividad suficiente o con la necesaria calma; 
+tiene, por lo tanto, el peligro de ponerse inquieto y agotar su energía nerviosa. 
+No permite que los acontecimientos sigan su rumbo; juzga que sólo podrá estar 
+en paz cuando finalmente haya alcanzado sus metas.
+Resumen: Dedicación impaciente.`
+
+// -0 - 1
+`Interpretación fisiológica: No acepta la idea de ponerse laxo o 
+darse por vencido. Mantiene el agotamiento y la depresión bajo 
+control conservándose activo (especialmente en los lugares séptimo y octavo; 
+pero también en un menor grado en los puestos sexto y séptimo).
+Interpretación psicológica: Alguna situación presente o alguna relación es 
+insatisfactoria pero se siente incapaz de cambiarla para lograr la sensación 
+de pertenencia a algo o a alguien que necesita.
+No quiere exponer su lado débil y, por lo tanto, continúa resistiendo ese estado 
+de cosas sintiéndose dependiente en sus vínculos. Esto no sólo lo deprime sino que 
+también lo vuelve irritable e impaciente, produciéndose un gran desasosiego y un 
+apremio por escapar de esa situación, ya sea de hecho o, al menos, mentalmente. 
+Su capacidad para concentrarse puede disminuir.
+Resumen: Insatisfacción desasosegada.`
+
+// -0 - 2
+`Interpretación fisiológica: La fuerza de voluntad y la perseverancia 
+están en peligro de ser arrolladas por la excesiva tensión 
+(especialmente en los lugares séptimo y octavo, pero también en los puestos sexto y séptimo).
+Interpretación psicológica: La resistencia y la tenacidad se han debilitado. 
+Se siente sobrecargado, agotado y desorientado, pero continúa manteniéndose firme. 
+Se resiente de esta situación adversa que considera como una presión tangible 
+real que es intolerable y de la que quiere escapar. Pero se siente incapaz de tomar 
+la decisión adecuada.
+Resumen: Presión sin resolver.`
+
+// -0 - 3
+`Interpretación fisiológica: El intento de resistir toda forma de
+estimulación o excitación ha resultado en un estado de agitación
+reprimida, puede llevarlo a irritabilidad, accesos de ira e incluso neurosis sexuales. 
+Existe la posibilidad de que se sienta afectado por molestias cardíacas.
+Interpretación psicológica: La situación se considera como amenazadora y peligrosa. 
+Se violenta ante la idea de que le será imposible alcanzar sus objetivos. 
+Lo angustia el sentimiento de su impotencia para solucionarlo. 
+Tiene la sensación de estar solicitado en exceso y de estar acosado posiblemente hasta 
+el punto de llegar a una postración nerviosa.
+Resumen: Irritabilidad impotente.`
+
+// -0 - 4
+`Interpretación fisiológica: Existen tensiones, como resultado de
+frustraciones, que lo han llevado a un estado de agitación, o
+(especialmente en los lugares séptimo y octavo, pero también en menor grado en los puestos sexto y séptimo). 
+Interpretación psicológica: El resultado de esperanzas irrealizadas ha sido incertidumbre 
+y vigilancia aprensiva. Necesita con urgencia sentirse seguro y protegido contra futuras 
+decepciones, pretericiones o pérdidas de posición y prestigio. Está dudoso de que las cosas 
+le vayan mejor en adelante, pero aún así tiende a exigir en demasía y evita comprometerse.
+Resumen: Inseguridad aprensiva.`
+
+// -0 - 5
+`Interpretación fisiológica: Existen tensiones debidas a una   
+sensibilidad suprimida (en los lugares séptimo y octavo y,  
+especialmente, cuando es clasificado como "ansiedad"). 
+Interpretación psicológica: Se recrea en todo lo que es de buen gusto, gracioso y sensible, 
+pero mantiene su actitud crítica y rechaza ser arrastrado por el magnetismo de alguien, 
+a menos de que se le garantice genuinidad e integridad. Conserva, por lo tanto, un control 
+estricto y vigilante sobre sus relaciones sentimentales puesto que debe conocer con exactitud 
+en qué situación se halla. Exige sinceridad total como protección contra su propia tendencia 
+a ser excesivamente confiado.
+Resumen: Correspondencia controlada.`
+
+// -0 - 6
+`Interpretación fisiológica: Se han suprimido las exigencias
+orgánicas, y nerviosas del cuerpo (en los lugares séptimo y 
+octavo y, especialmente cuando está clasificado como "ansiedad").
+Interpretación psicológica: La situación presente es desagradable. 
+Tiene un deseo insatisfecho de asociarse con aquellos cuyas normas de vida sean tan elevadas 
+como las suyas y descollar sobre el común de la gente. Su control sobre los instintos sensuales 
+limita su capacidad para darse, pero el aislamiento resultante lo apremia a entregarse y buscar 
+la unión con alguien. Esto lo perturba puesto que considera tales instintos como una debilidad 
+que se debe superar. Cree que sólo con un autocontrol permanente puede esperar mantener su actitud 
+de superioridad individual. Quiere ser amado o admirado por sí mismo; necesita atención, reconocimiento 
+y estima de los demás.
+Resumen: Exige estima como si se tratara de un individuo excepcional.`
+
+// -0 - 7
+`Interpretación fisiológica: Existe una susceptibilidad acentuada a
+todos los estímulos externos (en los lugares séptimo y, octavo y, 
+especialmente, cuando se clasifica como "ansiedad").
+Interpretación psicológica: Quiere superar la falta de sentido de su vida y llenar el vacío 
+que cree que lo separa de los demás. Está ansioso de experimentar la vida en todos sus aspectos, 
+explorar todas sus posibilidades y vivir intensamente. 
+Se resiente, por lo tanto de cualquier restricción o límite que se le imponga e insiste en ser libre 
+y estar desligado de ataduras.
+Resumen: Autodeterminación expectante.`
+
+//-----------------------------------------------------------------------------------------------------------
+
+// -1
+`Interpretación fisiológica: Rechaza ponerse laxo o darse por vencido. 
+Mantiene el agotamiento y la depresión bajo control conservándose activo 
+(especialmente en el lugar octavo; mucho menos en el puesto sexto).
+Interpretación psicológica: Alguna situación presente o alguna relación 
+es insatisfactoria pero se siente incapaz de cambiarla para conseguir el 
+sentido de pertenencia a algo o a alguien que necesita. No quiere exponer 
+su lado más vulnerable y, por lo tanto, continúa resistiendo ese estado de 
+cosas sintiéndose dependiente de esos vínculos. Esto no sólo lo deprime, 
+sino que lo vuelve también irritable e impaciente, produciéndole un gran 
+desasosiego y un apremio de escapar de esta situación ya sea de hecho o, 
+al menos, con su imaginación. Su capacidad para concentrarse puede disminuir.
+Resumen: Insatisfacción desasosegada.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -1 - 0
+`Interpretación fisiológica: Muestra impaciencia y desasosiego y tiende a 
+estar deprimido (en los lugares séptimo y octavo).
+Interpretación psicológica: Cree que no puede controlar la situación para 
+formar funciones el sentido de pertenencia a algo o a alguien que necesita 
+y, así, continúa sin confiar en nadie completamente. Se resiste a aceptar 
+una condición o una relación que considera como una responsabilidad desalentadora. 
+Siente que la vida tiene mucho más que ofrecer y probablemente se vuelva 
+impaciente e irritable hasta que consiga todo lo que cree que le falta. 
+El apremio por salir de ese estado insatisfactorio lo lleva a desasosiego 
+y desequilibrio. Su concentración puede disminuir.
+Resumen: Falta de realización inquieta e impaciente.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -1 - 2
+`Interpretación fisiológica: La fuerza de voluntad y la perseverancia están 
+en peligro de ser arrolladas por la excesiva tensión (especialmente en los 
+lugares séptimo y octavo, pero también en los puestos sexto y séptimo).
+Interpretación psicológica: La resistencia y la tenacidad están sobrecargadas 4
+por el intento permanente de superar las dificultades existentes. Se aferra 
+a sus objetivos pero se siente a la vez sometido a presiones intolerables. 
+Considera que es imposible modificar la situación y convertirla en una de 
+cooperación y confianza mutua; entonces, desea liberarse de ella completamente.
+Resumen: Presión que se origina de tensión y discordia.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -1 - 3
+`Interpretación fisiológica: Existe una agitación reprimida que resulta 
+de relaciones personales poco satisfactorias o en discordia. Esto puede 
+llevarlo a irritabilidad, accesos de ira o incluso neurosis sexuales. 
+Existe la posibilidad de que se sienta afectado por molestias cardíacas.
+Interpretación psicológica: Cierta asociación poco satisfactoria da lugar 
+a una gran angustia. Se siente impotente de restablecer la cordialidad y 
+cualquier tipo de confianza mutua, de modo que esta situación es considerada 
+como depresiva y como un estado de infelicidad que se debe seguir tolerando. 
+Acosado hasta el punto de llegar a una postración nerviosa.
+Resumen: Desarmonía impotente e irritable.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -1 - 4
+`Interpretación fisiológica: Decepciones sentimentales han dado lugar a 
+tensión y ansiedad (especialmente en los lugares séptimo y octavo, pero 
+también en los puestos sexto y séptimo).
+Interpretación psicológica: Una asociación sentimental ya no se está 
+desarrollando con suavidad, ha sido profundamente decepcionante y es 
+considerada ahora como un vínculo depresivo. Aunque por una parte querría 
+librarse del todo de esa unión, por otra, sin embargo, no quiere perder 
+nada ni arriesgar su seguridad y ponerse en peligro o ante la posibilidad 
+de una nueva decepción. Estos sentimientos contradictorios lo perjudican 
+de tal modo que trata de suprimirlos con una actitud fría y severa.
+Resumen: Tensión originada por una decepción sentimental.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -1 - 5
+`Interpretación fisiológica: Tensión que se origina por falta de 
+comprensión mutua (especialmente en los lugares séptimo y octavo; 
+en menor grado en los puestos sexto y séptimo).
+Interpretación psicológica: Una situación presente es poco satisfactoria; 
+se siente incapaz de mejorarla sin una colaboración benévola. La necesidad 
+de comprensión y de concesiones afectivas mutuas permanece sin satisfacer; 
+tiene ahora la impresión de estar atado, produciéndole impaciencia, 
+irritabilidad y deseo de escapar.
+Resumen: Impaciencia originada por una permanente falta de comprensión.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -1 - 6
+`Interpretación fisiológica: La insatisfacción sentimental y la falta de 
+aprecio lo han llevado a una gran tensión y a un autocontrol excesivo 
+(en los lugares séptimo y octavo; mucho menos significativo en los puestos 
+sexto y séptimo).
+Interpretación psicológica: Juzga que debe recibir colaboración antes 
+de que pueda mejorarse la situación presente. La falta de comprensión 
+y aprecio lo hacen sentir que no existe ninguna ligazón afectiva real, 
+y la insatisfacción da lugar a una susceptible sensibilidad; quiere 
+sentirse más seguro y más tranquilo. Le gustaría romper unas ataduras 
+que ahora considera depresivas y restablecer su propia individualidad. 
+Su autocontrol de los sentidos le impide darse con facilidad, pero el 
+aislamiento resultante lo apremia a entregarse y buscar la unión con alguien. 
+Esto lo perturba puesto que considera tales instintos como una debilidad que 
+se debe superar: cree que sólo puede afirmar su propia individualidad con un 
+permanente autocontrol y que sólo así puede mantenerse firme por encima de sus 
+dificultades presentes.
+Resumen: Insatisfacción sentimental originada por falta de aprecio y 
+autocontrol desproporcionado.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -1 - 7
+`Interpretación fisiológica: La insatisfacción sentimental ha dado 
+lugar a un deseo susceptible e impaciente de independencia, 
+conduciéndolo a una gran tensión y desasosiego (en los lugares séptimo y octavo; 
+menos grave en los puestos sexto y séptimo).
+Interpretación psicológica: Alguna situación presente o alguna relación es 
+poco satisfactoria, pero se siente incapaz de mejorarla sin una colaboración 
+benévola. No quiere exponer su lado más vulnerable y, por lo tanto, considera 
+inoportuno mostrar afecto o ser demasiado demostrativo. Considera esa asociación 
+como una unión depresiva porque, aunque quiere ser independiente y estar libre, 
+no desea arriesgar la pérdida de nada. Todo esto lo lleva a reaccionar con 
+susceptibilidad e impaciencia, mientras su apremio para "escapar de todo" se 
+convierte en un desasosiego. La capacidad para concentrarse puede disminuir.
+Resumen: Desequilibrio desasosegado originado por falta de satisfacción afectiva.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+//-----------------------------------------------------------------------------------------------------------
 
 
 //-----------------------------------------------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------------------------------------------------
+
+
+
+//-----------------------------------------------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------------------------------------------------
+
+
 
