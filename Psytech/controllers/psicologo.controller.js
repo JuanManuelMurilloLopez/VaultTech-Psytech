@@ -591,8 +591,42 @@ function obtenerParejasConZona(selecciones) {
         const a = selecciones[i];
         const b = selecciones[i + 1];
         const clave = [a.numeroColor, b.numeroColor].sort((x, y) => x - y).join('-');
-        const zona = obtenerZona(a.posicion) + '-' + obtenerZona(b.posicion);
-        pares.set(clave, { zonas: new Set([zona]) });
+        let zona = obtenerZona(a.posicion) + '-' + obtenerZona(b.posicion);
+
+        switch (zona) {
+            case '+-X':
+            case 'X-+':
+                zona = '++';
+                break;
+            case '--=':
+            case '=--':
+                zona = '--';
+                break;
+            case 'X-=':
+                zona = '+-';
+                break;
+            case '+-+':
+                zona = '++';
+                break;
+            case '=--':
+                zona = '--'; 
+                break;
+            case '=-=':
+                zona = '=='; 
+                break;
+            case 'X-X':
+                zona = 'XX'; 
+                break;
+            case '---':
+                zona = '--'; 
+                break;
+            default:
+                break;
+        }
+        if (!pares.has(clave)) {
+            pares.set(clave, { zonas: new Set() });
+        }
+        pares.get(clave).zonas.add(zona);
     }
     return pares;
 }
@@ -606,7 +640,7 @@ function obtenerParejasClasificadas(seleccionesFase1, seleccionesFase2) {
     for (let [clave, datosF1] of paresF1) {
         if (paresF2.has(clave)) {
             const datosF2 = paresF2.get(clave);
-            const zonasF1 = [...datosF1.zonas][0];
+            const zonasF1 = [...datosF1.zonas][0]; 
             const zonasF2 = [...datosF2.zonas][0];
 
             parejas.push({
