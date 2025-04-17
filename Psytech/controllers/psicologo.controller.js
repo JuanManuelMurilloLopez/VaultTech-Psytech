@@ -604,28 +604,29 @@ exports.getAnalisisColores = async (request, response, next) => {
         const resultadosFase2 = [];
 
         const colores = {
-            1: { nombre: 'Gris', significado: 'Participación', tipo: 'Laboral' },
-            2: { nombre: 'Azul', significado: 'Paciencia', tipo: 'Laboral' },
-            3: { nombre: 'Verde', significado: 'Productividad', tipo: 'Laboral' },
-            4: { nombre: 'Rojo', significado: 'Empuje/Agresividad', tipo: 'Laboral' },
-            5: { nombre: 'Amarillo', significado: 'Sociabilidad', tipo: 'Laboral' },
-            6: { nombre: 'Morado', significado: 'Creatividad', tipo: 'Laboral' },
-            7: { nombre: 'Café', significado: 'Vigor', tipo: 'No laboral' },
-            8: { nombre: 'Negro', significado: 'Satisfacción', tipo: 'No laboral' },
+            0: { nombre: 'Gris', significado: 'Participación', tipo: 'Laboral' },
+            1: { nombre: 'Azul', significado: 'Paciencia', tipo: 'Laboral' },
+            2: { nombre: 'Verde', significado: 'Productividad', tipo: 'Laboral' },
+            3: { nombre: 'Rojo', significado: 'Empuje/Agresividad', tipo: 'Laboral' },
+            4: { nombre: 'Amarillo', significado: 'Sociabilidad', tipo: 'Laboral' },
+            5: { nombre: 'Morado', significado: 'Creatividad', tipo: 'Laboral' },
+            6: { nombre: 'Café', significado: 'Vigor', tipo: 'No laboral' },
+            7: { nombre: 'Negro', significado: 'Satisfacción', tipo: 'No laboral' },
+            8: { nombre: 'Gris', significado: 'Participación', tipo: 'Laboral' },
         };
-
+        
         rows.forEach(({ fase, idColor, posicion }) => {
             let porcentaje = 90 - (posicion * 10);
             if (porcentaje <= 50) porcentaje -= 10;
 
-            const info = colores[idColor] || { nombre: 'Desconocido', significado: '', tipo: 'Desconocido' };
+            const info = colores[idColor]|| { nombre: 'Desconocido', significado: '', tipo: 'Desconocido' };
 
             const resultado = {
                 color: info.nombre,
                 significado: info.significado,
                 tipo: info.tipo,
                 porcentaje
-            };
+            };            
 
             if (fase === 1) {
                 resultadosFase1.push(resultado);

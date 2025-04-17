@@ -96,23 +96,29 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                    <% 
-                                    // Obtener todos los significados únicos
-                                    const significadosUnicos = [...new Set([
-                                        ...resultadosFase1.map(c => c.significado),
-                                        ...resultadosFase2.map(c => c.significado)
-                                    ])];
-                            
-                                    for (let significado of significadosUnicos) {
+                                    <%
+                                    const todosSignificados = [
+                                        "Participación",
+                                        "Paciencia",
+                                        "Productividad",
+                                        "Empuje/Agresividad",
+                                        "Sociabilidad",
+                                        "Creatividad",
+                                        "Vigor",
+                                        "Satisfacción"
+                                    ];
+                                
+                                    for (let significado of todosSignificados) {
                                         const personalidad = resultadosFase1.find(c => c.significado === significado);
                                         const adaptacion = resultadosFase2.find(c => c.significado === significado);
-                                    %>
-                                        <tr>
-                                            <td><%= significado %></td>
-                                            <td><%= personalidad ? personalidad.porcentaje + '%' : '0%' %></td>
-                                            <td><%= adaptacion ? adaptacion.porcentaje + '%' : '0%' %></td>
-                                        </tr>
-                                    <% } %>
+                                %>
+                                    <tr>
+                                        <td><%= significado %></td>
+                                        <td><%= personalidad ? personalidad.porcentaje + '%' : '0%' %></td>
+                                        <td><%= adaptacion ? adaptacion.porcentaje + '%' : '0%' %></td>
+                                    </tr>
+                                <% } %>
+                                
                             </tbody>
                         </table>                            
                     </div>
@@ -139,10 +145,14 @@
 
         // Obtener todos los significados únicos
         const todosSignificados = [
-            ...new Set([
-                ...datosFase1.map(c => c.significado),
-                ...datosFase2.map(c => c.significado)
-            ])
+            "Participación",
+            "Paciencia",
+            "Productividad",
+            "Empuje/Agresividad",
+            "Sociabilidad",
+            "Creatividad",
+            "Vigor",
+            "Satisfacción"
         ];
 
         const personalidadData = todosSignificados.map(significado => {
