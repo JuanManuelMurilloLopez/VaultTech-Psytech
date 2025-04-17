@@ -67,4 +67,30 @@ module.exports = class Coordinador {
             return rows[0].total > 0;
         });
   }
+
+  // EDITAR USUARIO
+  // Actualizar un usuario que ya existe (sin modificar el rol)
+  static update(idUsuario, usuario, estatusUsuario, nombreUsuario, apellidoPaterno, apellidoMaterno, correo, lada, numeroTelefono) {
+    return db.execute(
+      `UPDATE usuarios 
+      SET usuario = ?, 
+          estatusUsuario = ?, 
+          nombreUsuario = ?, 
+          apellidoPaterno = ?, 
+          apellidoMaterno = ?, 
+          correo = ?, 
+          lada = ?, 
+          numeroTelefono = ?
+      WHERE idUsuario = ?`,
+      [usuario, estatusUsuario, nombreUsuario, apellidoPaterno, apellidoMaterno, correo, lada, numeroTelefono, idUsuario]
+    );
+  }
+
+  // ACTUALIZAR ESTATUS DE USUARIO
+  static updateEstatus(idUsuario, estatusUsuario) {
+    return db.execute(
+      'UPDATE usuarios SET estatusUsuario = ? WHERE idUsuario = ?',
+      [estatusUsuario, idUsuario]
+    );
+  }
 }
