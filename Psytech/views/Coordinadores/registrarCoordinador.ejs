@@ -27,6 +27,9 @@
             <div>
                 <h1 class="text-container">REGISTRAR COORDINADOR</h1>
             </div>
+            <% if (typeof error !== 'undefined') { %>
+                <div class="alert alert-danger"><%= error %></div>
+            <% } %>            
             <form action="/coordinador/registrar-coordinador" method="POST" onsubmit="return validarFormulario()">
                 <div>
                     <!--Input nombre-->

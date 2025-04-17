@@ -60,4 +60,11 @@ module.exports = class Coordinador {
       ]
     );
   }
+
+  static correoExiste(correo) {
+    return db.execute('SELECT COUNT(*) as total FROM usuarios WHERE correo = ?', [correo])
+        .then(([rows]) => {
+            return rows[0].total > 0;
+        });
+  }
 }

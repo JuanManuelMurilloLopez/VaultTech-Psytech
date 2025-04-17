@@ -30,26 +30,37 @@ exports.getRegistrarPsicologos = (request, response, next) => {
 
 exports.postRegistrarPsicologos = (request, response, next) => {
     const { correo, nombrePsicologo, apellidoPaterno, apellidoMaterno, lada, numero } = request.body;
-   
-    const psicologo = new Psicologo(
-        correo, // usuario
-        1,
-        nombrePsicologo,
-        apellidoPaterno,
-        apellidoMaterno,
-        correo, // correo electronico
-        lada,
-        numero,
-        2
-    );
-    
-    console.log('Guardando psicologo:', psicologo);
-    psicologo.savePsicologo()
-   .then(() => {
-        exports.getPsicologosRegistrados(request, response, next);
-   })
-   .catch((error) => {
-        console.log('Error al guardar psicologo:', error);
+
+    Psicologo.correoExiste(correo)
+    .then((existe) => {
+
+        if (existe) {
+            return response.render('psicologos/registrarPsicologo', {
+                error: 'El correo ya está registrado.'
+            });
+        }
+
+        const psicologo = new Psicologo(
+            correo, // usuario
+            1,
+            nombrePsicologo,
+            apellidoPaterno,
+            apellidoMaterno,
+            correo, // correo electrónico
+            lada,
+            numero,
+            2
+        );
+
+        console.log('Guardando psicólogo:', psicologo);
+
+        return psicologo.savePsicologo()
+            .then(() => {
+                exports.getPsicologosRegistrados(request, response, next);
+            });
+    })
+    .catch((error) => {
+        console.log('Error al guardar psicólogo:', error);
     });
 };
 
@@ -86,28 +97,40 @@ exports.getRegistrarCoordinador = (request, response, next) => {
 
 exports.postRegistrarCoordinador = (request, response, next) => {
     const { correo, nombreCoordinador, apellidoPaterno, apellidoMaterno, lada, numero } = request.body;
-   
-    const coordinador = new Coordinador(
-        correo, // usuario
-        1,
-        nombreCoordinador,
-        apellidoPaterno,
-        apellidoMaterno,
-        correo, // correo electronico
-        lada,
-        numero,
-        1
-    );
-    
-    console.log('Guardando coordinador:', coordinador);
-   coordinador.saveCoordinador()
-   .then(() => {
-        exports.getCoordinadoresRegistrados(request, response, next);
-   })
-   .catch((error) => {
+
+    Coordinador.correoExiste(correo)
+    .then((existe) => {
+
+        if (existe) {
+            return response.render('coordinadores/registrarCoordinador', {
+                error: 'El correo ya está registrado.'
+            });
+        }
+
+        const coordinador = new Coordinador(
+            correo, // usuario
+            1,
+            nombreCoordinador,
+            apellidoPaterno,
+            apellidoMaterno,
+            correo, // correo electronico
+            lada,
+            numero,
+            1
+        );
+
+        console.log('Guardando coordinador:', coordinador);
+
+        return coordinador.saveCoordinador()
+            .then(() => {
+                exports.getCoordinadoresRegistrados(request, response, next);
+            });
+    })
+    .catch((error) => {
         console.log('Error al guardar coordinador:', error);
     });
 };
+
 
 exports.getEditarCoordinador = (request, response, next) => {
     response.render('Coordinadores/editarCoordinador');
