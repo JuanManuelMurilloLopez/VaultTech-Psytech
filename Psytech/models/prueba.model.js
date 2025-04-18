@@ -256,6 +256,16 @@ module.exports = class Prueba{
             AND SC.idPrueba = 6
             ORDER BY SC.fase, SC.posicion
             `, [idAspirante, idGrupo]);
-}
+    }   
+
+    // Nombre aspirante analisis colores
+    static getInformacionAspirante(idAspirante) {
+        return db.execute(`
+            SELECT u.nombreUsuario, u.apellidoPaterno, u.apellidoMaterno
+            FROM usuarios u
+            JOIN aspirantes a ON u.idUsuario = a.idUsuario
+            WHERE a.idAspirante = ?
+        `, [idAspirante]);
+    }
 
 }

@@ -59,6 +59,12 @@
     flex-direction: row;
 }
 
+.nombre-aspirante-texto {
+    font-size: 25px; 
+    font-weight: normal;
+    text-align: center;
+}
+
 .text-center{
     font-size: 36px;
     font-style: normal;

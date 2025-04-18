@@ -22,6 +22,11 @@
         <div class="container">
             <%- include('../includes/_buttonCerrarSesion.ejs') %>
             <h1 class="text-center">Análisis Prueba Colores</h1> <br>
+            <div class="nombre-aspirante-texto">Nombre del aspirante:
+                <%= informacionAspirante.nombreUsuario + " " +
+                informacionAspirante.apellidoPaterno + " " +
+                informacionAspirante.apellidoMaterno %>
+            </div> <br>
             
             <!-- Fases de colores -->
             <div class="prueba-colores-container">

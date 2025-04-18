@@ -801,6 +801,10 @@ function obtenerParejasClasificadas(seleccionesFase1, seleccionesFase2) {
 exports.getAnalisisColores = async (request, response, next) => {
     const { idGrupo, idAspirante, idInstitucion } = request.params;
     try {
+
+        // Obtener información del aspirante
+        const [informacionAspiranteRows] = await Prueba.getInformacionAspirante(idAspirante);
+
         // Obtener selecciones de colores completas
         const [seleccionesColoresRows] = await CuadernilloColores.getSeleccionesColores(idGrupo, idAspirante);
         
@@ -909,7 +913,9 @@ exports.getAnalisisColores = async (request, response, next) => {
             parejas: parejasConInterpretaciones,
             idGrupo, 
             idAspirante,
-            idInstitucion
+            idInstitucion,
+            // nombre aspirante analisis
+            informacionAspirante: informacionAspiranteRows[0]
         });
     } catch (error) {
         console.error('Error al obtener análisis de colores:', error);
