@@ -100,6 +100,11 @@ h1, h4 {
     min-width: 250px;
 }
 
+.personalidad-y-adaptacion-container {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
 #graficaMixta {
     width: 100% !important;
     height: 400px !important;
@@ -181,7 +186,7 @@ h1, h4 {
 /* Estilos para la seccion de movilidad */
 .movilidad-container {
     margin-top: 40px;
-    margin-bottom: 80px; 
+    margin-bottom: 40px; 
 }
 
 .movilidad-container .card-header {
@@ -205,4 +210,99 @@ h1, h4 {
     color: #62868C;
     margin-top: 10px;
     text-align: center;
+}
+
+/* Estilos para diseño de interpretaciones */
+.interpretacion-container {
+    margin-top: 40px;
+    margin-bottom: 80px; 
+}
+
+.interpretacion-horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.interpretacion-card {
+    flex: 0 0 calc(33.333% - 20px);
+    max-width: calc(33.333% - 20px);
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+    overflow: hidden;
+    min-height: 200px; 
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 992px) {
+    .interpretacion-card {
+        flex: 0 0 calc(50% - 15px);
+        max-width: calc(50% - 15px);
+    }
+}
+
+@media (max-width: 768px) {
+    .interpretacion-card {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* Movimineto cards*/
+.interpretacion-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.interpretacion-card .card-body {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.interpretacion-seccion {
+    margin-bottom: 15px;
+    border-left: 3px solid #728575; 
+    padding-left: 12px;
+}
+
+.tipo-contenido {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    color: #62868C; 
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.interpretacion-seccion p {
+    text-align: justify;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+    color: #333;
+}
+
+.interpretacion-card:hover {
+    border-color: #728575; 
+}
+
+.interpretacion-horizontal::after {
+    content: "";
+    flex: 0 0 calc(33.333% - 20px);
+    max-width: calc(33.333% - 20px);
+}
+
+@media (max-width: 992px) {
+    .interpretacion-horizontal::after {
+        flex: 0 0 calc(50% - 15px);
+        max-width: calc(50% - 15px);
+    }
 }
