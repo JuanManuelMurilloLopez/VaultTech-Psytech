@@ -585,96 +585,175 @@ function obtenerZona(posicion) {
     return '-';
 }
 
+function mapearZona(zonaCruda) {
+    if (zonaCruda === '+-' || zonaCruda === 'X-' || zonaCruda === '-+' || zonaCruda === 'X=' || zonaCruda === '=X' || zonaCruda === '=-' || zonaCruda === '-=') {
+        return zonaCruda;
+    }
+
+    switch (zonaCruda) {
+        case '+-X':
+        case 'X-+':
+        case '+-+':
+            return '++';
+        case '--=':
+        case '=--':
+        case '---':
+            return '--';
+        case '==-':
+        case '=-=':
+            return '==';
+        case 'X-=':
+        case '=-X':
+            return '+-';
+        case 'X-X':
+            return 'XX';
+        default:
+            return zonaCruda.split('-').sort().join('');
+    }
+}
+
 function obtenerParejasConZona(selecciones) {
     const pares = new Map();
     for (let i = 0; i < selecciones.length - 1; i++) {
         const a = selecciones[i];
         const b = selecciones[i + 1];
         const clave = [a.numeroColor, b.numeroColor].sort((x, y) => x - y).join('-');
-        let zona = obtenerZona(a.posicion) + '-' + obtenerZona(b.posicion);
 
-        switch (zona) {
-            case '+-X':
-            case 'X-+':
-                zona = '++';
-                break;
-            case '--=':
-            case '=--':
-                zona = '--';
-                break;
-            case 'X-=':
-                zona = '+-';
-                break;
-            case '+-+':
-                zona = '++';
-                break;
-            case '=--':
-                zona = '--'; 
-                break;
-            case '=-=':
-                zona = '=='; 
-                break;
-            case 'X-X':
-                zona = 'XX'; 
-                break;
-            case '---':
-                zona = '--'; 
-                break;
-            default:
-                break;
-        }
+        const zonaCruda = `${obtenerZona(a.posicion)}-${obtenerZona(b.posicion)}`;
+        const zona = mapearZona(zonaCruda);
+
         if (!pares.has(clave)) {
-            pares.set(clave, { zonas: new Set() });
+            pares.set(clave, []);
         }
-        pares.get(clave).zonas.add(zona);
+        pares.get(clave).push(zona); 
     }
     return pares;
+}
+
+function filtrarParejasNaturalesYDisociadas(paresF1, paresF2) {
+    const todasClaves = new Set([...paresF1.keys(), ...paresF2.keys()]);
+    const zonasClave = new Set(['++', '--', '==', 'XX']);
+    const resultado = [];
+
+    for (let clave of todasClaves) {
+        const zonasF1 = paresF1.get(clave) || [];
+        const zonasF2 = paresF2.get(clave) || [];
+
+        const zonaF1 = zonasF1[0] || null;
+        const zonaF2 = zonasF2[0] || null;
+
+        const enF1 = zonasF1.length > 0;
+        const enF2 = zonasF2.length > 0;
+
+        const esZonaValida = (zona) => zonasClave.has(zona);
+
+        const esNatural = enF1 && enF2 && zonaF1 === zonaF2 && esZonaValida(zonaF1);
+        const esDisociada = enF1 && enF2 && zonaF1 !== zonaF2 && esZonaValida(zonaF1) && esZonaValida(zonaF2);
+
+        if (esNatural) {
+            resultado.push({
+                pareja: clave,
+                tipo: 'natural',
+                zonas: { fase1: zonaF1, fase2: zonaF2 }
+            });
+        } else if (esDisociada) {
+            resultado.push({
+                pareja: clave,
+                tipo: 'disociada',
+                zonas: { fase1: zonaF1, fase2: zonaF2 }
+            });
+        }
+    }
+
+    return resultado.filter(par => (par.zonas.fase1 && zonasClave.has(par.zonas.fase1)) || (par.zonas.fase2 && zonasClave.has(par.zonas.fase2)));
+}
+
+function filtrarParejasArtificiales(paresF1, paresF2, parejasNaturalesYDisociadas = [], seleccionesF1 = [], seleccionesF2 = []) {
+    const todasClaves = new Set([...paresF1.keys(), ...paresF2.keys()]);
+    const resultado = [];
+
+    const esParejaClasificada = (clave) => {
+        for (let i = 0; i < parejasNaturalesYDisociadas.length; i++) {
+            if (parejasNaturalesYDisociadas[i].pareja === clave) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    const esPosicionValida = (a, b) => {
+        const posicionesValidas = [[0, 1], [2, 3], [4, 5], [6, 7]];
+        return posicionesValidas.some(pair =>
+            (pair[0] === a && pair[1] === b) || (pair[0] === b && pair[1] === a)
+        );
+    };
+
+    const obtenerPosicionDeColor = (selecciones, numeroColor) => {
+        for (let i = 0; i < selecciones.length; i++) {
+            if (selecciones[i].numeroColor === numeroColor) {
+                return selecciones[i].posicion;
+            }
+        }
+        return null;
+    };
+
+    for (let clave of todasClaves) {
+        const zonasF1 = paresF1.get(clave) || [];
+        const zonasF2 = paresF2.get(clave) || [];
+
+        const zonaF1 = zonasF1[0] || null;
+        const zonaF2 = zonasF2[0] || null;
+
+        const enF1 = zonasF1.length > 0;
+        const enF2 = zonasF2.length > 0;
+
+        if (esParejaClasificada(clave)) continue;
+
+        const [colorA, colorB] = clave.split('-').map(Number);
+
+        const posA_f1 = obtenerPosicionDeColor(seleccionesF1, colorA);
+        const posB_f1 = obtenerPosicionDeColor(seleccionesF1, colorB);
+        const posA_f2 = obtenerPosicionDeColor(seleccionesF2, colorA);
+        const posB_f2 = obtenerPosicionDeColor(seleccionesF2, colorB);
+
+        const parejaEsValida =
+            esPosicionValida(posA_f1, posB_f1) || esPosicionValida(posA_f2, posB_f2);
+
+        if (parejaEsValida) {
+            if (enF1 && !enF2 && zonaF1 !== '+-' && zonaF1 !== undefined) {
+                resultado.push({
+                    pareja: clave,
+                    tipo: 'artificial',
+                    zonas: { fase1: zonaF1 }
+                });
+            } else if (enF2 && !enF1 && zonaF2 !== '+-' && zonaF2 !== undefined) {
+                resultado.push({
+                    pareja: clave,
+                    tipo: 'artificial',
+                    zonas: { fase2: zonaF2 }
+                });
+            }
+        }
+    }
+
+    return resultado;
 }
 
 function obtenerParejasClasificadas(seleccionesFase1, seleccionesFase2) {
     const paresF1 = obtenerParejasConZona(seleccionesFase1);
     const paresF2 = obtenerParejasConZona(seleccionesFase2);
 
-    const parejas = [];
-    const artificialesAgregadas = new Set();
+    const resultadoNaturalesYDisociadas = filtrarParejasNaturalesYDisociadas(paresF1, paresF2);
+    const resultadoArtificiales = filtrarParejasArtificiales(
+        paresF1,
+        paresF2,
+        resultadoNaturalesYDisociadas,
+        seleccionesFase1,
+        seleccionesFase2
+    );
 
-    for (let [clave, datosF1] of paresF1) {
-        if (paresF2.has(clave)) {
-            const datosF2 = paresF2.get(clave);
-            const zonaF1 = [...datosF1.zonas][0];
-            const zonaF2 = [...datosF2.zonas][0];
-
-            if (zonaF1 === zonaF2) {
-                if (
-                    (zonaF1 === '+-+' || zonaF1 === '=-=' || zonaF1 === '---' || zonaF1 === 'X-X') &&
-                    !artificialesAgregadas.has(zonaF1)
-                ) {
-                    parejas.push({
-                        pareja: clave,
-                        tipo: 'artificial',
-                        zonas: { fase1: zonaF1, fase2: zonaF2 }
-                    });
-                    artificialesAgregadas.add(zonaF1);
-                } else {
-                    parejas.push({
-                        pareja: clave,
-                        tipo: 'natural',
-                        zonas: { fase1: zonaF1, fase2: zonaF2 }
-                    });
-                }
-            } else {
-                parejas.push({
-                    pareja: clave,
-                    tipo: 'disociada',
-                    zonas: { fase1: zonaF1, fase2: zonaF2 }
-                });
-            }
-        }
-    }
-
-    return parejas;
+    return [...resultadoNaturalesYDisociadas, ...resultadoArtificiales];
 }
-
 
 exports.getAnalisisColores = async (request, response, next) => {
     const { idGrupo, idAspirante, idInstitucion } = request.params;

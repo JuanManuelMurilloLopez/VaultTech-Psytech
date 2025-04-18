@@ -126,6 +126,7 @@
             </div>
 
             <% if (Array.isArray(parejas) && parejas.length > 0) { %>
+                <!-- Parejas naturales -->
                 <h5 class="mb-0">Parejas naturales</h5>
                 <ul class="list-group list-group-flush">
                 <% parejas
@@ -141,7 +142,6 @@
                     </li>
                 <% }); %>
                 </ul>
-            
                 <ul class="list-group list-group-flush">
                 <% parejas
                     .filter(par => par.tipo === 'disociada')
@@ -156,6 +156,8 @@
                     </li>
                 <% }); %>
                 </ul>
+            
+                <!-- Parejas artificiales -->
                 <h5 class="mb-0">Parejas artificiales</h5>
                 <ul class="list-group list-group-flush">
                 <% parejas
@@ -171,8 +173,8 @@
                     </li>
                 <% }); %>
                 </ul>
-
-            <% } %>            
+            <% } %>
+                   
 
             <div class="boton-container">
                 <a class="btn btn-color--third boton-regresar-abajo"
