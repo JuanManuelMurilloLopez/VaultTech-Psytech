@@ -125,56 +125,33 @@
                 </div>
             </div>
 
-            <% if (Array.isArray(parejas) && parejas.length > 0) { %>
-                <!-- Parejas naturales -->
-                <h5 class="mb-0">Parejas naturales</h5>
-                <ul class="list-group list-group-flush">
-                <% parejas
-                    .filter(par => par.tipo === 'natural')
-                    .forEach(par => {
-                        const [color1, color2] = par.pareja.split('-');
-                        const zona1 = par.zonas.fase1;
-                        const zona2 = par.zonas.fase2;
-                        const zonasStr = zona1 === zona2 ? zona1 : `${zona1} / ${zona2}`;
+            <!-- resultado.ejs -->
+            <div class="container mt-4">
+                <h2 class="mb-4">Interpretaciones de combinaciones</h2>
+                <% parejas.forEach(c => { 
+                    const mostrarFase1 = c.zonas.fase1 && c.zonas.fase1 !== 'N/A';
+                    const mostrarFase2 = c.zonas.fase2 && c.zonas.fase2 !== 'N/A';
                 %>
-                    <li class="list-group-item">
-                        Pareja: <%= color1 %> + <%= color2 %>, Zonas: <%= zonasStr %>
-                    </li>
-                <% }); %>
-                </ul>
-                <ul class="list-group list-group-flush">
-                <% parejas
-                    .filter(par => par.tipo === 'disociada')
-                    .forEach(par => {
-                        const [color1, color2] = par.pareja.split('-');
-                        const zona1 = par.zonas.fase1;
-                        const zona2 = par.zonas.fase2;
-                        const zonasStr = zona1 === zona2 ? zona1 : `${zona1} / ${zona2}`;
-                %>
-                    <li class="list-group-item">
-                        Pareja: <%= color1 %> + <%= color2 %>, Zonas: <%= zonasStr %>
-                    </li>
-                <% }); %>
-                </ul>
-            
-                <!-- Parejas artificiales -->
-                <h5 class="mb-0">Parejas artificiales</h5>
-                <ul class="list-group list-group-flush">
-                <% parejas
-                    .filter(par => par.tipo === 'artificial')
-                    .forEach(par => {
-                        const [color1, color2] = par.pareja.split('-');
-                        const zona1 = par.zonas.fase1;
-                        const zona2 = par.zonas.fase2;
-                        const zonasStr = zona1 === zona2 ? zona1 : `${zona1} / ${zona2}`;
-                %>
-                    <li class="list-group-item">
-                        Pareja: <%= color1 %> + <%= color2 %>, Zonas: <%= zonasStr %>
-                    </li>
-                <% }); %>
-                </ul>
-            <% } %>
-                   
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            Pareja: <%= c.pareja %> — Zonas: 
+                            <% if (mostrarFase1) { %><%= c.zonas.fase1 %><% } else { %>N/A<% } %>
+                            <% if (mostrarFase2) { %> / <%= c.zonas.fase2 %><% } %>
+                        </div>
+                        <div class="card-body">
+                            <% if (mostrarFase1) { %>
+                                <p><%= c.texto.fase1 %></p>
+                            <% } %>
+                            <% if (mostrarFase2) { %>
+                                <p><%= c.texto.fase2 %></p>
+                            <% } %>
+                            <% if (!mostrarFase1 && !mostrarFase2) { %>
+                                <p><em>Interpretación no disponible para esta combinación.</em></p>
+                            <% } %>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>           
 
             <div class="boton-container">
                 <a class="btn btn-color--third boton-regresar-abajo"

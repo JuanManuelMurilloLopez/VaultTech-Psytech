@@ -9,6 +9,7 @@ const { request, response } = require('express');
 const Cuadernillo = require('../models/cuadernilloOtis.model');
 const CatalogoPruebas = require('../models/catalogoPruebas.model');
 const CuadernilloColores = require('../models/cuadernilloColores.model');
+const interpretaciones = require('../util/interpretacionColores.js');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
@@ -617,7 +618,7 @@ function obtenerParejasConZona(selecciones) {
     for (let i = 0; i < selecciones.length - 1; i++) {
         const a = selecciones[i];
         const b = selecciones[i + 1];
-        const clave = [a.numeroColor, b.numeroColor].sort((x, y) => x - y).join('-');
+        const clave = `${a.numeroColor}-${b.numeroColor}`;
 
         const zonaCruda = `${obtenerZona(a.posicion)}-${obtenerZona(b.posicion)}`;
         const zona = mapearZona(zonaCruda);
@@ -636,8 +637,11 @@ function filtrarParejasNaturalesYDisociadas(paresF1, paresF2) {
     const resultado = [];
 
     for (let clave of todasClaves) {
-        const zonasF1 = paresF1.get(clave) || [];
-        const zonasF2 = paresF2.get(clave) || [];
+        const [c1, c2] = clave.split('-').map(Number);
+        const claveNorm = c1 < c2 ? `${c1}-${c2}` : `${c2}-${c1}`;
+
+        const zonasF1 = paresF1.get(claveNorm) || [];
+        const zonasF2 = paresF2.get(claveNorm) || [];
 
         const zonaF1 = zonasF1[0] || null;
         const zonaF2 = zonasF2[0] || null;
@@ -650,37 +654,33 @@ function filtrarParejasNaturalesYDisociadas(paresF1, paresF2) {
         const esNatural = enF1 && enF2 && zonaF1 === zonaF2 && esZonaValida(zonaF1);
         const esDisociada = enF1 && enF2 && zonaF1 !== zonaF2 && esZonaValida(zonaF1) && esZonaValida(zonaF2);
 
-        if (esNatural) {
+        if (esNatural || esDisociada) {
             resultado.push({
-                pareja: clave,
-                tipo: 'natural',
-                zonas: { fase1: zonaF1, fase2: zonaF2 }
-            });
-        } else if (esDisociada) {
-            resultado.push({
-                pareja: clave,
-                tipo: 'disociada',
-                zonas: { fase1: zonaF1, fase2: zonaF2 }
+                pareja: claveNorm,
+                tipo: esNatural ? 'natural' : 'disociada',
+                zonas: { fase1: zonaF1 || 'N/A', fase2: zonaF2 || 'N/A' }
             });
         }
     }
 
-    return resultado.filter(par => (par.zonas.fase1 && zonasClave.has(par.zonas.fase1)) || (par.zonas.fase2 && zonasClave.has(par.zonas.fase2)));
+    return resultado.filter(par =>
+        (par.zonas.fase1 && zonasClave.has(par.zonas.fase1)) ||
+        (par.zonas.fase2 && zonasClave.has(par.zonas.fase2))
+    );
 }
+
 
 function filtrarParejasArtificiales(paresF1, paresF2, parejasNaturalesYDisociadas = [], seleccionesF1 = [], seleccionesF2 = []) {
     const todasClaves = new Set([...paresF1.keys(), ...paresF2.keys()]);
     const resultado = [];
 
     const esParejaClasificada = (clave) => {
-        for (let i = 0; i < parejasNaturalesYDisociadas.length; i++) {
-            if (parejasNaturalesYDisociadas[i].pareja === clave) {
-                return true;
-            }
-        }
-        return false;
+        const claveInversa = clave.split('-').reverse().join('-');
+        return parejasNaturalesYDisociadas.some(p =>
+            p.pareja === clave || p.pareja === claveInversa
+        );
     };
-
+    
     const esPosicionValida = (a, b) => {
         const posicionesValidas = [[0, 1], [2, 3], [4, 5], [6, 7]];
         return posicionesValidas.some(pair =>
@@ -724,13 +724,13 @@ function filtrarParejasArtificiales(paresF1, paresF2, parejasNaturalesYDisociada
                 resultado.push({
                     pareja: clave,
                     tipo: 'artificial',
-                    zonas: { fase1: zonaF1 }
+                    zonas: { fase1: zonaF1 || 'N/A' }
                 });
             } else if (enF2 && !enF1 && zonaF2 !== '+-' && zonaF2 !== undefined) {
                 resultado.push({
                     pareja: clave,
                     tipo: 'artificial',
-                    zonas: { fase2: zonaF2 }
+                    zonas: { fase2: zonaF2 || 'N/A' }
                 });
             }
         }
@@ -752,7 +752,30 @@ function obtenerParejasClasificadas(seleccionesFase1, seleccionesFase2) {
         seleccionesFase2
     );
 
-    return [...resultadoNaturalesYDisociadas, ...resultadoArtificiales];
+    // Depuración
+    console.log('Resultado Naturales y Disociadas:', resultadoNaturalesYDisociadas);
+
+    // Agregar interpretaciones
+    const agregarInterpretaciones = (parejas) => {
+        return parejas.map(p => {
+            const textoFase1 = obtenerInterpretacion(p.zonas.fase1, p.zonas.fase2, p.pareja);
+            const textoFase2 = obtenerInterpretacion(p.zonas.fase2, p.zonas.fase1, p.pareja);
+        
+            if (!p.zonas.fase1 || !p.zonas.fase2) {
+                return { 
+                    ...p, 
+                    texto: { 
+                        fase1: 'Interpretación no disponible para esta combinación.', 
+                        fase2: 'Interpretación no disponible para esta combinación.' 
+                    }
+                };
+            }
+
+            return { ...p, texto: { fase1: textoFase1, fase2: textoFase2 } };
+        });
+    };
+
+    return [...agregarInterpretaciones(resultadoNaturalesYDisociadas), ...resultadoArtificiales];
 }
 
 exports.getAnalisisColores = async (request, response, next) => {
@@ -795,11 +818,12 @@ exports.getAnalisisColores = async (request, response, next) => {
             8: { nombre: 'Gris', significado: 'Participación', tipo: 'Laboral' },
         };
         
+        // Mapear las respuestas de colores a resultados con sus significados y porcentajes
         rows.forEach(({ fase, idColor, posicion }) => {
             let porcentaje = 90 - (posicion * 10);
             if (porcentaje <= 50) porcentaje -= 10;
 
-            const info = colores[idColor]|| { nombre: 'Desconocido', significado: '', tipo: 'Desconocido' };
+            const info = colores[idColor] || { nombre: 'Desconocido', significado: '', tipo: 'Desconocido' };
 
             const resultado = {
                 color: info.nombre,
@@ -815,6 +839,51 @@ exports.getAnalisisColores = async (request, response, next) => {
             }
         });
 
+        function agregarInterpretaciones(parejas) {
+            return parejas.map(p => {
+                const textoFase1 = obtenerInterpretacion(p.zonas.fase1, p.zonas.fase2, p.pareja);
+                const textoFase2 = obtenerInterpretacion(p.zonas.fase2, p.zonas.fase1, p.pareja);
+        
+                if (p.zonas.fase1 === 'N/A' || p.zonas.fase2 === 'N/A') {
+                    return { 
+                        ...p, 
+                        texto: { 
+                            fase1: 'Interpretación no disponible para esta combinación.', 
+                            fase2: 'Interpretación no disponible para esta combinación.' 
+                        }
+                    };
+                }
+        
+                return { ...p, texto: { fase1: textoFase1, fase2: textoFase2 } };
+            });
+        }
+        
+        function obtenerInterpretacion(zona1, zona2, pareja) {
+            if (zona1 === 'N/A' || zona2 === 'N/A') {
+                return 'Interpretación no disponible para esta combinación.';
+            }
+        
+            const claveDirecta = `${zona1}|${pareja}`;
+            const claveInvertida = `${zona2}|${invertirPareja(pareja)}`;
+              
+            if (interpretaciones[claveDirecta]) {
+                return interpretaciones[claveDirecta];
+            } else if (interpretaciones[claveInvertida]) {
+                return interpretaciones[claveInvertida];
+            } else {
+                return 'Interpretación no disponible para esta combinación.';
+            }
+        }                                    
+        
+        // Función para invertir la pareja
+        const invertirPareja = (pareja) => {
+            const partes = pareja.split('-');
+            return `${partes[1]}-${partes[0]}`;
+        };
+
+        const parejasConInterpretaciones = agregarInterpretaciones(parejas);
+
+        // Renderizar la vista con todos los datos
         response.render('Psicologos/analisisColores.ejs', {
             seleccionesFase1: seleccionesFase1 || [],
             seleccionesFase2: seleccionesFase2 || [],
@@ -822,7 +891,7 @@ exports.getAnalisisColores = async (request, response, next) => {
             resultadosFase2,
             movilidad,
             interpretacionMovilidad,
-            parejas,
+            parejas: parejasConInterpretaciones,
             idGrupo, 
             idAspirante,
             idInstitucion

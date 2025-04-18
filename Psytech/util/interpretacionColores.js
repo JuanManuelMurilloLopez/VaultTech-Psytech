@@ -1,4 +1,47 @@
+module.exports = {
+    '==|2-6':`Interpretación fisiológica: Un excesivo autodominio al tratar de ganar la consideración y estima de los 
+    demás ha dado lugar a tensión especial (especialmente en los lugares séptimo y octavo; de un modo mucho 
+    menos importante en los puestos sexto y séptimo).
+    Interpretación psicológica: Tiene una necesidad que todavía no ha sido satisfecha, de asociarse con 
+    aquellos cuyas normas de vida sean tan elevadas como las suyas y descollar sobre el común de la gente. 
+    Esto lo somete a una gran tensión, pero permanece firme en sus actitudes a pesar de la falta de aprecio.
+    Encuentra esta situación incómoda y le gustaría salir de ella, mas evita comprometerse con cualquier juicio. 
+    Incapaz de resolverse, porque siempre pospone el tomar las decisiones apropiadas dudando de su capacidad 
+    para sostener la oposición que resultaría de ello. Necesita el afecto de los demás, la aceptación de sus 
+    deseos y el respeto a sus opiniones hasta que pueda sentirse tranquilo y seguro.
+    Resumen: Exigencia terca pero ineficaz de estima.
+    (El grupo + es necesario, por lo tanto, como compensación.)`,
 
+    '==|6-2': `Interpretación fisiológica: Un excesivo autodominio al tratar de ganar la consideración y estima de los   
+    demás ha dado lugar a tensión (especialmente en los lugares séptimo y octavo; menos acentuado, 
+    aunque todavía significativo, en los puestos sexto y séptimo).
+    Interpretación psicológica: Tiene una necesidad, que todavía no ha sido satisfecha, de asociarse con 
+    aquellos cuyas normas de vida sean tan elevadas como las suyas y descollar sobre el común de la gente. 
+    Esto lo somete a una gran tensión, pero permanece firme en sus actitudes a pesar de la falta de aprecio. 
+    Encuentra esta situación incómoda y le gustaría salir de ella, mas evita comprometerse con cualquier juicio. 
+    Incapaz de resolverse, porque siempre pospone el tomar las decisiones apropiadas dudando de su capacidad 
+    para sostener la oposición que resultaría de ello. Necesita el afecto de los demás, la aceptación de sus 
+    deseos y el respeto a sus opiniones hasta que pueda sentirse tranquilo y seguro.
+    Resumen: Exigencia terca pero ineficaz de estima. 
+    (El grupo + es necesario, por lo tanto, como compensación.)`,
+
+    '++|5-7': `Tiene una imperiosa necesidad de una ligazón o unión con otro 
+    que lo llene de verdad sensualmente y que no esté en conflicto 
+    con sus convicciones o con su sentido de lo que es convincente.`,
+
+    'XX|3-4': `Ligero y desenvuelto. Necesita sentir que los acontecimientos se desarrollan 
+    según las líneas previstas; de otro modo, la irritación puede llevarle a la 
+    inconstancia ya actividades superficiales.`,
+
+    '==|1-0':`Tiene grandes exigencias sentimentales y quiere relacionarse en 
+    una asociación íntima, pero sin gran profundidad de sentimiento.`,
+
+    'XX|4-5':`Imaginativo y sensible; busca una salida para estas cualidades, 
+    especialmente en compañía de alguien que sea también sensible. Lo 
+    insólito y la aventura con rapidez despiertan en él interés y entusiasmo.`
+};
+
+/*
 // +0
 `Renuente a participar; quiere evitar todo tipo de estímulos. 
 Ha tenido que soportar demasiadas cosas de índole agotadora  
@@ -284,10 +327,7 @@ inclinado al fantaseo y soñar despierto.`
 `Desea encontrar su propia estimulación en una atmósfera de fausto 
 sensual.`
 
-// +5 +7
-`Tiene una imperiosa necesidad de una ligazón o unión con otro 
-que lo llene de verdad sensualmente y que no esté en conflicto 
-con sus convicciones o con su sentido de lo que es convincente.`
+
 
 //-----------------------------------------------------------------------------------------------------------
 
@@ -515,11 +555,6 @@ comprensión mutua y sin discordias.`
 Ocupa -o lo desea- un puesto de autoridad en el cual pueda ejercer control 
 sobre los acontecimientos.`
 
-// X 3 X 4
-`Ligero y desenvuelto. Necesita sentir que los acontecimientos se desarrollan 
-según las líneas previstas; de otro modo, la irritación puede llevarle a la 
-inconstancia ya actividades superficiales.`
-
 // X 3 X 5
 `Participa con facilidad en todo lo que lleva consigo emociones o estimulación. 
 Quiere sentirse excitado.`
@@ -562,10 +597,7 @@ que los acontecimientos se desarrollan según las líneas previstas. Esto le
 lleva a irritación, inconstancia y falta de perseverancia en buscar un 
 objetivo concreto.`
 
-// X 4 X 5
-`Imaginativo y sensible; busca una salida para estas cualidades, 
-especialmente en compañía de alguien que sea también sensible. Lo 
-insólito y la aventura con rapidez despiertan en él interés y entusiasmo.`
+
 
 // X 4 X 6
 `Inseguro. Busca enraizarse, estabilizarse, asegurarse sentimentalmente 
@@ -751,10 +783,6 @@ a hacer componendas; así evita la pérdida de afecto y de participación total.
 // = 1
 `Permanece desvinculado sentimentalmente, aún cuando se encuentre 
 relacionado con una asociación íntima.`
-
-// = 1 = 0
-`Tiene grandes exigencias sentimentales y quiere relacionarse en 
-una asociación íntima, pero sin gran profundidad de sentimiento.`
 
 // = 1 = 2
 `Cree que no está recibiendo lo que se le debe y que no es 
@@ -1340,20 +1368,6 @@ Quiere escapar de esta situación, pero no puede encontrar la fuerza mental para
 Resumen: Humillado por falta de aprecio.
 (El grupo + es necesario, por lo tanto, como compensación).`
 
-// -2 -6
-`Interpretación fisiológica: Un excesivo autodominio al tratar de ganar la consideración y estima de los 
-demás ha dado lugar a tensión especial (especialmente en los lugares séptimo y octavo; de un modo mucho 
-menos importante en los puestos sexto y séptimo).
-Interpretación psicológica: Tiene una necesidad que todavía no ha sido satisfecha, de asociarse con 
-aquellos cuyas normas de vida sean tan elevadas como las suyas y descollar sobre el común de la gente. 
-Esto lo somete a una gran tensión, pero permanece firme en sus actitudes a pesar de la falta de aprecio.
-Encuentra esta situación incómoda y le gustaría salir de ella, mas evita comprometerse con cualquier juicio. 
-Incapaz de resolverse, porque siempre pospone el tomar las decisiones apropiadas dudando de su capacidad 
-para sostener la oposición que resultaría de ello. Necesita el afecto de los demás, la aceptación de sus 
-deseos y el respeto a sus opiniones hasta que pueda sentirse tranquilo y seguro.
-Resumen: Exigencia terca pero ineficaz de estima.
-(El grupo + es necesario, por lo tanto, como compensación.)`
-
 // -2 -7
 `Interpretación fisiológica: Una frustración derivada de restricciones inaceptables sobre su libertad 
 de acción está produciendo tensión (especialmente en los lugares séptimo y octavo; de un modo mucho 
@@ -1700,19 +1714,6 @@ autocontrol y que sólo así puede mantenerse firme por encima de sus dificultad
 Resumen: Insatisfacción sentimental originada por falta de aprecio y autocontrol desproporcionado. 
 (El grupo + es necesario, por lo tanto, como compensación.)`
 
-// -6 -2
-`Interpretación fisiológica: Un excesivo autodominio al tratar de ganar la consideración y estima de los   
-demás ha dado lugar a tensión (especialmente en los lugares séptimo y octavo; menos acentuado, 
-aunque todavía significativo, en los puestos sexto y séptimo).
-Interpretación psicológica: Tiene una necesidad, que todavía no ha sido satisfecha, de asociarse con 
-aquellos cuyas normas de vida sean tan elevadas como las suyas y descollar sobre el común de la gente. 
-Esto lo somete a una gran tensión, pero permanece firme en sus actitudes a pesar de la falta de aprecio. 
-Encuentra esta situación incómoda y le gustaría salir de ella, mas evita comprometerse con cualquier juicio. 
-Incapaz de resolverse, porque siempre pospone el tomar las decisiones apropiadas dudando de su capacidad 
-para sostener la oposición que resultaría de ello. Necesita el afecto de los demás, la aceptación de sus 
-deseos y el respeto a sus opiniones hasta que pueda sentirse tranquilo y seguro.
-Resumen: Exigencia terca pero ineficaz de estima. 
-(El grupo + es necesario, por lo tanto, como compensación.)`
 
 // -6 -3
 `Interpretación fisiológica: Tensión que se origina en la supresión de deseos somáticos o sexuales y 
@@ -2177,3 +2178,4 @@ una reputación por sí mismo se ha vuelto un imperativo. Reacciona insistiendo 
 y rechaza representar un rol impersonal o de menor importancia.`
 
 //-----------------------------------------------------------------------------------------------------------
+*/
