@@ -1267,30 +1267,913 @@ Resumen: Desequilibrio desasosegado originado por falta de satisfacción afectiv
 
 //-----------------------------------------------------------------------------------------------------------
 
+// -2
+`Interpretación fisiológica: La fuerza de voluntad, la resistencia la capacidad para 
+mantenerse firme ante la oposición, o están en peligro de ser arrolladas por la excesiva 
+tensión (especialmente en el lugar octavo; en el puesto sexto está menos acentuada. 
+pero todavía se halla presente).
+Interpretación psicológica: La tenacidad y la fuerza de voluntad necesarias para luchar 
+contra las dificultades presentes se han debilitado. 
+Se siente sobrecargado, agotado y desorientado, pero continúa manteniéndose firme en su puesto. 
+Se resiente de esta situación adversa que considera como una presión tangible real que es intolerable 
+y de la que quiere escapar, pero cree que es incapaz de tomar la decisión apropiada.
+Resumen: Resistencia a adoptar las medidas necesarias para resolver la situación tensa.
+(El grupo -1- es necesario, por lo tanto, como compensación.)`
+
+// -2 -0
+`Interpretación fisiológica: La capacidad de resistir presiones se ha sobrecargado, conduciéndolo a
+tensión y frustración, impaciencia e irritabilidad (especialmente en los lugares séptimo y octavo;
+también en menor grado en los puestos sexto y séptimo).
+Interpretación psicológica: Ha perdido la resistencia y la fuerza de voluntad necesarias para luchar
+contra las dificultades presentes. Se siente sobrecargado y desorientado pero continúa manteniéndose 
+firme y todavía persigue sus objetivos con gran intensidad. Esto lo somete a una presión intolerable de 
+la cual quiere escapar, pero no puede decidirse a tomar la decisión apropiada. Como resultado, permanece 
+profundamente envuelto en el problema y no puede encararlo objetivamente ni sale de él: no puede 
+abandonarlo y cree que sólo estará en paz cuando haya alcanzado sus objetivos.
+Resumen: Compromiso sin resolver.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -2 -1
+`Interpretación fisiológica: Una insatisfacción sentimental y la capacidad reducida de soportar oposición 
+o dificultades están produciendo tensión y frustración.
+Interpretación psicológica: Ha perdido la resistencia y la fuerza de voluntad necesarias para luchar 
+contra las dificultades presentes que se le aparecen como una oposición deliberada. Permanece firme, 
+pero está sometido a una intolerable presión. Necesita colaboración y realización sentimental; cree que 
+con esa carencia le es imposible mejorar dicha situación.
+Quiere "escapar de todo" pronto.
+Resumen: Presión que se origina de tensión y discordia.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -2 -3
+`Interpretación fisiológica: El intento de evitar cualquier forma de estimulación o excitación da lugar a 
+angustia y agitación.
+Considera su ambiente como hostil y está bajo gran presión. Es irritable y tiene accesos de ira, con la 
+posibilidad de que sobrevengan neurosis sexuales o molestias cardíacas.
+Interpretación psicológica: Se halla angustiado por la hostilidad aparente del ambiente. Se siente coartado 
+y sometido a intolerable presión. 
+Es rebelde y se resiente de todo lo que considera como exigencias irrazonables que se le hacen, pero se 
+considera sin fuerzas para controlar la situación e incapaz de proteger se de ella.
+Resumen: Rebelión impotente.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -2 -4
+`Interpretación fisiológica: Tensión y ansiedad que se han originado por un conflicto entre la esperanza y
+la necesidad o después de un gran desengaño.
+Interpretación psicológica: Decepciones y esperanzas irrealizadas han dado lugar a una incertidumbre 
+ansiosa; al mismo tiempo, duda que las cosas sean mejor en el futuro y, en consecuencia, pospone las 
+decisiones esenciales. Este conflicto entre la esperanza y la necesidad está creando una gran tirantez; 
+en vez de resolver éste, encarándolo para tomar decisiones definitivas, es muy probable que se dedique a 
+la búsqueda de futilidades como escapatoria.
+Resumen: Vacilación frustrada.
+(El grupo + es necesario, por 10 tanto, como compensación.)`
+
+// -2 -5
+`Interpretación fisiológica: El sentimiento de haber recibido desprecios e incomprensiones se ha convertido 
+en una gran tensión (especialmente en los lugares de séptimo y octavo; de un modo mucho menos importante 
+en los puestos sexto y séptimo)
+Interpretación psicológica: Se siente en una posición desagradable; la confianza, el aprecio y la 
+comprensión le son negados y es tratado con una falta de consideración humillante. Juzga que se lo ha 
+valorado de un modo inferior al que necesita para su autoestima, y que no hay nada que pueda hacer sobre ello. 
+Está desanimado por la batalla solitaria que sostiene contra todas las adversidades, sin recibir ningún aliento. 
+Se siente desorientado y que, en lugar de la admiración que necesita, es siempre mal interpretado. 
+Quiere escapar de esta situación, pero no puede encontrar la fuerza mental para tomar la decisión apropiada.
+Resumen: Humillado por falta de aprecio.
+(El grupo + es necesario, por lo tanto, como compensación).`
+
+// -2 -6
+`Interpretación fisiológica: Un excesivo autodominio al tratar de ganar la consideración y estima de los 
+demás ha dado lugar a tensión especial (especialmente en los lugares séptimo y octavo; de un modo mucho 
+menos importante en los puestos sexto y séptimo).
+Interpretación psicológica: Tiene una necesidad que todavía no ha sido satisfecha, de asociarse con 
+aquellos cuyas normas de vida sean tan elevadas como las suyas y descollar sobre el común de la gente. 
+Esto lo somete a una gran tensión, pero permanece firme en sus actitudes a pesar de la falta de aprecio.
+Encuentra esta situación incómoda y le gustaría salir de ella, mas evita comprometerse con cualquier juicio. 
+Incapaz de resolverse, porque siempre pospone el tomar las decisiones apropiadas dudando de su capacidad 
+para sostener la oposición que resultaría de ello. Necesita el afecto de los demás, la aceptación de sus 
+deseos y el respeto a sus opiniones hasta que pueda sentirse tranquilo y seguro.
+Resumen: Exigencia terca pero ineficaz de estima.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -2 -7
+`Interpretación fisiológica: Una frustración derivada de restricciones inaceptables sobre su libertad 
+de acción está produciendo tensión (especialmente en los lugares séptimo y octavo; de un modo mucho 
+menos importante en los puestos sexto y séptimo).
+Interpretación psicológica: Busca independencia y estar libre de cualquier restricción y, por lo tanto, 
+evita obligaciones o todo lo que pueda ser un impedimento.
+Está sometido a una gran presión y quiere escapar de ella de modo que pueda obtener lo que necesita 
+pero le falta con frecuencia la suficiente fortaleza en sus propósitos para tener éxito.
+Resumen: Deseo frustrado de independencia y libertad de acción.
+(El grupo + es necesario, por lo tanto, como compensación.)`
 
 //-----------------------------------------------------------------------------------------------------------
 
+// -3
+`Interpretación fisiológica: El intento de resistir cualquier estimulación nueva ha resultado en un 
+estado de agitación reprimida y contenida que lo lleva a irritabilidad, accesos de ira e incluso
+neurosis sexuales. Existe la posibilidad de que se sienta afectado por trastornos cardíacos. 
+(Resulta especialmente significativo en el lugar octavo, pero también lo es en el puesto sexto.)
+Interpretación psicológica: La situación se considera como amenazadora y peligrosa. Se violenta ante la 
+idea de que le es imposible alcanzar sus objetivos y se aflige con su sentimiento de impotencia para 
+solucionarlo. Tiene la sensación de estar solicitado en exceso y de estar acosado posiblemente hasta el 
+punto de llegar a una postración nerviosa.
+Resumen: Impotencia.
+(El grupo + es necesario. por lo tanto. como compensación.)`
+
+// -3 -0
+`Interpretación fisiológica: El intento de resistir cualquier estimulación nueva ha resultado en un 
+estado de agitación reprimida. Se encuentra impaciente errático e irritable con la posibilidad de que
+se sienta afectado por hipertensión u otros trastornos cardíacos (especialmente en los lugares séptimo 
+y octavo, pero también en menor grado en los puestos sexto y séptimo).
+Interpretación psicológica: La situación se considera como amenazadora y peligrosa. Se resiente de 
+que todo aquello por lo cual había luchado con tanta intensidad corre peligro de serle arrebatado, 
+está desesperado porque se considera impotente para impedirlo; teme que va a perderlo todo sin más. 
+Es incapaz de ver la situación objetivamente, y está tan agitado que no puede descansar en sus  intentos 
+de apartar esa amenaza a sus deseos. Tiene la sensaci6n de estar solicitado en exceso y de estar acosado 
+posiblemente hasta el punto de una postración nerviosa.
+Resumen: Agitación desesperada. 
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -3 -1
+`Interpretación fisiológica: El intento de resistir cualquier nueva estimulación, unida a la incapacidad 
+de ponerse laxo, han resultado  en  un  estado de agitación reprimida y lo han empujado a ir más allá 
+de sus posibilidades. Se encuentra impaciente, irritable y febril con la posibilidad de que se sienta 
+afectado por trastornos cardíacos.
+Interpretación psicológica: Está angustiado por el estado poco satisfactorio de cierta asociación íntima. 
+Se siente incapaz de hacer algo para restablecer la cordialidad y la confianza mutua y considera que 
+está ligado a una situación desdichada de la que no puede escapar.
+Resumen: Angustia originada por desarmonía. 
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -3 -2
+`Interpretación fisiológica: Una impotencia agitada y la incapacidad de controlar los acontecimientos 
+lo están sometiendo, o a gran tensión. Existe la posibilidad de que se sienta afectado por trastornos 
+cardíacos y / o espasmos musculares.
+Interpretación psicológica: Está gravemente angustiado por todo lo que se le presenta como un 
+ambiente hostil. Se siente sometido a una gran presión y manejado contra su voluntad. 
+Es rebelde y se resiente de todo lo que considera como exigencias irrazonables que se le hacen, pero 
+se considera sin fuerzas para controlar la situación e incapaz de protegerse de ésta de algún modo.
+Resumen: Resentimiento impotente.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -3 -4
+`Interpretación fisiológica: Existen tensiones, como resultado de frustraciones, que lo han llevado a 
+un estado agitado y ansioso.
+Interpretación psicológica: Está deseoso de causar una buena impresión pero preocupado e inseguro 
+sobre sus probabilidades de éxito. Juzga que tiene derecho a todo lo que pueda aspirar, y se vuelve 
+desvalido y angustiado cuando las circunstancias se ponen en su contra.Encuentra unta nueva posibilidad 
+de fracaso muy perturbadora y esto lo puede llevar a una postración nerviosa. Se considera a sí mismo 
+como una "víctima", que ha sido mal dirigido y se ha abusado de él; confunde esta representación con 
+la realidad misma y trata de convencerse de que su fracaso en conseguir posición y reconocimiento es por 
+culpa de los demás.
+Resumen: Autodefensa poco realista.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -3 -5
+`Interpretación fisiológica: Se originan tensiones a causa de la frustración por los intentos fallidos  
+de alcanzar seguridad y comprensión (especial mente en los lugares séptimo y octavo; de un modo mucho 
+menos importante en los puestos sexto y séptimo).
+Interpretación psicológica: Responde a los estímulos externos y quiere experimentarlo todo con intensidad, 
+pero encuentra la situación presente frustrante en extremo. Necesita comprensión empática y sensación 
+de seguridad. Está angustiado por su aparente impotencia en alcanzar sus objetivos.
+Resumen: Empatía frustrada.
+(El grupo + es necesario. por lo tanto, como compensación.)`
+
+// -3 -6
+`Interpretación fisiológica: Se origina tensión a causa de postración nerviosa o de situaciones 
+tensas sexuales debidas a un excesivoautocontrol (en los lugares séptimo y octavo; 
+menor en los puestos sexto y séptimo).
+Interpretación psicológica: Se siente poco apreciado y halla su situación presente desagradable. 
+Necesita reconocimiento personal y afecto para compensar la ausencia de otros con un modo de pensar 
+igual al suyo y con quien asociarse para sentirse más seguro. Su autocontrol sensual le impide poder 
+darse con facilidad, pero el aislamiento resultante lo apremiaa entregarse y unirse con alguien. 
+Esto lo perturba puesto que considera tales instintos como una debilidad que se debe superar; 
+cree que sólo no dejándose arrastrar por ellos puede sostener las dificultades de la situación. 
+Quiere ser considerado como un compañero deseable y ser admirado por sus cualidades personales.
+Resumen: Inseguridad que se origina en la falta de amistades.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -3 -7
+`Interpretación fisiológica: Frustraciones causadas por una situación que no se quería han dado lugar 
+a tensión (principalmente en los lugares séptimo y octavo; mucho menos en los puestos sexto y séptimo).
+Interpretación psicológica: Se considera aprisionando en la situación desagradable e impotente 
+para solucionarla. Está enojado y disgustado al mismo tiempo que duda si será capaz de lograr 
+sus objetivos; se siente frustrado casi hasta el punto de postración nerviosa. Quiere escapar, 
+sentirse menos coartado y más libre para tomar sus propias decisiones.
+Resumen: Deseo frustrado de independencia.
+(El grupo + es necesario, por lo tanto, como compensación.)`
 
 //-----------------------------------------------------------------------------------------------------------
 
+// -4
+`Interpretación fisiológica: Existen tensiones, como resultado de frustraciones, que lo han llevado 
+a un estado de agitación (especialmente en el lugar octavo; mucho menos en el puesto sexto).
+Interpretación psicológica: Esperanzas irrealizadas le han llevado a un estado de incertidumbre 
+y aprehensión. Necesita sentirse seguro y evitar cualquier otra decepción; teme ser preterido o perder 
+posición y prestigio. Duda que las cosas le vayan mejor en adelante y esta actitud negativa lo lleva a 
+exigir demasiado; rechaza comprometerse en algo razonable.
+Resumen: Pesimismo agitado; temeroso de perder prestigio.
+(E1 grupo + es necesario, por lo tanto, como compensación.)`
+
+// -4 -0
+`Interpretación fisiológica: Su estado de agitada tensión ha sido el resultado de incertidumbres 
+y preocupaciones sobre oportunidades perdidas (especialmente en los lugares séptimo y octavo; mucho 
+menos en los puestos sexto y séptimo).
+Interpretación psicológica: Cree que la vida debe proporcionarle más de lo que le ha dado hasta hora, 
+que sus esperanzas y deseos deben realizarse de algún modo; de hecho juzga que éstos le deben ser 
+concedidos por completo. La incertidumbre presente le produce gran preocupación y se encuentra en una 
+tensión expectante para no perder ninguna oportunidad. Está ansioso de evitar más contrariedades y 
+cualquier disminución de posición o prestigio. Intenta asegurarse de que no será despreciado; necesita 
+urgentemente seguridad.
+Resumen: Expectación tensa. 
+(El grupo + es necesario. por lo tanto, como compensación.)`
+
+// -4 -1
+`Interpretación fisiológica: Decepciones sentimentales han dado lugar a tensión y ansiedad 
+(especialmente en los lugares séptimo y octavo, pero también en los puestos sexto y séptimo).
+Interpretación psicológica: Una asociación sentimental ya no se está desarrollando con suavidad ha 
+sido profundamente decepcionante y es considerada ahora como un vínculo depresivo. Aunque por una parte 
+querría librarse del todo de esa unión por otra sin embargo, no quiere perder nada ni arriesgar su 
+seguridad y ponerse en peligro o ante la posibilidad de una nueva decepción. Estos sentimientos 
+contradictorios lo perjudican de tal modo que trata de suprimirlos con una actitud fría y severa.
+Resumen: Tensión originada por una decepción sentimental.
+(El grupo + es necesario. por lo tanto, como compensación.)`
+
+// -4 -2
+`Interpretación fisiológica: Tensión y ansiedad que se ha originado por un conflicto entre la esperanza 
+y la necesidad, después de un gran desengaño.
+Interpretación psicológica: Decepciones y esperanzas irrealizadas han dado lugar una incertidumbre 
+ansiosa; al mimo tiempo duda que las cosas sean me en el futuro y, en consecuencia, pospone las decisiones 
+esenciales. Este conflicto entre la esperanza y la necesidad el creando una gran tirantez; en vez de 
+resolver éste, encarándolo para tomar decisiones definitivas, es muy probable que se dedique a la búsqueda 
+de futilidades como escapatoria.
+Resumen: Vacilación frustrada.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -4 -3
+`Interpretación fisiológica: Existen tensiones, como resultado de frustraciones, que lo han llevado 
+a un estado agitado y ansioso.
+Interpretación psicológica: Está deseo de causar una buena impresión pero reocupado e inseguro sobre 
+sus probabilidades de éxito. Juzga que tiene derecho a todo lo que pueda aspirar, y se vuelve desvalido 
+y angustiado cuando las circunstancias se ponen en su contra. Encuentra una nueva posibilidad de fracaso 
+muy perturbadora y esto lo puede llevar a una postración nerviosa. Se considera a sí mismo como una 
+"víctima', que ha sido mal dirigido y se ha abusado de él; confunde esta representación conla realidad 
+misma y trata de convencerse de que su fracaso en conseguir posición y reconocimiento es 
+por culpa de los demás.
+Resumen: Autodefensa poco realista. 
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -4 -5
+`Interpretación fisiológica:Un desengaño lo ha llevado a un estado de susceptibilidad, a un aislamiento 
+coartado de los demás y a un retraimiento en sí mismo (en los lugares séptimo y octavo; mucho menos 
+en los puestos sexto y séptimo).
+Interpretación psicológica: Suprime su entusiasmo innato y su naturaleza imaginativa por miedo de que 
+pueda ser arrastrado por ellos y encontrarse persiguiendo sólo quimeras. Juzga que ha sido mal dirigido 
+y se ha abusado de él; se ha retraído para mantenerse precavidamente distante de los demás. 
+Tiene cuidado y observa críticamente los móviles de los que se le acercan para ver si son sinceros: 
+una vigilancia que con facilidad se convierte en suspicacia y desconfianza.
+Resumen: "Gato escaldado del agua fría huye"; decepción sentimental que lo lleva a un recelo 
+vigilante de los móviles de los demás. 
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -4 -6
+`Interpretación fisiológica: Tensión que resulta del esfuerzo por encubrir la ansiedad bajo  
+una capa de confianza en sí mismo y despreocupación (principalmente en los lugares séptimo y octavo; 
+mucho menos en los puestos sexto y séptimo).
+Interpretación psicológica: La situación presente es desagradable. Se siente solo e inseguro al mismo 
+tiempo que tiene una necesidad insatisfecha de asociarse con aquellos cuyas normas de vida sean tan 
+elevadas como las suyas; quiere descollar sobre el común de la gente. Esta sensación de aislamiento 
+magnifica y convierte su necesidad en una apetencia compulsiva que resulta sumamente perturbadora a su 
+autosuficiencia debido al dominio de sí que normalmente se impone. Puesto que quiere demostrar la 
+disposición especial de su personalidad, trata de suprimir esa necesidad delante de otros y aparenta una 
+actitud de despreocupada confianza en sí mismo para encubrir su temor a comportarse de modo inadecuado 
+tratando con desprecio a aquellos que critican su conducta. Sin embargo bajo esa aparente indiferencia 
+ansía en realidad la aprobación y el aprecio de los demás. 
+Resumen: Decepción que lleva a una supuesta indiferencia. 
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -4 -7
+`Interpretación fisiológica: Tensión que resulta de decepciones y una vigilante autoprotección contra 
+posteriores contrariedades (principalmente en los lugares séptimo y octavo).
+Interpretación psicológica: Esperanzas irrealizadas lo han llevado a una inseguridad ya una tensa 
+vigilancia. Insiste en la libertad de acción y se resiente de cualquier tipo de control que no sea el 
+que él mismo se imponga. Reticente a irse sin algo o a abandonarlo; exige seguridad como protección 
+contra posteriores contrariedades o pérdidas de posición y prestigio. Duda que las cosas mejoren en el 
+futuro y esa actitud negativa lo lleva a exigir demasiado; rechaza comprometerse en algo razonable.
+Resumen: Vigilante y cauteloso.
+(El grupo + es necesario, por lo tanto, como compensación.)`
 
 //-----------------------------------------------------------------------------------------------------------
 
+// -5
+`Interpretación fisiológica: Tensión debida a la supresión de la sensibilidad (solamente en lugar octavo; 
+tensión leve si no es clasificado como "ansiedad").
+Interpretación psicológica: Se recrea en todo lo que es de buen gusto, gracioso y sensible, pero mantiene 
+su actitud critica y rechaza ser arrastrado por el magnetismo de alguien amenos de que se le garantice 
+absoluta genuinidad e integridad. Conserva, por lo tanto, un control estricto y vigilante sobre sus 
+relaciones sentimentales puesto que debe conocer con exactitud en qué situación se halla. 
+Exige sinceridad total como protección contra su propia tendencia a ser excesivamente confiado.
+Resumen: Correspondencia controlada y analítica.`
+
+// -5 -0
+`Interpretación fisiológica: Muestra impaciencia y agitación (solamente en los lugares séptimo y octavo; 
+leve si no es clasificado como "ansiedad").
+Interpretación psicológica: Siente que la vida tiene mucho más que ofrecer y que es imperativo encontrar 
+la asociación responsiva y comprensiva que está buscando; acepta, por lo tanto, todas las oportunidades 
+que se le presentan. Sin embargo, mantiene su actitud crítica y rechaza ser arrastrado por el magnetismo 
+de alguien, amenos de que se le garantice absoluta genuinidad e integridad. Conserva, por lo tanto, 
+un control estricto y vigilante sobre sus asociaciones sentimentales puesto que debe conocer con exactitud 
+en qué situación halla. Exige sinceridad total como protección contra su propia tendencia a confiado.
+Resumen: Correspondencia controlada.`
+
+// -5 -1
+`Interpretación fisiológica: Rechaza ponerse laxo o darse por vencido. Mantiene el agotamiento y la 
+depresión bajo control, conservándose activo (especialmente en los lugares séptimo y octavo; 
+en los puestos sexto y séptimo).
+Interpretación psicológica: Una asociación sentimental es poco satisfactoria; siente incapaz de cambiarla 
+sin cooperación; la necesidad de comprensión y concesiones afectivas mutuas continúa sin realizarse. 
+Esto no sólo lo deprime, sino que lo vuelve también irritable impaciente, produciéndole desasosiego un 
+apremio de escapar de esta situación, ya sea de hecho o, al menos, con su imaginación. Su capacidad para 
+concentrarse puede disminuir. 
+Resumen: Desasosiego causado por satisfacción sentimental.
+(El grupo + es necesario, por la tan como compensación.)`
+
+// -5 -2
+`Interpretación fisiológica: El sentimiento de haber recibido desprecios e incomprensiones se ha 
+convertido en una gran tensión, (especialmente en los lugares séptimo y octavo; algo menos 
+en los puestos sexto y séptimo).
+Interpretación psicológica: Se siente, una posición desagradable; la confianza, el aprecio y la 
+comprensión le son negados y es tratado con una falta de consideración humillante. Juzga que se lo ha 
+valorado de un modo inferior al que necesita para su autoestima, y que no hay nada que pueda hacer 
+sobre ello. Está desanimado por la batalla solitaria que sostiene contra todas las adversidades, sin 
+recibir ningún aliento. Se siente desorientado y que, en lugar de la admiración que necesita, es siempre 
+mal interpretado. Quiere escapar de esta situación, pero no puede encontrar la fuerza mental para tomar 
+la decisión apropiada.
+Resumen: Humillado por falta de aprecio.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -5 -3
+`Interpretación fisiológica: Se originan tensionesa causa de la frustración por los intentos fallidos 
+de alcanzar seguridad comprensión. Su equilibrio nervioso puede resentirse gravemente, existiendo la 
+posibilidad de trastornos cardíacos (especialmente en los lugares séptimo y octavo; algo menos en 
+los puestos sexto y séptimo).
+Interpretación psicológica: Responde a los estímulos externos y quiere experimentarlo todo con intensidad, 
+pero encuentra la situación presente frustrante en extremo. Necesita comprensión empática y sensación de 
+seguridad. Está angustiado por su aparente impotencia en alcanzar sus objetivos.
+Resumen: Frustración sentimental empática. 
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -5 -4
+`Interpretación fisiológica: Un desengaño lo ha llevado a un estado de susceptibilidad, a un aislamiento 
+coartado de los demás ya un retraimiento en sí mismo (en los lugares séptimo y octavo; menos, en los 
+puestos sexto y séptimo).
+Interpretación psicológica: Suprime su entusiasmo innato y su naturaleza imaginativa por miedo de que 
+pueda ser arrastrado por ellos y encontrarse persiguiendo sólo quimeras. Juzga que ha sido mal dirigido 
+y se ha abusado de él; se ha retraído para mantenerse precavidamente distante de los demás. 
+Tiene cuidado y observa críticamente los móviles de los que se le acercan para ver si son sinceros: 
+una vigilancia que con facilidad se convierte en suspicacia y desconfianza.
+Resumen: "Gato escaldado, del agua fría huye"; decepción sentimental que lo lleva a un recelo vigilante 
+de los móviles de los demás. 
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -5 -6
+`Interpretación fisiológica: Se origina tensión por la incapacidad para mantener relaciones firmes 
+en una condición deseable (solamente en los en los lugares séptimo y octavo; leve si no se clasifica 
+como "ansiedad").
+Interpretación psicológica: Quiere una pareja con quien pueda compartirlo todo en una atmósfera de 
+despejada serenidad, pero su compulsión por demostrar su individualidad lo lleva a adoptar una actitud 
+crítica y exigente. Ello produce discordias y lo lleva a alternar unos períodos de aproximación íntima con 
+otros de alejamiento, de modo que no permite el desarrollo del estado ideal que ansía. A pesar del apremio 
+de satisfacer sus deseos naturales, se impone un gran autodominio sobre sus instintos en la creencia de 
+que esto prueba su superioridad y lo levanta por encima del común de la gente. Es perspicaz, crítico y 
+especial; tiene buen gusto y distinción. Estas cualidades, junto con su tendencia a adoptar sus propios 
+puntos de vista lo capacitan para juzgar las cosas por sí mismo y expresar sus opiniones con autoridad. 
+Le gusta lo original, lo ingenioso y lo sutil; se esfuerza por asociarse con otros de gustos parecidos que 
+puedan ayudarlo en su desarrollo intelectual. Desea la admiración y el aprecio de los demás.
+Resumen: Distinción intelectual o estética.`
+
+// -5 -7
+`Interpretación fisiológica: Tensiones que resultan de restricciones limitaciones molestas 
+(solamente si es clasificado como "ansiedad"  en  los lugares séptimo y octavo).
+Interpretación psicológica: Se esfuerza por lograr relaciones sinceras, fundadas en la mutua confianza y 
+comprensión. Desea actuar sólo en conformidad con sus propias convicciones. Exige libertad para tomar 
+sus decisiones sin interferencias, influencias externas o necesidad de hacer componendas. 
+Resumen: Exige independencia y "trato sincero".`
 
 //-----------------------------------------------------------------------------------------------------------
 
+// -6
+`Interpretación fisiológica: Tensión que se origina en la supresión de deseos somáticos o sexuales y 
+la insuficiente consideración por las necesidades orgánicas (sólo y especialmente en el lugar octavo, si
+es clasificado como "ansiedad").
+Interpretación psicológica: Tiene Una necesidad insatisfecha de asociarse con aquellos cuyas normas de 
+vida sean tan elevadas como las suyas; quiere descollar sobre los demás. Este deseo de sobresalir lo 
+aísla e inhibe su disposición para darse libremente. Aunque quiere entregarse y dejarse llevar, considera 
+que ello es Una debilidad que debe ser resistida. Cree que este autocontrol lo elevará sobre el común de 
+la gente y le asegurará el reconocimiento de tener una personalidad única y distintiva.
+Resumen: Exige estima de los demás.`
+
+// -6 -0
+`Interpretación fisiológica: Tensión que se origina de la supresión de deseos somáticos o sexuales y 
+la insuficiente consideración por lasnecesidades orgánicas (sólo y especialmente en los lugares séptimo 
+y octavo si es clasificado como "ansiedad").
+Interpretación psicológica: La situación presente es desagradable. Tiene un deseo insatisfecho de 
+asociarse con aquellos cuyas normas de vida sean tan elevadas como las suyas y descollar sobre el común 
+de la gente. Su control sobre los instintos sensuales limita su capacidad para darse, pero el aislamiento 
+resultante lo apremia a entregarse y buscar la unión con alguien. Esto lo perturba puesto que considera 
+tales instintos como una debilidad que se debe superar. Cree que sólo con un autocontrol permanente 
+puede esperar mantener su actitud de superioridad individual. Quiere ser amado y admirado por sí mismo; 
+necesita atención, reconocimiento y estima de los demás.
+Resumen: Exige estima como si se tratara de un individuo excepcional.`
+
+// -6 -1
+`Interpretación fisiológica: La insatisfacción sentimental y la falta de aprecio lo han llevado a una 
+gran tensión y a un autocontrol excesivo (en los lugares séptimo y octavo; menos acentuado en los 
+puestos sexto y séptimo).
+Interpretación psicológica: Juzga que debe recibir colaboración antes de que pueda mejorarse la situación 
+presente. La falta de comprensión y aprecio lo hacen sentir que no existe ninguna ligazón afectiva real, 
+y la insatisfacción da lugar a una susceptible sensibilidad; quiere sentirse más seguro y más tranquilo. 
+Le gustaría romper unas ataduras que ahora considera depresivas y restablecer su propia individualidad. 
+Su autocontrol de los sentidos le impide darse con facilidad, pero el aislamiento resultante lo apremia 
+a entregarse y buscar la unión con alguien. Esto lo perturba puesto que considera tales instintos como 
+una debilidad que se debe superar; cree que sólo puede afirmar su propia individualidad con un permanente 
+autocontrol y que sólo así puede mantenerse firme por encima de sus dificultades presentes.
+Resumen: Insatisfacción sentimental originada por falta de aprecio y autocontrol desproporcionado. 
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -6 -2
+`Interpretación fisiológica: Un excesivo autodominio al tratar de ganar la consideración y estima de los   
+demás ha dado lugar a tensión (especialmente en los lugares séptimo y octavo; menos acentuado, 
+aunque todavía significativo, en los puestos sexto y séptimo).
+Interpretación psicológica: Tiene una necesidad, que todavía no ha sido satisfecha, de asociarse con 
+aquellos cuyas normas de vida sean tan elevadas como las suyas y descollar sobre el común de la gente. 
+Esto lo somete a una gran tensión, pero permanece firme en sus actitudes a pesar de la falta de aprecio. 
+Encuentra esta situación incómoda y le gustaría salir de ella, mas evita comprometerse con cualquier juicio. 
+Incapaz de resolverse, porque siempre pospone el tomar las decisiones apropiadas dudando de su capacidad 
+para sostener la oposición que resultaría de ello. Necesita el afecto de los demás, la aceptación de sus 
+deseos y el respeto a sus opiniones hasta que pueda sentirse tranquilo y seguro.
+Resumen: Exigencia terca pero ineficaz de estima. 
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -6 -3
+`Interpretación fisiológica: Tensión que se origina en la supresión de deseos somáticos o sexuales y 
+la insuficiente consideración por las necesidades orgánicas (especialmente en los lugares séptimo y 
+octavo; levemente menos grave en los puestos sexto y séptimo).
+Interpretación psicológica: Se siente poco apreciado y halla su situación presente desagradable. 
+Necesita reconocimiento personal y afecto para compensar la ausencia de otros con un modo de pensar igual 
+al suyo y con quien asociarse para sentirse más seguro. Su autocontrol sensual le impide poder darse con 
+facilidad, pero el aislamiento resultante lo apremia a entregarse y unirse con alguien. Esto lo perturba 
+puesto que considera tales instintos como una debilidad que se debe superar: cree que sólo de este modo 
+puede sostener las dificultades de la situación. Quiere ser considerado como un compañero deseable y ser 
+admirado por sus cualidades personales.
+Resumen: Inseguridad que se origina en la falta de amistades. 
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -6 -4
+`Interpretación fisiológica: Tensión que resulta del esfuerzo por encubrir la ansiedad y angustia bajo   
+una capa de en sí mismo y despreocupación (especialmente en los lugares séptimo y octavo; menos acentuado, 
+aunque toda vía significativo, en los puestos sexto y séptimo.)
+Interpretación psicológica: La situación presente es desagradable. Se siente solo e inseguro al mismo 
+tiempo que tiene una necesidad insatisfecha de asociarse con aquellos cuyas normas de vida sean tan 
+elevadas como las suyas; quiere descollar sobre el común de la gente. Esta sensación de aislamiento 
+magnifica y convierte su necesidad en una apetencia compulsiva que resulta sumamente perturbadora a su 
+autosuficiencia debido al dominio de sí que normalmente se impone. Puesto que quiere demostrar la 
+disposición especial de su personalidad, trata de suprimir esa necesidad delante de otros y aparenta una 
+actitud de despreocupada confianza en sí mismo para encubrir su temor a comportarse de un modo inadecuado, 
+tratando con desprecio a aquellos que critican su conducta.Sin embargo, bajo esa aparente indiferencia 
+ansía en realidad la aprobación y el aprecio de los demás.
+Resumen: Decepción que lleva a una supuesta indiferencia.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -6 -5
+`Interpretación fisiológica: Se origina tensión por la incapacidad para mantener relaciones firmes en 
+una condición deseable (solamente en los lugares séptimo y octavo; leve, si no se clasifica como “ansiedad").
+Interpretación psicológica: Es sensible y le afecta la nobleza y delicadeza de sentimientos; desea unirse 
+en algún tipo de fusión mística y de armonía erótica. Sin embargo, este deseo permanece sin satisfacer 
+debido a la falta de una pareja adecuada o de condiciones adversas; conserva un control estricto y 
+vigilante sobre sus asociaciones sentimentales puesto que necesita conocer con exactitud en qué situación 
+se halla. Es minucioso, esteta y tiene un sentido cultural que le permite formar y expresar su propio 
+gusto y juicio, especialmente en los ámbitos del arte y de la creación artística. Se esfuerza por 
+asociarse con otros que puedan ayudarlo en su crecimiento intelectual y artístico.
+Resumen: Sensibilidad artística sublimada.`
+
+// -6 -7
+`Interpretación fisiológica: Tensiones que resultan de restricciones o limitaciones molestas (solamente
+significativo si es clasificado como "ansiedad" en los lugares séptimo y octavo; de otro modo, 
+denota sólo el deseo normal, de independencia).
+Interpretación psicológica: Quiere libertad para seguir sus propias convicciones y principios, para 
+alcanzar respeto como persona por sus propias cualidades. Desea aprovechar todas las oportunidades sin 
+tener que someterse a limitaciones o restricciones.
+Resumen: Deseo de regir su propio destino.` 
 
 //-----------------------------------------------------------------------------------------------------------
 
+// -7
+`Interpretación fisiológica: Tensión que se origina por la intensidad de sentimiento, de esfuerzo, etc. 
+(tal como la indiquen los otros colores). (Sólo resulta especialmente significativo si se clasifica como 
+"ansiedad" en el lugar octavo; de otro modo es normal.)
+Interpretación psicológica: Desea ser independiente, estar desligado de ataduras y libre de cualquier 
+limitación o restricción, excepto aquellas que él mismo se imponga por su propia elección y decisión.
+Resumen: Deseo de tener control sobre su propio destino.`
+
+// -7 -0
+`Interpretación fisiológica: Existe una susceptibilidad acentuada a todos los estímulos externos  
+(en los lugares séptimo y octavo y, principalmente, cuando es clasificado como “ansiedad").
+Interpretación psicológica: Quiere superar 16 falta de sentido de su existencia y la brecha que lo separa 
+de los demás. Cree que la vida tiene mucho que ofrecer y que él puede perder su parte correspondiente de 
+experiencias si fracasa en hacer el mejor empleo posible de todas las oportunidades. En consecuencia, 	
+persigue sus objetivos con vehemente intensidad y se entrega a ello con profundidad y rapidez. 
+Se siente totalmente competente en cualquier campo al que se dedique; algunas veces puede ser considerado 
+por los demás como entrometido y curioso.
+Resumen: Dedicación intensa.`
+
+// -7 -1
+`Interpretación fisiológica: La insatisfacción sentimental ha dado lugar a un deseo susceptible e 
+impaciente de independencia, conduciéndolo a una gran tensión y desasosiego (especialmente en los 
+lugares séptimo y octavo, pero también en los puestos sexto y séptimo).
+Interpretación psicológica: Alguna situación presente o alguna 	relación es poco satisfactoria, pero se 
+siente incapaz de mejorarla sin colaboración benévola. No quiere exponer su lado más vulnerable y, 
+por lo tanto considera inoportuno mostrar afecto o ser demasiado demostrativo. Considera esa asociación 
+como una unión depresiva porque, aunque quiere ser independiente y estar libre, no desea arriesgar la 
+pérdida de nada. Todo esto lo lleva a reaccionar con susceptibilidad e impaciencia mientras su apremio 	
+para escapar se convierte en un gran desasosiego. La capacidad 	para concentrarse puede disminuir.
+Resumen: Desequilibrio desasosegado originado por falta de 	satisfacción afectiva. 
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -7 -2
+`Interpretación fisiológica: Una frustración derivada de restricciones inaceptables sobre su libertad de   
+acción está produciendo tensión(especialmente en los lugares séptimo y octavo, pero también en los 
+puestos sexto y séptimo).
+Interpretación psicológica: Busca independencia y estar libre de cualquier restricción y, por lo tanto, 
+evita obligaciones o todo lo que pueda ser un impedimento. Está sometido a una gran presión y 	
+quiere escapar de ella de modo que pueda obtener lo que necesita, pero le falta con frecuencia la 
+suficiente fortaleza en sus propósitos para tener éxito.
+Resumen: Deseo frustrado de independencia y libertad de acción. 
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -7 -3
+`Interpretación fisiológica: Frustraciones causadas por una situación que no se quería han dado lugar 
+a tensión (especialmente en los lugares séptimo y octavo, pero también en los puestos sexto y séptimo).
+Interpretación psicológica: Se considera aprisionado en una situación desagradable e impotente para 
+solucionarla. Está enojado y disgustado, al mismo tiempo que duda si será capaz de lograr sus objetivos; 
+se siente frustrado casi hasta el punto de postración nerviosa. Quiere escapar, sentirse menos coartado 
+y más libre para tomar sus propias decisiones.
+Resumen: Deseo frustrado de independencia. 	
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -7 -4
+`Interpretación fisiológica: Tensión que resulta de decepciones y una vigilante autoprotección 
+contra posteriores contrariedades (especialmente en los lugares séptimo y octavo, pero también en 
+los puestos sexto y séptimo).
+Interpretación psicológica: Esperanzas irrealizadas lo han llevado a una inseguridad ya una tensa 
+vigilancia. Insiste en la libertad de acción y se resiente de cualquier tipo de control que no sea 
+el que él mismo se imponga. Reticente a irse sin algo o a abandonarlo; exige seguridad como protección 
+contra posteriores contrariedades o pérdidas de posición y prestigio. Duda que las cosas mejoren en el 
+futuro y esa actitud negativa lo lleva a exigir demasiado; rechaza comprometerse en algo razonable.
+Resumen: Vigilante y cauteloso.
+(El grupo + es necesario, por lo tanto, como compensación.)`
+
+// -7 -5
+`Interpretación fisiológica: Tensiones que resultan de restricciones o limitaciones molestas 
+(en los lugares séptimo y octavo pero principalmente si es clasificado como "ansiedad").
+Interpretación psicológica: Es sensible, impresionable e inclinado a dejarse llevar por entusiasmos 
+absorbentes. Busca una situación ideal (irrealizada hasta el momento) que pueda compartir con otro en 
+total acuerdo y mutua profundidad de comprensión. Cree que existe el riesgo de ser explotado si está 
+excesivamente inclinado a confiar en los demás y, por lo tanto, exige pruebas de su sinceridad. 
+Necesita saber con exactitud en qué situación se halla en las relaciones que entabla.
+Resumen: Exigencias de independencia compartida.`
+
+// -7 -6
+`Interpretación fisiológica: Tensiones que resultan de restricciones o limitaciones molestas 
+(en los lugares séptimo y octavo, pero principalmente si es clasificado como "ansiedad").
+Interpretación psicológica: Resiste cualquier forma de presión que provenga de los demás e insiste en su 
+independencia como persona. Quiere determinarse sin interferencias, sacar él mismo conclusiones y tomar 
+sus propias decisiones. Detesta la uniformidad y la mediocridad. Al desear ser considerado como alguien 
+que expresa sus opiniones con autoridad, encuentra difícil reconocer que se ha equivocado y, a la vez en 
+algunas ocasiones es reluctante a aceptar o comprender los puntos de vista de otro.
+Resumen: Exigencias de independencia y perfeccionismo.`
+
+//-----------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
+
+// +0 -0
+`Denota una actitud ambivalente que varía entre una reserva cautelosa y  el temor de no recibir lo que 
+le es debido.`
+
+// +0 -1
+`La ansiedad y la insatisfacción desasosegada, ya sea por las circunstancias o por las necesidades 
+sentimentales irrealizadas, han producido tensiones graves y leves. Su intento de escapar de ellas 
+consiste en crear por lo menos, un semblante externo apacible no permitiéndose ningún tipo de compromiso.`
+
+// +0 -2
+`Una gran tensión se ha originado a causa del fracaso en establecerse  de un modo acorde a la opinión 
+que tiene de sí mismo ya causa, al mismo tiempo, del esfuerzo permanente en demostrar lo que vale, 
+con recursos inadecuados. Trata de escapar de estas exigencias excesivas a sus menguadas reservas 
+adoptando una actitud defensiva en la cual rechaza cualquier compromiso o envolverse en nuevas 
+cosas desagradables.`
+
+// +0 -3
+`Su vitalidad agotada ha producido intolerancia hacia cualquier nueva estimulación o demanda sobre 
+sus recursos. Este sentimiento de impotencia lo somete a agitación, irritación y grave angustia de 
+las cuales trata de escapar rechazando cualquier nueva participación directa; se limita a una 
+aproximación cautelosa y a una determinación encubierta de salir al fin con la suya.`
+
+// +0 -4
+`La decepción de sus esperanzas irrealizadas y el temor de que si formula nuevos objetivos, 
+sólo vengan nuevos reveses, se han convertido en una gran ansiedad. Trata de escapar de todo ello, 
+aislándose y protegiéndose con una actitud de reserva cautelosa. Voluble y depresivo.`
+
+// +0 -5
+`Necesita protegerse contra su tendencia a ser demasiado confiado, puesto que está expuesto a ser 
+mal entendido o explotado por los demás. Como consecuencia, adopta una actitud crítica y distante, 
+participando de gusto sólo cuando está seguro de la sinceridad y la confiabilidad.`
+
+// +0  -6
+`El deseo insatisfecho de ser respetado y de descollar por encima de  sus compañeros le está 
+causando cierta ansiedad. Como consecuencia, la sociabilidad normal se reprime y rechaza aceptar 		
+compromisos y participar con otros actividades comunes.`
+
+// +0 -7
+`Teme que su independencia esté gravemente amenazada o restringida a menos de que se proteja de 
+toda influencia externa. No quiere ser molestado.`
 
 //-----------------------------------------------------------------------------------------------------------
 
+// +1 -1
+`Denota una actitud ambivalente que varía entre una felicidad relajada y una insatisfacción desasosegada.`
 
+// +1 -0
+`Necesita alcanzar una situación estable y apacible que lo habilite para librarse de las preocupaciones 
+que puedan impedirle lograr todo lo que quiere.`
+
+// +1 -2
+`Las tensiones, graves y leves, producidas al tratar de manipular los factores que están, en realidad 
+fuera de sus posibilidades o exceden sus reservas de energía, lo han llevado a gran ansiedad y a una 
+sensación de inadecuación personal (aunque sin admitirlo). Busca huir a una situación más apacible y 
+libre de problemas, en la cual no tenga ya que hacer valer sus derechos o luchar bajo tanta presión.`
+
+// +1 -3
+`Su vitalidad agotada ha producido intolerancia hacia cualquier nueva estimulación o demanda sobre 
+sus recursos. Este sentimiento de impotencia lo somete a agitación y grave angustia. Trata de escapar 
+de todo ello abandonando la lucha y buscando unas condiciones apacibles y tranquilas donde recuperarse 
+en un ambiente de afecto y seguridad.`
+
+// +1 -4
+`La decepción de sus esperanzas irrealizadas y el temor de que si formula nuevos objetivos, sólo vengan 
+nuevos reveses, se han convertido en gran ansiedad. Trata de escapar de todo ello buscando una asociación 
+apacible y armónica que lo proteja de la insatisfacción y falta de aprecio.`
+
+// +1 -5
+`Necesita protegerse contra su tendencia a ser demasiado confiado, puesto que está expuesto a ser mal 
+entendido o explotado por los demás. Está buscando, por lo tanto, una asociación íntima que le proporcione 
+tranquilidad y comprensión, y en la que cada cual sepa en qué situación se halla el otro.`
+
+// +1 -6
+`Quiere ser apreciado y respetado; esto lo busca mediante una relación íntima y apacible de estima mutua.`
+
+// +1 -7
+`No desea estar envuelto en diferencias de opinión, discordias o discusiones; prefiere que lo dejen en paz.`
 
 //-----------------------------------------------------------------------------------------------------------
 
+// +2 -2
+`Denota una actitud ambivalente que varía entre el autorrealce y el deseo de escapar de las presiones que 
+se le oponen.`
+
+// +2 -0
+`Tiene miedo de que se le impida lograr las cosas que quiere y, por lo tanto, exige que los demás 
+reconozcan el derecho que tiene sobre ellas.`
+
+// +2 -1
+`La ansiedad y la insatisfacción desasosegada, ya sea por las circunstancias o por las exigencias 
+sentimentales irrealizadas, le han producido tensión. Trata de escapar de ello negando su existencia, 		
+encubriendo su insatisfacción bajo unas pretensiones orgullosas, pero ilusorias, deautosuficiencia 
+e independencia.`
+
+// +2 -3
+`Su vitalidad agotada ha producido intolerancia hacia cualquier nueva estimulación o demanda sobre 
+sus recursos. Esta sensación de impotencia, juntamente con la frustración de no poder controlar los 
+sucesos, lo somete a agitación, irritación y grave angustia. Trata de escapar de todo ello con una 
+insistencia obstinada en sus propios puntos de vista, pero su condición general de impotencia lo hace 
+a menudo fracasar en su intento. Es, por lo tanto, muy sensible a la crítica y fácilmente se siente ofendido.`
+
+// +2 -4
+`La decepción y el temor ante la posibilidad de que resulte inútil plantearse nuevos objetivos lo han 
+llevado aun estado de ansiedad. Desea reconocimiento y una posición social pero está preocupado acerca 
+de las perspectivas que tiene de lograrlos. Reacciona protestando contra toda crítica y se opone a cualquier 
+intento de ser influido. Trata de hacer valer sus derechos con un control minucioso de los detalles en un 
+esfuerzo por fortalecer su posición.`
+
+// +2 -5
+`Trabaja para fortalecer su posición social y ayudar a su autoestima examinando sus propias realizaciones 
+(y las de los demás) con sentido crítico y juicio científico. Insiste en dejar las cosas claras e inequívocas.`
+
+// +2 -6
+`Necesita ser considerado y respetado como un individuo extraordinario, de modo que así pueda incrementar 
+su autoestima y sentimiento de valor personal. Se opone a la mediocridad y se fija para sí normas de 
+vida muy elevadas.`
+
+// +2 -7
+`Se opone con todas sus fuerzas a cualquier influencia externa o interferencia en la libertad de tomar 
+sus propias decisiones y hacer sus planes. Trabaja para establecer y fortalecer su propia posición.`
 
 //-----------------------------------------------------------------------------------------------------------
 
+// +3 -3
+`Denota una actitud ambivalente que va ría entre el deseo de salirse con  la suya y la necesidad de 
+que 10 dejen en paz.`
 
+// +3 -0
+`El temor de que se le impida alcanzar las cosas que quiere lo leva a representar su papel con una 
+intensidad febril y apremiante.`
 
+// +3 -1
+`La ansiedad y la insatisfacción desasosegada, ya sean por las circunstancias o por las necesidades 
+sentimentales irrealizadas, le han producido tensión. Trata de escapar de todo ello con una intensa 
+actividad dirigida hacia el éxito personal o hacia una amplia gama de experiencias.`
+
+// +3 -2
+`Las tensiones producidas al tratar de manipular los factores que están,  en realidad, fuera de sus 
+posibilidades o exceden sus reservas de energía lo han llevado a gran ansiedad ya una sensación de 
+inadecuación personal (aunque sin admitirlo). Intenta poner remedio a ello con una intensa actividad y 
+con una insistencia de salirse con la suya. Un defectuoso autocontrol puede conducirle a unas 
+manifestaciones incontrolables de ira.`
+
+// +3 -4
+`La decepción y el temor ante la posibilidad de que resulte inútil plantearse nuevos objetivos lo han 
+llevado aun estado de tensión y ansiedad. Quiere un contacto personal con otros que concuerdan 		
+con él y oportunidades para su desarrollo, pero cree que sus asociaciones son superficiales y que su 
+progreso está impedido. Reacciona con gran actividad y celo encaminado a lograr sus objetivos a toda costa.`
+
+// +3 -5
+`Quiere moverse con libertad y de un modo desinhibido, pero es coartado por su necesidad de fundar todas 
+las cosas sobre bases racionales, coherentes y claramente definidas.`
+
+// +3 -6
+`Se deleita en la acción; quiere ser respetado y apreciado por sus realizaciones personales.`
+
+// +3 -7
+`Lucha contra restricciones y limitaciones; insiste en desarrollarse libremente como resultado de sus 
+propios esfuerzos.`
+
+//-----------------------------------------------------------------------------------------------------------
+
+// +4 -4
+`Denota una actitud ambivalente que varía entre un deseo optimista de realizarse y un pesimismo sombrío.`
+
+// +4 -0
+`El temor de que se le impida lograr las cosas que quiere lo lleva a una búsqueda desasosegada por 
+hallar satisfacción. Embarcándose en actividades ilusorias y sin sentido.`
+
+// +4 -1
+`La ansiedad y la insatisfacción desasosegada ya sea por las circunstancias o por necesidades 
+sentimentales irrealizadas. Le han producido tensión. Se siente incomprendido desorientado y mal 			
+ubicado. Ello le empuja a buscar nuevas condiciones y asociaciones con la esperanza de que éstos le 
+puedan ofrecer una satisfacción y una paz de espíritu mayores.`
+
+// +4 -2
+`Las tensiones producidas al tratar de manipu1ar los factores que está en realidad fuera de sus 
+posibilidades o exceden sus reservas de energía lo han llevado a una gran ansiedad ya una sensación 
+de inadecuación personal (aunque sin admitirla). Reacciona buscando confirmación externa de su capacidad 
+y valer para ayudar a su autoestima. Tiende a culpar a los demás de modo que pueda sacarse de encima su 
+propia culpa. Busca ansiosamente soluciones; está inclinado a inhibiciones y deseos compu1sivos.`
+
+// +4 -3
+`Agitación, impredictibilidad e irritación. Junto con la vitalidad agotada y una intolerancia ante 					
+nuevas demandas, lo han colocado en una posición de la que se siente amenazado por sus circunstancias 
+actuales. Se siente incapaz de solucionar esto con cualquier forma de acción que provenga de él; está 
+esperando angustiosamente que alguna salida le proporcione un modo de escapar de todo ello.`
+
+// +4 -5
+`Es profundamente crítico de las condiciones presentes las cuales juzga que están desorganizadas y 
+definidas con poca claridad. Busca por lo tanto alguna salida que le aclare esta situación y le 
+proporcione un nivel más aceptable de orden y método.`
+
+// +4 -6
+`Se siente insuficientemente valorado en su situación presente y busca otras condiciones diferentes 
+en las cuales tenga una oportunidad de demostrar su valer.`
+
+// +4 -7
+`Se siente coartado e impedido de progresar; busca una solución que le aparte de todas estas limitaciones.`
+
+//-----------------------------------------------------------------------------------------------------------
+
+// +5 -5
+`Denota una actitud ambivalente que varía entre un deseo de sin exigencias y un desprecio por todos 
+aquellos que carecen de gusto y comprensión.`
+
+// +5 -0
+`Tiene temor de que se le impida lograr las cosas que quiere. Esto lo lleva a emplear su gran atracción 
+personal en el trato con los demás, esperando que le facilitara lograr sus objetivos.`
+
+// +5 -1
+`La ansiedad y la insatisfacción desasosegada, ya sea por las circunstancias o por necesidades 
+sentimentales irrealizadas le han producido gran tensión. Trata de huir buscando una atmósfera 			
+idealizada de simpatía y comprensión o un ambiente sustitutivo de esteticismo y belleza.`
+
+// +5 -2
+`Las tensiones producidas al tratar de manipular las factores que están en realidad fuera de sus 
+posibilidades exceden sus reservas de energía lo han llevado a una gran ansiedad y a una sensación 
+de inadecuación personal (aunque sin admitirlo). Trata de escapar de todo ello buscando un mundo 
+sustitutivo en el cual las cosas estén más cerca de sus deseos.`
+
+// +5 -3
+`Su vitalidad agotada ha producido intolerancia hacia cualquier nueva estimulación o demanda sobre 
+sus recursos. Este sentimiento de impotencia lo somete a agitación y grave angustia. Trata de escapar 
+de todo ello buscando un mundo ilusorio sustitutivo en el cual las cosas estén más cerca de sus deseos.`
+
+// +5 -4
+`La decepción y el temor ante la posibilidad de que resulte inútil plantearse nuevos objetivos lo han 
+llevado aun estado de ansiedad; está angustiado por la falta de una asociación íntima y comprensiva. 
+Trata de huir a un mundo sustitutivo en el cual las decepciones hayan desaparecido y las cosas estén 
+más cerca de sus deseos.`
+
+// +5 -6
+`Se impresiona grandemente con la individualidad. La originalidad y la persona de características 
+sobresalientes. Lo que admira que ésta trata de emularlo, y manifiesta originalidad en su propia 				
+personalidad.`
+
+// +5 -7
+`Intenta evitar las críticas e impedir restricciones sobre su libertad de acción y determinarse 
+por sí mismo con el empleo de su gran atracción personal en el trato con los demás.`
+
+//-----------------------------------------------------------------------------------------------------------
+
+// +6 -6
+`Denota una actitud ambivalente que varía entre la necesidad de una seguridad satisfecha y el deseo 
+por un reconocimiento especial.`
+
+// +6 -0
+`El temor de que se le impida lograr los cosas que quiere aumenta su necesidad de libertad y de estar 
+sin conflictos. Busca por lo tanto. Estabilidad y un ambiente en el que pueda ponerse laxo`
+
+// +6 -1
+`La ansiedad y la insatisfacción desasosegada ya sea por las circunstancias o por necesidades 
+sentimentales irrealizadas, le han producido gran tensión. Trata de escapar de todo ello buscando 			
+una seguridad libre de conflictos en la que pueda ponerse laxo y recuperarse.`
+
+// +6 -2
+`Las tensiones producidas al tratar de manipular los factores que están en realidad fuera de sus 
+posibilidades o exceder sus reservas de energía lo han llevado una gran ansiedad ya una sensación de 
+inadecuación personal (aunque sin admitirlo). Trata de escapar de todo ello refugiándose en un ambiente 
+estable y seguro en el cual pueda recuperarse y estar libre de toda nueva exigencia.`
+
+// +6 -3
+`Su vitalidad agotada ha producido intolerancia hacia cualquier nueva estimulación o demanda sobre 
+sus recursos. Esta sensación de impotencia lo somete a un estado agitado y de grave angustia. 		
+Trata de huir a un ambiente estable y seguro en el cual pueda ponerse laxo y recuperarse.`
+
+// +6 -4
+`La decepción y el temor ante la posibilidad de que resulte inútil plantearse nuevos objetivos lo han 
+llevado a un estado de ansiedad; está angustiado por la falta de una asociación íntima y comprensiva o 
+una adecuada valoración. Trata de huir a un ambiente estable y seguro en el que pueda ponerse laxo y 
+sentirse más satisfecho.`
+
+// +6 -5
+`Desea protegerse contra críticas o conflictos y procurarse una posición estable y segura; pero a su 
+vez tiende a ser critico de los demás y resulta difícil de complacer.`
+
+// +6 -7
+`Busca una seguridad y una posición social en la que ya no tenga que ser molestado por exigencias 
+que le impongan.`
+
+//-----------------------------------------------------------------------------------------------------------
+
+// + 7 -0
+`El temor de que se le impida lograr las cosas que quiere le empuja a sumergirse en todo tipo de 
+experiencias, de modo que pueda negar categóricamente que alguna valga la pena. Este desprecio destructivo 
+se convierte en su método de encubrir su impotencia y su profundo y sentimiento de futilidad.`
+
+// +7 -1
+`La ansiedad y la insatisfacción desasosegada ya sea por las circunstancias o por necesidades sentimentales 
+irrealizadas le han producido tensión. Reacciona ocultando esto ante la falta total de comprensi6n por parte 
+de los demás y adoptando una actitud desdeñosa y desafiadora.`
+
+// +7 -2
+`Las tensiones producidas al tratar de manipular los factores que están en realidad fuera de sus 
+posibilidades o exceden sus reservas de energía lo han llevado a una gran ansiedad ya una sensación de
+inadecuación personal (aunque sin admitirlo). Su incapacidad para fortalecer su voluntad le causan una 
+hiper-reacción de oposición obstinada, transfiriendo a otros toda la culpa de sus propios fracasos.`
+
+// +7 -3
+`Su vitalidad agotada ha producido intolerancia hacia cualquier nueva estimulación o demanda sobre sus 
+recursos. Este sentimiento de impotencia lo somete a agitación y grave angustia. Reacciona considerando 
+que ha sido convertido en víctima e insiste con indignación, resentimiento y actitud desafiadora que 
+le permitan seguir su propio camino.`
+
+// +7 -4
+`La decepción y el temor ante la posibilidad de que resulte inútil plantearse nuevos objetivos lo han 
+llevado a un estado de ansiedad, a un vacío ya un autodesprecio no admitido. Su rechazo de aceptar todo 
+esto lo lleva a adoptar actitudes obstinadas y desafiadoras.`
+
+// +7 -5
+`Su capacidad natural para examinarlo todo con juicio crítico ha sido distorsionada, convirtiéndose en 
+una actitud severa de desaprobación con la cual se opone  y desprecia a los demás sin considerar los 
+hechos reales.`
+
+// +7 -6
+`La necesidad de estima para tener la posibilidad de representar algún papel sobresaliente y conseguir 
+una reputación por sí mismo se ha vuelto un imperativo. Reacciona insistiendo en ser el centro de atención 
+y rechaza representar un rol impersonal o de menor importancia.`
+
+//-----------------------------------------------------------------------------------------------------------
