@@ -1,4 +1,3 @@
-// models/cuadernilloColores.model.js
 const db = require('../util/database');
 
 module.exports = class CuadernilloColores {

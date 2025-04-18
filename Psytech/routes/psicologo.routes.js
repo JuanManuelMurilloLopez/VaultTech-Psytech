@@ -67,10 +67,10 @@ router.get('/cuadernillo-otis/:idGrupo/:idAspirante/:idInstitucion', controller.
 // Vista con el análisis de la prueba otis del aspirante
 router.get('/analisis-otis/:idGrupo/:idAspirante/:idInstitucion', controller.getAnalisisOtis);
 
+// Vista con el análisis de la prueba Colores del aspirante
+router.get('/analisis-colores/:idGrupo/:idAspirante/:idInstitucion', controller.getAnalisisColores);
 // CUADERNILLO COLORES
 router.get('/cuadernillo-colores/:idGrupo/:idAspirante/:idInstitucion', controller.getCuadernilloColores);
-
-router.get('/analisis-colores', controller.getAnalisisColores);
 
 router.get('/respuestas-otis', controller.getRespuestasOtis);
 

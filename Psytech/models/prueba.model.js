@@ -229,4 +229,33 @@ module.exports = class Prueba{
             `, [idAspirante, idGrupo]);
     }
 
+    static getRespuestasColores(idAspirante, idGrupo) {
+        return db.execute(`
+            SELECT fase, idColor, posicion
+            FROM seleccionescolores
+            WHERE idAspirante = ? AND idGrupo = ?
+            ORDER BY fase, posicion
+        `, [idAspirante, idGrupo]);
+    }
+
+    
+    static getSeleccionesColores(idGrupo, idAspirante) {
+        return db.execute(`
+            SELECT 
+                SC.idSeleccionColores, 
+                SC.idColor, 
+                SC.posicion, 
+                SC.fase,
+                C.nombreColor, 
+                C.numeroColor, 
+                C.hexColor  
+            FROM seleccionesColores SC
+            JOIN colores C ON SC.idColor = C.idColor
+            WHERE SC.idAspirante = ?
+            AND SC.idGrupo = ?
+            AND SC.idPrueba = 6
+            ORDER BY SC.fase, SC.posicion
+            `, [idAspirante, idGrupo]);
+}
+
 }

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis Colores</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Link css -->
+    <link rel="stylesheet" href="/css/psicologos/analisisColores.css">
+    <!-- CSS navside -->
+    <link rel="stylesheet" href="/css/includeCss/_navsidePsicologo.css">
+    <!-- CSS cerrar sesión -->
+    <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
+</head>
+<body class="">
+    <div class="main">
+        <%- include('../includes/_navsidePsicologo.ejs') %>
+        <div class="container">
+            <%- include('../includes/_buttonCerrarSesion.ejs') %>
+            <h1 class="text-center">Análisis Prueba Colores</h1> <br>
+            
+            <!-- Fases de colores -->
+            <div class="prueba-colores-container">
+                <h5 class="titulo-seccion">Selección Por Fases</h5>
+                <hr>
+
+                <h2 class="fase-titulo">Fase 1</h2>
+                <div class="colores-row">
+                    <% for(let i = 0; i < 8; i++) { %>
+                        <div class="color-item-container">
+                            <% 
+                            const colorEnPosicion = seleccionesFase1.find(s => s.posicion === i);
+                            %>
+                            <div class="color-box" data-color="<%= colorEnPosicion ? colorEnPosicion.hexColor : '#f8f9fa' %>"></div>
+                            <div class="color-number"><%= colorEnPosicion ? colorEnPosicion.numeroColor : '-' %></div>
+                        </div>
+                    <% } %>
+                </div>
+                
+                <h2 class="fase-titulo">Fase 2</h2>
+                <div class="colores-row">
+                    <% for(let i = 0; i < 8; i++) { %>
+                        <div class="color-item-container">
+                            <% 
+                            const colorEnPosicion = seleccionesFase2.find(s => s.posicion === i);
+                            %>
+                            <div class="color-box" data-color="<%= colorEnPosicion ? colorEnPosicion.hexColor : '#f8f9fa' %>"></div>
+                            <div class="color-number"><%= colorEnPosicion ? colorEnPosicion.numeroColor : '-' %></div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+            
+            <!-- Seccion de movilidad -->
+            <div class="movilidad-container">
+                <h5 class="titulo-seccion">Análisis de Movilidad</h5>
+                <hr>
+                
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h5 class="mb-0">Resultado de Movilidad</h5>
+                            </div>
+                            <div class="chart-body">
+                                <p class="card-text">Positivos: +<%= movilidad.positivos %></p>
+                                <p class="card-text">Negativos: -<%= movilidad.negativos %></p>
+                                <h4 class="resultado-movilidad">MOVILIDAD = (+<%= movilidad.positivos %> -<%= movilidad.negativos %>)</h4>
+                                <h3 class="interpretacion-movilidad"><%= interpretacionMovilidad %></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seccion de personalidad y adaptacion -->
+            <div class="personalidad-y-adaptacion-container">
+                <h5 class="titulo-seccion">Personalidad Y Adaptación Al Medio</h5>
+                <hr>
+                
+                <div class="row g-4 mt-3">
+                    <div class="col-md-7">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h6>Gráficas</h6>
+                            </div>
+                            <div class="chart-body">
+                                <canvas id="graficaMixta"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="table-card">
+                            <div class="table-header">
+                                <h6>Resultados Detallados</h6>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table comparison-table">            
+                                    <thead>
+                                        <tr>
+                                            <th>Significado</th>
+                                            <th>Personalidad</th>
+                                            <th>Adaptación</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <%
+                                        const todosSignificados = [
+                                            "Participación",
+                                            "Paciencia",
+                                            "Productividad",
+                                            "Empuje/Agresividad",
+                                            "Sociabilidad",
+                                            "Creatividad",
+                                            "Vigor",
+                                            "Satisfacción"
+                                        ];
+                                    
+                                        for (let significado of todosSignificados) {
+                                            const personalidad = resultadosFase1.find(c => c.significado === significado);
+                                            const adaptacion = resultadosFase2.find(c => c.significado === significado);
+                                            const personalidadVal = personalidad ? personalidad.porcentaje : 0;
+                                            const adaptacionVal = adaptacion ? adaptacion.porcentaje : 0;
+                                        %>
+                                        <tr>
+                                            <td class="significado-cell"><%= significado %></td>
+                                            <td>
+                                                <div class="progress-container">
+                                                    <div class="progress">
+                                                        <div class="progress-bar personalidad-bar" role="progressbar" 
+                                                            style="width: <%= personalidadVal %>%;" 
+                                                            aria-valuenow="<%= personalidadVal %>" aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                    <span class="percent-value"><%= personalidadVal %>%</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="progress-container">
+                                                    <div class="progress">
+                                                        <div class="progress-bar adaptacion-bar" role="progressbar" 
+                                                            style="width: <%= adaptacionVal %>%;" 
+                                                            aria-valuenow="<%= adaptacionVal %>" aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                    <span class="percent-value"><%= adaptacionVal %>%</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Seccion de interpretacion -->
+            <div class="interpretacion-container">
+                <h5 class="titulo-seccion">Interpretación</h5>
+                <hr>
+    
+                
+                <div class="interpretacion-horizontal">
+                    <% 
+                    for (let i = 0; i < parejas.length; i++) { 
+                        const c = parejas[i];
+                        const mostrarFase1 = c.zonas.fase1 && c.zonas.fase1 !== 'N/A';
+                        const mostrarFase2 = c.zonas.fase2 && c.zonas.fase2 !== 'N/A';
+                        if (mostrarFase1 || mostrarFase2) {
+                    %>
+                        <div class="interpretacion-card">
+                            <div class="card-body">
+                                <% if (mostrarFase1) { %>
+                                    <div class="interpretacion-seccion">
+                                        <h6 class="tipo-contenido">Personalidad</h6>
+                                        <p><%= c.texto.fase1 %></p>
+                                    </div>
+                                <% } %>
+                                <% if (mostrarFase2) { %>
+                                    <div class="interpretacion-seccion <%= mostrarFase1 ? 'mt-3' : '' %>">
+                                        <h6 class="tipo-contenido">Adaptación al medio</h6>
+                                        <p><%= c.texto.fase2 %></p>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% 
+                        }
+                    } 
+                    %>
+                </div>
+            </div>
+         
+            <div class="boton-container">
+                <a class="btn btn-color--third boton-regresar-abajo"
+                href="/psicologo/cuadernillo-colores/<%= idGrupo %>/<%= idAspirante %>/<%= idInstitucion %>"
+                >Regresar</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Script del navside -->
+    <script src="/js/_navside.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+            document.addEventListener('DOMContentLoaded', function() {
+        const datosFase1 = <%- JSON.stringify(resultadosFase1) %>; // Personalidad
+        const datosFase2 = <%- JSON.stringify(resultadosFase2) %>; // Adaptación al medio
+
+        // Obtener todos los significados únicos
+        const todosSignificados = [
+            "Participación",
+            "Paciencia",
+            "Productividad",
+            "Empuje/Agresividad",
+            "Sociabilidad",
+            "Creatividad",
+            "Vigor",
+            "Satisfacción"
+        ];
+
+        const personalidadData = todosSignificados.map(significado => {
+            const item = datosFase1.find(c => c.significado === significado);
+            return item ? item.porcentaje : 0;
+        });
+
+        const adaptacionData = todosSignificados.map(significado => {
+            const item = datosFase2.find(c => c.significado === significado);
+            return item ? item.porcentaje : 0;
+        });
+
+
+        const ctx = document.getElementById('graficaMixta');
+        const mixedChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: todosSignificados,
+                datasets: [
+                    {
+                        label: 'Personalidad',
+                        data: personalidadData,
+                        backgroundColor: 'rgba(41, 73, 105, 0.7)', // --secondary
+                        borderColor: 'rgba(41, 73, 105, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        barPercentage: 0.7,
+                        categoryPercentage: 0.8
+                    },
+                    {
+                        label: 'Adaptación al medio',
+                        data: adaptacionData,
+                        backgroundColor: 'rgba(114, 133, 117, 0.7)', // --movilidad-header
+                        borderColor: 'rgba(114, 133, 117, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        barPercentage: 0.7,
+                        categoryPercentage: 0.8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 15,
+                            font: {
+                                family: "'Lato', sans-serif",
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        titleColor: '#333',
+                        bodyColor: '#333',
+                        bodyFont: {
+                            size: 13,
+                            family: "'Lato', sans-serif"
+                        },
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold',
+                            family: "'Lato', sans-serif"
+                        },
+                        padding: 12,
+                        borderColor: 'rgba(0, 0, 0, 0.1)',
+                        borderWidth: 1,
+                        displayColors: true,
+                        boxWidth: 10,
+                        boxHeight: 10,
+                        boxPadding: 3,
+                        usePointStyle: true,
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.dataset.label}: ${context.parsed.y}%`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Lato', sans-serif",
+                                size: 11
+                            },
+                            color: '#666',
+                            padding: 8,
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Lato', sans-serif",
+                                size: 11
+                            },
+                            color: '#666',
+                            padding: 8
+                        }
+                    }
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutQuart'
+                }
+            }
+        });
+    });
+    </script>
+
+    <!-- Poner colores desde data-color -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elegir todos los cuadros de color que tienen data-color
+            const colorBoxes = document.querySelectorAll('.color-box[data-color]');
+            
+            // Pone el color de fondo
+            colorBoxes.forEach(box => {
+                box.style.backgroundColor = box.getAttribute('data-color');
+            });
+        });
+    </script>
+</body>
+</html>
