@@ -752,9 +752,6 @@ function obtenerParejasClasificadas(seleccionesFase1, seleccionesFase2) {
         seleccionesFase2
     );
 
-    // Depuración
-    console.log('Resultado Naturales y Disociadas:', resultadoNaturalesYDisociadas);
-
     // Agregar interpretaciones
     const agregarInterpretaciones = (parejas) => {
         return parejas.map(p => {
@@ -862,10 +859,16 @@ exports.getAnalisisColores = async (request, response, next) => {
             if (zona1 === 'N/A' || zona2 === 'N/A') {
                 return 'Interpretación no disponible para esta combinación.';
             }
+
+            const numeros = pareja.match(/\d+/g);
+            if (!numeros || numeros.length !== 2) {
+                return 'Interpretación no disponible para esta combinación.';
+            }
+            const parejaNormalizada = `${numeros[0]}-${numeros[1]}`;
+            const claveDirecta = `${zona1}|${parejaNormalizada}`;
+            const claveInvertida = `${zona2}|${numeros[1]}-${numeros[0]}`;
+
         
-            const claveDirecta = `${zona1}|${pareja}`;
-            const claveInvertida = `${zona2}|${invertirPareja(pareja)}`;
-              
             if (interpretaciones[claveDirecta]) {
                 return interpretaciones[claveDirecta];
             } else if (interpretaciones[claveInvertida]) {
@@ -873,15 +876,26 @@ exports.getAnalisisColores = async (request, response, next) => {
             } else {
                 return 'Interpretación no disponible para esta combinación.';
             }
-        }                                    
+        }                                        
         
-        // Función para invertir la pareja
         const invertirPareja = (pareja) => {
             const partes = pareja.split('-');
             return `${partes[1]}-${partes[0]}`;
-        };
+        };        
 
-        const parejasConInterpretaciones = agregarInterpretaciones(parejas);
+        const parejasNormalizadas = parejas.map(p => {
+            const numeros = p.pareja.match(/\d+/g); 
+            if (!numeros || numeros.length !== 2) {
+                return p; 
+            }
+        
+            return {
+                ...p,
+                pareja: `${numeros[0]}-${numeros[1]}`
+            };
+        });
+
+        const parejasConInterpretaciones = agregarInterpretaciones(parejasNormalizadas);
 
         // Renderizar la vista con todos los datos
         response.render('Psicologos/analisisColores.ejs', {
@@ -898,7 +912,6 @@ exports.getAnalisisColores = async (request, response, next) => {
         });
     } catch (error) {
         console.error('Error al obtener análisis de colores:', error);
-        response.status(500).send('Error al obtener análisis de colores');
     }
 };
 
