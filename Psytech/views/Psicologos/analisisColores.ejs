@@ -62,11 +62,11 @@
                 
                 <div class="row g-4">
                     <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header text-white">
-                                <h5 class="card-title mb-0">Resultado de Movilidad</h5>
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h5 class="mb-0">Resultado de Movilidad</h5>
                             </div>
-                            <div class="card-body">
+                            <div class="chart-body">
                                 <p class="card-text">Positivos: +<%= movilidad.positivos %></p>
                                 <p class="card-text">Negativos: -<%= movilidad.negativos %></p>
                                 <h4 class="resultado-movilidad">MOVILIDAD = (+<%= movilidad.positivos %> -<%= movilidad.negativos %>)</h4>
@@ -77,55 +77,91 @@
                 </div>
             </div>
             
+            <!-- Seccion de personalidad y adaptacion -->
             <div class="personalidad-y-adaptacion-container">
                 <h5 class="titulo-seccion">Personalidad Y Adaptación Al Medio</h5>
                 <hr>
-            
-            <div class="row g-4 align-items-start">
-                <div class="col-md-7">
-                    <canvas id="graficaMixta"></canvas>
-                </div>
-                <div class="col-md-5">
-                    <div class="tabla-colores">
-                        <table class="table table-bordered">            
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>Significado</th>
-                                    <th>Personalidad</th>
-                                    <th>Adaptación al medio</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                    <%
-                                    const todosSignificados = [
-                                        "Participación",
-                                        "Paciencia",
-                                        "Productividad",
-                                        "Empuje/Agresividad",
-                                        "Sociabilidad",
-                                        "Creatividad",
-                                        "Vigor",
-                                        "Satisfacción"
-                                    ];
-                                
-                                    for (let significado of todosSignificados) {
-                                        const personalidad = resultadosFase1.find(c => c.significado === significado);
-                                        const adaptacion = resultadosFase2.find(c => c.significado === significado);
-                                %>
-                                    <tr>
-                                        <td><%= significado %></td>
-                                        <td><%= personalidad ? personalidad.porcentaje + '%' : '0%' %></td>
-                                        <td><%= adaptacion ? adaptacion.porcentaje + '%' : '0%' %></td>
-                                    </tr>
-                                <% } %>
-                                
-                            </tbody>
-                        </table>                            
+                
+                <div class="row g-4 mt-3">
+                    <div class="col-md-7">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h6>Gráficas</h6>
+                            </div>
+                            <div class="chart-body">
+                                <canvas id="graficaMixta"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="table-card">
+                            <div class="table-header">
+                                <h6>Resultados Detallados</h6>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table comparison-table">            
+                                    <thead>
+                                        <tr>
+                                            <th>Significado</th>
+                                            <th>Personalidad</th>
+                                            <th>Adaptación</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <%
+                                        const todosSignificados = [
+                                            "Participación",
+                                            "Paciencia",
+                                            "Productividad",
+                                            "Empuje/Agresividad",
+                                            "Sociabilidad",
+                                            "Creatividad",
+                                            "Vigor",
+                                            "Satisfacción"
+                                        ];
+                                    
+                                        for (let significado of todosSignificados) {
+                                            const personalidad = resultadosFase1.find(c => c.significado === significado);
+                                            const adaptacion = resultadosFase2.find(c => c.significado === significado);
+                                            const personalidadVal = personalidad ? personalidad.porcentaje : 0;
+                                            const adaptacionVal = adaptacion ? adaptacion.porcentaje : 0;
+                                        %>
+                                        <tr>
+                                            <td class="significado-cell"><%= significado %></td>
+                                            <td>
+                                                <div class="progress-container">
+                                                    <div class="progress">
+                                                        <div class="progress-bar personalidad-bar" role="progressbar" 
+                                                            style="width: <%= personalidadVal %>%;" 
+                                                            aria-valuenow="<%= personalidadVal %>" aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                    <span class="percent-value"><%= personalidadVal %>%</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="progress-container">
+                                                    <div class="progress">
+                                                        <div class="progress-bar adaptacion-bar" role="progressbar" 
+                                                            style="width: <%= adaptacionVal %>%;" 
+                                                            aria-valuenow="<%= adaptacionVal %>" aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                    <span class="percent-value"><%= adaptacionVal %>%</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            
+
+            <!-- Seccion de interpretacion -->
             <div class="interpretacion-container">
                 <h5 class="titulo-seccion">Interpretación</h5>
                 <hr>
@@ -172,12 +208,13 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Incluir el script del navside -->
+    <!-- Script del navside -->
     <script src="/js/_navside.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
+            document.addEventListener('DOMContentLoaded', function() {
         const datosFase1 = <%- JSON.stringify(resultadosFase1) %>; // Personalidad
         const datosFase2 = <%- JSON.stringify(resultadosFase2) %>; // Adaptación al medio
 
@@ -203,46 +240,120 @@
             return item ? item.porcentaje : 0;
         });
 
+
         const ctx = document.getElementById('graficaMixta');
         const mixedChart = new Chart(ctx, {
+            type: 'bar',
             data: {
                 labels: todosSignificados,
                 datasets: [
                     {
-                        type: 'bar',
                         label: 'Personalidad',
                         data: personalidadData,
-                        backgroundColor: 'rgba(0, 102, 204, 0.7)',
-                        borderColor: 'rgba(0, 102, 204, 1)',
-                        borderWidth: 1
+                        backgroundColor: 'rgba(41, 73, 105, 0.7)', // --secondary
+                        borderColor: 'rgba(41, 73, 105, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        barPercentage: 0.7,
+                        categoryPercentage: 0.8
                     },
                     {
-                        type: 'bar',
                         label: 'Adaptación al medio',
                         data: adaptacionData,
-                        borderColor: 'rgba(100, 149, 237, 1)',
-                        backgroundColor: 'rgba(100, 149, 237, 0.3)',
-                        borderWidth: 1
+                        backgroundColor: 'rgba(114, 133, 117, 0.7)', // --movilidad-header
+                        borderColor: 'rgba(114, 133, 117, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        barPercentage: 0.7,
+                        categoryPercentage: 0.8
                     }
                 ]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
-                    title: {
-                        display: true,
-                        text: 'Comparación: Personalidad vs Adaptación al medio'
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 15,
+                            font: {
+                                family: "'Lato', sans-serif",
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        titleColor: '#333',
+                        bodyColor: '#333',
+                        bodyFont: {
+                            size: 13,
+                            family: "'Lato', sans-serif"
+                        },
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold',
+                            family: "'Lato', sans-serif"
+                        },
+                        padding: 12,
+                        borderColor: 'rgba(0, 0, 0, 0.1)',
+                        borderWidth: 1,
+                        displayColors: true,
+                        boxWidth: 10,
+                        boxHeight: 10,
+                        boxPadding: 3,
+                        usePointStyle: true,
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.dataset.label}: ${context.parsed.y}%`;
+                            }
+                        }
                     }
                 },
                 scales: {
                     y: {
-                        min: 0,
                         beginAtZero: true,
-                        max: 100
+                        max: 100,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Lato', sans-serif",
+                                size: 11
+                            },
+                            color: '#666',
+                            padding: 8,
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Lato', sans-serif",
+                                size: 11
+                            },
+                            color: '#666',
+                            padding: 8
+                        }
                     }
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutQuart'
                 }
             }
         });
+    });
     </script>
 
     <!-- Poner colores desde data-color -->
