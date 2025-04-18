@@ -125,34 +125,39 @@
                 </div>
             </div>
 
-            <!-- resultado.ejs -->
+            <!-- análisis -->
             <div class="container mt-4">
-                <h2 class="mb-4">Interpretaciones de combinaciones</h2>
-                <% parejas.forEach(c => { 
-                    const mostrarFase1 = c.zonas.fase1 && c.zonas.fase1 !== 'N/A';
-                    const mostrarFase2 = c.zonas.fase2 && c.zonas.fase2 !== 'N/A';
+                <h2 class="mb-4">Interpretación</h2>
+                <% 
+                const chunkSize = 3;
+                for (let i = 0; i < parejas.length; i += chunkSize) { 
+                    const fila = parejas.slice(i, i + chunkSize); 
                 %>
-                    <div class="card mb-3">
-                        <div class="card-header">
-                            Pareja: <%= c.pareja %> — Zonas: 
-                            <% if (mostrarFase1) { %><%= c.zonas.fase1 %><% } else { %>N/A<% } %>
-                            <% if (mostrarFase2) { %> / <%= c.zonas.fase2 %><% } %>
-                        </div>
-                        <div class="card-body">
-                            <% if (mostrarFase1) { %>
-                                <p><%= c.texto.fase1 %></p>
-                            <% } %>
-                            <% if (mostrarFase2) { %>
-                                <p><%= c.texto.fase2 %></p>
-                            <% } %>
-                            <% if (!mostrarFase1 && !mostrarFase2) { %>
-                                <p><em>Interpretación no disponible para esta combinación.</em></p>
-                            <% } %>
-                        </div>
+                    <div class="row">
+                        <% fila.forEach(c => { 
+                            const mostrarFase1 = c.zonas.fase1 && c.zonas.fase1 !== 'N/A';
+                            const mostrarFase2 = c.zonas.fase2 && c.zonas.fase2 !== 'N/A';
+                        %>
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <% if (mostrarFase1) { %>
+                                            <p><%= c.texto.fase1 %></p>
+                                        <% } %>
+                                        <% if (mostrarFase2) { %>
+                                            <p><%= c.texto.fase2 %></p>
+                                        <% } %>
+                                        <% if (!mostrarFase1 && !mostrarFase2) { %>
+                                            <p><em>Interpretación no disponible para esta combinación.</em></p>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
                     </div>
-                <% }) %>
-            </div>           
-
+                <% } %>
+            </div>
+         
             <div class="boton-container">
                 <a class="btn btn-color--third boton-regresar-abajo"
                 href="/psicologo/cuadernillo-colores/<%= idGrupo %>/<%= idAspirante %>/<%= idInstitucion %>"

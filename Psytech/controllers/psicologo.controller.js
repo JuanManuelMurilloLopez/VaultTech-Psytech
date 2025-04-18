@@ -739,6 +739,29 @@ function filtrarParejasArtificiales(paresF1, paresF2, parejasNaturalesYDisociada
     return resultado;
 }
 
+function obtenerInterpretacion(zona1, zona2, pareja) {
+    if (zona1 === 'N/A' || zona2 === 'N/A') {
+        return 'Interpretación no disponible para esta combinación.';
+    }
+
+    const numeros = pareja.match(/\d+/g);
+    if (!numeros || numeros.length !== 2) {
+        return 'Interpretación no disponible para esta combinación.';
+    }
+
+    const parejaNormalizada = `${numeros[0]}-${numeros[1]}`;
+    const claveDirecta = `${zona1}|${parejaNormalizada}`;
+    const claveInvertida = `${zona2}|${numeros[1]}-${numeros[0]}`;
+
+    if (interpretaciones[claveDirecta]) {
+        return interpretaciones[claveDirecta];
+    } else if (interpretaciones[claveInvertida]) {
+        return interpretaciones[claveInvertida];
+    } else {
+        return 'Interpretación no disponible para esta combinación.';
+    }
+}
+
 function obtenerParejasClasificadas(seleccionesFase1, seleccionesFase2) {
     const paresF1 = obtenerParejasConZona(seleccionesFase1);
     const paresF2 = obtenerParejasConZona(seleccionesFase2);
@@ -854,29 +877,7 @@ exports.getAnalisisColores = async (request, response, next) => {
                 return { ...p, texto: { fase1: textoFase1, fase2: textoFase2 } };
             });
         }
-        
-        function obtenerInterpretacion(zona1, zona2, pareja) {
-            if (zona1 === 'N/A' || zona2 === 'N/A') {
-                return 'Interpretación no disponible para esta combinación.';
-            }
-
-            const numeros = pareja.match(/\d+/g);
-            if (!numeros || numeros.length !== 2) {
-                return 'Interpretación no disponible para esta combinación.';
-            }
-            const parejaNormalizada = `${numeros[0]}-${numeros[1]}`;
-            const claveDirecta = `${zona1}|${parejaNormalizada}`;
-            const claveInvertida = `${zona2}|${numeros[1]}-${numeros[0]}`;
-
-        
-            if (interpretaciones[claveDirecta]) {
-                return interpretaciones[claveDirecta];
-            } else if (interpretaciones[claveInvertida]) {
-                return interpretaciones[claveInvertida];
-            } else {
-                return 'Interpretación no disponible para esta combinación.';
-            }
-        }                                        
+                                              
         
         const invertirPareja = (pareja) => {
             const partes = pareja.split('-');
