@@ -10,6 +10,7 @@ const Cuadernillo = require('../models/cuadernilloOtis.model');
 const CatalogoPruebas = require('../models/catalogoPruebas.model');
 const CuadernilloColores = require('../models/cuadernilloColores.model');
 const interpretaciones = require('../util/interpretacionColores.js');
+const FormatoEntrevista = require('../models/formatoDeEntrevista.model.js');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
@@ -419,6 +420,19 @@ exports.postRegistrarAspirantes = (request, response, next) => {
 exports.getEditarAspirantes = (request, response, next) => {
     console.log('Editar Aspirante');
     response.render('Psicologos/editarAspirante');
+};
+
+// Controlador para menejar las respuestas de un aspirante por formato de entrevista
+
+exports.getRespuestasFormatoEntrevista = (request, response, next) => {
+    FormatoEntrevista.getRespuestasFormatoAspirante(request.params.idGrupo, request.params.idAspirante)
+    .then(([rows, fieldData]) => {
+        const respuestasAspirante = rows;
+        console.log(respuestasAspirante);
+    })
+    .catch((error) => {
+        console.log(error);
+    })
 };
 
 // CATÁLOGO PRUEBAS

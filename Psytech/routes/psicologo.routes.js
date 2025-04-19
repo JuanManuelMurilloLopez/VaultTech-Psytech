@@ -52,6 +52,9 @@ router.post('/registrar-aspirantes/:idGrupo/:idInstitucion', controller.postRegi
 // Formulario para editar aspirantes
 router.get('/editar-aspirantes', controller.getEditarAspirantes);
 
+// Consultar respuestas de aspirante de formato de entrevista
+router.get('/respuestas-formato-entrevista/:idGrupo/:idAspirante', controller.getRespuestasFormatoEntrevista);
+
 // Vista con todas las pruebas
 router.get('/catalogo-pruebas', controller.getCatalogoPruebas);
 
