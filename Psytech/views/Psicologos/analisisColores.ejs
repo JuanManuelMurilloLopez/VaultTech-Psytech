@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="/css/includeCss/_navsidePsicologo.css">
     <!-- CSS cerrar sesión -->
     <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
+
+    <!-- CSS para imprimir -->
+    <link rel="stylesheet" href="/css/psicologos/analisisColores.print.css" media="print">
 </head>
 <body class="">
     <div class="main">
@@ -371,6 +374,67 @@
             colorBoxes.forEach(box => {
                 box.style.backgroundColor = box.getAttribute('data-color');
             });
+        });
+    </script>
+
+    <!-- Script para boton de imprimir -->
+    <script>
+            document.addEventListener('DOMContentLoaded', function() {
+        // Definir estilos del boton
+        const buttonStyles = {
+            className: 'btn btn-color--secondary',
+            innerHTML: 'Imprimir Análisis',
+            style: {
+            padding: '6px 24px',
+            fontSize: '16px'
+            }
+        };
+        
+        // Buscar el contenedor
+        let container = document.querySelector('.boton-container');
+        
+        if (!container) {
+            // Si no existe, crear uno nuevo
+            container = document.createElement('div');
+            container.className = 'boton-container';
+            
+            // Estilos para el nuevo contenedor
+            Object.assign(container.style, {
+            display: 'flex',
+            justifyContent: 'flex-end',
+            marginTop: '60px',
+            marginBottom: '40px',
+            width: '100%'
+            });
+            
+            // Insertar en la pag
+            const mainContainer = document.querySelector('.container');
+            if (mainContainer) {
+            mainContainer.appendChild(container);
+            }
+        } else {
+            // Ajustar el contenedor que existe
+            Object.assign(container.style, {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%'
+            });
+        }
+        
+        // Crear boton de imprimir
+        const printButton = document.createElement('button');
+        
+        // Poner estilos y propiedades
+        printButton.className = buttonStyles.className;
+        printButton.innerHTML = buttonStyles.innerHTML;
+        Object.assign(printButton.style, buttonStyles.style);
+        
+        // Poner funcion de imprimir
+        printButton.addEventListener('click', () => window.print());
+        
+        // Agregar al contenedor
+        container.appendChild(printButton);
         });
     </script>
 </body>
