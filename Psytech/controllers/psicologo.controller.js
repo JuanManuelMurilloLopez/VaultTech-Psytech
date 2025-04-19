@@ -831,7 +831,7 @@ exports.getAnalisisColores = async (request, response, next) => {
         const resultadosFase2 = [];
 
         const colores = {
-            0: { nombre: 'Gris', significado: 'Participación', tipo: 'Laboral' },
+            0: { nombre: 'Gris', significado: 'Participación', tipo: 'No laboral' },
             1: { nombre: 'Azul', significado: 'Paciencia', tipo: 'Laboral' },
             2: { nombre: 'Verde', significado: 'Productividad', tipo: 'Laboral' },
             3: { nombre: 'Rojo', significado: 'Empuje/Agresividad', tipo: 'Laboral' },
@@ -839,29 +839,35 @@ exports.getAnalisisColores = async (request, response, next) => {
             5: { nombre: 'Morado', significado: 'Creatividad', tipo: 'Laboral' },
             6: { nombre: 'Café', significado: 'Vigor', tipo: 'No laboral' },
             7: { nombre: 'Negro', significado: 'Satisfacción', tipo: 'No laboral' },
-            8: { nombre: 'Gris', significado: 'Participación', tipo: 'Laboral' },
+            8: { nombre: 'Gris', significado: 'Participación', tipo: 'No laboral' },
         };
         
-        // Mapear las respuestas de colores a resultados con sus significados y porcentajes
         rows.forEach(({ fase, idColor, posicion }) => {
-            let porcentaje = 90 - (posicion * 10);
-            if (porcentaje <= 50) porcentaje -= 10;
-
             const info = colores[idColor] || { nombre: 'Desconocido', significado: '', tipo: 'Desconocido' };
-
+        
+            let porcentaje;
+        
+            if (info.tipo === 'No laboral') {
+                porcentaje = 20 + (posicion * 10);
+                if (porcentaje <= 50) porcentaje -= 10;
+            } else {
+                porcentaje = 90 - (posicion * 10);
+                if (porcentaje <= 50) porcentaje -= 10; 
+            }
+        
             const resultado = {
                 color: info.nombre,
                 significado: info.significado,
                 tipo: info.tipo,
                 porcentaje
-            };            
-
+            };
+        
             if (fase === 1) {
                 resultadosFase1.push(resultado);
             } else if (fase === 2) {
                 resultadosFase2.push(resultado);
             }
-        });
+        });               
 
         function agregarInterpretaciones(parejas) {
             return parejas.map(p => {
