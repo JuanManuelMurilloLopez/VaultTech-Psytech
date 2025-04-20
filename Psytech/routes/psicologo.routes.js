@@ -43,7 +43,8 @@ router.get('/informacion-grupos/:idGrupo/:idInstitucion', controller.getInformac
 // Vista con la información de un aspirante
 router.get('/aspirantes/:idAspirante/:idGrupo/:idInstitucion', controller.getAspirante);
 
-router.get('/importar-aspirantes', controller.getImportarAspirantes);
+router.get('/importar-aspirantes/:idInstitucion/:idGrupo', controller.getImportarAspirantes);
+router.post('/importar-aspirantes/:idInstitucion/:idGrupo', controller.postImportarAspirantes);
 
 // Formulario para crear nuevos aspirantes
 router.get('/registrar-aspirantes/:idGrupo/:idInstitucion', controller.getRegistrarAspirantes);
@@ -73,5 +74,10 @@ router.get('/analisis-colores/:idGrupo/:idAspirante/:idInstitucion', controller.
 router.get('/cuadernillo-colores/:idGrupo/:idAspirante/:idInstitucion', controller.getCuadernilloColores);
 
 router.get('/respuestas-otis', controller.getRespuestasOtis);
+
+
+
+
+router.get('/aspirantes-importados', controller.getAspirantesImportados);
 
 module.exports = router;

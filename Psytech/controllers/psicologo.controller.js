@@ -11,6 +11,9 @@ const CatalogoPruebas = require('../models/catalogoPruebas.model');
 const CuadernilloColores = require('../models/cuadernilloColores.model');
 const interpretaciones = require('../util/interpretacionColores.js');
 
+const xlsx = require('xlsx');
+const fs = require('fs');
+
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
     Grupo.fetchAll()
@@ -355,9 +358,72 @@ exports.getAspirante = (request, response, next) => {
 };
 
 exports.getImportarAspirantes = (request, response, next) => {
-    console.log('Importar Aspirantes');
-    response.render('Psicologos/importarAspirantes');
+    response.render('Psicologos/importarAspirantes', {
+        idGrupo: request.params.idGrupo,
+        idInstitucion: request.params.idInstitucion
+    });
 };
+
+exports.postImportarAspirantes = (request, response, next) => {
+    // Recuperamos el archivo subido por el psicólogo y lo pasamos a JSON
+    const archivoExcel = xlsx.readFile(request.files['excelAspirantes'][0].path);
+    const hojaExcel = archivoExcel.Sheets[archivoExcel.SheetNames[0]];
+    const JSONAspirantes = xlsx.utils.sheet_to_json(hojaExcel, {defval : ""});
+
+    const promesas = JSONAspirantes.map(aspirante => {
+        return Pais.findPais(aspirante.paisOrigen)
+        .then(([rows, fieldData]) => {
+        aspirante.idPais = rows[0].idPais;
+        return Estado.findEstado(aspirante.estadoResidencia);
+        })
+        .then(([rows, fieldData]) => {
+            aspirante.idEstado = rows[0].idEstado;
+            const nuevoAspirante = new Aspirante({
+                nombreUsuario: aspirante.nombre,
+                apellidoPaterno: aspirante.apellidoPaterno,
+                apellidoMaterno: aspirante.apellidoMaterno,
+                institucionProcedencia: aspirante.institucionProcedencia,
+                correo: aspirante.correo,
+                lada: aspirante.ladaTelefonica,
+                numeroTelefono: aspirante.numeroTelefono,
+                idPais: aspirante.idPais,
+                idEstado: aspirante.idEstado
+            });
+            return nuevoAspirante.save(request.params.idGrupo)
+            .then(() => nuevoAspirante.getIdAspirante(request.params.idGrupo))
+            .then(([rows]) => {
+                const idAspirante = rows[0].idAspirante;
+                return Grupo.getInformacionGruposPruebas(request.params.idGrupo)
+                .then(([pruebas]) => {
+                    const vincularPruebas = pruebas.map(prueba => nuevoAspirante.vincularPrueba(idAspirante, request.params.idGrupo, prueba));
+                    return Promise.all(vincularPruebas);
+                });
+            });
+        });
+    });
+    
+    Promise.all(promesas)
+    .then(() => {
+        //Eliminamos el archivo subido
+        fs.unlink(request.files['excelAspirantes'][0].path, (error) => {
+            if (error){
+                console.log(error);
+            }
+        })
+        //Mostramos la interfaz de aspirantes registrados con éxito
+        response.render('Psicologos/aspirantesRegistrados', {
+            idInstitucion: request.params.idInstitucion,
+            idGrupo: request.params.idGrupo
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+}
+
+exports.getAspirantesImportados = (request, response, next) => {
+    response.render('Psicologos/aspirantesRegistrados');
+}
 
 exports.getRegistrarAspirantes = (request, response, next) => {
     Pais.fetchAll()
