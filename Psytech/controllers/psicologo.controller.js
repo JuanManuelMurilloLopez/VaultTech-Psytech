@@ -95,7 +95,8 @@ exports.getEditarInstitucion = (request, response, next) => {
         const tiposInstitucion = rows;
         response.render('Psicologos/editarInstitucion', {
             institucion: institucion || null,
-            tiposInstitucion: tiposInstitucion || []
+            tiposInstitucion: tiposInstitucion || [],
+            error: ""
         })
     })
     .catch((error) => {
@@ -109,7 +110,16 @@ exports.getEditarInstitucion = (request, response, next) => {
 };
 
 exports.postEditarInstitucion = (request, response, next) => {
-
+    Institucion.modificarInstitucion(
+        request.params.idInstitucion, request.body.nombreInstitucion, 
+        request.body.estatusInstitucion, request.body.idTipoInstitucion
+    )
+    .then(() => {
+        response.render('cambiosGuardados.ejs');
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 }
 
 exports.getGrupos = (request, response, next) => {
