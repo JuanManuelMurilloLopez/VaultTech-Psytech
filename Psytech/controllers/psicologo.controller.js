@@ -87,6 +87,25 @@ exports.postRegistrarInstitucion = (request, response, next) => {
 
 exports.getEditarInstitucion = (request, response, next) => {
 
+    Institucion.fetchOne(request.params.idInstitucion)
+    .then(([rows, fieldData]) => {
+        const institucion = rows[0];
+    TipoInstitucion.fetchAll()
+    .then(([rows, fieldData]) => {
+        const tiposInstitucion = rows;
+        response.render('Psicologos/editarInstitucion', {
+            institucion: institucion || null,
+            tiposInstitucion: tiposInstitucion || []
+        })
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+
 };
 
 exports.postEditarInstitucion = (request, response, next) => {
