@@ -73,11 +73,21 @@ app.use(express.json());
 const multer = require('multer');
 
 const fileStorage = multer.diskStorage({
+
     destination: (request, file, callback) => {
+      console.log('Subiendo archivo con fieldname:', file.fieldname);
+      if (file.fieldname == 'excelAspirantes') {
+        callback(null, 'public/excel');
+      } else {
         callback(null, 'public/expedientes');
+      }
     },
     filename: (request, file, callback) => {
-        callback(null,request.session.idAspirante + new Date().getMilliseconds()  + file.originalname);
+      if (file.fieldname == 'excelAspirantes') {
+        callback(null, 'excelAspirantes' + new Date().getMilliseconds()  + file.originalname);
+      } else {
+        callback(null, request.session.idAspirante + new Date().getMilliseconds()  + file.originalname);
+      }
     },
 });
 
