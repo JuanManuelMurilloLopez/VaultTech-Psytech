@@ -87,7 +87,8 @@ const upload = multer({ storage: fileStorage });
 
 app.use(upload.fields([
     { name: 'cv', maxCount: 1 },
-    { name: 'kardex', maxCount: 1 }
+    { name: 'kardex', maxCount: 1 },
+    { name: 'excelAspirantes' }
 ]));
 
 // Importar rutas

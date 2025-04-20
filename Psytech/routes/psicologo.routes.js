@@ -46,6 +46,9 @@ router.get('/aspirantes/:idAspirante/:idGrupo/:idInstitucion', controller.getAsp
 router.get('/importar-aspirantes/:idInstitucion/:idGrupo', controller.getImportarAspirantes);
 router.post('/importar-aspirantes/:idInstitucion/:idGrupo', controller.postImportarAspirantes);
 
+//Borrar ruta
+router.get('/importar-aspirantes', controller.getImportarAspirantes);
+
 // Formulario para crear nuevos aspirantes
 router.get('/registrar-aspirantes/:idGrupo/:idInstitucion', controller.getRegistrarAspirantes);
 router.post('/registrar-aspirantes/:idGrupo/:idInstitucion', controller.postRegistrarAspirantes);

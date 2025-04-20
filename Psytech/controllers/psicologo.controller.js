@@ -359,6 +359,10 @@ exports.getImportarAspirantes = (request, response, next) => {
     response.render('Psicologos/importarAspirantes');
 };
 
+exports.postImportarAspirantes = (request, response, next) => {
+    
+}
+
 exports.getRegistrarAspirantes = (request, response, next) => {
     Pais.fetchAll()
     .then(([rows, fieldData]) => {
