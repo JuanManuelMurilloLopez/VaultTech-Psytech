@@ -15,6 +15,14 @@ module.exports = class Aspirante {
         this.idPais = infoAspirante.idPais,
         this.idEstado = infoAspirante.idEstado
     }
+
+    static fetchOne(idAspirante){
+        return db.execute(`SELECT * 
+                            FROM aspirantes 
+                            WHERE idAspirante = ?`
+                            , [idAspirante])
+    }
+
     save(idGrupo){
         return db.execute(`
             CALL registraraspiranteengrupo 

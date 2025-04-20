@@ -34,6 +34,15 @@ class Usuario {
         [usuario]
     );
   }
+
+  static findUsuario(idUsuario){
+    return db.execute(`
+                              SELECT *
+                              FROM usuarios
+                              WHERE idUsuario = ?
+      `, [idUsuario]);
+  }
+
 }
 
 
