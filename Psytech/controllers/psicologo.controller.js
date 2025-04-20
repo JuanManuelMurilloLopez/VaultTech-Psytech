@@ -358,7 +358,10 @@ exports.getAspirante = (request, response, next) => {
 };
 
 exports.getImportarAspirantes = (request, response, next) => {
-    response.render('Psicologos/importarAspirantes');
+    response.render('Psicologos/importarAspirantes', {
+        idGrupo: request.params.idGrupo,
+        idInstitucion: request.params.idInstitucion
+    });
 };
 
 exports.postImportarAspirantes = (request, response, next) => {
@@ -401,23 +404,25 @@ exports.postImportarAspirantes = (request, response, next) => {
     
     Promise.all(promesas)
     .then(() => {
-
         //Eliminamos el archivo subido
         fs.unlink(request.files['excelAspirantes'][0].path, (error) => {
             if (error){
                 console.log(error);
             }
         })
-
-        response.render('Psicologos/aspirantesRegistrados');
-
-        
+        //Mostramos la interfaz de aspirantes registrados con éxito
+        response.render('Psicologos/aspirantesRegistrados', {
+            idInstitucion: request.params.idInstitucion,
+            idGrupo: request.params.idGrupo
+        });
     })
     .catch((error) => {
         console.log(error);
     })
+}
 
-
+exports.getAspirantesImportados = (request, response, next) => {
+    response.render('Psicologos/aspirantesRegistrados');
 }
 
 exports.getRegistrarAspirantes = (request, response, next) => {

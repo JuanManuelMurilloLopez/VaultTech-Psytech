@@ -31,12 +31,25 @@
 
             <h1 class="text-center mt-5">IMPORTAR NUEVO ASPIRANTE</h1>
             
-            <p>Instrucciones</p>
+            <div>
+                <h4>Instrucciones:</h4>
+                <ul>
+                    <li>•   Descarga la plantilla y llena los campos</li>
+                    <li>•   No modifiques los encabezados del archivo</li>
+                    <li>•   No dejes campos vacíos</li>
+                    <li>•   El correo debe de ser único y válido</li>
+                </ul>
+                <a 
+                href="/excel/Formato_Importar_Aspirantes.xlsx"
+                download
+                class="btn btn-color--secondary">Descargar plantilla (.xlsx)</a>
+            </div>
     
-            <!-- Archivo -->
-            <div class="col-md-6 card p-4 mt-4 shadow-sm">
+            <div class="centrar">
+                <!-- Archivo -->
+            <div class=" card p-4 mt-4 shadow-sm w-50">
                 <div class="card-header">
-                    <h5 class="card-title">Excel</h5>
+                    <h5 class="card-title">Subir plantilla Excel</h5>
                     <p class="text-muted">Solo archivos .xlsx</p>
                 </div>
             
@@ -56,11 +69,13 @@
                     </form>
                 </div>
             </div>
+            </div>
+
+            
             
             <!-- Botones de navegación Grupo, Edicion, Regresar" -->
-            <button type="button" class="btn btn-color--third"
-            onclick="window.location.href=
-            '/psicologo/aspirantes'">Regresar</button>
+            <a href="/psicologo/informacion-grupos/<%= idGrupo %>/<%= idInstitucion %>"
+                class="btn btn-color--third" >Regresar</a>
             <br>
         </div>
 

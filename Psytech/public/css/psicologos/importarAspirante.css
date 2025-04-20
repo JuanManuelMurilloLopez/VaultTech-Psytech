@@ -27,6 +27,12 @@
     flex-direction: row;
 }
 
+.centrar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .btn-color--primary{
     background: var(--primary);
     color: var(--font-primary);

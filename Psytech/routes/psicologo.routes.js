@@ -75,4 +75,9 @@ router.get('/cuadernillo-colores/:idGrupo/:idAspirante/:idInstitucion', controll
 
 router.get('/respuestas-otis', controller.getRespuestasOtis);
 
+
+
+
+router.get('/aspirantes-importados', controller.getAspirantesImportados);
+
 module.exports = router;
