@@ -429,6 +429,9 @@ exports.getRespuestasFormatoEntrevista = (request, response, next) => {
     .then(([rows, fieldData]) => {
         const respuestasAspirante = rows;
         console.log(respuestasAspirante);
+        response.render('Psicologos/respuestasFormatoDeEntrevista', {
+            respuestasAspirante: respuestasAspirante || []
+        });
     })
     .catch((error) => {
         console.log(error);
