@@ -89,7 +89,7 @@ exports.getEditarInstitucion = (request, response, next) => {
 
     Institucion.fetchOne(request.params.idInstitucion)
     .then(([rows, fieldData]) => {
-        const institucion = rows[0];
+        const institucion = rows;
     TipoInstitucion.fetchAll()
     .then(([rows, fieldData]) => {
         const tiposInstitucion = rows;
@@ -115,7 +115,7 @@ exports.postEditarInstitucion = (request, response, next) => {
         request.body.estatusInstitucion, request.body.idTipoInstitucion
     )
     .then(() => {
-        response.render('cambiosGuardados.ejs');
+        response.render('Psicologos/cambiosGuardados.ejs');
     })
     .catch((error) => {
         console.log(error);

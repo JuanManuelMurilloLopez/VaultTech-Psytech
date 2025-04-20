@@ -59,6 +59,18 @@ module.exports = class Institucion {
             I.estatusInstitucion;
    `);
   }
+
+  static modificarInstitucion(idInstitucion, nombreInstitucion, 
+                              estatusInstitucion, idTipoInstitucion){
+    return db.execute(`UPDATE institucion
+                SET nombreInstitucion = ?,
+                estatusInstitucion = ?,
+                idTipoInstitucion = ?
+                WHERE idInstitucion = ?`
+      , [nombreInstitucion, estatusInstitucion, 
+        idTipoInstitucion, idInstitucion])
+  }
+
 }
 
 
