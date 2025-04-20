@@ -537,6 +537,10 @@ exports.getEditarAspirantes = (request, response, next) => {
     response.render('Psicologos/editarAspirante');
 };
 
+exports.postEditarAspirantes = (request, response, next) => {
+    
+}
+
 // CATÁLOGO PRUEBAS
 exports.getCatalogoPruebas = (request, response, next) => {
     CatalogoPruebas.fetchAll()
