@@ -18,7 +18,8 @@ router.get('/registrar-institucion', controller.getRegistrarInstitucion);
 router.post('/registrar-institucion', controller.postRegistrarInstitucion);
 
 // Formulario para editar instituciones
-router.get('/editar-institucion', controller.getEditarInstitucion);
+router.get('/editar-institucion/:idInstitucion', controller.getEditarInstitucion);
+router.post('/editar-institucion/:idInstitucion', controller.postEditarInstitucion);
 
 router.get('/grupos', controller.getGrupos);
 
@@ -75,9 +76,5 @@ router.get('/cuadernillo-colores/:idGrupo/:idAspirante/:idInstitucion', controll
 
 router.get('/respuestas-otis', controller.getRespuestasOtis);
 
-
-
-
-router.get('/aspirantes-importados', controller.getAspirantesImportados);
 
 module.exports = router;

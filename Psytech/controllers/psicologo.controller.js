@@ -86,9 +86,12 @@ exports.postRegistrarInstitucion = (request, response, next) => {
 
 
 exports.getEditarInstitucion = (request, response, next) => {
-    console.log('Editar Instituciones');
-    response.render('Psicologos/editarInstitucion');
+
 };
+
+exports.postEditarInstitucion = (request, response, next) => {
+
+}
 
 exports.getGrupos = (request, response, next) => {
     Institucion.fetchOne(request.params.idInstitucion)
@@ -442,9 +445,6 @@ exports.postImportarAspirantes = (request, response, next) => {
     })
 }
 
-exports.getAspirantesImportados = (request, response, next) => {
-    response.render('Psicologos/aspirantesRegistrados');
-}
 
 exports.getRegistrarAspirantes = (request, response, next) => {
     Pais.fetchAll()
