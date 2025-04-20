@@ -46,6 +46,7 @@ exports.getRegistrarInstitucion = (request, response, next) => {
         const tiposInstitucion = rows;
         response.render('Psicologos/registrarInstitucion', {
             tiposInstitucion: tiposInstitucion || [],
+            error: ""
         })
     })
     .catch((error) => {
@@ -54,15 +55,35 @@ exports.getRegistrarInstitucion = (request, response, next) => {
 };
 
 exports.postRegistrarInstitucion = (request, response, next) => {
-    const institucion = new Institucion(request.body);
-    institucion.save()
-    .then(() => {
-        exports.getCatalogoInstituciones(request, response, next);
+    const nombreInput = request.body.nombreInstitucion.trim().toLowerCase();
+
+    Institucion.fetchAll()
+    .then(([rows]) => {
+        const institucionExistente = rows.find(institucion => 
+            institucion.nombreInstitucion.trim().toLowerCase() === nombreInput
+        );
+
+        if (institucionExistente) {
+            return TipoInstitucion.fetchAll()
+            .then(([tipos]) => {
+                response.render('Psicologos/registrarInstitucion', {
+                    tiposInstitucion: tipos || [],
+                    error: "Institución previamente registrada"
+                });
+            });
+        }
+
+        const institucion = new Institucion(request.body);
+        return institucion.save()
+        .then(() => {
+            exports.getCatalogoInstituciones(request, response, next);
+        });
     })
     .catch((error) => {
         console.log(error);
     });
-}
+};
+
 
 exports.getEditarInstitucion = (request, response, next) => {
     console.log('Editar Instituciones');
