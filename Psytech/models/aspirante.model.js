@@ -97,4 +97,14 @@ module.exports = class Aspirante {
             `,[idAspirante, idGrupo]);
     }
 
+    static modificarAspirante(idAspirante, institucionProcedencia, idPais, idEstado){
+        return db.execute(`
+                            UPDATE aspirantes
+                            SET institucionProcedencia = ?,
+                            idPais = ?,
+                            idEstado = ?
+                            WHERE idAspirante = ?
+            `, [institucionProcedencia, idPais, idEstado, idAspirante])
+    }
+
 }

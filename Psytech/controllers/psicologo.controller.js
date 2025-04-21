@@ -535,8 +535,6 @@ exports.postRegistrarAspirantes = (request, response, next) => {
 
 exports.getEditarAspirantes = (request, response, next) => {
 
-    
-
     Aspirante.fetchOne(request.params.idAspirante)
     .then(([rows, fieldData]) => {
         const aspirante = rows[0];
@@ -579,6 +577,31 @@ exports.getEditarAspirantes = (request, response, next) => {
 };
 
 exports.postEditarAspirantes = (request, response, next) => {
+    console.log(request.body);
+
+    Aspirante.modificarAspirante(
+                                request.params.idAspirante, 
+                                request.body.institucionProcedencia, 
+                                request.body.idPais, request.body.idEstado)
+    .then(() => {
+        Usuario.modificarUsuario(
+                                request.params.idAspirante, 
+                                request.body.nombreUsuario, 
+                                request.body.apellidoPaterno, 
+                                request.body.apellidoMaterno, 
+                                request.body.correo, request.body.lada, 
+                                request.body.numeroTelefono, 
+                                request.body.estatusUsuario) // Falta hacer las funciones modificarAspirante, modificarUsuario, añadir el botón de estatus
+        .then(() => {
+
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 
 }
 
