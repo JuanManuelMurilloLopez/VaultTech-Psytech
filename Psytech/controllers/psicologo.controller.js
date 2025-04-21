@@ -11,6 +11,7 @@ const CatalogoPruebas = require('../models/catalogoPruebas.model');
 const CuadernilloColores = require('../models/cuadernilloColores.model');
 const interpretaciones = require('../util/interpretacionColores.js');
 const FormatoEntrevista = require('../models/formatoDeEntrevista.model.js');
+const Familiar = require('../models/formularioFamiliares.model.js');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
@@ -432,6 +433,30 @@ exports.getRespuestasFormatoEntrevista = (request, response, next) => {
         response.render('Psicologos/respuestasFormatoDeEntrevista', {
             respuestasAspirante: respuestasAspirante || []
         });
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+};
+
+// Controlador para menejar la informacion familiar de un aspirante
+
+exports.getInformacionFamiliar = (request, response, next) => {
+    Familiar.getFamiliaresAspirante(request.params.idGrupo, request.params.idAspirante)
+    .then(([rows, fieldData]) => {
+        const informacionFamiliar = rows.map((familiar) => ({
+            key: familiar.idFamiliar,
+            rol: familiar.rolFamiliar,
+            name: familiar.nombreFamiliar,
+            age: familiar.edadFamiliar,
+            gender: familiar.idGenero,
+            maritalStatus: familiar.idEstadoCivil,
+            lifeStatus: familiar.estadoDeVida === 1 ? "Vivo" : "Muerto",
+            parent: familiar.hijoDe
+        }));
+        console.log(informacionFamiliar);
+
+        response.json({ nodes: informacionFamiliar });
     })
     .catch((error) => {
         console.log(error);

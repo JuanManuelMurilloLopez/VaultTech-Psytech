@@ -55,6 +55,9 @@ router.get('/editar-aspirantes', controller.getEditarAspirantes);
 // Consultar respuestas de aspirante de formato de entrevista
 router.get('/respuestas-formato-entrevista/:idGrupo/:idAspirante', controller.getRespuestasFormatoEntrevista);
 
+// Consultar informacion familair de un aspirante
+router.get('/informacion-familiares/:idGrupo/:idAspirante', controller.getInformacionFamiliar);
+
 // Vista con todas las pruebas
 router.get('/catalogo-pruebas', controller.getCatalogoPruebas);
 

@@ -34,4 +34,11 @@ module.exports = class Familiar{
         );
     }
     
+    static getFamiliaresAspirante(idGrupo, idAspirante){
+        return db.execute(
+            `SELECT * FROM familiares F 
+            JOIN gruposaspirantes GA ON F.idAspirante = GA.idAspirante 
+            WHERE GA.idGrupo = ?  AND GA.idAspirante = ?`, [idGrupo, idAspirante]);
+    }
+
 }
