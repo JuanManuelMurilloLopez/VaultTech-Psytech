@@ -18,7 +18,8 @@ router.get('/registrar-institucion', controller.getRegistrarInstitucion);
 router.post('/registrar-institucion', controller.postRegistrarInstitucion);
 
 // Formulario para editar instituciones
-router.get('/editar-institucion', controller.getEditarInstitucion);
+router.get('/editar-institucion/:idInstitucion', controller.getEditarInstitucion);
+router.post('/editar-institucion/:idInstitucion', controller.postEditarInstitucion);
 
 router.get('/grupos', controller.getGrupos);
 
@@ -43,7 +44,8 @@ router.get('/informacion-grupos/:idGrupo/:idInstitucion', controller.getInformac
 // Vista con la información de un aspirante
 router.get('/aspirantes/:idAspirante/:idGrupo/:idInstitucion', controller.getAspirante);
 
-router.get('/importar-aspirantes', controller.getImportarAspirantes);
+router.get('/importar-aspirantes/:idInstitucion/:idGrupo', controller.getImportarAspirantes);
+router.post('/importar-aspirantes/:idInstitucion/:idGrupo', controller.postImportarAspirantes);
 
 // Formulario para crear nuevos aspirantes
 router.get('/registrar-aspirantes/:idGrupo/:idInstitucion', controller.getRegistrarAspirantes);
@@ -67,11 +69,12 @@ router.get('/cuadernillo-otis/:idGrupo/:idAspirante/:idInstitucion', controller.
 // Vista con el análisis de la prueba otis del aspirante
 router.get('/analisis-otis/:idGrupo/:idAspirante/:idInstitucion', controller.getAnalisisOtis);
 
+// Vista con el análisis de la prueba Colores del aspirante
+router.get('/analisis-colores/:idGrupo/:idAspirante/:idInstitucion', controller.getAnalisisColores);
 // CUADERNILLO COLORES
 router.get('/cuadernillo-colores/:idGrupo/:idAspirante/:idInstitucion', controller.getCuadernilloColores);
 
-router.get('/analisis-colores', controller.getAnalisisColores);
-
 router.get('/respuestas-otis', controller.getRespuestasOtis);
+
 
 module.exports = router;

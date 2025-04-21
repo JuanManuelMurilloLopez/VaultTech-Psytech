@@ -6,4 +6,10 @@ module.exports = class Pais {
         return db.execute('SELECT * FROM paises');
     }
 
+    static findPais(aspirantePais) {
+        return db.execute(`SELECT idPais
+                            FROM paises
+                            WHERE nombrePais = ?`, [aspirantePais]);
+    }
+
 }

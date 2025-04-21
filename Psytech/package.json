@@ -24,6 +24,7 @@
     "compression": "^1.8.0",
     "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
+    "exceljs": "^4.4.0",
     "express": "^4.21.2",
     "express-session": "^1.18.1",
     "fs": "^0.0.1-security",
@@ -36,6 +37,7 @@
     "nodemailer": "^6.10.0",
     "nodemon": "^3.1.9",
     "readdirp": "^4.1.2",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "xlsx": "^0.18.5"
   }
 }
