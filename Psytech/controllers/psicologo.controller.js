@@ -591,9 +591,9 @@ exports.postEditarAspirantes = (request, response, next) => {
                                 request.body.apellidoMaterno, 
                                 request.body.correo, request.body.lada, 
                                 request.body.numeroTelefono, 
-                                request.body.estatusUsuario) // Falta hacer las funciones modificarAspirante, modificarUsuario, añadir el botón de estatus
+                                request.body.estatusUsuario)
         .then(() => {
-
+            response.render('Psicologos/cambiosGuardados.ejs');
         })
         .catch((error) => {
             console.log(error);
