@@ -91,7 +91,7 @@
                 <hr>
                 
                 <div class="row g-4 mt-3">
-                    <div class="col-md-7">
+                    <div class="col-12">
                         <div class="chart-card">
                             <div class="chart-header">
                                 <h6>Gráficas</h6>
@@ -101,7 +101,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-12">
                         <div class="table-card">
                             <div class="table-header">
                                 <h6>Resultados Detallados</h6>
@@ -127,7 +127,15 @@
                                             "Vigor",
                                             "Satisfacción"
                                         ];
-                                    
+                                        
+                                        function obtenerColorBarra(porcentaje) {
+                                            if (porcentaje === 90) return '#a8e6a1'; // Verde claro
+                                            if (porcentaje >= 80) return '#2e7d32'; // Verde oscuro
+                                            if (porcentaje >= 70) return '#4fc3f7'; // Azul celeste
+                                            if (porcentaje >= 60) return '#ff9800'; // Naranja
+                                            return '#e53935'; // Rojo
+                                        }
+                                  
                                         for (let significado of todosSignificados) {
                                             const personalidad = resultadosFase1.find(c => c.significado === significado);
                                             const adaptacion = resultadosFase2.find(c => c.significado === significado);
@@ -140,7 +148,7 @@
                                                 <div class="progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar personalidad-bar" role="progressbar" 
-                                                            style="width: <%= personalidadVal %>%;" 
+                                                            style="width: <%= personalidadVal %>%; background-color: <%= obtenerColorBarra(personalidadVal) %>" 
                                                             aria-valuenow="<%= personalidadVal %>" aria-valuemin="0" aria-valuemax="100">
                                                         </div>
                                                     </div>
@@ -151,10 +159,10 @@
                                                 <div class="progress-container">
                                                     <div class="progress">
                                                         <div class="progress-bar adaptacion-bar" role="progressbar" 
-                                                            style="width: <%= adaptacionVal %>%;" 
-                                                            aria-valuenow="<%= adaptacionVal %>" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
-                                                    </div>
+                                                        style="width: <%= adaptacionVal %>%; background-color: <%= obtenerColorBarra(adaptacionVal) %>" 
+                                                        aria-valuenow="<%= adaptacionVal %>" aria-valuemin="0" aria-valuemax="100">
+                                                    </div>   
+                                                </div>                                                
                                                     <span class="percent-value"><%= adaptacionVal %>%</span>
                                                 </div>
                                             </td>
@@ -168,44 +176,60 @@
                 </div>
             </div>
 
-
-            <!-- Seccion de interpretacion -->
+            <!-- Sección de interpretación -->
             <div class="interpretacion-container">
                 <h5 class="titulo-seccion">Interpretación</h5>
                 <hr>
-    
-                
+
                 <div class="interpretacion-horizontal">
                     <% 
+                    let textoPersonalidad = ''; 
+                    let textoAdaptacion = '';
+
                     for (let i = 0; i < parejas.length; i++) { 
                         const c = parejas[i];
                         const mostrarFase1 = c.zonas.fase1 && c.zonas.fase1 !== 'N/A';
                         const mostrarFase2 = c.zonas.fase2 && c.zonas.fase2 !== 'N/A';
-                        if (mostrarFase1 || mostrarFase2) {
+
+                        // Eliminar las etiquetas <p> usando expresión regular
+                        const eliminarEtiquetasP = (texto) => texto.replace(/<p>/g, '').replace(/<\/p>/g, '');
+
+                        if (mostrarFase1) {
+                            textoPersonalidad += ` ${eliminarEtiquetasP(c.texto.fase1)}`;
+                        }
+                        
+                        if (mostrarFase2) {
+                            textoAdaptacion += ` ${eliminarEtiquetasP(c.texto.fase2)}`;
+                        }                        
+                    }
+
+                    // Mostrar una caja para Personalidad si hay texto
+                    if (textoPersonalidad) { 
                     %>
                         <div class="interpretacion-card">
                             <div class="card-body">
-                                <% if (mostrarFase1) { %>
-                                    <div class="interpretacion-seccion">
-                                        <h6 class="tipo-contenido">Personalidad</h6>
-                                        <p><%= c.texto.fase1 %></p>
-                                    </div>
-                                <% } %>
-                                <% if (mostrarFase2) { %>
-                                    <div class="interpretacion-seccion <%= mostrarFase1 ? 'mt-3' : '' %>">
-                                        <h6 class="tipo-contenido">Adaptación al medio</h6>
-                                        <p><%= c.texto.fase2 %></p>
-                                    </div>
-                                <% } %>
+                                <div class="interpretacion-seccion">
+                                    <h6 class="tipo-contenido">Personalidad</h6>
+                                    <%= textoPersonalidad %>
+                                </div>
                             </div>
                         </div>
-                    <% 
-                        }
-                    } 
-                    %>
+                    <% } %>
+
+                    <!-- Mostrar una caja para Adaptación al medio si hay texto -->
+                    <% if (textoAdaptacion) { %>
+                        <div class="interpretacion-card">
+                            <div class="card-body">
+                                <div class="interpretacion-seccion">
+                                    <h6 class="tipo-contenido">Adaptación al medio</h6>
+                                    <%= textoAdaptacion %>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
                 </div>
             </div>
-         
+
             <div class="boton-container">
                 <a class="btn btn-color--third boton-regresar-abajo"
                 href="/psicologo/cuadernillo-colores/<%= idGrupo %>/<%= idAspirante %>/<%= idInstitucion %>"
@@ -248,6 +272,16 @@
             return item ? item.porcentaje : 0;
         });
 
+        const getColor = (valor) => {
+            if (valor === 90) return '#a8e6a1'; // Verde claro
+            if (valor >= 80) return '#2e7d32'; // Verde oscuro
+            if (valor >= 70) return '#4fc3f7'; // Azul celeste
+            if (valor >= 60) return '#ff9800'; // Naranja
+            return '#e53935'; // Rojo
+        };
+
+        const personalidadColors = personalidadData.map(valor => getColor(valor));
+        const adaptacionColors = adaptacionData.map(valor => getColor(valor));
 
         const ctx = document.getElementById('graficaMixta');
         const mixedChart = new Chart(ctx, {
@@ -258,8 +292,8 @@
                     {
                         label: 'Personalidad',
                         data: personalidadData,
-                        backgroundColor: 'rgba(41, 73, 105, 0.7)', // --secondary
-                        borderColor: 'rgba(41, 73, 105, 1)',
+                        backgroundColor: personalidadColors,
+                        borderColor: personalidadColors,
                         borderWidth: 1,
                         borderRadius: 4,
                         barPercentage: 0.7,
@@ -268,8 +302,8 @@
                     {
                         label: 'Adaptación al medio',
                         data: adaptacionData,
-                        backgroundColor: 'rgba(114, 133, 117, 0.7)', // --movilidad-header
-                        borderColor: 'rgba(114, 133, 117, 1)',
+                        backgroundColor: adaptacionColors,
+                        borderColor: adaptacionColors,
                         borderWidth: 1,
                         borderRadius: 4,
                         barPercentage: 0.7,
@@ -282,15 +316,7 @@
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'top',
-                        labels: {
-                            usePointStyle: true,
-                            padding: 15,
-                            font: {
-                                family: "'Lato', sans-serif",
-                                size: 12
-                            }
-                        }
+                        display: false, 
                     },
                     tooltip: {
                         backgroundColor: 'rgba(255, 255, 255, 0.9)',

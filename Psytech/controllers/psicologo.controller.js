@@ -1002,13 +1002,7 @@ exports.getAnalisisColores = async (request, response, next) => {
         
                 return { ...p, texto: { fase1: textoFase1, fase2: textoFase2 } };
             });
-        }
-                                              
-        
-        const invertirPareja = (pareja) => {
-            const partes = pareja.split('-');
-            return `${partes[1]}-${partes[0]}`;
-        };        
+        }   
 
         const parejasNormalizadas = parejas.map(p => {
             const numeros = p.pareja.match(/\d+/g); 

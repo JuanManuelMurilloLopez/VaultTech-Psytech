@@ -279,14 +279,12 @@
   
   /* Barra personalidad (azul) */
   .personalidad-bar {
-    background-color: rgba(41, 73, 105, 0.8) !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
   
   /* Barra adaptación (verde) */
   .adaptacion-bar {
-    background-color: rgba(114, 133, 117, 0.8) !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
