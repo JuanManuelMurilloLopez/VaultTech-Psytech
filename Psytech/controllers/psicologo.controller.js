@@ -239,6 +239,23 @@ exports.getInformacionGrupo = (request, response, next) => {
     
 }
 
+exports.buscarAspirantes = (request, response, next) => {
+    Grupo.getAspirantes(request.params.idGrupo)
+        .then(([rows]) => {
+            const filtrados = rows.filter(a => {
+                const nombreCompleto = `${a.nombreUsuario} ${a.apellidoPaterno} ${a.apellidoMaterno || ''}`.toLowerCase();
+                return nombreCompleto.includes(request.params.valor.toLowerCase());
+            });
+
+            response.json(filtrados);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+};
+
+
+
 exports.getEditarGrupo = (request, response, next) => {
     const idGrupo = request.params.idGrupo;
     

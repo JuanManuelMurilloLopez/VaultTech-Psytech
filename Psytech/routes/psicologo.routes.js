@@ -39,7 +39,8 @@ router.post('/editar-grupo/:idGrupo', controller.postEditarGrupo);
 router.post('/actualizar-estatus-grupo/:idGrupo', controller.postActualizarEstatusGrupo);
 
 // Vista con la información de cierto grupo
-router.get('/informacion-grupos/:idGrupo/:idInstitucion', controller.getInformacionGrupo)
+router.get('/informacion-grupos/:idGrupo/:idInstitucion', controller.getInformacionGrupo);
+router.get('/buscar-aspirantes/:idGrupo/:valor', controller.buscarAspirantes);
 
 // Vista con la información de un aspirante
 router.get('/aspirantes/:idAspirante/:idGrupo/:idInstitucion', controller.getAspirante);
