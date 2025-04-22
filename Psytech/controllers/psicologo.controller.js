@@ -13,6 +13,7 @@ const interpretaciones = require('../util/interpretacionColores.js');
 
 const xlsx = require('xlsx');
 const fs = require('fs');
+const Usuario = require('../models/usuario.model.js');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
@@ -533,9 +534,76 @@ exports.postRegistrarAspirantes = (request, response, next) => {
 };
 
 exports.getEditarAspirantes = (request, response, next) => {
-    console.log('Editar Aspirante');
-    response.render('Psicologos/editarAspirante');
+
+    Aspirante.fetchOne(request.params.idAspirante)
+    .then(([rows, fieldData]) => {
+        const aspirante = rows[0];
+
+        Usuario.findUsuario(aspirante.idUsuario)
+        .then(([rows, fieldData]) => {
+            const usuario = rows[0];
+            Pais.fetchAll()
+            .then(([rows, fieldData]) => {
+                const paises = rows;
+                Estado.fetchAll()
+                .then(([rows, fieldData]) => {
+                    const estados = rows;
+                    response.render('Psicologos/editarAspirante',{
+                        aspirante: aspirante || null,
+                        usuario: usuario || null,
+                        paises: paises || [],
+                        estados: estados || [],
+                        idGrupo: request.params.idGrupo,
+                        idInstitucion: request.params.idInstitucion
+                    })
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
+        
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
+
+exports.postEditarAspirantes = (request, response, next) => {
+    console.log(request.body);
+
+    Aspirante.modificarAspirante(
+                                request.params.idAspirante, 
+                                request.body.institucionProcedencia, 
+                                request.body.idPais, request.body.idEstado)
+    .then(() => {
+        Usuario.modificarUsuario(
+                                request.params.idAspirante, 
+                                request.body.nombreUsuario, 
+                                request.body.apellidoPaterno, 
+                                request.body.apellidoMaterno, 
+                                request.body.correo, request.body.lada, 
+                                request.body.numeroTelefono, 
+                                request.body.estatusUsuario)
+        .then(() => {
+            response.render('Psicologos/cambiosGuardados.ejs');
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+
+}
 
 // CATÁLOGO PRUEBAS
 exports.getCatalogoPruebas = (request, response, next) => {

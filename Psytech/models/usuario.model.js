@@ -34,6 +34,34 @@ class Usuario {
         [usuario]
     );
   }
+
+  static findUsuario(idUsuario){
+    return db.execute(`
+                              SELECT *
+                              FROM usuarios
+                              WHERE idUsuario = ?
+      `, [idUsuario]);
+  }
+
+  static modificarUsuario(
+                          idAspirante, nombreUsuario, apellidoPaterno, 
+                          apellidoMaterno, correo, lada, numeroTelefono, 
+                          estatusUsuario){
+    return db.execute(`
+                        UPDATE usuarios u
+                        JOIN aspirantes a on u.idUsuario = a.idUsuario
+                        SET u.nombreUsuario = ?,
+                        u.apellidoPaterno = ?,
+                        u.apellidoMaterno = ?,
+                        u.correo = ?,
+                        u.lada = ?,
+                        u.numeroTelefono = ?,
+                        u.estatusUsuario = ?
+                        WHERE a.idAspirante = ?
+      `, [nombreUsuario, apellidoPaterno, apellidoMaterno, 
+          correo, lada, numeroTelefono, estatusUsuario, idAspirante]);
+  }
+
 }
 
 
