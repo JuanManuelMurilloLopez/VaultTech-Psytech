@@ -10,7 +10,7 @@ module.exports = class CatalogoPruebas {
 
   static fetchAll() {
     return db.execute(`
-      SELECT idPrueba, nombre, descripcion, instrucciones, tiempo
+      SELECT idPrueba, nombre, descripcion, instrucciones, duracion
       FROM pruebas
       ORDER BY nombre
     `);

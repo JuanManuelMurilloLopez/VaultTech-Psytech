@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Prueba Hartman</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+    <link rel="stylesheet" href="/css/aspirantes/hartmanPrueba.css" />
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <!-- Progress bar -->
+        <div class="progress-container">
+          <progress class="progress custom-progress" value="<%= fase1 ? 50 : 100 %>" max="100"></progress>
+          <p class="progress-text">Fase <%= fase1 ? 1 : 2 %> de 2</p>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions">
+          <h2 class="instructions-title">Instrucciones:</h2>
+          <p>Ordene las siguientes frases según su preferencia. Asigne el número 1 a la frase que más le agrade o identifique, y continúe en orden ascendente hasta el 18 para la que menos le agrade.</p>
+          <p>
+            <strong>Nota importante:</strong>
+            Cada número solo puede ser usado una vez. Una vez seleccionado, ese número no estará disponible para otras frases.
+          </p>
+        </div>
+
+        <!-- Error message for duplicates -->
+        <div id="error-message" class="message is-danger is-hidden">
+          <div class="message-body">
+            <p class="has-text-weight-bold">No puede continuar con respuestas duplicadas.</p>
+            <p>Por favor, revise las opciones marcadas en rojo y asigne un número único a cada pregunta.</p>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <form action="/aspirante/prueba-hartman/fase<%= fase1 ? 1 : 2 %>" method="POST" id="hartman-form">
+
+          <!-- Questions split into two columns -->
+          <div class="columns question-container">
+            <!-- First column - Questions 1-9 -->
+            <div class="column is-half">
+              <% preguntasHartman.slice(0, 9).forEach((pregunta, index) => { %>
+                <div class="question-box">
+                  <div class="columns is-vcentered">
+                    <div class="column is-8">
+                      <span class="question-number">Número <%= numerosPreguntas[index] %>:</span>
+                      <span class="question-text"><%= pregunta %></span>
+                    </div>
+                    <div class="column is-4">
+                      <div class="field">
+                        <div class="control">
+                          <div class="select is-fullwidth ranking-select">
+                            <select name="respuesta_<%= numerosPreguntas[index] %>" id="select_<%= numerosPreguntas[index] %>" required>
+                              <option value="">Ranking</option>
+                              <% for (let opcion = 1; opcion <= 18; opcion++) { %>
+                                <option value="<%= opcion %>"><%= opcion %></option>
+                              <% } %>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+
+            <!-- Second column - Questions 10-18 -->
+            <div class="column is-half">
+              <% preguntasHartman.slice(9, 18).forEach((pregunta, index) => { %>
+                <div class="question-box">
+                  <div class="columns is-vcentered">
+                    <div class="column is-8">
+                      <span class="question-number">Número <%= numerosPreguntas[index + 9] %>:</span>
+                      <span class="question-text"><%= pregunta %></span>
+                    </div>
+                    <div class="column is-4">
+                      <div class="field">
+                        <div class="control">
+                          <div class="select is-fullwidth ranking-select">
+                            <select name="respuesta_<%= numerosPreguntas[index + 9] %>" id="select_<%= numerosPreguntas[index + 9] %>" required>
+                              <option value="">Ranking</option>
+                              <% for (let opcion = 1; opcion <= 18; opcion++) { %>
+                                <option value="<%= opcion %>"><%= opcion %></option>
+                              <% } %>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+
+          <!-- Submit button -->
+          <div class="button-container">
+            <button class="button is-info is-medium" type="submit" id="submit-button">Siguiente</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <script src="/js/respondeHartman.js"></script>
+  </body>
+</html>
