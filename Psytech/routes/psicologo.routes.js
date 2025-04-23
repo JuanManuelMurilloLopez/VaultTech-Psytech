@@ -39,7 +39,8 @@ router.post('/editar-grupo/:idGrupo', controller.postEditarGrupo);
 router.post('/actualizar-estatus-grupo/:idGrupo', controller.postActualizarEstatusGrupo);
 
 // Vista con la información de cierto grupo
-router.get('/informacion-grupos/:idGrupo/:idInstitucion', controller.getInformacionGrupo)
+router.get('/informacion-grupos/:idGrupo/:idInstitucion', controller.getInformacionGrupo);
+router.get('/buscar-aspirantes/:idGrupo/:valor', controller.buscarAspirantes);
 
 // Vista con la información de un aspirante
 router.get('/aspirantes/:idAspirante/:idGrupo/:idInstitucion', controller.getAspirante);
@@ -52,7 +53,8 @@ router.get('/registrar-aspirantes/:idGrupo/:idInstitucion', controller.getRegist
 router.post('/registrar-aspirantes/:idGrupo/:idInstitucion', controller.postRegistrarAspirantes);
 
 // Formulario para editar aspirantes
-router.get('/editar-aspirantes', controller.getEditarAspirantes);
+router.get('/editar-aspirante/:idInstitucion/:idGrupo/:idAspirante', controller.getEditarAspirantes);
+router.post('/editar-aspirante/:idInstitucion/:idGrupo/:idAspirante', controller.postEditarAspirantes);
 
 // Vista con todas las pruebas
 router.get('/catalogo-pruebas', controller.getCatalogoPruebas);

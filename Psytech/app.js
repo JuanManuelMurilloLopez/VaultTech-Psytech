@@ -66,6 +66,7 @@ app.set('views', 'views');
 
 // Middleware para procesar datos del formulario
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // Middleware para procesar JSON
 app.use(express.json());
