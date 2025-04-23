@@ -431,7 +431,10 @@ exports.getRespuestasFormatoEntrevista = (request, response, next) => {
         const respuestasAspirante = rows;
         console.log(respuestasAspirante);
         response.render('Psicologos/respuestasFormatoDeEntrevista', {
-            respuestasAspirante: respuestasAspirante || []
+            respuestasAspirante: respuestasAspirante || [],
+            aspirante: request.params.idAspirante || null,
+            grupo: request.params.idGrupo || null,
+            idInstitucion: request.params.idInstitucion || null,
         });
     })
     .catch((error) => {
@@ -478,7 +481,10 @@ exports.getInformacionFamiliar = (request, response, next) => {
             informacionFamiliar: {
                 nodos: nodos || [],
                 links: links || []
-            }
+            },
+            aspirante: request.params.idAspirante || null,
+            grupo: request.params.idGrupo || null,
+            idInstitucion: request.params.idInstitucion || null,
         });
         
     })
