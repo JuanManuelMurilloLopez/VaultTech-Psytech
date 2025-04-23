@@ -98,25 +98,6 @@ module.exports = class Prueba{
         return Promise.all(promesas);
     };               
 
-    static getPreguntas16PF(){}
-
-    static getPreguntasHartman(){}
-
-    static getPreguntasKostick(){}
-
-    static getPreguntasTerman(){}
-
-
-    static addRespuestaOtis(){}
-
-    static addRespuesta16PF(){}
-
-    static addRespuestaHartman(){}
-
-    static addRespuestaKostick(){}
-
-    static addRespuestaTerman(){}
-
     static fetchColores(){
         return db.execute('SELECT * FROM colores ORDER BY numeroColor');
     }

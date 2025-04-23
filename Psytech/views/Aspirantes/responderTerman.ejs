@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= title %></title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+    <link rel="stylesheet" href="/css/aspirantes/responderTerman.css" />
+</head>
+
+<body class="has-background-light">
+    <div class="site">
+        <main>
+        <!-- Sección de advertencia -->
+        <section id="advertencia-inicial" class="section">
+            <div class="container has-text-centered">
+            <div class="box">
+                <h2 class="title is-size-1 has-text-black">Advertencia</h2>
+                <p class="subtitle is-5 mb-5">
+                Una vez iniciada la prueba, no podrás actualizar la página ni regresar. Si lo haces, tus respuestas no se guardarán.
+                </p>
+                <div id="botones-inicio">
+                <button id="volver-prueba" class="button is-large has-text-white">Volver</button>
+                <button id="iniciar-prueba" class="button is-large has-text-white">Iniciar prueba</button>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- Contenedor principal -->
+        <section id="contenedor-serie" class="section" style="display: none">
+            <progress id="barra-progreso" class="progress is-small" value="0" max="100"></progress>
+            <p id="progreso-texto" class="has-text-centered">0% completado</p>
+
+            <div class="container">
+            <!-- Cronómetro -->
+            <div id="cronometro" class="is-info has-text-black has-text-weight-bold is-size-5 has-text-centered">
+                Tiempo restante: 0s
+            </div>
+
+            <!-- Instrucciones -->
+            <div id="instrucciones-serie" class="box content"></div>
+
+            <!-- Preguntas -->
+            <div id="preguntas-serie" class="mt-5"></div>
+
+            <!-- Botón siguiente -->
+            <button id="siguiente-serie" class="button is-link is-medium is-fullwidth is-hidden">Siguiente Serie</button>
+            </div>
+        </section>
+        </main>
+
+        <footer></footer>
+    </div>
+
+    <script src="/js/aspirantes/responderTerman.js"></script>
+</body>
+
+</html>

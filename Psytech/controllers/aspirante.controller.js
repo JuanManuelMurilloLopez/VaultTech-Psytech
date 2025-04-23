@@ -8,6 +8,9 @@ const PruebaColores = require('../models/prueba.model');
 const PruebaOtis = require('../models/prueba.model');
 const OpcionOtis = require('../models/opcionOtis.model.js');
 const Aspirante = require('../models/aspirante.model');
+const Terman = require('../models/terman.model');
+const modeloTerman = new Terman();
+const respuestasModel = require('../models/respuestasTerman.model');
 
 //Rutas del portal de los Aspirantes
 exports.getPruebas = (request, response) => {
@@ -623,4 +626,92 @@ exports.getPruebaCompletada = (request, response, next) => {
 
 exports.getRespuestasEnviadas = (request, response, next) => {
     response.render('Aspirantes/respuestasEnviadas');
+};
+
+// Controladores para pruebas Terman y Hartman
+
+exports.getResponderTerman = (req, res, next) => {
+    res.render("Aspirantes/responderTerman", {
+        title: "Responder Terman"
+    });
+};
+
+exports.getInfoSerie = (req, res, next) => {
+    const idSerie = parseInt(req.params.idSerie);
+    console.log("Valor recibido en req.params.idSerie:", idSerie);
+
+    if (!idSerie || isNaN(idSerie)) {
+        return res.status(400).json({ error: "ID de serie inválido o no proporcionado." });
+    }
+
+    let nombreSeccion, instruccion, preguntas, opciones;
+
+    modeloTerman.fetchSerieInfoById(idSerie)
+        .then(info => {
+            // console.log("info:", info);
+            id = info[0].idSerieTerman
+            nombreSeccion = info[0].nombreSeccion;
+            instruccion = info[0].instruccion;
+            duracion = info[0].duracion
+
+            return modeloTerman.fetchPreguntaSerieById(idSerie);
+        })
+        .then(preguntasRows => {
+            preguntas = preguntasRows;
+            return modeloTerman.fetchOpcionesSerieById(idSerie);
+        })
+        .then(opcionesRows => {
+            opciones = opcionesRows;
+
+            // Adjunta las opciones a cada pregunta
+            const preguntasConOpciones = preguntas.map(p => {
+                p.opciones = opciones.filter(o => o.idPreguntaTerman === p.idPreguntaTerman);
+                return p;
+            });
+
+            res.json({
+                id,
+                nombreSeccion,
+                instruccion,
+                duracion,
+                preguntas: preguntasConOpciones
+            });
+            console.log(res.json)
+        })
+        .catch(error => {
+            console.error("Error al cargar serie:", error);
+            res.status(500).json({ error: "Error al cargar la serie." });
+        });
+};
+
+exports.postRespuestasSerie = async (req, res, next) => {
+    try {
+        // Constantes de construcción
+
+        const idSerie = parseInt(req.params.idSerie);
+        const { respuestas } = req.body;
+        // console.log("Recibimos respuestas en el backend:", respuestas);
+        const idUsuario = req.session.idAspirante;
+        const idGrupo = req.session.idGrupo;
+        const idPrueba = 4;
+
+        // PASO 49 DE DIAGRAMA: Calificamos la serie
+        await calificarSerieTerman(idSerie, idUsuario, idGrupo, respuestas)
+
+        // PASO 69 DE DIAGRAMA: Creamos el modelo con esos datos 
+        const respuestasModel = new respuestasTerman(
+            idUsuario,
+            idGrupo,
+            idPrueba,
+            respuestas
+        );
+
+        // Guardamos las respuestas
+        await respuestasModel.save();
+        res.status(200).json({ ok: true, message: "Respuestas guardadas" });
+
+    } catch (error) {
+        console.log("Algo salió mal en post_respuestasSerie:", error);
+        res.status(500).json({ error: "Error al guardar respuestas" });
+    }
 };

@@ -53,4 +53,10 @@ router.get('/prueba-completada', controller.getPruebaCompletada);
 
 router.get('/respuestas-enviadas', controller.getRespuestasEnviadas);
 
+// Rutas para prueba Terman
+
+router.get('/prueba-terman', controller.getResponderTerman);
+router.get('/prueba-terman/serie/:idSerie', controller.getInfoSerie);
+router.post('/prueba-terman/serie/:idSerie', controller.postRespuestasSerie);
+
 module.exports = router;
