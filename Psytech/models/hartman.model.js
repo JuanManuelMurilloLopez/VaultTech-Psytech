@@ -41,11 +41,13 @@ class Hartman {
     static async getRespuestasUsuario(idAspirante, idGrupo) {
       try {
           const query = `
-            SELECT idPreguntaHartman, respuestaAbierta, tiempoRespuesta
+            SELECT idPreguntaHartman, 
+                  GROUP_CONCAT(respuestaAbierta) AS respuestasAbiertas, 
+                  tiempoRespuesta
             FROM respuestashartman
             WHERE idAspirante = ? AND idGrupo = ?
-            GROUP BY idPreguntaHartman
-            ORDER BY idPreguntaHartman ASC
+            GROUP BY idPreguntaHartman, tiempoRespuesta
+            ORDER BY idPreguntaHartman ASC;
           `;
           const [rows] = await db.execute(query, [idAspirante, idGrupo]);
           return rows;
@@ -55,14 +57,15 @@ class Hartman {
       }
     }
 
-    static getGrupoPrueba(idAspirante, idPrueba){
-            return db.execute(`
-                SELECT idGrupo 
-                FROM aspirantesgrupospruebas 
-                WHERE idAspirante = ? AND idPrueba = ?
-            `, [idAspirante, idPrueba]);       
-    }
-
+    static async getGrupoPrueba(idAspirante, idPrueba){
+      const [rows] = await db.execute(`
+          SELECT idGrupo 
+          FROM aspirantesgrupospruebas 
+          WHERE idAspirante = ? AND idPrueba = ?
+      `, [idAspirante, idPrueba]);
+  
+      return rows;
+  }  
 }
 
 // Exporta la clase para que pueda ser utilizada en otros módulos

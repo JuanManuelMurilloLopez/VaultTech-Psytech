@@ -634,34 +634,36 @@ let tiempoInicio;
  * Almacena el tiempo de inicio, obtiene las preguntas de la fase 1,
  * actualiza la sesión de la prueba y renderiza la vista.
  */
-exports.getHartmanFase1 = (request, response, next) => {
+exports.getHartmanFase1 = async (request, response, next) => {
     const idPrueba = 3;
     const fasePregunta = 1;
 
-    hartman.getGrupoPrueba(request.session.idAspirante, idPrueba)
-        .then(([rows]) => {
-            if (rows.length > 0) {
-                request.session.idGrupo = rows[0].idGrupo;
-                console.log("ID de Grupo establecido:", request.session.idGrupo);
-            } else {
-                console.log("No se encontró grupo para este aspirante y prueba");
-            }
+    try {
+        if (!request.session.idAspirante) {
+            return response.status(400).send("Debe iniciar sesión.");
+        }
 
-            // Obtener preguntas de la fase 1
-            return hartman.fetchFase1(fasePregunta);
-        })
-        .then(([rows]) => {
-            response.render('Aspirantes/faseHartman', {
-                idsPreguntasHartman: rows.map(row => row.idPreguntaHartman),
-                numerosPreguntas: rows.map(row => row.idPreguntaHartman),
-                preguntasHartman: rows.map(row => row.preguntaHartman),
-                fase1: true,
-            });
-        })
-        .catch((error) => {
-            console.error('Error obteniendo las preguntas de la fase 1:', error);
-            response.status(500).send('Error al obtener las preguntas de la fase 1.');
+        const grupo = await hartman.getGrupoPrueba(request.session.idAspirante, idPrueba);
+        if (!grupo || grupo.length === 0) {
+            return response.status(400).send("No estás asignado a ningún grupo para esta prueba.");
+        }
+
+        request.session.idGrupo = grupo[0].idGrupo;
+        console.log("ID de Grupo establecido:", request.session.idGrupo);
+
+        const [preguntas] = await hartman.fetchFase1(fasePregunta);
+
+        response.render('Aspirantes/faseHartman', {
+            idsPreguntasHartman: preguntas.map(row => row.idPreguntaHartman),
+            numerosPreguntas: preguntas.map(row => row.idPreguntaHartman),
+            preguntasHartman: preguntas.map(row => row.preguntaHartman),
+            fase1: true,
         });
+
+    } catch (error) {
+        console.error('Error obteniendo grupo o preguntas:', error.message);
+        response.status(500).send("Ocurrió un error al obtener el grupo o las preguntas.");
+    }
 };
 
 /**
@@ -673,6 +675,10 @@ exports.postHartmanFase1 = (request, response, next) => {
     const tiempoTotalSegundos = Math.floor((tiempoFin - tiempoInicio) / 1000);
     console.log("Contador detenido:", tiempoFin, " -> Tiempo total:", tiempoTotalSegundos, "segundos");
 
+    const idAspirante = request.session.idAspirante;
+    const idGrupo = request.session.idGrupo;
+    const idPrueba = 3; 
+
     const totalPreguntas = Object.keys(request.body).filter(key => key.startsWith("respuesta_")).length;
     const tiempoPromedio = totalPreguntas > 0 ? tiempoTotalSegundos / totalPreguntas : 0;
     console.log("Tiempo promedio por pregunta:", tiempoPromedio);
@@ -681,14 +687,13 @@ exports.postHartmanFase1 = (request, response, next) => {
         .filter(([pregunta_id]) => pregunta_id.startsWith("respuesta_"))
         .map(([pregunta_id, respuesta]) => {
             const idPregunta = parseInt(pregunta_id.replace("respuesta_", ""), 10);
-
             return [
-                request.session.idUsuario ?? null,
-                request.session.idGrupo ?? null,
-                idPregunta ?? null,
-                3,
-                respuesta ?? null,
-                tiempoPromedio ?? null
+                idAspirante,
+                idGrupo,
+                idPregunta,
+                idPrueba,
+                respuesta,
+                tiempoPromedio
             ];
         });
 
@@ -696,7 +701,7 @@ exports.postHartmanFase1 = (request, response, next) => {
 
     respuestasFase1.save()
         .then(() => {
-            response.redirect('/prueba-hartman/fase2');
+            response.redirect('/aspirante/prueba-hartman/fase2');
         })
         .catch(err => {
             console.error('Error al guardar respuestas:', err);
@@ -718,7 +723,7 @@ exports.getHartmanFase2 = async (request, response, next) => {
         response.render('Aspirantes/faseHartman', {
             numerosPreguntas: rows.map(row => row.idPreguntaHartman),
             preguntasHartman: rows.map(row => row.preguntaHartman),
-            fase1: false,
+            fase1: false, // Indicar que es la fase 2
         });
     } catch (error) {
         console.error('Error obteniendo las preguntas de la fase 2:', error);
@@ -731,7 +736,6 @@ exports.getHartmanFase2 = async (request, response, next) => {
  * Calcula el tiempo, extrae las respuestas, las guarda, actualiza la sesión
  * de la prueba y redirige al aspirante.
  */
-
 exports.postHartmanFase2 = async (request, response, next) => {
     try {
         const tiempoFin = Date.now();
@@ -741,6 +745,10 @@ exports.postHartmanFase2 = async (request, response, next) => {
         const totalPreguntas = Object.keys(request.body).filter(key => key.startsWith("respuesta_")).length;
         const tiempoPromedio = totalPreguntas > 0 ? tiempoTotalSegundos / totalPreguntas : 0;
         console.log("Tiempo promedio por pregunta:", tiempoPromedio);
+
+        const idAspirante = request.session.idAspirante;
+        const idGrupo = request.session.idGrupo;
+        const idPrueba = 3; 
         
         const respuestas = Object.entries(request.body)
             .filter(([pregunta_id]) => pregunta_id.startsWith("respuesta_"))
@@ -748,69 +756,68 @@ exports.postHartmanFase2 = async (request, response, next) => {
                 const idPregunta = parseInt(pregunta_id.replace("respuesta_", ""), 10);
 
                 return [
-                    request.session.idUsuario,
-                    request.session.idGrupo,
+                    idAspirante,
+                    idGrupo,
                     idPregunta,
-                    3,
+                    idPrueba,
                     respuesta,
                     tiempoPromedio,
                 ];
             });
 
-        console.log("Respuestas array:", respuestas); // Log the array
+        console.log("Respuestas array:", respuestas);
 
         const respuestasFase2 = new hartman(respuestas);
 
         await respuestasFase2.save();
         
-/**
- * Análisis Hartman y guardado de variables 
- */
-        
-    // 1. Recuperar todas las respuestas del usuario 
-    const todasLasRespuestas = await hartman.getRespuestasUsuario(
-        request.session.idUsuario,
-        request.session.idGrupo
-    );
-    console.log("Todas las respuestas del usuario:", todasLasRespuestas);
+        // --- Análisis Hartman y guardado de variables ---
+        // 1. Recuperar todas las respuestas del usuario
+        const todasLasRespuestas = await hartman.getRespuestasUsuario(
+            request.session.idAspirante,
+            request.session.idGrupo
+        );
+        console.log("Todas las respuestas del usuario:", todasLasRespuestas);
 
-    // Separar las respuestas en arreglos de 'cita' y 'frase' y los convierte a numeros 
-    const respuestasFrase = todasLasRespuestas
-        .filter((r) => r.idPreguntaHartman >= 1 && r.idPreguntaHartman <= 18)
-        .map((r) => parseInt(r.respuestaAbierta, 10)); 
+        // Separar las respuestas en arreglos de 'cita' y 'frase' y los convierte a números
+        const respuestasFrase = todasLasRespuestas
+            .filter((r) => r.idPreguntaHartman >= 1 && r.idPreguntaHartman <= 18)
+            .map((r) => parseInt(r.respuestaAbierta, 10));
 
-    const respuestasCita = todasLasRespuestas
-        .filter((r) => r.idPreguntaHartman >= 19 && r.idPreguntaHartman <= 36)
-        .map((r) => parseInt(r.respuestaAbierta, 10)); 
+        const respuestasCita = todasLasRespuestas
+            .filter((r) => r.idPreguntaHartman >= 19 && r.idPreguntaHartman <= 36)
+            .map((r) => parseInt(r.respuestaAbierta, 10));
+
         console.log("Respuestas Frase:", respuestasFrase);
         console.log("Respuestas Cita:", respuestasCita);
-            
-    // 2. Analizar las respuestas 
-    const resultadosAnalisis = calcularResultados(respuestasFrase, respuestasCita);
-    console.log("Resultados del análisis:", resultadosAnalisis);
-    
-    // 3. Guardar los resultados del análisis
-    const hartmanAnalysis = new hartmanAnalysisModel(
-    request.session.idUsuario,
-    request.session.idGrupo,
-    resultadosAnalisis
-    );
-    await hartmanAnalysis.save();
-    console.log("Análisis guardado en la base de datos.");
-    
-    // --- FIN ANÁLISIS Y GUARDADO ---
-            
-            const sesiones = new sesionesPruebas();
-            await sesiones.updateSesionPrueba({
-            idAspirante: request.session.idUsuario,
+
+        // 2. Analizar las respuestas
+        const resultadosAnalisis = calcularResultados(respuestasFrase, respuestasCita);
+        console.log("Resultados del análisis:", resultadosAnalisis);
+        
+        // 3. Guardar los resultados del análisis
+        const hartmanAnalysis = new hartmanAnalysisModel(
+            request.session.idAspirante,
+            request.session.idGrupo,
+            resultadosAnalisis
+        );
+        await hartmanAnalysis.save();
+        console.log("Análisis guardado en la base de datos.");
+        
+        // --- FIN ANÁLISIS Y GUARDADO ---
+        
+        // Actualizar la sesión de la prueba a 'completada'
+        const sesiones = new sesionesPruebas();
+        await sesiones.updateSesionPrueba({
+            idAspirante: request.session.idAspirante,
             idGrupo: request.session.idGrupo,
             idPrueba: 3,
-            estatus: 2,
-    });
-    
-    response.redirect('/aspirante/prueba-completada');
+            estatus: 2, // Fase 2 completada
+        });
+        
+        response.redirect('/aspirante/prueba-completada');
     } catch (err) {
-    console.error('Error en post_HartmanFase2:', err);
-    response.status(500).send('Error interno del servidor.');
+        console.error('Error en post_HartmanFase2:', err);
+        response.status(500).send('Error interno del servidor.');
     }
 };
