@@ -440,11 +440,10 @@ exports.getRespuestasFormatoEntrevista = (request, response, next) => {
 };
 
 // Controlador para menejar la informacion familiar de un aspirante
-
 exports.getInformacionFamiliar = (request, response, next) => {
     Familiar.getFamiliaresAspirante(request.params.idGrupo, request.params.idAspirante)
     .then(([rows, fieldData]) => {
-        const informacionFamiliar = rows.map((familiar) => ({
+        const nodos = rows.map((familiar) => ({
             key: familiar.idFamiliar,
             rol: familiar.rolFamiliar,
             name: familiar.nombreFamiliar,
@@ -452,11 +451,36 @@ exports.getInformacionFamiliar = (request, response, next) => {
             gender: familiar.idGenero,
             maritalStatus: familiar.idEstadoCivil,
             lifeStatus: familiar.estadoDeVida === 1 ? "Vivo" : "Muerto",
-            parent: familiar.hijoDe
+            hijoDePadre: familiar.hijoDePadre,
+            hijoDeMadre: familiar.hijoDeMadre
         }));
-        console.log(informacionFamiliar);
 
-        response.json({ nodes: informacionFamiliar });
+        const links = [];
+        rows.forEach((familiar => {
+            if(familiar.hijoDePadre){
+                links.push({
+                    from: familiar.hijoDePadre, 
+                    to: familiar.idFamiliar
+                })
+            }
+            if (familiar.hijoDeMadre) {
+                links.push({
+                    from: familiar.hijoDeMadre, 
+                    to: familiar.idFamiliar
+                });
+            }
+        }))
+
+        console.log(nodos);
+        console.log(links);
+
+        response.render('Psicologos/informacionFamiliar', {
+            informacionFamiliar: {
+                nodos: nodos || [],
+                links: links || []
+            }
+        });
+        
     })
     .catch((error) => {
         console.log(error);

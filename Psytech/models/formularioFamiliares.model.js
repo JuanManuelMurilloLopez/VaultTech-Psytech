@@ -11,7 +11,8 @@ module.exports = class Familiar{
             `SELECT rolFamiliar, 
                                 nombreFamiliar, 
                                 edadFamiliar, 
-                                hijoDe, 
+                                hijoDePadre,
+                                hijodeMadre, 
                                 estadoDeVida 
             FROM familiares`
         );
@@ -20,8 +21,8 @@ module.exports = class Familiar{
     saveFamiliar() {
         const sql = `
             INSERT INTO familiares 
-            (idFamiliar, idAspirante, rolFamiliar, nombreFamiliar, edadFamiliar, idGenero, idEstadoCivil, hijoDe, estadoDeVida) 
-            VALUES (uuid(), ?, ?, ?, ?, ?, ?, ?, ?)
+            (idFamiliar, idAspirante, rolFamiliar, nombreFamiliar, edadFamiliar, idGenero, idEstadoCivil, hijoDePadre, hijoDeMadre, estadoDeVida) 
+            VALUES (uuid(), ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
     
         return db.query(sql, [this.idAspirante, ...this.respuestas]);
