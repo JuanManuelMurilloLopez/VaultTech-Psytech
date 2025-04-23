@@ -33,7 +33,7 @@
                     <%= error %>
                 </div>
             <% } %>
-            <form action="/coordinador/editar-coordinador/<%= coordinador.idUsuario %>" method="POST">
+            <form action="/coordinador/editar-coordinador/<%= coordinador.idUsuario %>" method="POST" onsubmit="return validarFormulario()">
                 <div>
                     <!--Input nombre-->
                     <div class="mb-3">
@@ -48,7 +48,7 @@
                     <!--Input Apellido Materno-->
                     <div class="mb-3">
                         <label class="form-label" for="apellidoMaterno">Apellido Materno</label>
-                        <input class="form-control" type="text" name="apellidoMaterno" id="apellidoMaterno" value="<%= coordinador.apellidoMaterno %>" required>
+                        <input class="form-control" type="text" name="apellidoMaterno" id="apellidoMaterno" value="<%= coordinador.apellidoMaterno %>">
                     </div>
                     <!--Input Correo-->
                     <div class="mb-3">
@@ -131,6 +131,15 @@
                 cambiarEstatus(false);
             });
         });
+    </script>
+    <script>
+        function validarFormulario() {
+            const ladaInput = document.getElementById('lada');
+            if (!ladaInput.value.startsWith('+')) {
+                ladaInput.value = '+' + ladaInput.value;
+            }
+            return true; 
+        }
     </script>
 </body>
 </html>
