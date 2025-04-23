@@ -78,5 +78,7 @@ router.get('/cuadernillo-colores/:idGrupo/:idAspirante/:idInstitucion', controll
 
 router.get('/respuestas-otis', controller.getRespuestasOtis);
 
+// Vista con el análisis de la prueba Hartman del aspirante
+router.get('/analisis-hartman/:idGrupo/:idAspirante/:idInstitucion', controller.getAnalisisHartman);
 
 module.exports = router;

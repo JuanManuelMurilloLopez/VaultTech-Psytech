@@ -1178,3 +1178,96 @@ exports.getRespuestasOtis = (request, response, next) => {
     console.log('Respuestas Otis');
     response.render('Psicologos/respuestasOtis');
 };
+
+const consultaResultados = require('../models/consultaResultados.model.js');
+ const {
+     buscarValor, // Importa la función
+     DIM,
+     DIF,
+     dimGeneral,
+     dimPorcentaje,
+     INT,
+     DI,
+     DIS,
+     VQ,
+     Equilibrio_BQR,
+     Equilibrio_BQA,
+     Equilibrio_CQ1,
+     Equilibrio_CQ2
+ } = require('../public/js/aspirantes/encuentraValor.js');
+
+exports.getAnalisisHartman = async (request, response, next) => {
+
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    console.log('Analisis Hartman');
+
+    try {
+        const [rows] = await consultaResultados.fetchHartmanAspirante(idAspirante, idGrupo);
+        console.log("Datos de la base de datos:", rows);
+
+        if (!rows || rows.length === 0) {
+            return response.status(404).send("No se encontraron resultados de Hartman.");
+        }
+
+         // Procesa los datos del analisis de hartman para poder graficarlos
+        const analisisProcesado = {
+            MundoInterno: {
+                DimI: rows[0].citaDimI != null ? buscarValor(rows[0].citaDimI, DIM) : 0,
+                DimE: rows[0].citaDimE != null ? buscarValor(rows[0].citaDimE, DIM) : 0,
+                DimS: rows[0].citaDimS != null ? buscarValor(rows[0].citaDimS, DIM) : 0,
+                DiF: rows[0].citaDif != null ? buscarValor(rows[0].citaDif, DIF) : 0,
+                DimGeneral: rows[0].citaDimGeneral != null ? buscarValor(rows[0].citaDimGeneral, dimGeneral) : 0,
+                DimPorcentaje: rows[0].citaDimPorcentaje != null ? buscarValor(rows[0].citaDimPorcentaje, dimPorcentaje) : 0,
+                IntI: rows[0].citaIntI != null ? buscarValor(rows[0].citaIntI, INT) : 0,
+                IntE: rows[0].citaIntE != null ? buscarValor(rows[0].citaIntE, INT) : 0,
+                IntS: rows[0].citaIntS != null ? buscarValor(rows[0].citaIntS, INT) : 0,
+                IntGeneral: rows[0].citaIntGeneral != null ? buscarValor(rows[0].citaIntGeneral, DIM) : 0,
+                IntPorcentaje: rows[0].citaIntPorcentaje != null ? buscarValor(rows[0].citaIntPorcentaje, dimPorcentaje) : 0,
+                Di: rows[0].citaDi != null ? buscarValor(rows[0].citaDi, DI) : 0,
+                Dis: rows[0].citaDIS != null ? buscarValor(rows[0].citaDIS, DIS) : 0,
+                Sq1: rows[0].citaSQ1 != null ? buscarValor(rows[0].citaSQ1, VQ) : 0,
+                Sq2: rows[0].citaSQ2 != null ? buscarValor(rows[0].citaSQ2, DIM) : 0,
+            },
+            MundoExterno: {
+                DimI: rows[0].fraseDimI != null ? buscarValor(rows[0].fraseDimI, DIM) : 0,
+                DimE: rows[0].fraseDimE != null ? buscarValor(rows[0].fraseDimE, DIM) : 0,
+                DimS: rows[0].fraseDimS != null ? buscarValor(rows[0].fraseDimS, DIM) : 0,
+                DiF: rows[0].fraseDif != null ? buscarValor(rows[0].fraseDif, DIF) : 0,
+                DimGeneral: rows[0].fraseDimGeneral != null ? buscarValor(rows[0].fraseDimGeneral, dimGeneral) : 0,
+                DimPorcentaje: rows[0].fraseDimPorcentaje != null ? buscarValor(rows[0].fraseDimPorcentaje, dimPorcentaje) : 0,
+                IntI: rows[0].fraseIntI != null ? buscarValor(rows[0].fraseIntI, INT) : 0,
+                IntE: rows[0].fraseIntE != null ? buscarValor(rows[0].fraseIntE, INT) : 0,
+                IntS: rows[0].fraseIntS != null ? buscarValor(rows[0].fraseIntS, INT) : 0,
+                IntGeneral: rows[0].fraseIntGeneral != null ? buscarValor(rows[0].fraseIntGeneral, DIM) : 0,
+                IntPorcentaje: rows[0].fraseIntPorcentaje != null ? buscarValor(rows[0].fraseIntPorcentaje, dimPorcentaje) : 0,
+                Di: rows[0].fraseDi != null ? buscarValor(rows[0].fraseDi, DI) : 0,
+                Dis: rows[0].fraseDIS != null ? buscarValor(rows[0].fraseDIS, DIS) : 0,
+                Sq1: rows[0].fraseVQ1 != null ? buscarValor(rows[0].fraseVQ1, VQ) : 0,
+                Sq2: rows[0].fraseVQ2 != null ? buscarValor(rows[0].fraseVQ2, DIM) : 0,
+            },
+            Equilibrio: {
+                Bqr1: rows[0].BQr1 != null ? buscarValor(rows[0].BQr1, Equilibrio_BQR) : 0,
+                Bqr2: rows[0].BQr2 != null ? buscarValor(rows[0].BQr2, Equilibrio_BQR) : 0,
+                Bqa1: rows[0].BQa1 != null ? buscarValor(rows[0].BQa1, Equilibrio_BQA) : 0,
+                Bqa2: rows[0].BQa2 != null ? buscarValor(rows[0].BQa2,DIM) : 0, 
+                Cq1: rows[0].CQ1 != null ? buscarValor(rows[0].CQ1, Equilibrio_CQ1) : 0,
+                Cq2: rows[0].CQ2 != null ? buscarValor(rows[0].CQ2, Equilibrio_CQ2) : 0,
+            }
+        };
+
+         console.log("Datos procesados para la gráfica:", analisisProcesado);
+
+
+         response.render('pruebas/hartman/analisisHartman.pug', {
+             csrfToken: request.csrfToken(),
+             datos: analisisProcesado,
+             analisisHartman: rows,
+         });
+ 
+
+     } catch (error) {
+         console.error("Error al obtener o procesar los datos de Hartman:", error);
+         response.status(500).send("Error al procesar el análisis de Hartman");
+     }
+};

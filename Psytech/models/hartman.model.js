@@ -41,13 +41,11 @@ class Hartman {
     static async getRespuestasUsuario(idAspirante, idGrupo) {
       try {
           const query = `
-            SELECT idPreguntaHartman, 
-                  GROUP_CONCAT(respuestaAbierta) AS respuestasAbiertas, 
-                  tiempoRespuesta
+            SELECT idPreguntaHartman, respuestaAbierta, tiempoRespuesta
             FROM respuestashartman
             WHERE idAspirante = ? AND idGrupo = ?
-            GROUP BY idPreguntaHartman, tiempoRespuesta
-            ORDER BY idPreguntaHartman ASC;
+            GROUP BY idPreguntaHartman, respuestaAbierta, tiempoRespuesta
+            ORDER BY idPreguntaHartman ASC
           `;
           const [rows] = await db.execute(query, [idAspirante, idGrupo]);
           return rows;
