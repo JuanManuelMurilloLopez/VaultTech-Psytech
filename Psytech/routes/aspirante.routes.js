@@ -53,4 +53,19 @@ router.get('/prueba-completada', controller.getPruebaCompletada);
 
 router.get('/respuestas-enviadas', controller.getRespuestasEnviadas);
 
+// 16Pf y KOSTICK
+router.get("/instruccionesPrueba/:idPrueba", aspiranteController.get_instrucciones);
+  
+  router.post("/preguntasPrueba/:idPrueba", aspiranteController.post_preguntasPrueba);
+  
+  router.post("/siguientePregunta", aspiranteController.post_siguientePregunta);
+  
+  router.post("/pruebaCompletada", aspiranteController.pruebaCompletada);
+  
+  router.get("/pruebaCompletada", aspiranteController.get_pruebaCompletada);
+  
+  router.post("/siguientePregunta1", aspiranteController.post_siguientePregunta1);
+  
+  router.post("/pruebaCompletada1", aspiranteController.pruebaCompletada1);
+
 module.exports = router;
