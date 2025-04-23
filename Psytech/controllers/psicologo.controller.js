@@ -31,7 +31,6 @@ exports.getCatalogoInstituciones = (request, response, next) => {
     Institucion.fetchAll()
     .then(([rows, fieldData]) => {
         const arregloInstituciones = rows;
-        console.log("Instituciones Registradas: ", arregloInstituciones);
         response.render('Psicologos/catalogoInstituciones', {
             arregloInstituciones: arregloInstituciones || [],
         });
@@ -161,7 +160,6 @@ exports.getRegistrarGrupo = (req, res, next) => {
 
 // Post
   exports.postRegistrarGrupo = (req, res, next) => {
-    console.log("Request Body", req.body);
     const {
       nombreGrupo,
       carrera,
@@ -1197,14 +1195,10 @@ const consultaResultados = require('../models/consultaResultados.model.js');
  } = require('../public/js/aspirantes/encuentraValor.js');
 
 exports.getAnalisisHartman = async (request, response, next) => {
-
-    const idAspirante = request.params.idAspirante;
-    const idGrupo = request.params.idGrupo;
-    console.log('Analisis Hartman');
+    const { idGrupo, idAspirante, idInstitucion } = request.params;
 
     try {
         const [rows] = await consultaResultados.fetchHartmanAspirante(idAspirante, idGrupo);
-        console.log("Datos de la base de datos:", rows);
 
         if (!rows || rows.length === 0) {
             return response.status(404).send("No se encontraron resultados de Hartman.");
@@ -1256,13 +1250,12 @@ exports.getAnalisisHartman = async (request, response, next) => {
             }
         };
 
-         console.log("Datos procesados para la gráfica:", analisisProcesado);
-
-
-         response.render('pruebas/hartman/analisisHartman.pug', {
-             csrfToken: request.csrfToken(),
-             datos: analisisProcesado,
-             analisisHartman: rows,
+         response.render('Psicologos/analisisHartman.ejs', {
+            datos: analisisProcesado,
+            analisisHartman: rows,
+            idGrupo,
+            idAspirante,
+            idInstitucion
          });
  
 

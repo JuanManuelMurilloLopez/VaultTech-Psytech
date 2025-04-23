@@ -772,8 +772,6 @@ exports.postHartmanFase2 = async (request, response, next) => {
         .map((r) => parseInt(r.respuestaAbierta, 10)); 
 
         const resultadosAnalisis = calcularResultados(respuestasFrase, respuestasCita);
-        console.log('respuestasFrase', respuestasFrase);
-        console.log('respuestasCita', respuestasCita);
 
         const hartmanAnalysis = new hartmanAnalysisModel(idAspirante, idGrupo, resultadosAnalisis);
         await hartmanAnalysis.save();
@@ -784,7 +782,7 @@ exports.postHartmanFase2 = async (request, response, next) => {
         if (rows.length === 0) {
             await db.execute(
                 `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
-                 VALUES (?, ?, ?, ?)`,
+                 VALUES (?, ?, ?, 2)`,
                 [idAspirante, idGrupo, idPrueba, estatus]
             );
         } else {
