@@ -80,6 +80,6 @@ router.get('/respuestas-otis', controller.getRespuestasOtis);
 
 
 // 16Pf y KOSTICK
-router.get("/consultaRespuestasAspirante/:idusuario/:idprueba", psicologaController.get_respuestasA);
+router.get("/consultaRespuestasAspirante/:idusuario/:idprueba", controller.get_respuestasA);
 
 module.exports = router;
