@@ -13,7 +13,7 @@ module.exports = class CuadernilloColores {
                 C.nombreColor, 
                 C.numeroColor, 
                 C.hexColor  
-            FROM seleccionesColores SC
+            FROM seleccionescolores SC
             JOIN colores C ON SC.idColor = C.idColor
             WHERE SC.idAspirante = ?
             AND SC.idGrupo = ?
