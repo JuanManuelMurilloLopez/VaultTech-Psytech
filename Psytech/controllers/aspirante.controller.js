@@ -817,7 +817,7 @@ exports.get_instrucciones = (request, response, next) => {
     .then(([rows, fieldData]) => {
         request.session.idGrupo = rows[0].idGrupo;
         console.log(request.session.idGrupo);
-        Prueba.updateEstatusPrueba(request.session.idAspirante, request.session.idGrupo, 1, 'En progreso')
+        Prueba.updateEstatusPruebaK16(request.session.idAspirante, request.session.idGrupo, 1, 'En progreso')
         .then(() => {
             response.render('Aspirantes/datosPersonalesKostick');
         })
@@ -855,7 +855,7 @@ exports.get_instrucciones = (request, response, next) => {
     .then(([rows, fieldData]) => {
         request.session.idGrupo = rows[0].idGrupo;
         console.log(request.session.idGrupo);
-        Prueba.updateEstatusPrueba(request.session.idAspirante, request.session.idGrupo, 2, 'En progreso')
+        Prueba.updateEstatusPruebaK16(request.session.idAspirante, request.session.idGrupo, 2, 'En progreso')
         .then(() => {
             response.render('Aspirantes/datosPersonales16PF');
         })
@@ -1071,7 +1071,7 @@ exports.get_instrucciones = (request, response, next) => {
         return response.status(500).json({ message: "Error saving response." });
       });
   
-    Prueba.updateEstatusPrueba(request.session.idAspirante, request.session.idGrupo, 1, 'Completada')
+    Prueba.updateEstatusPruebaK16(request.session.idAspirante, request.session.idGrupo, 1, 'Completada')
     .then(() => {
 
     })
@@ -1114,7 +1114,7 @@ exports.get_instrucciones = (request, response, next) => {
         return response.status(500).json({ message: "Error saving response." });
       });
 
-      Prueba.updateEstatusPrueba(request.session.idAspirante, request.session.idGrupo, 2, 'Completada')
+      Prueba.updateEstatusPruebaK16(request.session.idAspirante, request.session.idGrupo, 2, 'Completada')
       .then(() => {
   
       })
