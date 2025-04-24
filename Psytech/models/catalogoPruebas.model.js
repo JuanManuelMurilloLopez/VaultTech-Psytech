@@ -5,12 +5,12 @@ module.exports = class CatalogoPruebas {
     this.nombre = prueba.nombre;
     this.descripcion = prueba.descripcion;
     this.instrucciones = prueba.instrucciones;
-    this.tiempo = prueba.tiempo;
+    this.duracion = prueba.duracion;
   }
 
   static fetchAll() {
     return db.execute(`
-      SELECT idPrueba, nombre, descripcion, instrucciones, tiempo
+      SELECT idPrueba, nombre, descripcion, instrucciones, duracion
       FROM pruebas
       ORDER BY nombre
     `);
