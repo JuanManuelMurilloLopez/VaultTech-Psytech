@@ -59,12 +59,27 @@
 
       <!-- Botón de envío -->
       <div class="text-center mt-5">
-        <button type="submit" class="btn btn-color--secondary" >Siguiente</button>
+        <button type="submit" class="btn btn-color--secondary" id="submit-button">Siguiente</button>
       </div>
     </form>
   </div>
 
-  <script src="/js/respondeHartman.js"></script>
+  <script src="/js/aspirantes/respondeHartman.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+<script>
+  // Bloquea el botón de "atrás"
+  history.pushState(null, null, location.href);
+  window.onpopstate = function () {
+    history.pushState(null, null, location.href);
+    alert("No puedes regresar a la pantalla anterior durante la prueba.");
+  };
+  if (performance.navigation.type === 1 || sessionStorage.getItem("refreshed")) {
+    // Si es una recarga (tipo 1 = reload)
+    sessionStorage.removeItem("refreshed");
+    window.location.href = "/aspirante/prueba-hartman/fase1"; // Ajusta esta ruta a tu pantalla inicial
+  } else {
+    sessionStorage.setItem("refreshed", "true");
+  }
+</script>
 </html>

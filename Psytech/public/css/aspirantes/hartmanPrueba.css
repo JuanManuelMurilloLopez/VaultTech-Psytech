@@ -34,6 +34,12 @@
   transition: background-color 0.3s;
 }
 
+.question-box.has-duplicate {
+  border: 2px solid red;
+  background-color: #ffe6e6;
+  border-radius: 8px;
+}
+
 .question-box:hover {
   background-color: #909191;
 }
@@ -91,8 +97,8 @@
 }
 
 .btn-color--secondary {
-  background-color: var(--secondary);
-  color: var(--font-secondary);
+  background-color: var(--secondary) !important;
+  color: var(--font-secondary) !important;
 }
 
 .btn-color--secondary:hover {

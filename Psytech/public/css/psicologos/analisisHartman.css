@@ -16,8 +16,8 @@
     border-radius: 10px;
     font-size: 14px;
     text-align: center;
-    background: var(--secondary);
-    color: var(--font-secondary);
+    background: var(--secondary) !important;
+    color: var(--font-secondary) !important;
 }
 
 .btn-color--third {

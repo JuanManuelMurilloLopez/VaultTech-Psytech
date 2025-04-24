@@ -49,12 +49,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkForDuplicates() {
       const selectionCounts = {};
       let hasDuplicates = false;
-      
+    
+      // Quita estilos anteriores
       document.querySelectorAll('.question-box').forEach(box => {
         box.classList.remove('has-duplicate');
       });
-      
-      // Cuenta las selecciones y marca los duplicados
+    
+      // Verifica duplicados
       selects.forEach((select) => {
         const value = select.value;
         if (value) {
@@ -66,28 +67,26 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       });
-      
-      // Marca los duplicados
-      for (const [value, selectElements] of Object.entries(selectionCounts)) {
-        if (selectElements.length > 1) {
-          selectElements.forEach(select => {
-            const questionBox = select.closest('.question-box');
-            if (questionBox) {
-              questionBox.classList.add('has-duplicate');
-            }
+    
+      // Aplica clases visuales a duplicados
+      for (const selects of Object.values(selectionCounts)) {
+        if (selects.length > 1) {
+          selects.forEach(select => {
+            const box = select.closest('.question-box');
+            if (box) box.classList.add('has-duplicate');
           });
         }
       }
-      
-      // Muestra mensaje de error si tiene duplicados 
+    
+      // Muestra u oculta el mensaje de error
       if (hasDuplicates) {
-        errorMessage.classList.remove('is-hidden');
-        submitButton.disabled = true;
+        errorMessage.classList.remove('d-none');
+        if (submitButton) submitButton.disabled = true;
       } else {
-        errorMessage.classList.add('is-hidden');
-        submitButton.disabled = false;
+        errorMessage.classList.add('d-none');
+        if (submitButton) submitButton.disabled = false;
       }
-    }
+    }    
     
     // Validacion
     form.addEventListener('submit', (event) => {
@@ -98,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (selectionValues.length !== uniqueValues.size) {
         event.preventDefault();
         checkForDuplicates();
-        errorMessage.classList.remove('is-hidden');
+        errorMessage.classList.remove('d-none');
         
         // Scroll to the error message
         errorMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
