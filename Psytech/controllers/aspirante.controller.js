@@ -149,6 +149,7 @@ exports.getFormularioFamiliares = (request, response, next) => {
                     Familiar.fetchHijoDe(request.session.idAspirante)
                     .then(([rows, fieldData]) => {
                         const hijoDe = rows;
+                        console.log(hijoDe);
 
                         response.render('Aspirantes/formularioFamiliar',{
                             familiares: familiares || [],

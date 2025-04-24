@@ -97,6 +97,16 @@ module.exports = class Aspirante {
             `,[idAspirante, idGrupo]);
     }
 
+    static getFormatoEntrevista(idAspirante, idGrupo){
+        return db.execute(
+            `SELECT PFE.idPreguntaFormatoEntrevista, PFE.nombrePreguntaFormatoEntrevista, PFE.tipoPregunta, PFE.seccion, APFE.respuestaAspirante 
+            FROM gruposaspirantes GA 
+            JOIN aspirantespreguntasformatoentrevista APFE ON GA.idAspirante = APFE.idAspirante 
+            JOIN preguntasformatoentrevista PFE ON PFE.idPreguntaFormatoEntrevista = APFE.idPreguntaFormatoEntrevista 
+            WHERE GA.idAspirante = ?
+            AND GA.idGrupo = ? `, [idAspirante, idGrupo]);
+    }
+
     static modificarAspirante(idAspirante, institucionProcedencia, idPais, idEstado){
         return db.execute(`
                             UPDATE aspirantes
