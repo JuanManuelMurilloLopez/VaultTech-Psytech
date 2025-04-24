@@ -652,7 +652,7 @@ exports.getHartmanFase1 = async (request, response, next) => {
 
         const [preguntas] = await hartman.fetchFase1(fasePregunta);
 
-        response.render('Aspirantes/faseHartman', {
+        response.render('Aspirantes/pruebaHartman', {
             idsPreguntasHartman: preguntas.map(row => row.idPreguntaHartman),
             numerosPreguntas: preguntas.map(row => row.idPreguntaHartman),
             preguntasHartman: preguntas.map(row => row.preguntaHartman),
@@ -718,7 +718,7 @@ exports.getHartmanFase2 = async (request, response, next) => {
         const fasePregunta = 2;
         const [rows] = await hartman.fetchFase1(fasePregunta);
 
-        response.render('Aspirantes/faseHartman', {
+        response.render('Aspirantes/pruebaHartman', {
             numerosPreguntas: rows.map(row => row.idPreguntaHartman),
             preguntasHartman: rows.map(row => row.preguntaHartman),
             fase1: false, // Indicar que es la fase 2
@@ -783,10 +783,10 @@ exports.postHartmanFase2 = async (request, response, next) => {
             await db.execute(
                 `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
                  VALUES (?, ?, ?, 2)`,
-                [idAspirante, idGrupo, idPrueba, estatus]
+                [idAspirante, idGrupo, idPrueba]
             );
         } else {
-            await PruebaHartman.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatus);
+            await PruebaHartman.updateEstatusPrueba(idAspirante, idGrupo, idPrueba);
         }
 
         response.redirect('/aspirante/prueba-completada');
