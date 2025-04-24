@@ -10,10 +10,14 @@ const Cuadernillo = require('../models/cuadernilloOtis.model');
 const CatalogoPruebas = require('../models/catalogoPruebas.model');
 const CuadernilloColores = require('../models/cuadernilloColores.model');
 const interpretaciones = require('../util/interpretacionColores.js');
+const InfoPruebas = require('../models/infoPruebas.model');
+const FormatoEntrevista = require('../models/formatoDeEntrevista.model.js');
+const Familiar = require('../models/formularioFamiliares.model.js');
 
 const xlsx = require('xlsx');
 const fs = require('fs');
 const Usuario = require('../models/usuario.model.js');
+const { error } = require('console');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
@@ -408,14 +412,23 @@ exports.getAspirante = (request, response, next) => {
         Aspirante.getMisPruebas(request.params.idAspirante, request.params.idGrupo)
         .then(([rows, fieldData]) => {
             const informacionPruebas = rows; 
-            response.render('Psicologos/informacionAspirante', {
-                informacionAspirante: informacionAspirante || [],
-                idGrupo: request.params.idGrupo || null,
-                informacionPruebas: informacionPruebas || [],
-                aspirante: request.params.idAspirante || null,
-                idInstitucion: request.params.idInstitucion || null,
+            Aspirante.getFormatoEntrevista(request.params.idAspirante, request.params.idGrupo)
+            .then(([rows, fieldData]) => {
+                const formatoEntrevista = rows;
+                console.log(formatoEntrevista);
+                response.render('Psicologos/informacionAspirante', {
+                    informacionAspirante: informacionAspirante || [],
+                    idGrupo: request.params.idGrupo || null,
+                    informacionPruebas: informacionPruebas || [],
+                    formatoEntrevista: formatoEntrevista || [],
+                    aspirante: request.params.idAspirante || null,
+                    idInstitucion: request.params.idInstitucion || null,
+                })
             })
-
+            .catch((error) => {
+                console.log(error)
+            })
+            
         })
         .catch((error) => {
             console.log(error);
@@ -614,11 +627,77 @@ exports.postEditarAspirantes = (request, response, next) => {
             console.log(error);
         });
     })
+};
+
+// Controlador para menejar las respuestas de un aspirante por formato de entrevista
+
+exports.getRespuestasFormatoEntrevista = (request, response, next) => {
+    FormatoEntrevista.getRespuestasFormatoAspirante(request.params.idGrupo, request.params.idAspirante)
+    .then(([rows, fieldData]) => {
+        const respuestasAspirante = rows;
+        console.log(respuestasAspirante);
+        response.render('Psicologos/respuestasFormatoDeEntrevista', {
+            respuestasAspirante: respuestasAspirante || [],
+            aspirante: request.params.idAspirante || null,
+            grupo: request.params.idGrupo || null,
+            idInstitucion: request.params.idInstitucion || null,
+        });
+    })
     .catch((error) => {
         console.log(error);
-    });
+    })
+};
 
-}
+// Controlador para menejar la informacion familiar de un aspirante
+exports.getInformacionFamiliar = (request, response, next) => {
+    Familiar.getFamiliaresAspirante(request.params.idGrupo, request.params.idAspirante)
+    .then(([rows, fieldData]) => {
+        const nodos = rows.map((familiar) => ({
+            key: familiar.idFamiliar,
+            rol: familiar.rolFamiliar,
+            name: familiar.nombreFamiliar,
+            age: familiar.edadFamiliar,
+            gender: familiar.idGenero,
+            maritalStatus: familiar.idEstadoCivil,
+            lifeStatus: familiar.estadoDeVida === 1 ? "Vivo" : "Muerto",
+            hijoDePadre: familiar.hijoDePadre,
+            hijoDeMadre: familiar.hijoDeMadre
+        }));
+
+        const links = [];
+        rows.forEach((familiar => {
+            if(familiar.hijoDePadre){
+                links.push({
+                    from: familiar.hijoDePadre, 
+                    to: familiar.idFamiliar
+                })
+            }
+            if (familiar.hijoDeMadre) {
+                links.push({
+                    from: familiar.hijoDeMadre, 
+                    to: familiar.idFamiliar
+                });
+            }
+        }))
+
+        console.log(nodos);
+        console.log(links);
+
+        response.render('Psicologos/informacionFamiliar', {
+            informacionFamiliar: {
+                nodos: nodos || [],
+                links: links || []
+            },
+            aspirante: request.params.idAspirante || null,
+            grupo: request.params.idGrupo || null,
+            idInstitucion: request.params.idInstitucion || null,
+        });
+        
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+};
 
 // CATÁLOGO PRUEBAS
 exports.getCatalogoPruebas = (request, response, next) => {
@@ -1264,3 +1343,89 @@ exports.getAnalisisHartman = async (request, response, next) => {
          response.status(500).send("Error al procesar el análisis de Hartman");
      }
 };
+// Consulta informacion prueba Otis
+exports.getPruebaOtis = async (req, res, next) => {
+    try {
+        // Obtener todas las preguntas de OTIS
+        const [preguntasDB] = await InfoPruebas.getPreguntasOtis();
+        
+        // Obtener todas las opciones
+        const [opcionesDB] = await InfoPruebas.getOpcionesOtis();
+        
+        // Estructurar las preguntas con sus opciones y respuestas correctas
+        const preguntasConRespuestas = preguntasDB.map(pregunta => {
+            // Filtrar opciones
+            const opciones = opcionesDB
+                .filter(opcion => opcion.idPreguntaOtis === pregunta.idPreguntaOtis)
+                .map(opcion => ({
+                    idOpcionOtis: opcion.idOpcionOtis,
+                    opcionOtis: opcion.opcionOtis,
+                    descripcionOpcion: opcion.descripcionOpcion,
+                    esCorrecta: opcion.esCorrecta === 1
+                }));
+
+            return {
+                idPreguntaOtis: pregunta.idPreguntaOtis,
+                numeroPregunta: pregunta.numeroPregunta,
+                preguntaOtis: pregunta.preguntaOtis,
+                opciones: opciones,
+                respuestaCorrecta: opciones.find(opcion => opcion.esCorrecta) || null
+            };
+        });
+
+        // Ordenar preguntas por num
+        preguntasConRespuestas.sort((a, b) => a.numeroPregunta - b.numeroPregunta);
+
+        // Obtener informacion de la prueba
+        const [infoPrueba] = await InfoPruebas.getInfoPrueba(5); // ID Otis
+
+        // Renderizar vista
+        res.render('Psicologos/infoPruebaOtis', {
+            preguntas: preguntasConRespuestas,
+            prueba: infoPrueba[0]
+        });
+    } catch (error) {
+        console.error("Error al generar información OTIS:", error);
+        res.status(500).render('error', {
+            mensaje: 'Error al cargar la guía de respuestas OTIS',
+            error: error
+        });
+    }
+};
+//16PF y Kostick
+exports.get_respuestasA = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idPrueba = request.params.idprueba;
+  
+    Aspirante.fetchOne(idAspirante).then(([datosAspirante, fieldData]) => {
+      PerteneceGrupo.fetchOne(idAspirante).then(([rows, fieldData]) => {
+        Grupo.fetchOneId(rows[0].idGrupo).then(([grupoRows, fieldData]) => {
+          if (idPrueba == 1) {
+            ResultadosKostick.fetchAll(rows[0].idGrupo, idAspirante).then(
+              (resultados) => {
+                response.render("consultaRespuestasAspirante", {
+                  usuario: request.session.usuario || "",
+                  prueba: "Kostick",
+                  grupo: grupoRows[0],
+                  valores: resultados[0][0],
+                  datos: datosAspirante[0],
+                });
+              }
+            );
+          } else if (idPrueba == 2) {
+            Resultados16PF.fetchAll(rows[0].idGrupo, idAspirante).then(
+              (resultados) => {
+                response.render("consultaRespuestasAspirante", {
+                  usuario: request.session.usuario || "",
+                  prueba: "PRUEBA DE 16PF",
+                  grupo: grupoRows,
+                  valores: resultados[0][0],
+                  datos: datosAspirante[0],
+                });
+              }
+            );
+          }
+        });
+      });
+    });
+  };

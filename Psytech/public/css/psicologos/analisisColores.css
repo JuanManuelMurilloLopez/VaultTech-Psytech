@@ -255,6 +255,7 @@ h1, h4 {
 }
 
 .interpretacion-seccion {
+    text-align: justify;
     margin-bottom: 15px;
     border-left: 3px solid #294969; 
     padding-left: 12px;

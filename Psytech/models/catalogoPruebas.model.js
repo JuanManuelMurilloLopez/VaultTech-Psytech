@@ -5,7 +5,7 @@ module.exports = class CatalogoPruebas {
     this.nombre = prueba.nombre;
     this.descripcion = prueba.descripcion;
     this.instrucciones = prueba.instrucciones;
-    this.tiempo = prueba.tiempo;
+    this.duracion = prueba.duracion;
   }
 
   static fetchAll() {

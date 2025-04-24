@@ -116,6 +116,16 @@
     margin: 16px 0;
 }
 
+.formato-status{
+    font-size: 12px;
+    padding: 8px 16px;
+    margin-left: 20px;
+    color: #990202;
+    background: #ffd6d6;
+    border-radius: 10px;
+
+}
+
 .btn{
     padding: 0;
 }
