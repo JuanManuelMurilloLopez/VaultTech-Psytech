@@ -1,0 +1,291 @@
+<div class="section ">
+    <div class="container ">
+      <div class="title has-text-weight-semibold mb-2"> <!-- BULMA-->
+        Respuestas de: <%= datos.nombres %> <%= datos.apellidoPaterno %> <%=
+        datos.apellidoMaterno %>
+      </div>
+      <div class="subtitle">
+        Grupo: <%= grupo.posgrado %> <%= grupo.generacion%>
+      </div>
+      <br />
+      <div class="subtitle has-text-centered"><%= prueba %></div> <!-- BULMA-->
+  
+      <div class="has-items-centered"> <!-- BULMA-->
+        <canvas id="graph"> </canvas>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+  
+  <script class="grafica">
+    const valores = <%- JSON.stringify(valores) %>;
+    const prueba = <%- JSON.stringify(prueba) %>;
+    let data; // Initialize data variable
+    const ctx = document.getElementById("graph").getContext("2d");
+  
+    console.log(prueba); // Debugging
+    console.log(valores); // Debugging
+  
+    if (prueba === "El inventario de Percepción Kostick") {
+       data = {
+        labels: [
+          "C",
+          "D",
+          "R",
+          "O",
+          "B",
+          "S",
+          "X",
+          "V",
+          "T",
+          "I",
+          "P",
+          "L",
+          "A",
+          "G",
+          "N",
+          "W",
+          "F",
+          "K",
+          "E",
+          "Z",
+        ],
+        datasets: [
+          {
+            label: "Adaptación al trabajo",
+            data: [
+              valores.C,
+              valores.D,
+              valores.R,
+              valores.O,
+              valores.B,
+              valores.S,
+              valores.X,
+              valores.V,
+              valores.T,
+              valores.I,
+              valores.P,
+              valores.L,
+              valores.A,
+              valores.G,
+              valores.N,
+              valores.W,
+              valores.F,
+              valores.K,
+              valores.E,
+              valores.Z,
+            ],
+            backgroundColor: [
+              "rgba(173, 216, 230, 0.7)",
+              "rgba(173, 216, 230, 0.7)",
+              "rgba(173, 216, 230, 0.7)",
+              "rgba(70, 130, 180, 0.7)",
+              "rgba(70, 130, 180, 0.7)",
+              "rgba(70, 130, 180, 0.7)",
+              "rgba(70, 130, 180, 0.7)",
+              "rgba(135, 206, 235, 0.7)",
+              "rgba(135, 206, 235, 0.7)",
+              "rgba(30, 144, 255, 0.7)",
+              "rgba(30, 144, 255, 0.7)",
+              "rgba(30, 144, 255, 0.7)",
+              "rgba(0, 0, 205, 0.7)",
+              "rgba(0, 0, 205, 0.7)",
+              "rgba(0, 0, 205, 0.7)",
+              "rgba(65, 105, 225, 0.7)",
+              "rgba(65, 105, 225, 0.7)",
+              "rgba(25, 25, 112, 0.7)",
+              "rgba(25, 25, 112, 0.7)",
+              "rgba(25, 25, 112, 0.7)",
+            ],
+            borderColor: [
+              "rgba(173, 216, 230, 1)",
+              "rgba(173, 216, 230, 1)",
+              "rgba(173, 216, 230, 1)",
+              "rgba(70, 130, 180, 1)",
+              "rgba(70, 130, 180, 1)",
+              "rgba(70, 130, 180, 1)",
+              "rgba(70, 130, 180, 1)",
+              "rgba(135, 206, 235, 1)",
+              "rgba(135, 206, 235, 1)",
+              "rgba(30, 144, 255, 1)",
+              "rgba(30, 144, 255, 1)",
+              "rgba(30, 144, 255, 1)",
+              "rgba(0, 0, 205, 1)",
+              "rgba(0, 0, 205, 1)",
+              "rgba(0, 0, 205, 1)",
+              "rgba(65, 105, 225, 1)",
+              "rgba(65, 105, 225, 1)",
+              "rgba(25, 25, 112, 1)",
+              "rgba(25, 25, 112, 1)",
+              "rgba(25, 25, 112, 1)",
+            ],
+            borderWidth: 1,
+          },
+        ],
+      };
+      const config = {
+      type: "bar",
+      data: data,
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: "Valores",
+            },
+          },
+          x: {
+            title: {
+              display: true,
+              text: "Factores",
+            },
+          },
+        },
+      },
+    };
+    new Chart(ctx, config);
+    } else if (prueba === "Personalidad 16 Factores (16 PF)") {
+       data = {
+        labels: [
+          "A",
+          "B",
+          "C",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "L",
+          "M",
+          "N",
+          "O",
+          "Q1",
+          "Q2",
+          "Q3",
+          "Q4",
+        ],
+        datasets: [
+          {
+            label: "Personalidad 16 Factores",
+            data: [
+              valores.A,
+              valores.B,
+              valores.C,
+              valores.E,
+              valores.F,
+              valores.G,
+              valores.H,
+              valores.I,
+              valores.L,
+              valores.M,
+              valores.N,
+              valores.O,
+              valores.Q1,
+              valores.Q2,
+              valores.Q3,
+              valores.Q4,
+            ],
+            backgroundColor: [
+              "rgba(173, 216, 230, 0.7)",
+              "rgba(173, 216, 230, 0.7)",
+              "rgba(173, 216, 230, 0.7)",
+              "rgba(70, 130, 180, 0.7)",
+              "rgba(70, 130, 180, 0.7)",
+              "rgba(70, 130, 180, 0.7)",
+              "rgba(70, 130, 180, 0.7)",
+              "rgba(135, 206, 235, 0.7)",
+              "rgba(135, 206, 235, 0.7)",
+              "rgba(30, 144, 255, 0.7)",
+              "rgba(30, 144, 255, 0.7)",
+              "rgba(30, 144, 255, 0.7)",
+              "rgba(0, 0, 205, 0.7)",
+              "rgba(0, 0, 205, 0.7)",
+              "rgba(0, 0, 205, 0.7)",
+              "rgba(65, 105, 225, 0.7)",
+            ],
+            borderColor: [
+              "rgba(173, 216, 230, 1)",
+              "rgba(173, 216, 230, 1)",
+              "rgba(173, 216, 230, 1)",
+              "rgba(70, 130, 180, 1)",
+              "rgba(70, 130, 180, 1)",
+              "rgba(70, 130, 180, 1)",
+              "rgba(70, 130, 180, 1)",
+              "rgba(135, 206, 235, 1)",
+              "rgba(135, 206, 235, 1)",
+              "rgba(30, 144, 255, 1)",
+              "rgba(30, 144, 255, 1)",
+              "rgba(30, 144, 255, 1)",
+              "rgba(0, 0, 205, 1)",
+              "rgba(0, 0, 205, 1)",
+              "rgba(0, 0, 205, 1)",
+              "rgba(65, 105, 225, 1)",
+            ],
+            borderWidth: 1,
+          },
+        ],
+      };
+  
+      const descripciones = {
+        A: "Afiabilidad",
+        B: "Razonamiento",
+        C: "Estabilidad emocional",
+        E: "Dominancia",
+        F: "Vivacidad",
+        G: "Atención a las normas",
+        H: "Audacia social",
+        I: "Sensibilidad",
+        L: "Confianza",
+        M: "Abstracción",
+        N: "Astucia",
+        O: "Aprensión",
+        Q1: "Apertura al cambio",
+        Q2: "Autosuficiencia",
+        Q3: "Perfeccionismo",
+        Q4: "Tensión",
+      };
+  
+      const config = {
+        type: "bar",
+        data: data,
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: "Valores"
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: "Factores"
+              }
+            }
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const factor = context.label;
+                  const valor = context.raw;
+                  const descripcion = descripciones[factor] || factor;
+                  return `${descripcion}: ${valor}`;
+                }
+              }
+            }
+          }
+        }
+      };
+  
+      const myChart = new Chart(document.getElementById("grafico16PF"), config);
+      new Chart(ctx, config);
+    }
+  </script>
+  
+  <%- include('includes/_footer')%>

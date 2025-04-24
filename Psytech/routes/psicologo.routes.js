@@ -85,4 +85,7 @@ router.get('/cuadernillo-colores/:idGrupo/:idAspirante/:idInstitucion', controll
 router.get('/respuestas-otis', controller.getRespuestasOtis);
 
 
+// 16Pf y KOSTICK
+router.get("/consultaRespuestasAspirante/:idusuario/:idprueba", controller.get_respuestasA);
+
 module.exports = router;
