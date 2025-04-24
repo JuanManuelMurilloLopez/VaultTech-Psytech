@@ -10,12 +10,9 @@ const Cuadernillo = require('../models/cuadernilloOtis.model');
 const CatalogoPruebas = require('../models/catalogoPruebas.model');
 const CuadernilloColores = require('../models/cuadernilloColores.model');
 const interpretaciones = require('../util/interpretacionColores.js');
-<<<<<<< HEAD
 const InfoPruebas = require('../models/infoPruebas.model');
-=======
 const FormatoEntrevista = require('../models/formatoDeEntrevista.model.js');
 const Familiar = require('../models/formularioFamiliares.model.js');
->>>>>>> debd40fc95ea74aba00d8c1d141c6c7dc297a5fb
 
 const xlsx = require('xlsx');
 const fs = require('fs');
