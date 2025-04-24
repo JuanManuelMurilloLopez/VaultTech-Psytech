@@ -10,7 +10,12 @@ const Cuadernillo = require('../models/cuadernilloOtis.model');
 const CatalogoPruebas = require('../models/catalogoPruebas.model');
 const CuadernilloColores = require('../models/cuadernilloColores.model');
 const interpretaciones = require('../util/interpretacionColores.js');
+<<<<<<< HEAD
 const InfoPruebas = require('../models/infoPruebas.model');
+=======
+const FormatoEntrevista = require('../models/formatoDeEntrevista.model.js');
+const Familiar = require('../models/formularioFamiliares.model.js');
+>>>>>>> debd40fc95ea74aba00d8c1d141c6c7dc297a5fb
 
 const xlsx = require('xlsx');
 const fs = require('fs');
@@ -617,11 +622,77 @@ exports.postEditarAspirantes = (request, response, next) => {
             console.log(error);
         });
     })
+};
+
+// Controlador para menejar las respuestas de un aspirante por formato de entrevista
+
+exports.getRespuestasFormatoEntrevista = (request, response, next) => {
+    FormatoEntrevista.getRespuestasFormatoAspirante(request.params.idGrupo, request.params.idAspirante)
+    .then(([rows, fieldData]) => {
+        const respuestasAspirante = rows;
+        console.log(respuestasAspirante);
+        response.render('Psicologos/respuestasFormatoDeEntrevista', {
+            respuestasAspirante: respuestasAspirante || [],
+            aspirante: request.params.idAspirante || null,
+            grupo: request.params.idGrupo || null,
+            idInstitucion: request.params.idInstitucion || null,
+        });
+    })
     .catch((error) => {
         console.log(error);
-    });
+    })
+};
 
-}
+// Controlador para menejar la informacion familiar de un aspirante
+exports.getInformacionFamiliar = (request, response, next) => {
+    Familiar.getFamiliaresAspirante(request.params.idGrupo, request.params.idAspirante)
+    .then(([rows, fieldData]) => {
+        const nodos = rows.map((familiar) => ({
+            key: familiar.idFamiliar,
+            rol: familiar.rolFamiliar,
+            name: familiar.nombreFamiliar,
+            age: familiar.edadFamiliar,
+            gender: familiar.idGenero,
+            maritalStatus: familiar.idEstadoCivil,
+            lifeStatus: familiar.estadoDeVida === 1 ? "Vivo" : "Muerto",
+            hijoDePadre: familiar.hijoDePadre,
+            hijoDeMadre: familiar.hijoDeMadre
+        }));
+
+        const links = [];
+        rows.forEach((familiar => {
+            if(familiar.hijoDePadre){
+                links.push({
+                    from: familiar.hijoDePadre, 
+                    to: familiar.idFamiliar
+                })
+            }
+            if (familiar.hijoDeMadre) {
+                links.push({
+                    from: familiar.hijoDeMadre, 
+                    to: familiar.idFamiliar
+                });
+            }
+        }))
+
+        console.log(nodos);
+        console.log(links);
+
+        response.render('Psicologos/informacionFamiliar', {
+            informacionFamiliar: {
+                nodos: nodos || [],
+                links: links || []
+            },
+            aspirante: request.params.idAspirante || null,
+            grupo: request.params.idGrupo || null,
+            idInstitucion: request.params.idInstitucion || null,
+        });
+        
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+};
 
 // CATÁLOGO PRUEBAS
 exports.getCatalogoPruebas = (request, response, next) => {

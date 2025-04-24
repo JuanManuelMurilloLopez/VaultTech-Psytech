@@ -56,6 +56,12 @@ router.post('/registrar-aspirantes/:idGrupo/:idInstitucion', controller.postRegi
 router.get('/editar-aspirante/:idInstitucion/:idGrupo/:idAspirante', controller.getEditarAspirantes);
 router.post('/editar-aspirante/:idInstitucion/:idGrupo/:idAspirante', controller.postEditarAspirantes);
 
+// Consultar respuestas de aspirante de formato de entrevista
+router.get('/respuestas-formato-entrevista/:idGrupo/:idAspirante/:idInstitucion', controller.getRespuestasFormatoEntrevista);
+
+// Consultar informacion familair de un aspirante
+router.get('/informacion-familiares/:idGrupo/:idAspirante/:idInstitucion', controller.getInformacionFamiliar);
+
 // Vista con todas las pruebas
 router.get('/catalogo-pruebas', controller.getCatalogoPruebas);
 

@@ -63,8 +63,22 @@
             </div>
 
             <div class="mb-3 col-md-3">
-                <label class="form-label" for="hijoDe">Hijo de</label> <br>
-                <select class="form-select" name="hijoDe">
+                <label class="form-label" for="hijoDe">Hijo de (Padre / Madre)</label> <br>
+                <select class="form-select" name="hijoDePadre">
+                    <option value="">familiares registrados</option>
+                    <% if (hijoDe.length > 0) { %>
+                        <% for(hijo of hijoDe) { %>
+                            <option value="<%= hijo.idFamiliar %>"> 
+                                <%= hijo.nombreFamiliar %> 
+                            </option>
+                        <% } %>
+                    <% } %>
+                </select>
+            </div>
+
+            <div class="mb-3 col-md-3">
+                <label class="form-label" for="hijoDe">Hijo de (Padre / Madre)</label> <br>
+                <select class="form-select" name="hijoDeMadre">
                     <option value="">familiares registrados</option>
                     <% if (hijoDe.length > 0) { %>
                         <% for(hijo of hijoDe) { %>
