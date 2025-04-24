@@ -17,6 +17,7 @@ const Familiar = require('../models/formularioFamiliares.model.js');
 const xlsx = require('xlsx');
 const fs = require('fs');
 const Usuario = require('../models/usuario.model.js');
+const { error } = require('console');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
@@ -413,14 +414,23 @@ exports.getAspirante = (request, response, next) => {
         Aspirante.getMisPruebas(request.params.idAspirante, request.params.idGrupo)
         .then(([rows, fieldData]) => {
             const informacionPruebas = rows; 
-            response.render('Psicologos/informacionAspirante', {
-                informacionAspirante: informacionAspirante || [],
-                idGrupo: request.params.idGrupo || null,
-                informacionPruebas: informacionPruebas || [],
-                aspirante: request.params.idAspirante || null,
-                idInstitucion: request.params.idInstitucion || null,
+            Aspirante.getFormatoEntrevista(request.params.idAspirante, request.params.idGrupo)
+            .then(([rows, fieldData]) => {
+                const formatoEntrevista = rows;
+                console.log(formatoEntrevista);
+                response.render('Psicologos/informacionAspirante', {
+                    informacionAspirante: informacionAspirante || [],
+                    idGrupo: request.params.idGrupo || null,
+                    informacionPruebas: informacionPruebas || [],
+                    formatoEntrevista: formatoEntrevista || [],
+                    aspirante: request.params.idAspirante || null,
+                    idInstitucion: request.params.idInstitucion || null,
+                })
             })
-
+            .catch((error) => {
+                console.log(error)
+            })
+            
         })
         .catch((error) => {
             console.log(error);
