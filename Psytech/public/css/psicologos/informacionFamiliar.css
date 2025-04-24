@@ -29,14 +29,12 @@
 
 .family-container{
     background-color: white; 
-    border: solid 1px black; 
-    width: 95%; 
+    border: solid 1px var(--primary); 
+    border-radius: 20px;
+    width: 100%; 
     height: 500px;
 }
 
-.fixed-bottom-buttons {
-    width: 95%; 
-}
 
 .btn-color--primary{
     background: var(--primary);

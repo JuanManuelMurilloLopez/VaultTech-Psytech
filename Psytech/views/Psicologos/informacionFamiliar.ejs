@@ -35,7 +35,7 @@
 
             <div class="fixed-bottom-buttons">
                 <div class="container">
-                    <div class="row gx-3 mt-4 mb-3">
+                    <div class="row gx-3 mt-5 mb-3">
                         <div class="col-md-6">
                             <a href="/psicologo/respuestas-formato-entrevista/<%= grupo %>/<%= aspirante %>/<%= idInstitucion %>" 
                             class="btn btn-color--third">Regresar</a>
@@ -59,7 +59,6 @@
 
         const nameProperty = 'name';
         const genderProperty = 'gender';
-        const maritalStatusProperty = 'maritalStatus';
         const lifeStatusProperty = 'lifeStatus';
 
         const theme = {
@@ -78,7 +77,7 @@
                 deadBorder: '#B00000',
                 personText: '#383838',
                 personNodeBackground: '#FFFFFF',
-                selectionStroke: '#485670',
+                selectionStroke: '#95B6BC',
                 counterBackground: '#485670',
                 counterBorder: '#FFFFFF',
                 counterText: '#FFFFFF',
@@ -98,7 +97,7 @@
 
         const STROKE_WIDTH = 3;
         const ADORNMENT_STROKE_WIDTH = STROKE_WIDTH + 1;
-        const CORNER_ROUNDNESS = 12;
+        const CORNER_ROUNDNESS = 20;
         const IMAGE_TOP_MARGIN = 20;
         const MAIN_SHAPE_NAME = 'mainShape';
         const IMAGE_DIAMETER = 40;
@@ -166,15 +165,18 @@
             const $ = go.GraphObject.make;
 
             const diagram = new go.Diagram("myDiagramDiv", {
+                padding: new go.Margin(70, 15, 15, 20),
+
                 layout: $(go.LayeredDigraphLayout, {
                     direction: 90,
-                    columnSpacing: 40,
-                    layerSpacing: 60,
-                    setsPortSpots: false,
-                    packOption: go.LayeredDigraphLayout.PackAll,
+                    columnSpacing: 60,
+                    layerSpacing: 80,
+                    setsPortSpots: true,
+                    packOption: go.LayeredDigraphLayout.PackStraighten,
                     aggressiveOption: go.LayeredDigraphLayout.AggressiveMore,
-                    alignOption: go.LayeredDigraphLayout.AlignCenter,
-                    cycleRemoveOption: go.LayeredDigraphLayout.CycleDepthFirst,
+                    alignOption: go.LayeredDigraphLayout.AlignAll,
+                    cycleRemoveOption: go.LayeredDigraphLayout.CycleGreedy,
+                    initializeOption: go.LayeredDigraphLayout.LayerLongestPathSource,
                     initializeOption: go.LayeredDigraphLayout.InitDepthFirstOut
                 }),
                 'toolManager.hoverDelay': 100,
@@ -185,20 +187,21 @@
             const personBadge = () =>
                 new go.Panel('Auto', {
                     alignmentFocus: go.Spot.TopRight,
-                    alignment: new go.Spot(1, 0, -25, STROKE_WIDTH - 0.5)
+                    alignment: new go.Spot(1, 0, -20, 2.5)
                 })
                     .add(
                         new go.Shape({
                             figure: 'RoundedRectangle',
                             parameter1: CORNER_ROUNDNESS,
                             parameter2: 4 | 8,
-                            desiredSize: new go.Size(NaN, 22.5),
+                            desiredSize: new go.Size(NaN, 25),
                             stroke: null
                         })
                             .bind('fill', genderProperty, genderToFillColor),
                     new go.TextBlock({
                         font: theme.fonts.badgeFont,
-                        margin: new go.Margin(3, 8, 3, 8)
+                        alignment: new go.Spot(0.5, 0.10),
+                        margin: new go.Margin(2, 25, 2, 25)
                     })
                         .bind('stroke', genderProperty, genderToTextColor)
                         .bind('text', genderProperty, genderToText)
@@ -259,14 +262,14 @@
                         desiredSize: new go.Size(IMAGE_DIAMETER, IMAGE_DIAMETER)
                         })
                         .apply(strokeStyle),
-                        new go.Picture({ scale: 0.9 })
+                        new go.Picture({ scale: 1 })
                         .apply(pictureStyle)
                     );
 
             const personMainShape = () =>
                 new go.Shape({
                     figure: 'RoundedRectangle',
-                    desiredSize: new go.Size(215, 110),
+                    desiredSize: new go.Size(320, 140),
                     portId: '',
                     parameter1: CORNER_ROUNDNESS
                 })
@@ -276,7 +279,7 @@
                 new go.TextBlock({
                     stroke: theme.colors.personText,
                     font: theme.fonts.nameFont,
-                    desiredSize: new go.Size(160, 50),
+                    desiredSize: new go.Size(280, NaN),
                     overflow: go.TextOverflow.Ellipsis,
                     textAlign: 'center',
                     verticalAlignment: go.Spot.Center,
@@ -284,10 +287,32 @@
                         .add($(go.Shape, { fill: "#FFFFCC" }))
                         .add($(go.TextBlock, { margin: 4 })
                             .bind("text", nameProperty)),
-                    alignmentFocus: go.Spot.Top,
-                    alignment: new go.Spot(0.5, 0, 0, 25)
+                    alignmentFocus: go.Spot.Center,
+                    alignment: new go.Spot(0.5, 0.30)
                 })
-                    .bind('text', nameProperty);
+                    .bind('text', data => `Nombre: ${(data[nameProperty])}`);
+            
+            const personAgeTextBlock = () => 
+                new go.TextBlock({
+                    stroke: theme.colors.personText,
+                    font: theme.fonts.nameFont,
+                    textAlign: 'center',
+                    verticalAlignment: go.Spot.Bottom,
+                    alignmentFocus: go.Spot.Bottom,
+                    alignment: new go.Spot(0.5, 0.50)
+                })
+                    .bind('text', data => `Edad: ${data.age}`);
+
+            const personMaritalStTextBlock = () => 
+                new go.TextBlock({
+                    stroke: theme.colors.personText,
+                    font: theme.fonts.nameFont,
+                    textAlign: 'center',
+                    verticalAlignment: go.Spot.Bottom,
+                    alignmentFocus: go.Spot.Bottom,
+                    alignment: new go.Spot(0.5, 0.64)
+                })
+                    .bind('text', data => `Estado civil: ${maritalStatusToText(data.maritalStatus)}`);
 
             const personRoleTextBlock = () => 
                 new go.TextBlock({
@@ -296,7 +321,7 @@
                     textAlign: 'center',
                     verticalAlignment: go.Spot.Bottom,
                     alignmentFocus: go.Spot.Bottom,
-                    alignment: new go.Spot(0.5, 1, 0, -15)
+                    alignment: new go.Spot(0.5, 1, 0, -20)
                 })
                     .bind('text', 'rol');
 
@@ -304,14 +329,20 @@
                 selectionAdorned: false,
                 mouseEnter: onMouseEnterPart,
                 mouseLeave: onMouseLeavePart,
-                selectionChanged: onSelectionChange
+                selectionChanged: onSelectionChange,
+                fromSpot: go.Spot.Bottom,
+                toSpot: go.Spot.Top,
+                fromLinkable: true,
+                toLinkable: true
             })
                 .add(
                     $(go.Panel, "Spot")
                     .add(
                         personMainShape(),
-                        personNameTextBlock(),
-                        personRoleTextBlock()
+                        personRoleTextBlock(),
+                        personAgeTextBlock(),
+                        personMaritalStTextBlock(),
+                        personNameTextBlock()
                     ),
                     personImage(),
                     personBadge(),
@@ -320,22 +351,24 @@
 
             diagram.linkTemplate = $(go.Link, {
                 selectionAdorned: false,
-                routing: go.Link.Orthogonal,
+                routing: go.Link.AvoidsNodes,
                 corner: 15,
                 curve: go.Link.JumpOver,
-                adjusting: go.Link.End,
+                adjusting: go.Link.Scale,
                 reshapable: true,
                 relinkableFrom: false,
                 relinkableTo: false,
                 layerName: 'Background',
                 mouseEnter: onMouseEnterPart,
                 mouseLeave: onMouseLeavePart,
-                corner: 4
+                smoothness: 0.5
             })
                 .add(
                     $(go.Shape, {
                         stroke: theme.colors.link,
-                        strokeWidth: 1.5
+                        strokeWidth: 1.5,
+                        strokeDashArray: null,
+                        strokeCap: "round"
                     })
                     .bindObject('stroke', 'isHighlighted', (isHighlighted) =>
                         isHighlighted ? theme.colors.selectionStroke : theme.colors.link
@@ -345,6 +378,16 @@
                     )
                     .bindObject('strokeWidth', 'isSelected', (selected) => selected ? 2.5 : 1.5)
                 );
+
+            diagram.addDiagramListener("InitialLayoutCompleted", function(e) {
+                e.diagram.links.each(function(link) {
+                    if (link.fromNode && link.toNode) {
+                        link.fromSpot = go.Spot.Bottom;
+                        link.toSpot = go.Spot.Top;
+                    }
+                });
+                e.diagram.layoutDiagram(true);
+            });
 
             const model = new go.GraphLinksModel({
                 nodeDataArray: familyNodes,
