@@ -2,6 +2,13 @@ const db = require('../util/database');
 
 module.exports = class Prueba{
 
+    static fetchOneByName(nombrePrueba){
+        return db.execute(`
+                            SELECT *
+                            FROM pruebas
+                            WHERE nombre = ?
+            `, [nombrePrueba]);
+    }
 
     // Ya no leera archivos, que devolvera promesa vacia
     static fetchInstrucciones() {
@@ -101,6 +108,38 @@ module.exports = class Prueba{
     static getPreguntas16PF(){}
 
     static getPreguntasHartman(){}
+
+    static getPreguntaKostick(numeroPreguntaKostick){
+        return db.execute(`
+                            SELECT *
+                            FROM preguntaskostick
+                            WHERE numeroPreguntaKostick = ?
+            `, [numeroPreguntaKostick]);
+    }
+
+    static getOpcionesByPregunta(idPregunta){
+        return db.execute(`
+                            SELECT *
+                            FROM opcioneskostick
+                            WHERE idPreguntaKostick = ?
+                `, [idPregunta]); 
+    }
+
+    static getPregunta16PF(numeroPregunta16PF){
+        return db.execute(`
+                            SELECT *
+                            FROM preguntas16PF
+                            WHERE numeroPregunta16PF = ?
+                `, [numeroPregunta16PF]);
+    }
+
+    static getOpcionesByPregunta16PF(idPregunta){
+        return db.execute(`
+                            SELECT *
+                            FROM opciones16PF
+                            WHERE idPregunta16PF = ?
+                `, [idPregunta]); 
+    }
 
     static getPreguntasKostick(){}
 
@@ -266,6 +305,18 @@ module.exports = class Prueba{
             JOIN aspirantes a ON u.idUsuario = a.idUsuario
             WHERE a.idAspirante = ?
         `, [idAspirante]);
+    }
+
+    static updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatus){
+        return db.execute(`
+                            UPDATE aspirantesgrupospruebas
+                            SET idEstatus = (SELECT idEstatus
+                                                FROM estatusprueba
+                                                WHERE nombreEstatus = ?)
+                            WHERE idAspirante = ?
+                            AND idGrupo = ?
+                            AND idPrueba = ?
+            `, [estatus, idAspirante, idGrupo, idPrueba]);
     }
 
 }

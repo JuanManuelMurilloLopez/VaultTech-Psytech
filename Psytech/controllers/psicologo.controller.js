@@ -1178,3 +1178,41 @@ exports.getRespuestasOtis = (request, response, next) => {
     console.log('Respuestas Otis');
     response.render('Psicologos/respuestasOtis');
 };
+
+//16PF y Kostick
+exports.get_respuestasA = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idPrueba = request.params.idprueba;
+  
+    Aspirante.fetchOne(idAspirante).then(([datosAspirante, fieldData]) => {
+      PerteneceGrupo.fetchOne(idAspirante).then(([rows, fieldData]) => {
+        Grupo.fetchOneId(rows[0].idGrupo).then(([grupoRows, fieldData]) => {
+          if (idPrueba == 1) {
+            ResultadosKostick.fetchAll(rows[0].idGrupo, idAspirante).then(
+              (resultados) => {
+                response.render("consultaRespuestasAspirante", {
+                  usuario: request.session.usuario || "",
+                  prueba: "Kostick",
+                  grupo: grupoRows[0],
+                  valores: resultados[0][0],
+                  datos: datosAspirante[0],
+                });
+              }
+            );
+          } else if (idPrueba == 2) {
+            Resultados16PF.fetchAll(rows[0].idGrupo, idAspirante).then(
+              (resultados) => {
+                response.render("consultaRespuestasAspirante", {
+                  usuario: request.session.usuario || "",
+                  prueba: "PRUEBA DE 16PF",
+                  grupo: grupoRows,
+                  valores: resultados[0][0],
+                  datos: datosAspirante[0],
+                });
+              }
+            );
+          }
+        });
+      });
+    });
+  };

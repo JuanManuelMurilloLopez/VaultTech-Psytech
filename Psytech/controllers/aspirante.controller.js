@@ -9,6 +9,10 @@ const PruebaOtis = require('../models/prueba.model');
 const OpcionOtis = require('../models/opcionOtis.model.js');
 const Aspirante = require('../models/aspirante.model');
 
+const Prueba = require('../models/prueba.model');
+const RespondeKostick = require('../models/respondeKostick.model.js');
+const Responde16PF = require('../models/responde16pf.model.js');
+
 //Rutas del portal de los Aspirantes
 exports.getPruebas = (request, response) => {
     ConsultarPruebas.fetchAll(request.session.idAspirante)
@@ -625,83 +629,154 @@ exports.getRespuestasEnviadas = (request, response, next) => {
     response.render('Aspirantes/respuestasEnviadas');
 };
 
-// 16PF y Kostick
+////////////////////
+// 16PF y Kostick //
+////////////////////
 exports.get_instrucciones = (request, response, next) => {
-    Prueba.fetchOne(request.params.idPrueba).then(([rows]) => {
-      response.render("instruccionesPrueba", {
-        isLoggedIn: request.session.isLoggedIn || false,
-        usuario: request.session.usuario || "",
-        csrfToken: request.csrfToken(),
-        privilegios: request.session.privilegios || [],
-        prueba: rows[0],
-        idUsuario: request.session.idUsuario,
+    PruebaOtis.fetchOneByName(request.params.idPrueba).then(([rows]) => {
+      response.render("Aspirantes/instruccionesPruebas", {
+        prueba: rows[0]
       });
     });
   };
   
   
+  // Datos Personales
+  exports.getDatosPersonalesKostick = (request, response, next) => {
+    Prueba.getGrupoPrueba(request.session.idAspirante, 1)
+    .then(([rows, fieldData]) => {
+        request.session.idGrupo = rows[0].idGrupo;
+        console.log(request.session.idGrupo);
+        Prueba.updateEstatusPrueba(request.session.idAspirante, request.session.idGrupo, 1, 'En progreso')
+        .then(() => {
+            response.render('Aspirantes/datosPersonalesKostick');
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+    
+  }
+
+  exports.postDatosPersonalesKostick = (request, response, next) => {
+
+    Prueba.getGrupoPrueba(request.session.idAspirante, 1)
+    .then(([rows, fieldData]) => {
+        const grupo = rows[0];
+        request.session.idGrupo = grupo.idGrupo;
+        Prueba.saveDatosPersonales(request.session.idAspirante, grupo.idGrupo, 1, request.body)
+        .then(() => {
+            response.render(`Aspirantes/autoPostKOSTICK`, {
+                idAspirante: request.session.idAspirante,
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch();
+  }
+
+  exports.getDatosPersonales16PF = (request, response, next) => {
+    Prueba.getGrupoPrueba(request.session.idAspirante, 2)
+    .then(([rows, fieldData]) => {
+        request.session.idGrupo = rows[0].idGrupo;
+        console.log(request.session.idGrupo);
+        Prueba.updateEstatusPrueba(request.session.idAspirante, request.session.idGrupo, 2, 'En progreso')
+        .then(() => {
+            response.render('Aspirantes/datosPersonales16PF');
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+  }
+
+  exports.postDatosPersonales16PF = (request, response, next) => {
+
+    Prueba.getGrupoPrueba(request.session.idAspirante, 1)
+    .then(([rows, fieldData]) => {
+        const grupo = rows[0];
+        request.session.idGrupo = grupo.idGrupo;
+        Prueba.saveDatosPersonales(request.session.idAspirante, grupo.idGrupo, 2, request.body)
+        .then(() => {
+            response.render(`Aspirantes/autoPost16PF`, {
+                idAspirante: request.session.idAspirante,
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch();
+  }
+
   /* controlador que renderiza la primera pregunta de la prueba dependiendo de us id (1 para Kostick y 2 para 16PF). Estos id se manejan así en todos los casos) */
   exports.post_preguntasPrueba = (request, response, next) => {
-    if (request.params.idPrueba == 1) {
-      Prueba.fetchOne(request.params.idPrueba)
-        .then(([prueba]) => {
+    if (request.params.idPrueba == 'KOSTICK') {
+      Prueba.fetchOneByName(request.params.idPrueba)
+        .then(([rows, fieldData]) => {
+            const prueba = rows[0];
           request.session.index = 1; // Index que ayudará a recuperar el resto de las preguntas (por número de pregunta) 
           let currentQuestionIndex = request.session.index;
-          PreguntaKostick.fetchOne(currentQuestionIndex)
-            .then(([pregunta]) => {
-              PreguntaKostick.getOpciones(pregunta[0].idPreguntaKostick)
-                .then(([opciones]) => {
-                  return response.render("preguntasPrueba", {
-                    isLoggedIn: request.session.isLoggedIn || false,
-                    usuario: request.session.usuario || "",
-                    csrfToken: request.csrfToken(),
-                    privilegios: request.session.privilegios || [],
-                    prueba: prueba[0],
-                    pregunta: pregunta[0],
-                    opciones: opciones,
-                    idGrupo: request.session.grupo,  //Se necesita guardar el id del grupo al que pertenece el Usuario en algún punto, o recuperarlo para este y los siguientes controladores
-                    idUsuario: request.session.idUsuario || "",
+          Prueba.getPreguntaKostick(currentQuestionIndex)
+          .then(([rows, fieldData]) => {
+            const pregunta = rows[0];
+            Prueba.getOpcionesByPregunta(pregunta.idPreguntaKostick)
+            .then(([rows, fieldData]) => {
+                const opciones = rows;
+                response.render("Aspirantes/preguntasPrueba", {
+                    prueba: prueba || null,
+                    pregunta: pregunta || null,
+                    opciones: opciones || [],
+                    idGrupo: request.session.grupo || '',  //Se necesita guardar el id del grupo al que pertenece el Usuario en algún punto, o recuperarlo para este y los siguientes controladores
+                    idAspirante: request.session.idAspirante || "",
                   });
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
             })
             .catch((error) => {
-              console.log(error);
+                console.log(error);
             });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
         })
         .catch((error) => {
           console.log(error);
         });
-    } else if (request.params.idPrueba == 2) {
-      Prueba.fetchOne(request.params.idPrueba)
-        .then(([prueba]) => {
-          request.session.index = 1;
+    } else if (request.params.idPrueba == '16PF') {
+        Prueba.fetchOneByName('PRUEBA DE 16PF')
+        .then(([rows, fieldData]) => {
+            const prueba = rows[0];
+          request.session.index = 1; // Index que ayudará a recuperar el resto de las preguntas (por número de pregunta) 
           let currentQuestionIndex = request.session.index;
-          Pregunta16PF.fetchOne(currentQuestionIndex)
-            .then(([pregunta]) => {
-              Pregunta16PF.getOpciones(pregunta[0].idPregunta16PF)
-                .then(([opciones]) => {
-                  return response.render("preguntasPrueba", {
-                    isLoggedIn: request.session.isLoggedIn || false,
-                    usuario: request.session.usuario || "",
-                    csrfToken: request.csrfToken(),
-                    privilegios: request.session.privilegios || [],
-                    prueba: prueba[0],
-                    pregunta: pregunta[0],
-                    opciones: opciones,
-                    idGrupo: request.session.grupo,
-                    idUsuario: request.session.idUsuario || "",
+          Prueba.getPregunta16PF(currentQuestionIndex)
+          .then(([rows, fieldData]) => {
+            const pregunta = rows[0];
+            Prueba.getOpcionesByPregunta16PF(pregunta.idPregunta16PF)
+            .then(([rows, fieldData]) => {
+                const opciones = rows;
+                response.render("Aspirantes/preguntasPrueba", {
+                    prueba: prueba || null,
+                    pregunta: pregunta || null,
+                    opciones: opciones || [],
+                    idGrupo: request.session.grupo || '',  //Se necesita guardar el id del grupo al que pertenece el Usuario en algún punto, o recuperarlo para este y los siguientes controladores
+                    idAspirante: request.session.idAspirante || "",
                   });
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
             })
             .catch((error) => {
-              console.log(error);
+                console.log(error);
             });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -719,39 +794,39 @@ exports.get_instrucciones = (request, response, next) => {
     const newRespondeKostick = new RespondeKostick(
       request.body.idPreguntaKostick,
       request.body.idGrupo,
-      request.body.idUsuario,
+      request.body.idAspirante,
       request.body.idOpcionKostick,
       request.body.tiempo
     );
     newRespondeKostick.save().then((uuid) => {
       request.session.idPregunta16PF = uuid;
-      request.session.idGrupo = uuid;
-      request.session.idUsuario = uuid;
     });
-    PreguntaKostick.fetchOne(request.session.index)
-      .then(([pregunta]) => {
-        PreguntaKostick.getOpciones(pregunta[0].idPreguntaKostick)
-          .then(([opciones]) => {
-            return response.status(200).json({
-              csrfToken: request.csrfToken(),
-              pregunta: pregunta[0],
-              opciones: opciones,
-              idGrupo: request.session.grupo,
-              idUsuario: request.session.idUsuario || "",
+
+    Prueba.getPreguntaKostick(request.session.index)
+    .then(([rows, fieldData]) => {
+        const pregunta = rows[0];
+        Prueba.getOpcionesByPregunta(pregunta.idPreguntaKostick)
+        .then(([rows, fieldData]) => {
+            const opciones = rows;
+            response.status(200).json({
+                pregunta: pregunta|| null,
+                opciones: opciones || [],
+                idGrupo: request.session.grupo || null,
+                idAspirante: request.session.idAspirante || "",
             });
-          })
-          .catch((error) => {
+        })
+        .catch((error) => {
             console.log(error);
-          });
-      })
-      .catch((error) => {
+        });
+    })
+    .catch((error) => {
         console.log(error);
-      });
+    });
   };
   
   /* post siguiente pregunta de 16PF (usando AJAX) */
   exports.post_siguientePregunta1 = (request, response, next) => {
-    const { idOpcion16PF, idGrupo, idUsuario, idPregunta16PF, tiempo } =
+    const { idOpcion16PF, idGrupo, idAspirante, idPregunta16PF, tiempo } =
       request.body;
     if (!request.session.index) {
       return response.redirect("/login");
@@ -761,42 +836,42 @@ exports.get_instrucciones = (request, response, next) => {
     const newResponde16pf = new Responde16PF(
       request.body.idPregunta16PF,
       request.body.idGrupo,
-      request.body.idUsuario,
+      request.body.idAspirante,
       request.body.idOpcion16PF,
       request.body.tiempo
     );
     newResponde16pf.save().then((uuid) => {
       request.session.idPregunta16PF = uuid;
-      request.session.idGrupo = uuid;
-      request.session.idUsuario = uuid;
     });
   
-    Pregunta16PF.fetchOne(request.session.index)
-      .then(([pregunta]) => {
-        Pregunta16PF.getOpciones(pregunta[0].idPregunta16PF)
-          .then(([opciones]) => {
-            return response.status(200).json({
-              csrfToken: request.csrfToken(),
-              pregunta: pregunta[0],
-              opciones: opciones,
-              idGrupo: request.session.grupo,
-              idUsuario: request.session.idUsuario || "",
+    Prueba.getPregunta16PF(request.session.index)
+    .then(([rows, fieldData]) => {
+        const pregunta = rows[0];
+        Prueba.getOpcionesByPregunta16PF(pregunta.idPregunta16PF)
+        .then(([rows, fieldData]) => {
+            const opciones = rows;
+            response.status(200).json({
+                pregunta: pregunta|| null,
+                opciones: opciones || [],
+                idGrupo: request.session.grupo || null,
+                idAspirante: request.session.idAspirante || "",
             });
-          })
-          .catch((error) => {
+        })
+        .catch((error) => {
             console.log(error);
-          });
-      })
-      .catch((error) => {
+        });
+    })
+    .catch((error) => {
         console.log(error);
-      });
+    });
+
   };
   
   /* Controlador que guarda la última pregunta de 16PF */
   exports.pruebaCompletada = (request, response, next) => {
     const idOpcionKostick = request.body.idOpcionKostick;
     const idGrupo = request.body.idGrupo;
-    const idUsuario = request.body.idUsuario;
+    const idAspirante = request.body.idAspirante;
     const idPreguntaKostick = request.body.idPreguntaKostick;
     const tiempo = request.body.tiempo;
     const idPrueba = 1;
@@ -808,7 +883,7 @@ exports.get_instrucciones = (request, response, next) => {
     const newRespondeKostick = new RespondeKostick(
       idPreguntaKostick,
       idGrupo,
-      idUsuario,
+      idAspirante,
       idOpcionKostick,
       tiempo
     );
@@ -817,8 +892,6 @@ exports.get_instrucciones = (request, response, next) => {
       .save()
       .then((uuid) => {
         request.session.idPregunta16PF = uuid;
-        request.session.idGrupo = uuid;
-        request.session.idUsuario = uuid;
         return response.status(200).json({
           message: "Prueba completada exitosamente",
         });
@@ -828,11 +901,12 @@ exports.get_instrucciones = (request, response, next) => {
         return response.status(500).json({ message: "Error saving response." });
       });
   
-    const newPruebaAspirante = new PruebaAspirante(idUsuario, idGrupo, idPrueba);
-  
-    newPruebaAspirante.terminarPrueba().then((uuid) => {
-      request.session.idGrupo = uuid;
-      request.session.idUsuario = uuid;
+    Prueba.updateEstatusPrueba(request.session.idAspirante, request.session.idGrupo, 1, 'Completada')
+    .then(() => {
+
+    })
+    .catch((error) => {
+        console.log(error);
     });
   };
   
@@ -840,7 +914,7 @@ exports.get_instrucciones = (request, response, next) => {
   exports.pruebaCompletada1 = (request, response, next) => {
     const idOpcion16PF = request.body.idOpcion16PF;
     const idGrupo = request.body.idGrupo;
-    const idUsuario = request.body.idUsuario;
+    const idAspirante = request.body.idAspirante;
     const idPregunta16PF = request.body.idPregunta16PF;
     const tiempo = request.body.tiempo;
   
@@ -853,7 +927,7 @@ exports.get_instrucciones = (request, response, next) => {
     const newResponde16pf = new Responde16PF(
       idOpcion16PF,
       idGrupo,
-      idUsuario,
+      idAspirante,
       idPregunta16PF,
       tiempo
     );
@@ -861,8 +935,6 @@ exports.get_instrucciones = (request, response, next) => {
       .save()
       .then((uuid) => {
         request.session.idPregunta16PF = uuid;
-        request.session.idGrupo = uuid;
-        request.session.idUsuario = uuid;
         return response.status(200).json({
           message: "Prueba completada exitosamente",
         });
@@ -871,68 +943,20 @@ exports.get_instrucciones = (request, response, next) => {
         console.error("Error saving response:", error);
         return response.status(500).json({ message: "Error saving response." });
       });
-    const newPruebaAspirante = new PruebaAspirante(idUsuario, idGrupo, idPrueba);
+
+      Prueba.updateEstatusPrueba(request.session.idAspirante, request.session.idGrupo, 2, 'Completada')
+      .then(() => {
   
-    newPruebaAspirante.terminarPrueba().then((uuid) => {
-      request.session.idGrupo = uuid;
-      request.session.idUsuario = uuid;
-    });
+      })
+      .catch((error) => {
+          console.log(error);
+      });
   };
   
   /* Controlador que lleva a la vista con mensaje de prueba completada*/
   exports.get_pruebaCompletada = (request, response, next) => {
-    Aspirante.fetchOne(request.session.idUsuario).then(([aspirante]) => {
-      response.render("finPrueba", {
-        isLoggedIn: request.session.isLoggedIn || false,
-        usuario: request.session.usuario || "",
-        csrfToken: request.csrfToken(),
-        privilegios: request.session.privilegios || [],
-        idUsuario: request.session.idUsuario,
-        aspirante: aspirante[0],
-      });
+    Aspirante.fetchOne(request.session.idAspirante).then(([aspirante]) => {
+      response.render('Aspirantes/pruebaCompletada');
     });
   };
 
-//16PF y Kostick
-exports.get_respuestasA = (request, response, next) => {
-    const idUsuario = request.params.idusuario;
-    const idPrueba = request.params.idprueba;
-  
-    Aspirante.fetchOne(idUsuario).then(([datosAspirante, fieldData]) => {
-      PerteneceGrupo.fetchOne(idUsuario).then(([rows, fieldData]) => {
-        Grupo.fetchOneId(rows[0].idGrupo).then(([grupoRows, fieldData]) => {
-          if (idPrueba == 1) {
-            ResultadosKostick.fetchAll(rows[0].idGrupo, idUsuario).then(
-              (resultados) => {
-                response.render("consultaRespuestasAspirante", {
-                  isLoggedIn: request.session.isLoggedIn || false,
-                  usuario: request.session.usuario || "",
-                  csrfToken: request.csrfToken(),
-                  privilegios: request.session.privilegios || [],
-                  prueba: "El inventario de Percepción Kostick",
-                  grupo: grupoRows[0],
-                  valores: resultados[0][0],
-                  datos: datosAspirante[0],
-                });
-              }
-            );
-          } else if (idPrueba == 2) {
-            Resultados16PF.fetchAll(rows[0].idGrupo, idUsuario).then(
-              (resultados) => {
-                response.render("consultaRespuestasAspirante", {
-                  isLoggedIn: request.session.isLoggedIn || false,
-                  usuario: request.session.usuario || "",
-                  csrfToken: request.csrfToken(),
-                  privilegios: request.session.privilegios || [],
-                  prueba: "Personalidad 16 Factores (16 PF)",
-                  grupo: grupoRows,
-                  valores: resultados[0][0],
-                  datos: datosAspirante[0],
-                });
-              }
-            );
-          }
-        });
-      });
-    });
-  };
