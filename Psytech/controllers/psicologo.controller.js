@@ -10,6 +10,7 @@ const Cuadernillo = require('../models/cuadernilloOtis.model');
 const CatalogoPruebas = require('../models/catalogoPruebas.model');
 const CuadernilloColores = require('../models/cuadernilloColores.model');
 const interpretaciones = require('../util/interpretacionColores.js');
+const InfoPruebas = require('../models/infoPruebas.model');
 
 const xlsx = require('xlsx');
 const fs = require('fs');
@@ -1177,4 +1178,54 @@ function interpretarMovilidad(movilidad) {
 exports.getRespuestasOtis = (request, response, next) => {
     console.log('Respuestas Otis');
     response.render('Psicologos/respuestasOtis');
+};
+
+// Consulta informacion prueba Otis
+exports.getPruebaOtis = async (req, res, next) => {
+    try {
+        // Obtener todas las preguntas de OTIS
+        const [preguntasDB] = await InfoPruebas.getPreguntasOtis();
+        
+        // Obtener todas las opciones
+        const [opcionesDB] = await InfoPruebas.getOpcionesOtis();
+        
+        // Estructurar las preguntas con sus opciones y respuestas correctas
+        const preguntasConRespuestas = preguntasDB.map(pregunta => {
+            // Filtrar opciones
+            const opciones = opcionesDB
+                .filter(opcion => opcion.idPreguntaOtis === pregunta.idPreguntaOtis)
+                .map(opcion => ({
+                    idOpcionOtis: opcion.idOpcionOtis,
+                    opcionOtis: opcion.opcionOtis,
+                    descripcionOpcion: opcion.descripcionOpcion,
+                    esCorrecta: opcion.esCorrecta === 1
+                }));
+
+            return {
+                idPreguntaOtis: pregunta.idPreguntaOtis,
+                numeroPregunta: pregunta.numeroPregunta,
+                preguntaOtis: pregunta.preguntaOtis,
+                opciones: opciones,
+                respuestaCorrecta: opciones.find(opcion => opcion.esCorrecta) || null
+            };
+        });
+
+        // Ordenar preguntas por num
+        preguntasConRespuestas.sort((a, b) => a.numeroPregunta - b.numeroPregunta);
+
+        // Obtener informacion de la prueba
+        const [infoPrueba] = await InfoPruebas.getInfoPrueba(5); // ID Otis
+
+        // Renderizar vista
+        res.render('Psicologos/infoPruebaOtis', {
+            preguntas: preguntasConRespuestas,
+            prueba: infoPrueba[0]
+        });
+    } catch (error) {
+        console.error("Error al generar información OTIS:", error);
+        res.status(500).render('error', {
+            mensaje: 'Error al cargar la guía de respuestas OTIS',
+            error: error
+        });
+    }
 };
