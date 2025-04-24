@@ -554,7 +554,7 @@ document.getElementById('siguiente-serie').addEventListener('click', () => {
                 permitirBotonAtras();
                 setTimeout(() => {
                     alert("¡Has terminado la prueba!");
-                    window.location.href = "/inicio/aspirante";
+                    window.location.href = "/aspirante/misPruebas";
                 }, 100);
             } 
         })

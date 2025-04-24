@@ -1,8 +1,8 @@
 const db = require('../util/database');
 
 class respuestasTerman {
-    constructor(idUsuario, idGrupo, idPrueba, respuestas) {
-        this.idUsuario = idUsuario;
+    constructor(idAspirante, idGrupo, idPrueba, respuestas) {
+        this.idAspirante = idAspirante;
         this.idGrupo = idGrupo;
         this.idPrueba = idPrueba;
         this.respuestas = respuestas; // [{ idPregunta, opcion, tiempo }, ...]
@@ -12,9 +12,9 @@ class respuestasTerman {
         const promesas = this.respuestas.map(r => {
             // r = { idPregunta, opcion, tiempo }
             return db.execute(
-                `INSERT INTO respuestasterman (idAspirante, idGrupo, idPreguntaTerman, idPrueba, respuestaAbierta, tiempoRespuesta) VALUES (?, ?, ?, ?, ?, ?)`,
+                `INSERT INTO respuestastermanaspirante (idAspirante, idGrupo, idPreguntaTerman, idPrueba, respuestaAbierta, tiempoRespuesta) VALUES (?, ?, ?, ?, ?, ?)`,
                 [
-                    this.idUsuario,
+                    this.idAspirante,
                     this.idGrupo,
                     r.idPregunta,
                     this.idPrueba,

@@ -9,8 +9,10 @@ const PruebaOtis = require('../models/prueba.model');
 const OpcionOtis = require('../models/opcionOtis.model.js');
 const Aspirante = require('../models/aspirante.model');
 const Terman = require('../models/terman.model');
-const modeloTerman = new Terman();
-const respuestasModel = require('../models/respuestasTerman.model');
+const respuestasTerman = require('../models/respuestasTerman.model');
+
+// Middlewares de apoyo
+const calificarSerieTerman = require("../middleware/calificarTerman.js");
 
 //Rutas del portal de los Aspirantes
 exports.getPruebas = (request, response) => {
@@ -302,6 +304,7 @@ exports.getPruebaOtis = (request, response, next) => {
     PruebaOtis.getGrupoPrueba(request.session.idAspirante, idPrueba)
         .then(([rows, fieldData]) => {
             if (rows.length > 0) {
+                console.log( request.session.idGrupo);
                 request.session.idGrupo = rows[0].idGrupo;
                 request.session.idPrueba = idPrueba;
             } else {
@@ -629,7 +632,7 @@ exports.getRespuestasEnviadas = (request, response, next) => {
     response.render('Aspirantes/respuestasEnviadas');
 };
 
-// Controladores para pruebas Terman y Hartman
+// Controladores para prueba Terman
 
 exports.getResponderTerman = (req, res, next) => {
     res.render("Aspirantes/responderTerman", {
@@ -645,21 +648,36 @@ exports.getInfoSerie = (req, res, next) => {
         return res.status(400).json({ error: "ID de serie inválido o no proporcionado." });
     }
 
+    const idPrueba = 4;
     let nombreSeccion, instruccion, preguntas, opciones;
 
-    modeloTerman.fetchSerieInfoById(idSerie)
+    console.log(req.session.idAspirante)
+
+    Terman.getGrupoPrueba(req.session.idAspirante, idPrueba)
+        .then(([rows, fieldData]) => {
+            if (rows.length > 0) {
+                req.session.idGrupo = rows[0].idGrupo;
+                req.session.idPrueba = idPrueba;
+            } else {
+                console.log("No se encontró grupo para este aspirante y prueba");
+            }
+
+            return Terman.fetchSerieInfoById(idSerie);
+        })
         .then(info => {
-            // console.log("info:", info);
+            if (info.length === 0) {
+                throw new Error("No se encontró información para la serie con ese ID.");
+            }
             id = info[0].idSerieTerman
             nombreSeccion = info[0].nombreSeccion;
             instruccion = info[0].instruccion;
             duracion = info[0].duracion
 
-            return modeloTerman.fetchPreguntaSerieById(idSerie);
+            return Terman.fetchPreguntaSerieById(idSerie);
         })
         .then(preguntasRows => {
             preguntas = preguntasRows;
-            return modeloTerman.fetchOpcionesSerieById(idSerie);
+            return Terman.fetchOpcionesSerieById(idSerie);
         })
         .then(opcionesRows => {
             opciones = opcionesRows;
@@ -677,7 +695,6 @@ exports.getInfoSerie = (req, res, next) => {
                 duracion,
                 preguntas: preguntasConOpciones
             });
-            console.log(res.json)
         })
         .catch(error => {
             console.error("Error al cargar serie:", error);
@@ -691,21 +708,22 @@ exports.postRespuestasSerie = async (req, res, next) => {
 
         const idSerie = parseInt(req.params.idSerie);
         const { respuestas } = req.body;
-        // console.log("Recibimos respuestas en el backend:", respuestas);
-        const idUsuario = req.session.idAspirante;
+        const idAspirante = req.session.idAspirante;
         const idGrupo = req.session.idGrupo;
         const idPrueba = 4;
 
         // PASO 49 DE DIAGRAMA: Calificamos la serie
-        await calificarSerieTerman(idSerie, idUsuario, idGrupo, respuestas)
+        await calificarSerieTerman(idSerie, idAspirante, idGrupo, respuestas)
 
         // PASO 69 DE DIAGRAMA: Creamos el modelo con esos datos 
         const respuestasModel = new respuestasTerman(
-            idUsuario,
+            idAspirante,
             idGrupo,
             idPrueba,
             respuestas
         );
+
+        console.log("respuestasModel: ", respuestasModel);
 
         // Guardamos las respuestas
         await respuestasModel.save();
