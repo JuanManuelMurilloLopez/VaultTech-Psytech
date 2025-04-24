@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Link css -->
-    <link rel="stylesheet" href="../../public/css/psicologos/analisisHartman.css" />
+    <link rel="stylesheet" href="/css/psicologos/analisisHartman.css" />
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -34,7 +34,8 @@
             </div>
 
             <div class="card shadow-sm p-4 mb-5 bg-white rounded">
-                <div class="mb-4" style="height: 400px;">
+                <!-- Importante: Eliminando estilo en línea y usando una clase en su lugar -->
+                <div class="chart-container mb-4">
                     <canvas id="chart"></canvas>
                 </div>
 
@@ -184,8 +185,10 @@
                         borderColor: "red",
                         backgroundColor: "rgba(255, 0, 0, 0.2)",
                         fill: false,
-                        tension: 0,
+                        tension: 0.1,
+                        borderWidth: 2,
                         pointRadius: 3,
+                        pointBackgroundColor: "red",
                     },
                     {
                         label: "Mundo Externo",
@@ -200,8 +203,10 @@
                         borderColor: "blue",
                         backgroundColor: "rgba(0, 0, 255, 0.2)",
                         fill: false,
-                        tension: 0,
+                        tension: 0.1,
+                        borderWidth: 2,
                         pointRadius: 3,
+                        pointBackgroundColor: "blue",
                     },
                     {
                         label: "Equilibrio",
@@ -216,8 +221,10 @@
                         borderColor: "black",
                         backgroundColor: "rgba(0, 0, 0, 0.2)",
                         fill: false,
-                        tension: 0,
+                        tension: 0.1,
+                        borderWidth: 2,
                         pointRadius: 3,
+                        pointBackgroundColor: "black",
                     }
                 ]
             },
@@ -227,26 +234,78 @@
                 plugins: {
                     title: {
                         display: true,
-                        text: "Gráfico de Líneas: Análisis Hartman"
+                        text: "Gráfico de Líneas: Análisis Hartman",
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        },
+                        padding: {
+                            top: 10,
+                            bottom: 20
+                        }
                     },
                     legend: {
-                        position: "bottom"
+                        position: "bottom",
+                        labels: {
+                            padding: 20,
+                            boxWidth: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
                     },
                     tooltip: {
-                        enabled: false
+                        enabled: true,
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        titleFont: {
+                            size: 13
+                        },
+                        bodyFont: {
+                            size: 12
+                        },
+                        padding: 10
                     }
                 },
                 hover: {
-                    mode: null
+                    mode: "nearest",
+                    intersect: false
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: "Valor"
+                            text: "Valor",
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        ticks: {
+                            font: {
+                                size: 11
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        ticks: {
+                            font: {
+                                size: 10
+                            },
+                            maxRotation: 45,
+                            minRotation: 45
                         }
                     }
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutQuart'
                 }
             }
         });

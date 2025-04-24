@@ -12,31 +12,31 @@
 }
 
 .btn-color--secondary {
-    padding: 4px 28px;
-    border-radius: 10px;
-    font-size: 14px;
-    text-align: center;
+    padding: 4px 28px !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    text-align: center !important;
     background: var(--secondary) !important;
     color: var(--font-secondary) !important;
 }
 
 .btn-color--third {
-    padding: 4px 24px;
-    border-radius: 10px;
-    font-size: 14px;
-    text-align: center;
-    background: var(--third);
-    color: var(--font-primary);
+    padding: 4px 24px !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    text-align: center !important;
+    background: var(--third) !important;
+    color: var(--font-primary) !important;
 }
 
 .btn-color--third:hover {
-    background: var(--third-hover);
-    color: var(--font-primary);
+    background: var(--third-hover) !important;
+    color: var(--font-primary) !important;
 }
 
 .btn-color--secondary:hover {
-    background: var(--secondary-hover);
-    color: var(--font-secondary);
+    background: var(--secondary-hover) !important;
+    color: var(--font-secondary) !important;
 }
 
 * {
@@ -47,82 +47,161 @@
 }
 
 .boton-container {
-    width: 100%;
-    text-align: left;
-    margin-top: 60px;
-    margin-bottom: 40px;
-    padding-left: 15px;
+    width: 100% !important;
+    text-align: center !important; 
+    margin-top: 30px !important;
+    margin-bottom: 30px !important;
+    padding-left: 15px !important;
 }
 
 h2, h4, h5 {
-    color: #000;
+    color: #000 !important;
+}
+
+.text-center h2 {
+    margin-bottom: 10px !important;
 }
 
 .main {
-    display: flex;
-    flex-direction: row;
-    min-height: 100vh;
-    width: 100%;
-    overflow: hidden;
-    transition: all 0.35s ease-in-out;
+    display: flex !important;
+    flex-direction: row !important;
+    min-height: 100vh !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    transition: all 0.35s ease-in-out !important;
 }
 
 .container {
-    flex: 1;
-    padding-left: 15px;
-    padding-right: 15px;
+    flex: 1 !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    padding-top: 20px !important;
 }
 
 .card {
-    border: none;
-    border-radius: 1rem;
+    border: none !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+    margin-bottom: 30px !important;
 }
 
-.card h5 {
-    border-left: 4px solid #0d6efd;
-    padding-left: 0.75rem;
+/* Encabezados de seccion */
+h5.fw-semibold {
+    border-left: 4px solid #0d6efd !important;
+    padding-left: 0.75rem !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 1rem !important;
+    font-weight: 600 !important;
+    background-color: #f8f9fa !important;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    border-radius: 0 4px 4px 0 !important;
+}
+
+/* Altura contenedor grafica */
+.chart-container {
+    height: 400px !important;
+    min-height: 400px !important;
+    width: 100% !important;
+    margin-bottom: 20px !important;
 }
 
 #chart {
-    max-height: 250px;
+    height: 400px !important;
     width: 100% !important;
+    max-width: 100% !important;
 }
 
-.table th, .table td {
-    text-align: center;
-    vertical-align: middle;
-    font-size: 0.9rem;
+/* Estilos para tablas */
+.table-responsive {
+    margin-bottom: 30px !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
 }
 
-.table th {
-    background-color: #f8f9fa;
-    color: #212529;
+.table {
+    margin-bottom: 0 !important;
+    width: 100% !important;
+    border-collapse: collapse !important;
 }
 
-.table-primary th,
+.table th, 
+.table td {
+    text-align: center !important;
+    vertical-align: middle !important;
+    font-size: 0.9rem !important;
+    padding: 0.6rem !important;
+    border: 1px solid #dee2e6 !important;
+}
+
+/* Encabezados obscuros */
+.table-dark th {
+    background-color: #212529 !important;
+    color: white !important;
+    font-weight: bold !important;
+    border-color: #32383e !important;
+}
+
+/* Filas fondo celeste */
+.table-primary th {
+    background-color: #cfe2ff !important;
+    color: #212529 !important;
+    font-weight: bold !important;
+}
+
 .table-primary td {
     background-color: #e2ecf9 !important;
 }
 
-.table-secondary th,
+/* Filas fondo gris */
+.table-secondary th {
+    background-color: #e2e3e5 !important;
+    color: #212529 !important;
+    font-weight: bold !important;
+}
+
 .table-secondary td {
     background-color: #f2f2f2 !important;
 }
 
+/* Hover en las filas */
+.table-hover tbody tr:hover {
+    background-color: rgba(0,0,0,0.05) !important;
+}
+
+/* Estilos del boton Regresar */
+.btn-color--third {
+    background-color: var(--third) !important;
+    color: #212529 !important;
+    transition: all 0.3s ease !important;
+    font-weight: 500 !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+}
+
+.btn-color--third:hover {
+    background-color: var(--third-hover) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+}
+
+/* Ajustes responsive */
 @media (max-width: 768px) {
+    .chart-container {
+        height: 300px !important;
+    }
+    
     #chart {
-        max-height: 200px;
+        height: 300px !important;
     }
 
     .main {
-        flex-direction: column;
-    }
-
-    .boton-container {
-        text-align: center;
+        flex-direction: column !important;
     }
 
     .table-responsive {
-        margin-bottom: 20px;
+        margin-bottom: 20px !important;
+    }
+    
+    h5.fw-semibold {
+        font-size: 1rem !important;
     }
 }
