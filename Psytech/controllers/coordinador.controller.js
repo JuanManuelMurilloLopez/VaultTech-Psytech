@@ -30,32 +30,134 @@ exports.getRegistrarPsicologos = (request, response, next) => {
 
 exports.postRegistrarPsicologos = (request, response, next) => {
     const { correo, nombrePsicologo, apellidoPaterno, apellidoMaterno, lada, numero } = request.body;
-   
-    const psicologo = new Psicologo(
-        correo, // usuario
-        1,
-        nombrePsicologo,
-        apellidoPaterno,
-        apellidoMaterno,
-        correo, // correo electronico
-        lada,
-        numero,
-        2
-    );
-    
-    console.log('Guardando psicologo:', psicologo);
-    psicologo.savePsicologo()
-   .then(() => {
-        exports.getPsicologosRegistrados(request, response, next);
-   })
-   .catch((error) => {
-        console.log('Error al guardar psicologo:', error);
+
+    Psicologo.correoExiste(correo)
+    .then((existe) => {
+
+        if (existe) {
+            return response.render('psicologos/registrarPsicologo', {
+                error: 'El correo ya está registrado.'
+            });
+        }
+
+        const psicologo = new Psicologo(
+            correo, // usuario
+            1,
+            nombrePsicologo,
+            apellidoPaterno,
+            apellidoMaterno,
+            correo, // correo electrónico
+            lada,
+            numero,
+            2
+        );
+
+        console.log('Guardando psicólogo:', psicologo);
+
+        return psicologo.savePsicologo()
+            .then(() => {
+                exports.getPsicologosRegistrados(request, response, next);
+            });
+    })
+    .catch((error) => {
+        console.log('Error al guardar psicólogo:', error);
     });
 };
 
-exports.getEditarPsicologos = (request, response, next) => {
-    response.render('Coordinadores/editarPsicologo');
+exports.getEditarPsicologo = (request, response, next) => {
+    const idUsuario = request.params.idUsuario;
+
+    Psicologo.fetchOne(idUsuario)
+    .then(([rows]) => {
+        if (rows.length === 0) {
+            return response.redirect('/coordinador/psicologos-registrados');
+        }
+
+        const psicologo = rows[0];
+
+        response.render('Coordinadores/editarPsicologo', {
+            psicologo: psicologo,
+            idUsuario: psicologo.idUsuario,
+            error: '',
+        });
+    })
+    .catch(error => {
+        console.log('Error al obtener psicólogo:', error);
+    });
 };
+
+exports.postEditarPsicologo = (request, response, next) => {
+    const idUsuario = request.params.idUsuario;
+    const {
+        usuario,
+        estatusUsuario,
+        nombreUsuario,
+        apellidoPaterno,
+        apellidoMaterno,
+        correo,
+        lada,
+        numeroTelefono
+    } = request.body;
+
+    let estatus;
+
+    Psicologo.fetchOne(idUsuario)
+    .then(([rows]) => {
+        if (rows.length === 0) {
+            console.log('Usuario no encontrado');
+        }
+
+        const usuarioActual = rows[0];
+        
+        estatus = (estatusUsuario === undefined || estatusUsuario === null)
+            ? usuarioActual.estatusUsuario
+            : (estatusUsuario === 'true' ? 1 : 0);
+
+        const valores = {
+            usuario: usuario || null,
+            nombreUsuario: nombreUsuario || null,
+            apellidoPaterno: apellidoPaterno || null,
+            apellidoMaterno: apellidoMaterno || null,
+            correo: correo || null,
+            lada: lada || null,
+            numeroTelefono: numeroTelefono || null,
+        };
+
+        return Psicologo.update(
+            idUsuario,
+            valores.usuario,
+            estatus,
+            valores.nombreUsuario,
+            valores.apellidoPaterno,
+            valores.apellidoMaterno,
+            valores.correo,
+            valores.lada,
+            valores.numeroTelefono
+        );
+    })
+    .then(() => {
+        response.redirect('/coordinador/psicologos-registrados');
+    })
+    .catch(error => {
+        console.log('Error al actualizar psicólogo:', error);
+    });
+};
+
+exports.postActualizarEstatusPsicologo = (request, response, next) => {
+    const idUsuario = request.params.idUsuario;
+    const { estatusUsuario } = request.body;
+
+    const nuevoEstatus = estatusUsuario === 'true';
+
+    Psicologo.updateEstatus(idUsuario, nuevoEstatus)
+        .then(() => {
+            response.redirect('/coordinador/psicologos-registrados');
+        })
+        .catch(error => {
+            console.log('Error al actualizar estatus del psicólogo:', error);
+        });
+};
+
 
 exports.getCoordinadoresRegistrados = (request, response, next) => {
     Coordinador.fetchAll()
@@ -86,29 +188,131 @@ exports.getRegistrarCoordinador = (request, response, next) => {
 
 exports.postRegistrarCoordinador = (request, response, next) => {
     const { correo, nombreCoordinador, apellidoPaterno, apellidoMaterno, lada, numero } = request.body;
-   
-    const coordinador = new Coordinador(
-        correo, // usuario
-        1,
-        nombreCoordinador,
-        apellidoPaterno,
-        apellidoMaterno,
-        correo, // correo electronico
-        lada,
-        numero,
-        1
-    );
-    
-    console.log('Guardando coordinador:', coordinador);
-   coordinador.saveCoordinador()
-   .then(() => {
-        exports.getCoordinadoresRegistrados(request, response, next);
-   })
-   .catch((error) => {
+
+    Coordinador.correoExiste(correo)
+    .then((existe) => {
+
+        if (existe) {
+            return response.render('coordinadores/registrarCoordinador', {
+                error: 'El correo ya está registrado.'
+            });
+        }
+
+        const coordinador = new Coordinador(
+            correo, // usuario
+            1,
+            nombreCoordinador,
+            apellidoPaterno,
+            apellidoMaterno,
+            correo, // correo electronico
+            lada,
+            numero,
+            1
+        );
+
+        console.log('Guardando coordinador:', coordinador);
+
+        return coordinador.saveCoordinador()
+            .then(() => {
+                exports.getCoordinadoresRegistrados(request, response, next);
+            });
+    })
+    .catch((error) => {
         console.log('Error al guardar coordinador:', error);
     });
 };
 
 exports.getEditarCoordinador = (request, response, next) => {
-    response.render('Coordinadores/editarCoordinador');
+    const idUsuario = request.params.idUsuario;
+
+    Coordinador.fetchOne(idUsuario)
+    .then(([rows]) => {
+        if (rows.length === 0) {
+            return response.redirect('/coordinador/coordinadores-registrados');
+        }
+
+        const coordinador = rows[0];
+
+        response.render('Coordinadores/editarCoordinador', {
+            coordinador: coordinador,
+            idUsuario: coordinador.idUsuario,
+            error: '',
+        });
+    })
+    .catch(error => {
+        console.log('Error al obtener coordinador:', error);
+    });
+};
+
+exports.postEditarCoordinador = (request, response, next) => {
+    const idUsuario = request.params.idUsuario;
+    const {
+        usuario,
+        estatusUsuario,
+        nombreUsuario,
+        apellidoPaterno,
+        apellidoMaterno,
+        correo,
+        lada,
+        numeroTelefono
+    } = request.body;
+
+    let estatus;
+
+    Coordinador.fetchOne(idUsuario)
+    .then(([rows]) => {
+        if (rows.length === 0) {
+            console.log('Usuario no encontrado');
+        }
+
+        const usuarioActual = rows[0];
+
+        estatus = (estatusUsuario === undefined || estatusUsuario === null)
+            ? usuarioActual.estatusUsuario
+            : (estatusUsuario === 'true' ? 1 : 0);
+
+        const valores = {
+            usuario: usuario || null,
+            nombreUsuario: nombreUsuario || null,
+            apellidoPaterno: apellidoPaterno || null,
+            apellidoMaterno: apellidoMaterno || null,
+            correo: correo || null,
+            lada: lada || null,
+            numeroTelefono: numeroTelefono || null,
+        };
+
+        return Coordinador.update(
+            idUsuario,
+            valores.usuario,
+            estatus,
+            valores.nombreUsuario,
+            valores.apellidoPaterno,
+            valores.apellidoMaterno,
+            valores.correo,
+            valores.lada,
+            valores.numeroTelefono
+        );
+    })
+    .then(() => {
+        response.redirect('/coordinador/coordinadores-registrados');
+    })
+    .catch(error => {
+        console.log('Error al actualizar coordinador:', error);
+    });
+};
+
+
+exports.postActualizarEstatusCoordinador = (request, response, next) => {
+    const idUsuario = request.params.idUsuario;
+    const { estatusUsuario } = request.body;
+
+    const nuevoEstatus = estatusUsuario === 'true';
+
+    Coordinador.updateEstatus(idUsuario, nuevoEstatus)
+        .then(() => {
+            response.redirect('/coordinador/coordinadores-registrados');
+        })
+        .catch(error => {
+            console.log('Error al actualizar estatus del coordinador:', error);
+        });
 };

@@ -279,14 +279,12 @@
   
   /* Barra personalidad (azul) */
   .personalidad-bar {
-    background-color: rgba(41, 73, 105, 0.8) !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
   
   /* Barra adaptación (verde) */
   .adaptacion-bar {
-    background-color: rgba(114, 133, 117, 0.8) !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
@@ -302,15 +300,17 @@
   /* TARJETAS INTERPRETACIÓN */
   .interpretacion-horizontal {
     display: flex !important;
-    flex-wrap: wrap !important;
+    flex-direction: column !important; /* Cambia a columna para apilar verticalmente */
     gap: 20px !important;                    
     margin-bottom: 30px !important;
+    width: 100% !important;
   }
   
-  /* Espacio tarjetas (tres por fila) */
+  /* Cada tarjeta debe ocupar el ancho completo */
   .interpretacion-card {
-    flex: 0 0 calc(33.333% - 20px) !important;
-    max-width: calc(33.333% - 20px) !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
     box-shadow: none !important;
@@ -318,14 +318,6 @@
     margin-bottom: 20px !important;
     overflow: hidden !important;
     min-height: auto !important;
-  }
-  
-  /* En impresiones de pags mas estrechas (dos por fila) */
-  @media print and (max-width: 992px) {
-    .interpretacion-card {
-      flex: 0 0 calc(50% - 15px) !important;
-      max-width: calc(50% - 15px) !important;
-    }
   }
   
   /* Borde izquierdo */

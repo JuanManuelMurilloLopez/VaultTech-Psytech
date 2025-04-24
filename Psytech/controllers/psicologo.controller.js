@@ -13,6 +13,10 @@ const interpretaciones = require('../util/interpretacionColores.js');
 const FormatoEntrevista = require('../models/formatoDeEntrevista.model.js');
 const Familiar = require('../models/formularioFamiliares.model.js');
 
+const xlsx = require('xlsx');
+const fs = require('fs');
+const Usuario = require('../models/usuario.model.js');
+
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
     Grupo.fetchAll()
@@ -45,6 +49,7 @@ exports.getRegistrarInstitucion = (request, response, next) => {
         const tiposInstitucion = rows;
         response.render('Psicologos/registrarInstitucion', {
             tiposInstitucion: tiposInstitucion || [],
+            error: ""
         })
     })
     .catch((error) => {
@@ -53,20 +58,72 @@ exports.getRegistrarInstitucion = (request, response, next) => {
 };
 
 exports.postRegistrarInstitucion = (request, response, next) => {
-    const institucion = new Institucion(request.body);
-    institucion.save()
+    const nombreInput = request.body.nombreInstitucion.trim().toLowerCase();
+
+    Institucion.fetchAll()
+    .then(([rows]) => {
+        const institucionExistente = rows.find(institucion => 
+            institucion.nombreInstitucion.trim().toLowerCase() === nombreInput
+        );
+
+        if (institucionExistente) {
+            return TipoInstitucion.fetchAll()
+            .then(([tipos]) => {
+                response.render('Psicologos/registrarInstitucion', {
+                    tiposInstitucion: tipos || [],
+                    error: "Institución previamente registrada"
+                });
+            });
+        }
+
+        const institucion = new Institucion(request.body);
+        return institucion.save()
+        .then(() => {
+            exports.getCatalogoInstituciones(request, response, next);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+};
+
+
+exports.getEditarInstitucion = (request, response, next) => {
+
+    Institucion.fetchOne(request.params.idInstitucion)
+    .then(([rows, fieldData]) => {
+        const institucion = rows;
+    TipoInstitucion.fetchAll()
+    .then(([rows, fieldData]) => {
+        const tiposInstitucion = rows;
+        response.render('Psicologos/editarInstitucion', {
+            institucion: institucion || null,
+            tiposInstitucion: tiposInstitucion || [],
+            error: ""
+        })
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+
+};
+
+exports.postEditarInstitucion = (request, response, next) => {
+    Institucion.modificarInstitucion(
+        request.params.idInstitucion, request.body.nombreInstitucion, 
+        request.body.estatusInstitucion, request.body.idTipoInstitucion
+    )
     .then(() => {
-        exports.getCatalogoInstituciones(request, response, next);
+        response.render('Psicologos/cambiosGuardados.ejs');
     })
     .catch((error) => {
         console.log(error);
     });
 }
-
-exports.getEditarInstitucion = (request, response, next) => {
-    console.log('Editar Instituciones');
-    response.render('Psicologos/editarInstitucion');
-};
 
 exports.getGrupos = (request, response, next) => {
     Institucion.fetchOne(request.params.idInstitucion)
@@ -183,6 +240,23 @@ exports.getInformacionGrupo = (request, response, next) => {
     });
     
 }
+
+exports.buscarAspirantes = (request, response, next) => {
+    Grupo.getAspirantes(request.params.idGrupo)
+        .then(([rows]) => {
+            const filtrados = rows.filter(a => {
+                const nombreCompleto = `${a.nombreUsuario} ${a.apellidoPaterno} ${a.apellidoMaterno || ''}`.toLowerCase();
+                return nombreCompleto.includes(request.params.valor.toLowerCase());
+            });
+
+            response.json(filtrados);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+};
+
+
 
 exports.getEditarGrupo = (request, response, next) => {
     const idGrupo = request.params.idGrupo;
@@ -357,9 +431,69 @@ exports.getAspirante = (request, response, next) => {
 };
 
 exports.getImportarAspirantes = (request, response, next) => {
-    console.log('Importar Aspirantes');
-    response.render('Psicologos/importarAspirantes');
+    response.render('Psicologos/importarAspirantes', {
+        idGrupo: request.params.idGrupo,
+        idInstitucion: request.params.idInstitucion
+    });
 };
+
+exports.postImportarAspirantes = (request, response, next) => {
+    // Recuperamos el archivo subido por el psicólogo y lo pasamos a JSON
+    const archivoExcel = xlsx.readFile(request.files['excelAspirantes'][0].path);
+    const hojaExcel = archivoExcel.Sheets[archivoExcel.SheetNames[0]];
+    const JSONAspirantes = xlsx.utils.sheet_to_json(hojaExcel, {defval : ""});
+
+    const promesas = JSONAspirantes.map(aspirante => {
+        return Pais.findPais(aspirante.paisOrigen)
+        .then(([rows, fieldData]) => {
+        aspirante.idPais = rows[0].idPais;
+        return Estado.findEstado(aspirante.estadoResidencia);
+        })
+        .then(([rows, fieldData]) => {
+            aspirante.idEstado = rows[0].idEstado;
+            const nuevoAspirante = new Aspirante({
+                nombreUsuario: aspirante.nombre,
+                apellidoPaterno: aspirante.apellidoPaterno,
+                apellidoMaterno: aspirante.apellidoMaterno,
+                institucionProcedencia: aspirante.institucionProcedencia,
+                correo: aspirante.correo,
+                lada: aspirante.ladaTelefonica,
+                numeroTelefono: aspirante.numeroTelefono,
+                idPais: aspirante.idPais,
+                idEstado: aspirante.idEstado
+            });
+            return nuevoAspirante.save(request.params.idGrupo)
+            .then(() => nuevoAspirante.getIdAspirante(request.params.idGrupo))
+            .then(([rows]) => {
+                const idAspirante = rows[0].idAspirante;
+                return Grupo.getInformacionGruposPruebas(request.params.idGrupo)
+                .then(([pruebas]) => {
+                    const vincularPruebas = pruebas.map(prueba => nuevoAspirante.vincularPrueba(idAspirante, request.params.idGrupo, prueba));
+                    return Promise.all(vincularPruebas);
+                });
+            });
+        });
+    });
+    
+    Promise.all(promesas)
+    .then(() => {
+        //Eliminamos el archivo subido
+        fs.unlink(request.files['excelAspirantes'][0].path, (error) => {
+            if (error){
+                console.log(error);
+            }
+        })
+        //Mostramos la interfaz de aspirantes registrados con éxito
+        response.render('Psicologos/aspirantesRegistrados', {
+            idInstitucion: request.params.idInstitucion,
+            idGrupo: request.params.idGrupo
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+}
+
 
 exports.getRegistrarAspirantes = (request, response, next) => {
     Pais.fetchAll()
@@ -419,8 +553,71 @@ exports.postRegistrarAspirantes = (request, response, next) => {
 };
 
 exports.getEditarAspirantes = (request, response, next) => {
-    console.log('Editar Aspirante');
-    response.render('Psicologos/editarAspirante');
+
+    Aspirante.fetchOne(request.params.idAspirante)
+    .then(([rows, fieldData]) => {
+        const aspirante = rows[0];
+
+        Usuario.findUsuario(aspirante.idUsuario)
+        .then(([rows, fieldData]) => {
+            const usuario = rows[0];
+            Pais.fetchAll()
+            .then(([rows, fieldData]) => {
+                const paises = rows;
+                Estado.fetchAll()
+                .then(([rows, fieldData]) => {
+                    const estados = rows;
+                    response.render('Psicologos/editarAspirante',{
+                        aspirante: aspirante || null,
+                        usuario: usuario || null,
+                        paises: paises || [],
+                        estados: estados || [],
+                        idGrupo: request.params.idGrupo,
+                        idInstitucion: request.params.idInstitucion
+                    })
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
+        
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+};
+
+exports.postEditarAspirantes = (request, response, next) => {
+    console.log(request.body);
+
+    Aspirante.modificarAspirante(
+                                request.params.idAspirante, 
+                                request.body.institucionProcedencia, 
+                                request.body.idPais, request.body.idEstado)
+    .then(() => {
+        Usuario.modificarUsuario(
+                                request.params.idAspirante, 
+                                request.body.nombreUsuario, 
+                                request.body.apellidoPaterno, 
+                                request.body.apellidoMaterno, 
+                                request.body.correo, request.body.lada, 
+                                request.body.numeroTelefono, 
+                                request.body.estatusUsuario)
+        .then(() => {
+            response.render('Psicologos/cambiosGuardados.ejs');
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
 };
 
 // Controlador para menejar las respuestas de un aspirante por formato de entrevista
@@ -958,13 +1155,7 @@ exports.getAnalisisColores = async (request, response, next) => {
         
                 return { ...p, texto: { fase1: textoFase1, fase2: textoFase2 } };
             });
-        }
-                                              
-        
-        const invertirPareja = (pareja) => {
-            const partes = pareja.split('-');
-            return `${partes[1]}-${partes[0]}`;
-        };        
+        }   
 
         const parejasNormalizadas = parejas.map(p => {
             const numeros = p.pareja.match(/\d+/g); 

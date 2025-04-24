@@ -27,6 +27,9 @@
             <div>
                 <h1 class="text-container">REGISTRAR PSICÓLOGO</h1>
             </div>
+            <% if (typeof error !== 'undefined') { %>
+                <div class="alert alert-danger"><%= error %></div>
+            <% } %>   
             <form action="/coordinador/registrar-psicologo" method="POST" onsubmit="return validarFormulario()">
                 <div>
                     <!--Input nombre-->
@@ -94,6 +97,15 @@
                         return false;
                     }
                 
+                    return true; 
+                }
+            </script>
+            <script>
+                function validarFormulario() {
+                    const ladaInput = document.getElementById('lada');
+                    if (!ladaInput.value.startsWith('+')) {
+                        ladaInput.value = '+' + ladaInput.value;
+                    }
                     return true; 
                 }
             </script>

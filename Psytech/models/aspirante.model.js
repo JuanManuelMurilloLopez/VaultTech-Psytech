@@ -15,6 +15,14 @@ module.exports = class Aspirante {
         this.idPais = infoAspirante.idPais,
         this.idEstado = infoAspirante.idEstado
     }
+
+    static fetchOne(idAspirante){
+        return db.execute(`SELECT * 
+                            FROM aspirantes 
+                            WHERE idAspirante = ?`
+                            , [idAspirante])
+    }
+
     save(idGrupo){
         return db.execute(`
             CALL registraraspiranteengrupo 
@@ -87,6 +95,16 @@ module.exports = class Aspirante {
                 AND vpa.nombreGrupo = grupos.nombreGrupo
                 AND idGrupo = ?
             `,[idAspirante, idGrupo]);
+    }
+
+    static modificarAspirante(idAspirante, institucionProcedencia, idPais, idEstado){
+        return db.execute(`
+                            UPDATE aspirantes
+                            SET institucionProcedencia = ?,
+                            idPais = ?,
+                            idEstado = ?
+                            WHERE idAspirante = ?
+            `, [institucionProcedencia, idPais, idEstado, idAspirante])
     }
 
 }
