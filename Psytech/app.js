@@ -30,6 +30,7 @@ app.use(
         scriptSrc: [
           "'self'",
           "https://cdn.jsdelivr.net",
+          "https://unpkg.com",
           "'unsafe-inline'",
           "'unsafe-hashes'"
         ],
@@ -37,6 +38,7 @@ app.use(
         styleSrc: [
           "'self'",
           "https://cdn.jsdelivr.net",
+          "https://fonts.googleapis.com",
           "https://fonts.googleapis.com",
           "'unsafe-inline'"
         ],
