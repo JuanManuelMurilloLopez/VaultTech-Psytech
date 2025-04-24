@@ -322,6 +322,7 @@
   
   /* Borde izquierdo */
   .interpretacion-seccion {
+    text-align: justify;
     margin-bottom: 15px !important;
     border-left: 3px solid #294969 !important;  
     padding-left: 12px !important;
