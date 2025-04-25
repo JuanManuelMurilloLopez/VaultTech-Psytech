@@ -11,7 +11,7 @@ function buscarValor(valor, matriz) {
             return resultado;
         }
     }
-    return null;
+    return 0;
 }
   
 
