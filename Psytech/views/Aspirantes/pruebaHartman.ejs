@@ -74,12 +74,5 @@
     history.pushState(null, null, location.href);
     alert("No puedes regresar a la pantalla anterior durante la prueba.");
   };
-  if (performance.navigation.type === 1 || sessionStorage.getItem("refreshed")) {
-    // Si es una recarga (tipo 1 = reload)
-    sessionStorage.removeItem("refreshed");
-    window.location.href = "/aspirante/prueba-hartman/fase1"; // Ajusta esta ruta a tu pantalla inicial
-  } else {
-    sessionStorage.setItem("refreshed", "true");
-  }
 </script>
 </html>
