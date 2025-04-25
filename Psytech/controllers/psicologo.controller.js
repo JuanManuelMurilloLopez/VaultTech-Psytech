@@ -1429,3 +1429,27 @@ exports.get_respuestasA = (request, response, next) => {
       });
     });
   };
+
+  // Consulta informacion prueba Colores
+    exports.getPruebaColores = async (req, res, next) => {
+    try {
+        // ID colores
+        const idPruebaColores = 6;
+        
+        // Obtener info general de la prueba
+        const [infoPrueba] = await InfoPruebas.getInfoPrueba(idPruebaColores);
+        
+        // Obtener colores de la base de datos
+        const [colores] = await InfoPruebas.getColores();
+        
+        // Renderizar la vista con los datos
+        res.render('psicologos/infoPruebaColores', {  
+            pageTitle: infoPrueba.length > 0 ? infoPrueba[0].nombrePrueba : 'Prueba de Colores',
+            infoPrueba: infoPrueba.length > 0 ? infoPrueba[0] : null,
+            colores: colores
+        });
+    } catch (error) {
+        console.error('Error al obtener datos de colores:', error);
+        next(error);
+    }
+};

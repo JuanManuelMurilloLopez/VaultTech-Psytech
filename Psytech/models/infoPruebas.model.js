@@ -29,4 +29,10 @@ module.exports = class InfoPruebas {
         );
     }
     
+    // Metodo para obtener todos los colores para la prueba colores
+    static getColores() {
+        return db.execute(
+            `SELECT * FROM colores ORDER BY idColor`
+        );
+    }
 };

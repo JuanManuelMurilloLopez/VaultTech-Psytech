@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Colores</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="/css/psicologos/infoPruebaColores.css">
+    <!-- CSS navside -->
+    <link rel="stylesheet" href="/css/includeCss/_navsidePsicologo.css">
+    <!-- CSS para cerrar sesión -->
+    <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
+</head>
+<body>
+
+    <div class="main">
+        <!-- Navside -->
+        <%- include('../includes/_navsidePsicologo.ejs') %>
+
+        <div class="container">
+            <!-- Boton de cerrar sesión -->
+            <%- include('../includes/_buttonCerrarSesion.ejs') %>
+
+            <h1 class="text-center">
+                <%= infoPrueba && infoPrueba.nombrePrueba ? infoPrueba.nombrePrueba : 'Test de Colores' %>
+            </h1>
+            <hr>
+           
+            <h5 class="titulo-seccion">Información Test de Colores</h5>
+            <hr>
+
+            <% if (infoPrueba && infoPrueba.descripcionPrueba) { %>
+                <div class="descripcion">
+                    <p><%= infoPrueba.descripcionPrueba %></p>
+                </div>
+            <% } %>
+
+            <!-- Instrucciones -->
+            <div class="card mb-4 instrucciones">
+                <div class="card-header">
+                    <h5 class="mb-0 text-center">INSTRUCCIONES</h5>
+                </div>
+                <div class="card-body">
+                    <p>Esta es una prueba para conocer tus preferencias emocionales y reacciones instintivas frente a los colores. La prueba consta de <strong>dos rondas</strong> en las que deberás elegir los colores según tu nivel de atracción hacia ellos.</p>
+                    
+                    <h6 class="mt-3">Primera Fase:</h6>
+                    <ol>
+                        <li>Se te mostrarán <strong>8 colores</strong> en pantalla.</li>
+                        <li>Observa los colores durante unos segundos.</li>
+                        <li>Selecciona el color que <strong>más te atrae</strong> en este momento.</li>
+                        <li>Entre los restantes, vuelve a elegir el siguiente que más te llame la atención.</li>
+                        <li>Repite el proceso hasta que hayas seleccionado los 8 colores <strong>en orden de preferencia</strong>, del más al menos atractivo.</li>
+                    </ol>
+
+                    <h6 class="mt-3">Segunda Fase:</h6>
+                    <ol>
+                        <li>Los mismos <strong>8 colores</strong> aparecerán nuevamente, en diferente orden.</li>
+                        <li>No pienses en la ronda anterior; <strong>elige según lo que ahora te atrae más</strong>.</li>
+                        <li>Selecciona nuevamente los 8 colores en orden de preferencia.</li>
+                    </ol>
+
+                    <p class="mt-3 mb-0 fw-bold">No hay respuestas correctas o incorrectas. Confía en tu primera impresión y elige lo que sientes en el momento.</p>
+                </div>
+            </div>
+
+            <!-- Contenedor tarjetas de colores -->
+            <div class="colores-container">
+                <% colores.forEach(color => { %>
+                    <div class="color-card">
+                        <div class="color-muestra" style="background-color: <%= color.hexColor %>"></div>
+                        <div class="color-info">
+                            <h3><%= color.nombreColor %></h3>
+                            <div class="info-detalle">
+                                <p><strong>ID:</strong> <%= color.idColor %></p>
+                                <p><strong>Número:</strong> <%= color.numeroColor %></p>
+                                <p><strong>Significado:</strong> <%= color.significado %></p>
+                                <p><strong>Código Hex:</strong> <%= color.hexColor %></p>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+
+            <!-- Seccion de interpretacion -->
+            <div class="interpretacion">
+                <h2>Interpretación Colores</h2>
+                <p>Los colores en esta prueba psicológica representan diferentes aspectos de la personalidad:</p>
+                <div class="interpretacion-grid">
+                    <% colores.forEach(color => { %>
+                        <div class="interpretacion-item">
+                            <div class="color-dot" style="background-color: <%= color.hexColor %>"></div>
+                            <strong><%= color.nombreColor %> (<%= color.significado %>)</strong>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+
+            <!-- Boton regresar -->
+            <div class="boton-container">
+                <a class="btn btn-color--third boton-regresar-abajo"
+                href="/psicologo/catalogo-pruebas"
+                >Regresar</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Script del navside -->
+    <script src="/js/_navside.js"></script>
+    
+</body>
+</html>

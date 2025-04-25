@@ -33,7 +33,11 @@
                     <div class="prueba-card">
                         <h2 class="prueba-title"><%= prueba.nombre %></h2>
                         <p class="prueba-description"><%= prueba.descripcion %></p>
-                        <a href="<%= prueba.idPrueba === 5 ? '/psicologo/prueba-otis' : '#' %>" class="btn btn-color--secondary">Ver prueba</a>
+                        <a href="<%= 
+                        prueba.idPrueba === 5 ? '/psicologo/prueba-otis' : 
+                        prueba.idPrueba === 6 ? '/psicologo/prueba-colores' : 
+                        '#' 
+                        %>" class="btn btn-color--secondary">Ver prueba</a>
                     </div>
                 <% } %>
             </div>

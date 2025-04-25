@@ -5,127 +5,133 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- CSS link -->
+  <link rel="stylesheet" href="/css/aspirantes/pruebaOtis.css">
   <title>Prueba</title>
 </head>
-<body class="">
-  <section class="section">
-    <nav class="">
-      <div class="">
-        <article class="message">
-          <div class="message-body" id="cronometro"></div>
-        </article>
+<body>
+  <div class="container mt-4">
+    <div class="cabeceraTest">
+      <h2 class="tituloTest text-center"><%= prueba.nombre %></h2>
+      <div class="headerOtis">
+        <div class="temporizadorOtis">
+          <span class="iconoReloj">⏱</span>
+          <span class="tiempoRestante" id="cronometro">2:00:00</span>
+        </div>
       </div>
-    </nav>
+    </div>
 
-    <% if (prueba.idPrueba === 1) {%>
+<div id="container">
 
-    <div class="container " id="container">
+  <div class="progresoOtis">
+    <label class="tituloProgreso">Progreso</label>
+    <div class="barraExterna">
       <progress
-        class="progress" 
+        class="barraInterna" 
         max="90"
-        value="<%= pregunta.numeroPreguntaKostick %>"
+        value="0"
         id="progressBar">
-        <%= pregunta.numeroPreguntaKostick %>
       </progress>
-      <% if (pregunta) { %>
-      <p class="subtitle is-2 mt-3" id="numero-pregunta"> <!-- BULMA -->
-        Pregunta <%= pregunta.numeroPreguntaKostick %>
-      </p>
-      <input
-        type="hidden"
-        name="preguntaK"
-        id="preguntaK"
-        value="<%=pregunta.idPreguntaKostick%>" />
+    </div>
+  </div>
+  <br>
+  <br>
 
-      <% if (opciones) { %> <% opciones.forEach(opcion => { %>
-      <div class="control " id="option-<%= opcion.idOpcionKostick %>">
-        <label class="radio">
-          <input
+  <!-- PRUEBA KOSTICK -->
+  <% if (prueba.idPrueba === 1) {%>
+    <% if (pregunta) { %>
+      <div class="areaTexto">
+        <h5>Pregunta <%= pregunta.numeroPreguntaKostick %></h5>
+        <hr>
+      </div>
+      <input
+      type="hidden"
+      name="preguntaK"
+      id="preguntaK"
+      value="<%= pregunta.idPreguntaKostick %>" />
+      <div class="pregtext">
+        <span>Selecciona la frase con la que más te identifiques</span>
+      </div>
+
+      <div class="opcionList">
+        <% if (opciones) { %> <% opciones.forEach(opcion => { %>
+          <div class="option" id="option-<%= opcion.idOpcionKostick %>">
+            <input
             type="radio"
             name="answer"
             value="<%= opcion.idOpcionKostick %>"
             required />
-          <%= opcion.opcionKostick %>. <%= opcion.descripcionOpcionKostick %>
-        </label>
+            <span><%= opcion.descripcionOpcionKostick %></span>
+          </div>
+        <% }) %> <% } %>
       </div>
-      <% }) %> <% } %> <% } %>
+      <hr>
 
-      <input
-        type="hidden"
-        id="idAspirante"
-        name="idAspirante"
-        value="<%= idAspirante%>" />
-      <input type="hidden" id="idGrupo" name="idGrupo" value="<%= idGrupo%>" />
-      <div class="columns"> <!-- BULMA -->
-        <button
-          type="button"
-          id="guardarPregunta"
-          class="column " 
-          onclick="nextQuestion(event)">
-          Siguiente
-        </button>
-      </div>
+    <input
+      type="hidden"
+      id="idAspirante"
+      name="idAspirante"
+      value="<%= idAspirante%>" />
+    <input type="hidden" id="idGrupo" name="idGrupo" value="<%= idGrupo%>" />
+    <div>
+      <button class="sigbtn btn btn-color--secondary" id="guardarPregunta" onclick="nextQuestion(event)">Siguiente</button>
     </div>
-    <%} else if (prueba.idPrueba === 2) {%>
-    <div class="container" id="container">
-      <progress
-        class="progress " 
-        max="90"
-        value="<%= pregunta.numeroPregunta16PF%>"
-        id="progressBar">
-        <%= pregunta.numeroPregunta16PF %>
-      </progress>
-      <% if (pregunta) { %>
-      <p class="subtitle"> <!-- BULMA -->
-        Pregunta <%= pregunta.numeroPregunta16PF %>
-      </p>
+    <% } %>
+  <!-- PRUEBA 16PF -->
+  <%} else if (prueba.idPrueba === 2) {%>
+    <% if (pregunta) { %>
+      <div class="areaTexto">
+        <h5>Pregunta <%= pregunta.numeroPregunta16PF %></h5>
+        <hr>
+      </div>
       <input
-        type="hidden"
-        name="pregunta16"
-        id="pregunta16"
-        value="<%=pregunta.idPregunta16PF%>" />
-      <p class="subtitle "> <!-- BULMA -->
-        <%= pregunta.pregunta16PF %>
-      </p>
-      <% if (opciones) { %> <% opciones.forEach(opcion => { %>
-      <div class="control" id="option-<%= opcion.idOpcion16PF %>">
-        <label class="radio">
-          <input
+      type="hidden"
+      name="pregunta16"
+      id="pregunta16"
+      value="<%=pregunta.idPregunta16PF%>" />
+      <div class="pregtext">
+        <span><%= pregunta.pregunta16PF %></span>
+      </div>
+      <div class="optionList">
+        <% if (opciones) { %> <% opciones.forEach(opcion => { %>
+          <div class="option" id="option-<%= opcion.idOpcion16PF %>">
+            <input
             type="radio"
             name="answer"
             value="<%= opcion.idOpcion16PF %>"
             required />
-          <%= opcion.opcion16PF %>. <%= opcion.descripcionOpcion16PF %>
-        </label>
+            <span><%= opcion.descripcionOpcion16PF %></span>
+          </div>
+          <% }) %> <% } %>
       </div>
-      <% }) %> <% } %> <% } %>
+      <hr>
+      <input
+      type="hidden"
+      id="idAspirante1"
+      name="idAspirante1"
+      value="<%=idAspirante%>" />
+    <input
+      type="hidden"
+      id="idGrupo1"
+      name="idGrupo1"
+      value="<%= idGrupo%>" />
+      <div class="text-end mt-4">
+        <button class="sigbtn btn btn-color--secondary" id="guardarPregunta" onclick="nextQuestion1(event)">Siguiente</button>
+      </div>
+    <% } %>
+  <%}%>
+</div>
+</div>
 
-      <input
-        type="hidden"
-        id="idAspirante1"
-        name="idAspirante1"
-        value="<%=idAspirante%>" />
-      <input
-        type="hidden"
-        id="idGrupo1"
-        name="idGrupo1"
-        value="<%= idGrupo%>" />
-      <div class="columns">  <!-- BULMA -->
-        <button
-          type="button"
-          id="guardarPregunta"
-          class="column "
-          onclick="nextQuestion1(event)">
-          Siguiente
-        </button>
-      </div>
-    </div>
-    <%}%>
-  </section>
+
+
+
+
 
   <script>
     const startTime = Date.now();
 
+    // Función para pasar a la siguiente pregunta KOSTICK
     function nextQuestion(event) {
       event.preventDefault();
 
@@ -175,74 +181,77 @@
           return response.json();
         })
         .then((data) => {
-          let html = `    <progress
-      class="progress is-link"
-      max="90"
-      value="${data.pregunta.numeroPreguntaKostick}">${data.pregunta.numeroPreguntaKostick}</progress>
-          <div class = "container">`;
-          const questionNumberElement =
-            document.getElementById("numero-pregunta");
-          html += `<p class="subtitle is-2 mt-3" id="numero-pregunta">
-                    Pregunta ${data.pregunta.numeroPreguntaKostick}
-                    </p>
-                          <input
-        type="hidden"
-        name="preguntaK"
-        id="preguntaK"
-        value="${data.pregunta.idPreguntaKostick}" />`;
-          if (data.opciones && Array.isArray(data.opciones)) {
-            data.opciones.forEach((opcion) => {
-              html += `<div class="control mt-3" id="option-${opcion.idOpcionKostick}">
-                              <label class="radio mx-5 subtitle is-4">
-                                <input
-                                  type="radio"
-                                  name="answer"
-                                  value="${opcion.idOpcionKostick}" required />
-                                ${opcion.opcionKostick}. ${opcion.descripcionOpcionKostick}
-                              </label>
+          let htmlAct
+
+          let barraProgreso = `<div class="progresoOtis">
+                                  <label class="tituloProgreso">Progreso</label>
+                                  <div class="barraExterna">
+                                    <progress
+                                      class="barraInterna" 
+                                      max="90"
+                                      value="0"
+                                      id="progressBar">
+                                    </progress>
+                                  </div>
+                                </div>
+                                <br>
+                                <br>`;
+
+          let divPregunta = ` <div class="areaTexto">
+                                <h5>Pregunta ${data.pregunta.numeroPreguntaKostick}</h5>
+                                <hr>
                               </div>
-                            `;
-            });
+                              <input
+                              type="hidden"
+                              name="preguntaK"
+                              id="preguntaK"
+                              value="${data.pregunta.idPreguntaKostick}" />
+                              <div class="pregtext">
+                                <span>Selecciona la frase con la que más te identifiques</span>
+                              </div>`;
+          let opciones = '';
+          if(data.opciones && Array.isArray(data.opciones)){
+            data.opciones.forEach((opcion) => {
+              opciones+= `<div class="option" id="option-${opcion.idOpcionKostick}">
+                            <input
+                            type="radio"
+                            name="answer"
+                            value="${opcion.idOpcionKostick}"
+                            required />
+                            <span>${opcion.descripcionOpcionKostick}</span>
+                          </div>`;
+            })
           }
-          html += `
-                <input
-        type="hidden"
-        id="idAspirante"
-        name="idAspirante"
-        value="<%= idAspirante%>" />
-      <input
-        type="hidden"
-        id="idGrupo"
-        name="idGrupo"
-        value="<%= idGrupo%>" />
-                <div class="columns is-centered ml-5 mt-6">`;
-          if (data.pregunta.numeroPreguntaKostick === 90) {
-            html += `<button
-            type="button"
-            id="guardarPregunta"
-            class="column is-narrow button mt-3 is-primary has-text-warning"
-            onclick="entregar(event)">
-            Finalizar
-           </button>
-        `;
+
+          let hiddenInputs = `<input
+                                type="hidden"
+                                id="idAspirante"
+                                name="idAspirante"
+                                value="<%= idAspirante%>" />
+                              <input type="hidden" id="idGrupo" name="idGrupo" value="<%= idGrupo%>" />`;
+
+          let siguienteBtn;
+          if(data.pregunta.numeroPreguntaKostick === 90){
+            siguienteBtn = `<div>
+                                <button class="sigbtn btn btn-color--secondary" id="guardarPregunta" onclick="entregar(event)">Finalizar</button>
+                              </div>`;
           } else {
-            html += `<button
-            type="button"
-            id="guardarPregunta"
-            class="column is-narrow button mt-3 is-primary has-text-warning"
-            onclick="nextQuestion(event)">
-            Siguiente
-          </button>
-          </div>`;
+            siguienteBtn = `<div>
+                                <button class="sigbtn btn btn-color--secondary" id="guardarPregunta" onclick="nextQuestion(event)">Siguiente</button>
+                              </div>`;
           }
+          
           const container = document.getElementById("container");
-          container.innerHTML = html;
+          htmlAct = barraProgreso + divPregunta + opciones + '<hr>' + hiddenInputs + siguienteBtn;
+          container.innerHTML = htmlAct;
+          document.getElementById('progressBar').style.width = `${(data.pregunta.numeroPreguntaKostick / 90) * 100}%`;
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);
         });
     }
 
+    // Función para entregar prueba Kostick
     function entregar(event) {
       event.preventDefault();
 
@@ -304,6 +313,8 @@
     //
     //
     //
+
+    // Función para pasar a la siguiente pregunta 16PF
     function nextQuestion1(event) {
       event.preventDefault();
 
@@ -353,77 +364,77 @@
           return response.json();
         })
         .then((data) => {
-          let html = `<progress
-      class="progress is-link"
-      max="185"
-      value="${data.pregunta.numeroPregunta16PF}">${data.pregunta.numeroPregunta16PF}</progress>
-          <div class = "container">`;
-          const questionNumberElement =
-            document.getElementById("numero-pregunta");
-          html += `<p class="subtitle is-2 mt-3" id="numero-pregunta">
-                    Pregunta ${data.pregunta.numeroPregunta16PF}
-                    </p>
-                          <input
-                          type="hidden"
-                          name="pregunta16"
-                          id="pregunta16"
-                          value="${data.pregunta.idPregunta16PF}" />
-                    <p class="subtitle is-3 mt-3" id="texto-pregunta">
-                    ${data.pregunta.pregunta16PF}
-                    </p>`;
-          if (data.opciones && Array.isArray(data.opciones)) {
-            data.opciones.forEach((opcion) => {
-              html += `<div class="control mt-3" id="option-${opcion.idOpcion16PF}">
-                              <label class="radio mx-5 subtitle is-4">
-                                <input
-                                  type="radio"
-                                  name="answer"
-                                  value="${opcion.idOpcion16PF}" required />
-                                ${opcion.opcion16PF}. ${opcion.descripcionOpcion16PF}
-                              </label>
+          let htmlAct
+          let barraProgreso = `<div class="progresoOtis">
+                                  <label class="tituloProgreso">Progreso</label>
+                                  <div class="barraExterna">
+                                    <progress
+                                      class="barraInterna" 
+                                      max="90"
+                                      value="0"
+                                      id="progressBar">
+                                    </progress>
+                                  </div>
+                                </div>
+                                <br>
+                                <br>`;
+
+          let divPregunta = ` <div class="areaTexto">
+                                <h5>Pregunta ${data.pregunta.numeroPregunta16PF}</h5>
+                                <hr>
                               </div>
-                            `;
-            });
+                              <input
+                              type="hidden"
+                              name="pregunta16"
+                              id="pregunta16"
+                              value="${data.pregunta.idPregunta16PF}" />
+                              <div class="pregtext">
+                                <span>${data.pregunta.pregunta16PF}</span>
+                              </div>`;
+          let opciones = '';
+          if(data.opciones && Array.isArray(data.opciones)){
+            data.opciones.forEach((opcion) => {
+              opciones+= `<div class="option" id="option-${opcion.idOpcion16PF}">
+                            <input
+                            type="radio"
+                            name="answer"
+                            value="${opcion.idOpcion16PF}"
+                            required />
+                            <span>${opcion.descripcionOpcion16PF}</span>
+                          </div>`;
+            })
           }
-          html += `
-                <input
-        type="hidden"
-        id="idAspirante1"
-        name="idAspirante"
-        value="<%= idAspirante%>" />
-      <input
-        type="hidden"
-        id="idGrupo1"
-        name="idGrupo"
-        value="<%= idGrupo%>" />
-              <div class="columns is-centered ml-5 mt-6">`;
-          if (data.pregunta.numeroPregunta16PF === 185) {
-            html += `
-          <button
-            type="button"
-            id="guardarPregunta"
-            class="column is-narrow button mt-3 is-primary has-text-warning"
-            onclick="entregar1(event)">
-            Finalizar
-          </button>
-        `;
+
+          let hiddenInputs = `<input
+                                type="hidden"
+                                id="idAspirante1"
+                                name="idAspirante1"
+                                value="<%= idAspirante%>" />
+                              <input type="hidden" id="idGrupo1" name="idGrupo1" value="<%= idGrupo%>" />`;
+
+          let siguienteBtn;
+          if(data.pregunta.numeroPregunta16PF === 185){
+            siguienteBtn = `<div>
+                                <button class="sigbtn btn btn-color--secondary" id="guardarPregunta" onclick="entregar1(event)">Finalizar</button>
+                              </div>`;
           } else {
-            html += `<button
-            type="button"
-            id="guardarPregunta"
-            class="column is-narrow button mt-3 is-primary has-text-warning"
-            onclick="nextQuestion1(event)">
-            Siguiente
-          </button>
-          </div>`;
+            siguienteBtn = `<div>
+                                <button class="sigbtn btn btn-color--secondary" id="guardarPregunta" onclick="nextQuestion1(event)">Siguiente</button>
+                              </div>`;
           }
+          
           const container = document.getElementById("container");
-          container.innerHTML = html;
+          htmlAct = barraProgreso + divPregunta + opciones + '<hr>' + hiddenInputs + siguienteBtn;
+          container.innerHTML = htmlAct;
+          document.getElementById('progressBar').style.width = `${(data.pregunta.numeroPregunta16PF / 185) * 100}%`;
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);
         });
     }
+
+
+    // Función para entregar prueba 16PF
     function entregar1(event) {
       event.preventDefault();
 

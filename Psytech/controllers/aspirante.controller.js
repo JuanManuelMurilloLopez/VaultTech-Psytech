@@ -905,7 +905,7 @@ exports.get_instrucciones = (request, response, next) => {
                     prueba: prueba || null,
                     pregunta: pregunta || null,
                     opciones: opciones || [],
-                    idGrupo: request.session.grupo || '',  //Se necesita guardar el id del grupo al que pertenece el Usuario en algún punto, o recuperarlo para este y los siguientes controladores
+                    idGrupo: request.session.idGrupo || '',  //Se necesita guardar el id del grupo al que pertenece el Usuario en algún punto, o recuperarlo para este y los siguientes controladores
                     idAspirante: request.session.idAspirante || "",
                   });
             })
@@ -936,7 +936,7 @@ exports.get_instrucciones = (request, response, next) => {
                     prueba: prueba || null,
                     pregunta: pregunta || null,
                     opciones: opciones || [],
-                    idGrupo: request.session.grupo || '',  //Se necesita guardar el id del grupo al que pertenece el Usuario en algún punto, o recuperarlo para este y los siguientes controladores
+                    idGrupo: request.session.idGrupo || '',  //Se necesita guardar el id del grupo al que pertenece el Usuario en algún punto, o recuperarlo para este y los siguientes controladores
                     idAspirante: request.session.idAspirante || "",
                   });
             })
@@ -981,7 +981,7 @@ exports.get_instrucciones = (request, response, next) => {
             response.status(200).json({
                 pregunta: pregunta|| null,
                 opciones: opciones || [],
-                idGrupo: request.session.grupo || null,
+                idGrupo: request.session.idGrupo || null,
                 idAspirante: request.session.idAspirante || "",
             });
         })
@@ -1023,7 +1023,7 @@ exports.get_instrucciones = (request, response, next) => {
             response.status(200).json({
                 pregunta: pregunta|| null,
                 opciones: opciones || [],
-                idGrupo: request.session.grupo || null,
+                idGrupo: request.session.idGrupo || null,
                 idAspirante: request.session.idAspirante || "",
             });
         })
