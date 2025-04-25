@@ -71,7 +71,7 @@ function actualizarProgresoGlobal() {
     const barra = document.getElementById('barra-progreso');
     const texto = document.getElementById('progreso-texto');
     const porcentaje = Math.round((preguntasRespondidas / preguntasTotales) * 100);
-    barra.value = porcentaje;
+    barra.style.width = `${porcentaje}%`;
     texto.innerText = `${porcentaje}% completado`;
 }
 function aumentarProgreso() {
@@ -145,7 +145,8 @@ function mostrarSerie(info) {
         <p><strong>TIP</strong>: Si no deseas responder la pregunta, solo da click en <strong>"No contestar"</strong>.<p>
         <div id="tiempo-boton">
         <p><strong>Tiempo para esta serie: </strong>${info.duracion} segundos</p>
-        <button id="comenzar-serie" class="button is-large has-text-white">Comenzar serie</button>
+        <button id="comenzar-serie" 
+        class="comenzar btn-color--secondary">Comenzar serie</button>
         </div>
     `;
     // Limpia el contenedor de preguntas
@@ -202,8 +203,9 @@ function mostrarPreguntaActual() {
         `).join('<br>')}
         <p id="error-seleccion" style="color: red; margin-top: 10px;"></p>
         <div class="botones-preguntas">
-            <button id="no-contestar" class="button is-large has-text-white">No contestar</button>
-            <button id="siguiente-pregunta" class="button is-large has-text-white" disabled>Siguiente</button>
+            <button id="no-contestar" class="no-contestar">No contestar</button>
+            <button id="siguiente-pregunta" 
+            class="btn siguiente" disabled>Siguiente</button>
         </div>
     `;
     tiempoInicio = Date.now();
@@ -260,8 +262,9 @@ function mostrarPreguntaActualSerie4() {
         `).join('<br>')}
         <p id="error-seleccion"></p>
         <div class="botones-preguntas">
-            <button id="no-contestar" class="button is-large has-text-white">No contestar</button>
-            <button id="siguiente-pregunta" class="button is-large has-text-white" disabled>Siguiente</button>
+            <button id="no-contestar" class="no-contestar">No contestar</button>
+            <button id="siguiente-pregunta" 
+            class="btn siguiente" disabled>Siguiente</button>
         </div>
     `;
     const checkboxes = contenedor.querySelectorAll(`input[name="respuesta_${pregunta.idPreguntaTerman}"]`);
@@ -335,8 +338,9 @@ function mostrarPreguntaActualSerie5() {
         <input type="text" id="respuestaTexto" placeholder="Escribe tu respuesta..." pattern="[0-9.\\/]*" inputmode="decimal" autocomplete="off">
         <p id="error-seleccion"></p>
         <div class="botones-preguntas">
-            <button id="no-contestar" class="button is-large has-text-white">No contestar</button>
-            <button id="siguiente-pregunta" class="button is-large has-text-white" disabled>Siguiente</button>
+            <button id="no-contestar" class="no-contestar">No contestar</button>
+            <button id="siguiente-pregunta" 
+            class="btn siguiente" disabled>Siguiente</button>
         </div>
     `;
     const input = document.getElementById('respuestaTexto');
@@ -395,8 +399,9 @@ function mostrarPreguntaActualSerie10() {
         </div>
         <p id="error-seleccion"></p>
         <div class="botones-preguntas">
-            <button id="no-contestar" class="button is-large has-text-white">No contestar</button>
-            <button id="siguiente-pregunta" class="button is-large has-text-white" disabled>Siguiente</button>
+            <button id="no-contestar" class="no-contestar">No contestar</button>
+            <button id="siguiente-pregunta" 
+            class="btn siguiente" disabled>Siguiente</button>
         </div>
     `;
     const inputA = document.getElementById('respuestaTextoA');
@@ -501,7 +506,8 @@ function mostrarInstruccionesSiguienteSerie(idSerie) {
             <p><strong>SELECCIONA 2 OPCIONES POR CADA PREGUNTA</strong></p>
             <div id="tiempo-boton">
             <p><strong>Tiempo para esta serie: </strong>${data.duracion} segundos</p>
-            <button id="comenzar-serie" class="button is-large has-text-white">Comenzar serie</button>
+            <button id="comenzar-serie" 
+            class="comenzar btn-color--secondary">Comenzar serie</button>
             </div>
         `;
         } else {
@@ -511,7 +517,8 @@ function mostrarInstruccionesSiguienteSerie(idSerie) {
                 <p><strong>TIP</strong>: Si no deseas responder la pregunta, solo da click en <strong>"No contestar"</strong>.<p>
                 <div id="tiempo-boton">
                 <p><strong>Tiempo para esta serie: </strong>${data.duracion} segundos</p>
-                <button id="comenzar-serie" class="button is-large has-text-white">Comenzar serie</button>
+                <button id="comenzar-serie" 
+                class="comenzar btn-color--secondary">Comenzar serie</button>
                 </div>
             `;
         }

@@ -1,24 +1,32 @@
 
-.site {
-    min-height: 100dvh;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    grid-template-columns: minmax(0, 1fr);
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+/* Botones Colores */
+:root{
+    --primary: #95B6BC;
+    --secondary: #294969;
+    --third: #C1C1C1;
+    --font-primary: #000;
+    --font-secondary: #fff;
+    --primary-hover: #7BA1A8;
+    --secondary-hover: #193858;
+    --third-hover:#B1B1B1;
 }
 
 /* -- Contenido en main --  */
 
-.site main {
+.site{
     display: flex;
     flex-direction: column;
     justify-content: center; /* Centrado vertical */
     align-items: center; /* Centrado horizontal */
+    margin: 90px auto;
 }
 
-/* -- Elementos generales */
-
-button {
-    background-color: #778377 !important;
+.tituloTest{
+    font-size: 46px;
+    font-weight: 500;
+    margin-bottom: 70px;
 }
 
 /* -- BARRA DE PROGRESO -- */
@@ -34,22 +42,89 @@ progress::-webkit-progress-value {
 
 /* -- CONTENDEDOR DE ADVERTENCIA -- */
 
-    #advertencia-inicial div {
-        background-color: #EBF3DC;
-    }
+#advertencia-inicial{
+    width: 95%;
+    margin: auto;
+}
 
-    #botones-inicio {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        flex-wrap: wrap;
-        margin-top: 1.5rem;
-    }
+.advertencia {
+    background: rgba(255, 228, 228, 50);
+    border-radius: 20px;
+    margin-bottom: 100px;
+}
 
-    #volver-prueba,
-    #no-contestar {
-        background-color: #F5756A !important;
-    }
+.titulo-advertencia{
+    font-size: 40px;
+    font-weight: 500;
+}
+
+.text-advertencia{
+    font-size: 20px;
+}
+
+.botones-inicio {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 1.5rem;
+}
+
+.volver{
+    padding: 8px 50px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.iniciar{
+    padding: 8px 40px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.comenzar{
+    margin-top: 20px;
+    padding: 8px 40px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.no-contestar {
+    color: #fff;
+    background: #A00505;
+    margin-top: 20px;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.siguiente{
+    color: #fff;
+    background: #294969;
+    margin-top: 20px;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.siguiente:hover{
+    color: #fff;
+    background: #122d49;
+}
+
+.btn:disabled {
+    background-color: #deeff3; /* Cambia esto al color que quieras */
+    color: #666; /* Texto más suave si gustas */
+    cursor: not-allowed;
+    opacity: 2; /* Por si Bootstrap lo hace transparente */
+}
+
+
 /*  CONTENDEDOR DE SERIES 
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 */
@@ -61,16 +136,73 @@ progress::-webkit-progress-value {
     padding: 1rem;    
 }
 
-#cronometro {
-    background-color: #EBF3DC;
-    padding: 20px;
-    margin: 20px 0;
+.headerTerman {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 12px 0;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.progresoTerman {
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    max-width: 80%;
+}
+
+.progresoLabel {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.tituloProgreso {
+    font-weight: 600;
+    font-size: 18px; /* más grande */
+}
+
+#progreso-texto {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.barraExterna {
+    background-color: #e0edf1;
+    height: 16px; /* más alta */
     border-radius: 8px;
-    box-sizing: border-box;
-}  
+    width: 100%;
+    overflow: hidden;
+    margin-top: -12px;
+}
+
+.barraInterna {
+    height: 100%;
+    width: 0%;
+    background-color: #76a9c3;
+    border-radius: 8px;
+    transition: width 0.3s ease;
+}
+
+.temporizadorTerman {
+    background-color: #e0edf1;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 16px; /* más grande */
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
 
 #instrucciones-serie {
-    background-color: #EBF3DC;
+    background-color: #E4EFF1;
+    padding: 30px 50px;
+    border-radius: 20px;
 }
 
 #instrucciones-serie p {
@@ -81,16 +213,19 @@ progress::-webkit-progress-value {
 /* -- PREGUNTAS --*/
 
 .botones-preguntas {
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
     margin-top: 20px;
 }
 
 #preguntas-serie p {
-    font-size: 1.5rem; 
-    font-weight: bold;
+    font-size: 20px; 
+    font-weight: 600;
     margin-bottom: 1rem;
 }
 #preguntas-serie label {
-    font-size: 1.2rem;
+    font-size: 18px;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -99,18 +234,18 @@ progress::-webkit-progress-value {
 
 /* Serie genérica: */
 #preguntas-serie input[type="radio"] {
-    width: 20px;
-    height: 20px;
-    accent-color: #778377;
+    width: 18px;
+    height: 18px;
+    accent-color: #457ba1;
     cursor: pointer;
 }
 
 /* Serie 4: */
 
 #preguntas-serie input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    accent-color: #778377;
+    width: 18px;
+    height: 18px;
+    accent-color: #457ba1;
     cursor: pointer;
 }
 
@@ -154,4 +289,34 @@ progress::-webkit-progress-value {
     color: red; 
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.btn-color--primary{
+    background: var(--primary);
+    color: var(--font-primary);
+}
+
+.btn-color--secondary{
+    background: var(--secondary);
+    color: var(--font-secondary);
+}
+
+.btn-color--third{
+    background: var(--third);
+    color: var(--font-primary);
+}
+
+.btn-color--third:hover{
+    background: var(--third-hover);
+    color: var(--font-primary);
+}
+
+.btn-color--secondary:hover{
+    background: var(--secondary-hover);
+    color: var(--font-secondary);
+}
+
+.btn-color--primary:hover{
+    background: var(--primary-hover);
+    color: var(--font-primary);
 }
