@@ -512,11 +512,19 @@ exports.getRegistrarAspirantes = (request, response, next) => {
         .then(([rows, fieldData]) => {
             const estados = rows;
             
-            response.render('Psicologos/registrarAspirante', {
-                paises: paises || [],
-                estados: estados || [],
-                idGrupo: request.params.idGrupo,
-                idInstitucion: request.params.idInstitucion,
+            Aspirante.fetchCorreos()
+            .then(([rows, fieldData]) => {
+                const correosRegistrados = rows;
+                response.render('Psicologos/registrarAspirante', {
+                    paises: paises || [],
+                    estados: estados || [],
+                    idGrupo: request.params.idGrupo,
+                    idInstitucion: request.params.idInstitucion,
+                    correosRegistrados: correosRegistrados,
+                });
+            })
+            .catch((error) => {
+                console.log(error);
             });
         })
         .catch((error) => {console.log(error)});

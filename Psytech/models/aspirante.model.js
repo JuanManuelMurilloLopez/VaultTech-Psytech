@@ -117,4 +117,12 @@ module.exports = class Aspirante {
             `, [institucionProcedencia, idPais, idEstado, idAspirante])
     }
 
+    static fetchCorreos(){
+        return db.execute(`
+                            SELECT correo
+                            FROM aspirantes, usuarios
+                            WHERE aspirantes.idUsuario = usuarios.idUsuario
+            `)
+    }
+
 }
