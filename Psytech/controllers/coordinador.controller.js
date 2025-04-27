@@ -35,7 +35,7 @@ exports.postRegistrarPsicologos = (request, response, next) => {
     .then((existe) => {
 
         if (existe) {
-            return response.render('psicologos/registrarPsicologo', {
+            return response.render('Coordinadores/registrarPsicologo', {
                 error: 'El correo ya está registrado.'
             });
         }
