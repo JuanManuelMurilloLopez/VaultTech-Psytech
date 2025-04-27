@@ -201,7 +201,6 @@ exports.getRegistrarGrupo = (req, res, next) => {
           idNivelAcademico,
           fechaLimite
         );
-        console.log("Grupo", grupo);
   
         return grupo.saveGrupoYPruebas(pruebasSeleccionadas);
       })
@@ -224,7 +223,6 @@ exports.getInformacionGrupo = (request, response, next) => {
         Grupo.getAspirantes(request.params.idGrupo)
         .then(([rows, fieldData]) => {
             const aspirantes = rows;
-            console.log(grupo);
             response.render('Psicologos/informacionGrupo.ejs', {
                 grupo: grupo || null,
                 aspirantes: aspirantes || [],
@@ -327,7 +325,6 @@ exports.postEditarGrupo = (request, response, next) => {
         estatusGrupo
     } = request.body;
     
-    console.log("estatusGrupo recibido:", estatusGrupo); 
     
     // Cambiar estatusGrupo a 1 (activo) o 0 (inactivo) para guardarlo en la base de datos
     // Si no se manda un nuevo valor, usar el mismo estatus que ya tenía
@@ -341,7 +338,6 @@ exports.postEditarGrupo = (request, response, next) => {
         }
         
         const grupoActual = rows[0];
-        console.log("Estatus actual del grupo:", grupoActual.estatusGrupo);
         
         // Si no se manda el estatusGrupo desde el formulario dejar el que ya estaba
         if (estatusGrupo === undefined || estatusGrupo === null) {
@@ -350,8 +346,6 @@ exports.postEditarGrupo = (request, response, next) => {
             // Convertir a 1 o 0 segun el valor recibido
             estatus = estatusGrupo === 'true' ? 1 : 0;
         }
-        
-        console.log("Estatus que se usará:", estatus);
         
         // Ciclo escolar semestre y año
         const cicloEscolar = `${semestre} ${anio}`;
@@ -415,7 +409,6 @@ exports.getAspirante = (request, response, next) => {
             Aspirante.getFormatoEntrevista(request.params.idAspirante, request.params.idGrupo)
             .then(([rows, fieldData]) => {
                 const formatoEntrevista = rows;
-                console.log(formatoEntrevista);
                 response.render('Psicologos/informacionAspirante', {
                     informacionAspirante: informacionAspirante || [],
                     idGrupo: request.params.idGrupo || null,
@@ -512,11 +505,19 @@ exports.getRegistrarAspirantes = (request, response, next) => {
         .then(([rows, fieldData]) => {
             const estados = rows;
             
-            response.render('Psicologos/registrarAspirante', {
-                paises: paises || [],
-                estados: estados || [],
-                idGrupo: request.params.idGrupo,
-                idInstitucion: request.params.idInstitucion,
+            Aspirante.fetchCorreos()
+            .then(([rows, fieldData]) => {
+                const correosRegistrados = rows;
+                response.render('Psicologos/registrarAspirante', {
+                    paises: paises || [],
+                    estados: estados || [],
+                    idGrupo: request.params.idGrupo,
+                    idInstitucion: request.params.idInstitucion,
+                    correosRegistrados: correosRegistrados,
+                });
+            })
+            .catch((error) => {
+                console.log(error);
             });
         })
         .catch((error) => {console.log(error)});
@@ -542,7 +543,6 @@ exports.postRegistrarAspirantes = (request, response, next) => {
                 }
                 Promise.all(promesas)
                 .then(([rows, fieldData]) => {
-                    console.log("Proceso terminado");
                     exports.getInformacionGrupo(request, response, next);
                 })
                 .catch((error) => {
@@ -605,7 +605,6 @@ exports.getEditarAspirantes = (request, response, next) => {
 };
 
 exports.postEditarAspirantes = (request, response, next) => {
-    console.log(request.body);
 
     Aspirante.modificarAspirante(
                                 request.params.idAspirante, 
@@ -635,7 +634,6 @@ exports.getRespuestasFormatoEntrevista = (request, response, next) => {
     FormatoEntrevista.getRespuestasFormatoAspirante(request.params.idGrupo, request.params.idAspirante)
     .then(([rows, fieldData]) => {
         const respuestasAspirante = rows;
-        console.log(respuestasAspirante);
         response.render('Psicologos/respuestasFormatoDeEntrevista', {
             respuestasAspirante: respuestasAspirante || [],
             aspirante: request.params.idAspirante || null,
@@ -680,9 +678,6 @@ exports.getInformacionFamiliar = (request, response, next) => {
             }
         }))
 
-        console.log(nodos);
-        console.log(links);
-
         response.render('Psicologos/informacionFamiliar', {
             informacionFamiliar: {
                 nodos: nodos || [],
@@ -712,7 +707,6 @@ exports.getCatalogoPruebas = (request, response, next) => {
 };
 
 exports.getPruebaOtis = (request, response, next) => {
-    console.log('Prueba OTIS');
     response.render('Psicologos/infoPruebaOtis');
 };
 
@@ -806,8 +800,6 @@ exports.getAnalisisOtis = (request, response, next) => {
         Prueba.getPuntajeBrutoOtis(request.params.idAspirante, request.params.idGrupo)
         .then(([rows, fieldData]) => {
             const puntajeBruto = rows[0].puntajeBruto;
-            console.log("Informacion Analisis: ", informacionAnalisis);
-            console.log("Puntaje Bruto: ", puntajeBruto);
             response.render('Psicologos/analisisOtis.ejs', {
                 informacionAnalisis: informacionAnalisis || [],
                 puntajeBruto: puntajeBruto || 0,
@@ -1252,7 +1244,6 @@ function interpretarMovilidad(movilidad) {
 }
 
 exports.getRespuestasOtis = (request, response, next) => {
-    console.log('Respuestas Otis');
     response.render('Psicologos/respuestasOtis');
 };
 

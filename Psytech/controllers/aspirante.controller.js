@@ -70,7 +70,6 @@ exports.getCargarExpedientes = (request, response, next) => {
     Aspirante.getExpedientes(request.session.idAspirante)
     .then(([rows, fieldData]) => {
         const informacionExpedientes = rows[0];
-        console.log("Información Expedientes", informacionExpedientes);
         response.render('Aspirantes/cargaExpedientes', {
             informacionExpedientes: informacionExpedientes || [],
         })
@@ -85,7 +84,6 @@ exports.postCargarExpedientes = (request, response, next) => {
     /*Revisamos el archivo que el aspirante subió, para mandarlo a su
       respectivo campo en la base de datos*/
     if(request.files['cv']){
-        console.log("entra al if de cv")
         Aspirante.addCv(request.session.idAspirante, request.files['cv'][0].filename)
         .then(() => {
             response.render('Aspirantes/expedientesGuardados');
@@ -96,7 +94,6 @@ exports.postCargarExpedientes = (request, response, next) => {
     }
 
     if(request.files['kardex']){
-        console.log("nombre archivo kardex", request.files['kardex'])
         Aspirante.addKardex(request.session.idAspirante, request.files['kardex'][0].filename)
         .then(() => {
             response.render('Aspirantes/expedientesGuardados');
@@ -155,7 +152,6 @@ exports.getFormularioFamiliares = (request, response, next) => {
                     Familiar.fetchHijoDe(request.session.idAspirante)
                     .then(([rows, fieldData]) => {
                         const hijoDe = rows;
-                        console.log(hijoDe);
 
                         response.render('Aspirantes/formularioFamiliar',{
                             familiares: familiares || [],
@@ -193,7 +189,6 @@ exports.postFormularioFamiliares = (request, response, next) => {
         familiaresParseados.push(value);
     }
 
-    console.log(familiaresParseados)
     
     const respuesta = new Familiar(request.session.idAspirante, familiaresParseados);
 
@@ -311,7 +306,6 @@ exports.getPruebaOtis = (request, response, next) => {
                 request.session.idGrupo = rows[0].idGrupo;
                 request.session.idPrueba = idPrueba;
             } else {
-                console.log("No se encontró grupo para este aspirante y prueba");
             }
 
             // Función para obtener las preguntas del model
@@ -390,8 +384,6 @@ exports.postGuardarRespuestas = async (request, response) => {
             datosPersonales
         );
 
-        console.log("Datos personales guardados correctamente");
-
         // Verificar si ya existe el registro en aspirantesGruposPruebas
         const [rows] = await PruebaOtis.verificarExistencia(
             idAspirante,
@@ -400,14 +392,12 @@ exports.postGuardarRespuestas = async (request, response) => {
         );
 
         if (rows.length === 0) {
-            console.log("No existe registro, insertando...");
             await db.execute(
                 `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
                 VALUES (?, ?, ?, 2)`,
                 [idAspirante, idGrupo, idPrueba]
             );
         } else {
-            console.log("Registro encontrado, actualizando estado...");
             await PruebaOtis.updateEstatusPrueba(
                 idAspirante,
                 idGrupo,
@@ -451,9 +441,7 @@ exports.getPruebaColores = (request, response, next) => {
             if (rows.length > 0) {
                 // Guardar el idGrupo
                 request.session.idGrupo = rows[0].idGrupo;
-                console.log("ID de Grupo establecido:", request.session.idGrupo);
             } else {
-                console.log("No se encontró grupo para este aspirante y prueba");
             }
 
             // Continuar con colores
@@ -482,14 +470,10 @@ exports.postPruebaColores = (request, response, next) => {
 };
 
 exports.postGuardarSeleccionesColores = (request, response) => {
-    console.log("1. Iniciando controlador postGuardarSeleccionesColores");
     
     if (!request.session.idAspirante) {
-        console.log("2. Error: No se encontró idAspirante en la sesión");
         return response.redirect('/aspirante/datos-personales-colores');
     }
-    
-    console.log("Datos recibidos:", request.body);
     
     // Recolectar las selecciones de colores desde los campos del formulario
     const selecciones = [];
@@ -521,10 +505,7 @@ exports.postGuardarSeleccionesColores = (request, response) => {
         });
     }
     
-    console.log("3. Selecciones procesadas:", selecciones);
-    
     if (selecciones.length === 0) {
-        console.log("4. Error: No hay selecciones para procesar");
         return response.redirect('/aspirante/prueba-colores');
     }
     
@@ -538,14 +519,10 @@ exports.postGuardarSeleccionesColores = (request, response) => {
             }
             
             const idGrupo = rows[0].idGrupo;
-            console.log("5. ID de Grupo obtenido:", idGrupo);
             
             // Separar las selecciones de fase 1 y 2
             const seleccionesFase1 = selecciones.filter(s => s.fase === 1);
             const seleccionesFase2 = selecciones.filter(s => s.fase === 2);
-            
-            console.log("6. Selecciones fase 1:", seleccionesFase1.length);
-            console.log("7. Selecciones fase 2:", seleccionesFase2.length);
             
             // Obtener datos personales
             const datosPersonales = request.session.datosPersonalesColores || {
@@ -563,7 +540,6 @@ exports.postGuardarSeleccionesColores = (request, response) => {
                 idPrueba,
                 datosPersonales
             ).then(() => {
-                console.log("8. Datos personales guardados correctamente");
                 // const pruebaColores1 = new PruebaColores(seleccionesFase1);
                 return PruebaColores.saveSeleccion(
                     request.session.idAspirante,
@@ -573,7 +549,6 @@ exports.postGuardarSeleccionesColores = (request, response) => {
                     seleccionesFase1
                 );
             }).then(() => {
-                console.log("9. Primera selección guardada");
                 // const pruebaColores2 = new PruebaColores(seleccionesFase2);
                 return PruebaColores.saveSeleccion(
                     request.session.idAspirante,
@@ -583,7 +558,6 @@ exports.postGuardarSeleccionesColores = (request, response) => {
                     seleccionesFase2
                 );
             }).then(() => {
-                console.log("10. Segunda selección guardada");
                 return PruebaColores.verificarExistencia(
                     request.session.idAspirante,
                     idGrupo,
@@ -591,14 +565,12 @@ exports.postGuardarSeleccionesColores = (request, response) => {
                 );
             }).then(([rows]) => {
                 if (rows.length === 0) {
-                    console.log("11. No existe registro, insertando...");
                     return db.execute(
                         `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
                         VALUES (?, ?, ?, 2)`,
                         [request.session.idAspirante, idGrupo, idPrueba]
                     );
                 } else {
-                    console.log("12. Registro encontrado, actualizando estado...");
                     return PruebaColores.updateEstatusPrueba(
                         request.session.idAspirante,
                         idGrupo, 
@@ -608,7 +580,6 @@ exports.postGuardarSeleccionesColores = (request, response) => {
             });
         })
         .then(() => {
-            console.log("13. Proceso completado con éxito");
             delete request.session.datosPersonalesColores;
             delete request.session.primeraSeleccion;
             response.redirect('/aspirante/prueba-completada');
@@ -816,7 +787,6 @@ exports.get_instrucciones = (request, response, next) => {
     Prueba.getGrupoPrueba(request.session.idAspirante, 1)
     .then(([rows, fieldData]) => {
         request.session.idGrupo = rows[0].idGrupo;
-        console.log(request.session.idGrupo);
         Prueba.updateEstatusPruebaK16(request.session.idAspirante, request.session.idGrupo, 1, 'En progreso')
         .then(() => {
             response.render('Aspirantes/datosPersonalesKostick');
@@ -854,7 +824,6 @@ exports.get_instrucciones = (request, response, next) => {
     Prueba.getGrupoPrueba(request.session.idAspirante, 2)
     .then(([rows, fieldData]) => {
         request.session.idGrupo = rows[0].idGrupo;
-        console.log(request.session.idGrupo);
         Prueba.updateEstatusPruebaK16(request.session.idAspirante, request.session.idGrupo, 2, 'En progreso')
         .then(() => {
             response.render('Aspirantes/datosPersonales16PF');

@@ -117,5 +117,30 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Incluir el script del navside -->
     <script src="/js/_navside.js"></script>
+
+    <script>
+
+        const correosRegistrados = <%- JSON.stringify(correosRegistrados) %>;
+
+        console.log(correosRegistrados);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const correoInput = document.getElementById('correo');
+
+            form.addEventListener('submit', function(event){
+                const correoIngresado = correoInput.value.trim().toLowerCase();
+
+                const correoExistente = correosRegistrados.some(correo => correo.correo.toLowerCase() === correoIngresado);
+                console.log(correoExistente);
+                if(correoExistente){
+                    event.preventDefault();
+                    alert('Este correo ya está registrado');
+                    correoInput.focus();
+                }
+            })
+        })
+    </script>
+
 </body>
 </html>
