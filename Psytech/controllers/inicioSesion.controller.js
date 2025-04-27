@@ -21,7 +21,9 @@ exports.getOtp = (request, response, next) => {
 };
 
 exports.getPost = async (request, response) => {
-    const {usuario} = request.body;
+    let {usuario} = request.body;
+
+    usuario = usuario.trim();
 
     /* Verificar si el checkbox está marcado
     if (!terminos) {
@@ -40,6 +42,11 @@ exports.getPost = async (request, response) => {
 
         if (!usuarioId) {
             return response.send('<script>alert("Usuario no encontrado"); window.location.href = "/login";</script>');
+        }
+
+        //Validar el estatusUsuario
+        if (usuarioId.estatusUsuario !== 1) {
+            return response.send('<script>alert("Usuario inactivo, comunícate con soporte."); window.location.href = "/login";</script>');
         }
 
         const codigoOTP = crypto.randomInt(100000, 999999);
