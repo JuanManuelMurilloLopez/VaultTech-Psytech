@@ -11,10 +11,12 @@ const colores = [
 
 let ronda = 1;
 let seleccionados = [];
+let finalizando = false; // Variable para controlar si se esta en proceso de finalizacion
 
 const container = document.getElementById("colorContainer");
 const terminarBtn = document.getElementById("terminarBtn");
 const modalElement = document.getElementById("segundaRondaModal");
+const finalizarModalElement = document.getElementById("finalizarModal");
 const seleccionesContainer = document.getElementById("seleccionesContainer");
 const colorSelectionForm = document.getElementById("colorSelectionForm");
 
@@ -109,15 +111,49 @@ function actualizarCamposFormulario() {
 }
 
 function verificarFinalizar() {
-  // Mostrar boton terminar cuando se tengan las 16 selecciones
-  terminarBtn.classList.remove("d-none");
+  // En vez de mostrar boton, mostrar modal de finalizar
+  const modal = new bootstrap.Modal(finalizarModalElement);
+  modal.show();
 }
 
+// Event listeners para los modals
 modalElement.addEventListener("hidden.bs.modal", () => {
   if (ronda === 2) {
     mostrarColores();
   }
 });
 
+// Agregar evento al boton dentro del modal de finalizar
+document.getElementById("submitPruebaBtn").addEventListener("click", () => {
+  // Marcar que se esta finalizando para evitar el warning de beforeunload
+  finalizando = true;
+  
+  // Marcar el formulario como en envio
+  colorSelectionForm.setAttribute('data-submitting', 'true');
+  
+  // Enviar el formulario
+  colorSelectionForm.submit();
+});
+
 // Iniciar prueba
 mostrarColores();
+
+// Modificar el script de beforeunload en el ejs
+window.addEventListener('beforeunload', function(e) {
+  // No mostrar warning si se termna desde el modal
+  if (finalizando) {
+    return;
+  }
+  
+  // No interrumpir cuando se envia el formulario
+  if (document.querySelector('#colorSelectionForm').getAttribute('data-submitting') === 'true') {
+    return;
+  }
+  
+  // Si la prueba esta en progreso (hay selecciones) mostrar warning
+  if (seleccionados && seleccionados.length > 0) {
+    const message = "¿Está seguro que desea salir? Su progreso en la prueba se perderá.";
+    e.returnValue = message;
+    return message;
+  }
+});
