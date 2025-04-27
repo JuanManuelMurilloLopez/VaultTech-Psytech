@@ -9,34 +9,10 @@
     --third-hover: #B1B1B1;
     --movilidad-header: #728575;
     --movilidad-text: #000;
-}
-
-.btn-color--secondary {
-    padding: 4px 28px !important;
-    border-radius: 10px !important;
-    font-size: 14px !important;
-    text-align: center !important;
-    background: var(--secondary) !important;
-    color: var(--font-secondary) !important;
-}
-
-.btn-color--third {
-    padding: 4px 24px !important;
-    border-radius: 10px !important;
-    font-size: 14px !important;
-    text-align: center !important;
-    background: var(--third) !important;
-    color: var(--font-primary) !important;
-}
-
-.btn-color--third:hover {
-    background: var(--third-hover) !important;
-    color: var(--font-primary) !important;
-}
-
-.btn-color--secondary:hover {
-    background: var(--secondary-hover) !important;
-    color: var(--font-secondary) !important;
+    --card-bg: #ffffff;
+    --heading-color: #294969;
+    --border-radius: 12px;
+    --box-shadow: 0 6px 15px rgba(0,0,0,0.08);
 }
 
 * {
@@ -46,20 +22,8 @@
     box-sizing: border-box;
 }
 
-.boton-container {
-    width: 100% !important;
-    text-align: center !important; 
-    margin-top: 30px !important;
-    margin-bottom: 30px !important;
-    padding-left: 15px !important;
-}
-
-h2, h4, h5 {
-    color: #000 !important;
-}
-
-.text-center h2 {
-    margin-bottom: 10px !important;
+body {
+    background-color: #f8f9fa;
 }
 
 .main {
@@ -73,49 +37,90 @@ h2, h4, h5 {
 
 .container {
     flex: 1 !important;
-    padding-left: 15px !important;
-    padding-right: 15px !important;
-    padding-top: 20px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
 }
 
+/* Estilos de titulos */
+h2, h4, h5 {
+    color: var(--heading-color) !important;
+}
+
+.text-center h2 {
+    font-size: 2.2rem !important;
+    margin-bottom: 10px !important;
+    font-weight: 700 !important;
+}
+
+.text-center h4 {
+    font-size: 1.5rem !important;
+    color: #495057 !important;
+    margin-bottom: 1.5rem !important;
+}
+
+/* Card principal */
 .card {
     border: none !important;
-    border-radius: 1rem !important;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
-    margin-bottom: 30px !important;
+    border-radius: var(--border-radius) !important;
+    box-shadow: var(--box-shadow) !important;
+    margin-bottom: 40px !important;
+    background-color: var(--card-bg) !important;
+}
+
+.card-body {
+    padding: 2rem !important;
+}
+
+/* Sección de la gráfica */
+.chart-container {
+    height: 550px !important;  
+    min-height: 550px !important;
+    width: 100% !important;
+    margin-bottom: 60px !important; 
+    position: relative !important;
+    padding-bottom: 40px !important; 
+    border-bottom: 1px solid #eaeaea !important; 
+}
+
+.analisisHartman {
+    font-size: 1.2rem !important;
+    font-weight: 500 !important;
+    margin-bottom: 0.5rem !important;
+    color: #495057 !important;
+    text-align: center !important; 
+}
+
+#chart {
+    height: 450px !important; 
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-top: 20px !important;
 }
 
 /* Encabezados de seccion */
 h5.fw-semibold {
-    border-left: 4px solid #0d6efd !important;
-    padding-left: 0.75rem !important;
-    margin-top: 1.5rem !important;
-    margin-bottom: 1rem !important;
+    border-left: 5px solid var(--secondary) !important;
+    padding-left: 1rem !important;
+    margin-top: 2.5rem !important; 
+    margin-bottom: 1.5rem !important;
     font-weight: 600 !important;
     background-color: #f8f9fa !important;
-    padding-top: 5px !important;
-    padding-bottom: 5px !important;
-    border-radius: 0 4px 4px 0 !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    border-radius: 0 8px 8px 0 !important;
+    font-size: 1.25rem !important;
+    color: var(--secondary) !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
 }
 
-/* Altura contenedor grafica */
-.chart-container {
-    height: 400px !important;
-    min-height: 400px !important;
-    width: 100% !important;
-    margin-bottom: 20px !important;
-}
-
-#chart {
-    height: 400px !important;
-    width: 100% !important;
-    max-width: 100% !important;
-}
-
-/* Estilos para tablas */
+/* Tablas */
 .table-responsive {
-    margin-bottom: 30px !important;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+    margin-bottom: 40px !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.07) !important;
+    border-radius: 8px !important;
+    overflow: hidden !important; 
 }
 
 .table {
@@ -128,80 +133,102 @@ h5.fw-semibold {
 .table td {
     text-align: center !important;
     vertical-align: middle !important;
-    font-size: 0.9rem !important;
-    padding: 0.6rem !important;
+    font-size: 0.95rem !important;
+    padding: 0.75rem !important;
     border: 1px solid #dee2e6 !important;
 }
 
-/* Encabezados obscuros */
+/* Estilos de tabla */
 .table-dark th {
-    background-color: #212529 !important;
+    background-color: var(--secondary) !important;
     color: white !important;
-    font-weight: bold !important;
+    font-weight: 600 !important;
     border-color: #32383e !important;
+    font-size: 0.9rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
 }
 
-/* Filas fondo celeste */
 .table-primary th {
     background-color: #cfe2ff !important;
     color: #212529 !important;
-    font-weight: bold !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
 }
 
-.table-primary td {
-    background-color: #e2ecf9 !important;
-}
-
-/* Filas fondo gris */
 .table-secondary th {
     background-color: #e2e3e5 !important;
     color: #212529 !important;
-    font-weight: bold !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+.table-primary td {
+    background-color: #e7f0ff !important;
 }
 
 .table-secondary td {
-    background-color: #f2f2f2 !important;
+    background-color: #f5f5f5 !important;
 }
 
 /* Hover en las filas */
-.table-hover tbody tr:hover {
-    background-color: rgba(0,0,0,0.05) !important;
+.table tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.04) !important;
 }
 
-/* Estilos del boton Regresar */
-.btn-color--third {
-    background-color: var(--third) !important;
-    color: #212529 !important;
-    transition: all 0.3s ease !important;
+/* Botones */
+.btn-color--secondary {
+    padding: 8px 28px !important;
+    border-radius: 8px !important;
+    font-size: 1rem !important;
+    text-align: center !important;
+    background: var(--secondary) !important;
+    color: var(--font-secondary) !important;
     font-weight: 500 !important;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-color--third {
+    padding: 8px 28px !important;
+    border-radius: 8px !important;
+    font-size: 1rem !important;
+    text-align: center !important;
+    background: var(--third) !important;
+    color: var(--font-primary) !important;
+    font-weight: 500 !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-color--secondary:hover {
+    background: var(--secondary-hover) !important;
+    color: var(--font-secondary) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.15) !important;
 }
 
 .btn-color--third:hover {
-    background-color: var(--third-hover) !important;
+    background: var(--third-hover) !important;
+    color: var(--font-primary) !important;
     transform: translateY(-2px) !important;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.15) !important;
 }
 
-/* Ajustes responsive */
-@media (max-width: 768px) {
-    .chart-container {
-        height: 300px !important;
-    }
-    
-    #chart {
-        height: 300px !important;
-    }
+.text-center .btn {
+    padding: 10px 32px !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+}
 
-    .main {
-        flex-direction: column !important;
-    }
-
-    .table-responsive {
-        margin-bottom: 20px !important;
-    }
-    
-    h5.fw-semibold {
-        font-size: 1rem !important;
-    }
+.boton-container {
+    width: 100% !important;
+    text-align: center !important; 
+    margin-top: 30px !important;
+    margin-bottom: 30px !important;
+    padding-left: 15px !important;
 }

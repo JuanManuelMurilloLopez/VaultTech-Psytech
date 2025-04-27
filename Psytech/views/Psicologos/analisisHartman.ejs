@@ -22,163 +22,173 @@
         <%- include('../includes/_navsidePsicologo.ejs') %>
 
         <div class="container py-4">
-        <%- include('../includes/_buttonCerrarSesion.ejs') %>
+            <%- include('../includes/_buttonCerrarSesion.ejs') %>
 
-        <div class="text-center mb-5">
-            <h2 class="fw-bold">Análisis Prueba Hartman</h2>
-            <h4 class="fw-semibold">
-            <%= analisisHartman[0].nombreAspirante %>
-            <%= analisisHartman[0].apellidoPaternoAspirante %>
-            <%= analisisHartman[0].apellidoMaternoAspirante %>
-            </h4>
-        </div>
-
-        <div class="card shadow-sm mb-5">
-            <div class="card-body">
-            <div class="chart-container mb-4" style="height: 400px;">
-                <p class="analisisHartman">Desarrollo de personalidad: <%= ((1 - (analisisHartman[0].fraseIntGeneral / analisisHartman[0].fraseDif)) * 100).toFixed(2) %>%</p>
-                <p class="analisisHartman">Falta Madurar: <%= ((analisisHartman[0].fraseIntGeneral / analisisHartman[0].fraseDif) * 100).toFixed(2) %>%</p>
-                <canvas id="chart"></canvas>
+            <!-- Encabezado principal -->
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Análisis Prueba Hartman</h2>
+                <h4 class="fw-semibold">
+                    <%= analisisHartman[0].nombreAspirante %>
+                    <%= analisisHartman[0].apellidoPaternoAspirante %>
+                    <%= analisisHartman[0].apellidoMaternoAspirante %>
+                </h4>
             </div>
 
-            <!-- Mundo Interno -->
-            <h5 class="fw-semibold mt-4">Mundo Interno - Citas</h5>
-            <div class="table-responsive mb-4">
-                <table class="table table-bordered table-sm align-middle text-center">
-                <thead class="table-dark">
-                    <tr>
-                    <th>Dim I</th><th>Dim E</th><th>Dim S</th><th>Dim General</th><th>Dim %</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <td><%= analisisHartman[0].citaDimI %></td>
-                    <td><%= analisisHartman[0].citaDimE %></td>
-                    <td><%= analisisHartman[0].citaDimS %></td>
-                    <td><%= analisisHartman[0].citaDimGeneral %></td>
-                    <td><%= analisisHartman[0].citaDimPorcentaje %></td>
-                    </tr>
-                </tbody>
-                <thead class="table-primary">
-                    <tr>
-                    <th>Int I</th><th>Int E</th><th>Int S</th><th>Int General</th><th>Int %</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <td><%= analisisHartman[0].citaIntI %></td>
-                    <td><%= analisisHartman[0].citaIntE %></td>
-                    <td><%= analisisHartman[0].citaIntS %></td>
-                    <td><%= analisisHartman[0].citaIntGeneral %></td>
-                    <td><%= analisisHartman[0].citaIntPorcentaje %></td>
-                    </tr>
-                </tbody>
-                <thead class="table-secondary">
-                    <tr>
-                    <th>D.I</th><th>DIF</th><th>DIS</th><th>Sq1</th><th>Sq2</th><th>Ai%</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <td><%= analisisHartman[0].citaDi %></td>
-                    <td><%= analisisHartman[0].citaDif %></td>
-                    <td><%= analisisHartman[0].citaDIS %></td>
-                    <td><%= analisisHartman[0].citaSQ1 %></td>
-                    <td><%= analisisHartman[0].citaSQ2 %></td>
-                    <td><%= analisisHartman[0].citaAiPorcentaje %></td>
-                    </tr>
-                </tbody>
-                </table>
+            <!-- Card con datos y grafica -->
+            <div class="card shadow-sm mb-5">
+                <div class="card-body">
+                    <div class="chart-container">
+                        <div class="text-center mb-3">
+                            <p class="analisisHartman">
+                                <strong>Desarrollo de personalidad:</strong> 
+                                <%= ((1 - (analisisHartman[0].fraseIntGeneral / analisisHartman[0].fraseDif)) * 100).toFixed(2) %>%
+                            </p>
+                            <p class="analisisHartman">
+                                <strong>Falta Madurar:</strong> 
+                                <%= ((analisisHartman[0].fraseIntGeneral / analisisHartman[0].fraseDif) * 100).toFixed(2) %>%
+                            </p>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Mundo Interno -->
+                    <h5 class="fw-semibold">Mundo Interno - Citas</h5>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered table-sm align-middle text-center table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Dim I</th><th>Dim E</th><th>Dim S</th><th>Dim General</th><th>Dim %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><%= analisisHartman[0].citaDimI %></td>
+                                    <td><%= analisisHartman[0].citaDimE %></td>
+                                    <td><%= analisisHartman[0].citaDimS %></td>
+                                    <td><%= analisisHartman[0].citaDimGeneral %></td>
+                                    <td><%= analisisHartman[0].citaDimPorcentaje %></td>
+                                </tr>
+                            </tbody>
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>Int I</th><th>Int E</th><th>Int S</th><th>Int General</th><th>Int %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><%= analisisHartman[0].citaIntI %></td>
+                                    <td><%= analisisHartman[0].citaIntE %></td>
+                                    <td><%= analisisHartman[0].citaIntS %></td>
+                                    <td><%= analisisHartman[0].citaIntGeneral %></td>
+                                    <td><%= analisisHartman[0].citaIntPorcentaje %></td>
+                                </tr>
+                            </tbody>
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th>D.I</th><th>DIF</th><th>DIS</th><th>Sq1</th><th>Sq2</th><th>Ai%</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><%= analisisHartman[0].citaDi %></td>
+                                    <td><%= analisisHartman[0].citaDif %></td>
+                                    <td><%= analisisHartman[0].citaDIS %></td>
+                                    <td><%= analisisHartman[0].citaSQ1 %></td>
+                                    <td><%= analisisHartman[0].citaSQ2 %></td>
+                                    <td><%= analisisHartman[0].citaAiPorcentaje %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Mundo Externo -->
+                    <h5 class="fw-semibold">Mundo Externo - Frases</h5>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered table-sm align-middle text-center table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Dim I</th><th>Dim E</th><th>Dim S</th><th>Dim General</th><th>Dim %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><%= analisisHartman[0].fraseDimI %></td>
+                                    <td><%= analisisHartman[0].fraseDimE %></td>
+                                    <td><%= analisisHartman[0].fraseDimS %></td>
+                                    <td><%= analisisHartman[0].fraseDimGeneral %></td>
+                                    <td><%= analisisHartman[0].fraseDimPorcentaje %></td>
+                                </tr>
+                            </tbody>
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>Int I</th><th>Int E</th><th>Int S</th><th>Int General</th><th>Int %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><%= analisisHartman[0].fraseIntI %></td>
+                                    <td><%= analisisHartman[0].fraseIntE %></td>
+                                    <td><%= analisisHartman[0].fraseIntS %></td>
+                                    <td><%= analisisHartman[0].fraseIntGeneral %></td>
+                                    <td><%= analisisHartman[0].fraseIntPorcentaje %></td>
+                                </tr>
+                            </tbody>
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th>DiF</th><th>D.I</th><th>DIS</th><th>Vq1</th><th>Vq2</th><th>Ai%</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><%= analisisHartman[0].fraseDif %></td>
+                                    <td><%= analisisHartman[0].fraseDi %></td>
+                                    <td><%= analisisHartman[0].fraseDIS %></td>
+                                    <td><%= analisisHartman[0].fraseVQ1 %></td>
+                                    <td><%= analisisHartman[0].fraseVQ2 %></td>
+                                    <td><%= analisisHartman[0].fraseAiPorcentaje %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Equilibrio -->
+                    <h5 class="fw-semibold">Equilibrio</h5>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm align-middle text-center table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Área</th><th>Bqr1</th><th>Bqr2</th><th>Bqa1</th><th>Bqa2</th><th>Cq1</th><th>Cq2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Equilibrio</strong></td>
+                                    <td><%= analisisHartman[0].BQr1.toFixed(2) %></td>
+                                    <td><%= analisisHartman[0].BQr2.toFixed(2) %></td>
+                                    <td><%= analisisHartman[0].BQa1.toFixed(2) %></td>
+                                    <td><%= analisisHartman[0].BQa2.toFixed(2) %></td>
+                                    <td><%= analisisHartman[0].CQ1.toFixed(2) %></td>
+                                    <td><%= analisisHartman[0].CQ2.toFixed(2) %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
-            <!-- Mundo Externo -->
-            <h5 class="fw-semibold mt-5">Mundo Externo - Frases</h5>
-            <div class="table-responsive mb-4">
-                <table class="table table-bordered table-sm align-middle text-center">
-                <thead class="table-dark">
-                    <tr>
-                    <th>Dim I</th><th>Dim E</th><th>Dim S</th><th>Dim General</th><th>Dim %</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <td><%= analisisHartman[0].fraseDimI %></td>
-                    <td><%= analisisHartman[0].fraseDimE %></td>
-                    <td><%= analisisHartman[0].fraseDimS %></td>
-                    <td><%= analisisHartman[0].fraseDimGeneral %></td>
-                    <td><%= analisisHartman[0].fraseDimPorcentaje %></td>
-                    </tr>
-                </tbody>
-                <thead class="table-primary">
-                    <tr>
-                    <th>Int I</th><th>Int E</th><th>Int S</th><th>Int General</th><th>Int %</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <td><%= analisisHartman[0].fraseIntI %></td>
-                    <td><%= analisisHartman[0].fraseIntE %></td>
-                    <td><%= analisisHartman[0].fraseIntS %></td>
-                    <td><%= analisisHartman[0].fraseIntGeneral %></td>
-                    <td><%= analisisHartman[0].fraseIntPorcentaje %></td>
-                    </tr>
-                </tbody>
-                <thead class="table-secondary">
-                    <tr>
-                    <th>DiF</th><th>D.I</th><th>DIS</th><th>Vq1</th><th>Vq2</th><th>Ai%</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <td><%= analisisHartman[0].fraseDif %></td>
-                    <td><%= analisisHartman[0].fraseDi %></td>
-                    <td><%= analisisHartman[0].fraseDIS %></td>
-                    <td><%= analisisHartman[0].fraseVQ1 %></td>
-                    <td><%= analisisHartman[0].fraseVQ2 %></td>
-                    <td><%= analisisHartman[0].fraseAiPorcentaje %></td>
-                    </tr>
-                </tbody>
-                </table>
+            <!-- Boton regresar -->
+            <div class="text-center mt-4 mb-5">
+                <a class="btn btn-color--third" href="/psicologo/aspirantes/<%= idAspirante %>/<%= idGrupo %>/<%= idInstitucion %>">
+                    Regresar
+                </a>
             </div>
-
-            <!-- Equilibrio -->
-            <h5 class="fw-semibold mt-5">Equilibrio</h5>
-            <div class="table-responsive">
-                <table class="table table-bordered table-sm align-middle text-center">
-                <thead class="table-dark">
-                    <tr>
-                    <th>Área</th><th>Bqr1</th><th>Bqr2</th><th>Bqa1</th><th>Bqa2</th><th>Cq1</th><th>Cq2</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <td><strong>Equilibrio</strong></td>
-                    <td><%= analisisHartman[0].BQr1.toFixed(2) %></td>
-                    <td><%= analisisHartman[0].BQr2.toFixed(2) %></td>
-                    <td><%= analisisHartman[0].BQa1.toFixed(2) %></td>
-                    <td><%= analisisHartman[0].BQa2.toFixed(2) %></td>
-                    <td><%= analisisHartman[0].CQ1.toFixed(2) %></td>
-                    <td><%= analisisHartman[0].CQ2.toFixed(2) %></td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
-            </div>
-        </div>
-
-        <!-- Botón regresar -->
-        <div class="text-center mt-4">
-            <a class="btn btn-secondary" href="/psicologo/aspirantes/<%= idAspirante %>/<%= idGrupo %>/<%= idInstitucion %>">
-            Regresar
-            </a>
-        </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/graficaHartman.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const hartmanData = {
           MundoInterno: {
