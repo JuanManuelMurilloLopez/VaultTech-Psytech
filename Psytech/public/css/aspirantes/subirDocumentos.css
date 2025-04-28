@@ -24,6 +24,16 @@
     flex-direction: row;
 }
 
+.instrucciones{
+    margin: auto;
+    padding: 10px 30px;
+    border-radius: 10px;
+    width: 55%;
+    color: #193858;
+    font-weight: 500;
+    background: #e0f9ff;
+}
+
 .btn-color--primary{
     background: var(--primary);
     color: var(--font-primary);
