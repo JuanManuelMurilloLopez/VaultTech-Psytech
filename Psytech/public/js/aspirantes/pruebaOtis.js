@@ -16,6 +16,7 @@ cronometro(valorTemporizador);
 // Función del temporizador
 function cronometro(tiempo) {
     contTiempo = setInterval(timer, 1000);
+
     function timer() {
         let minutos = Math.floor(tiempo / 60);
         let segundos = tiempo % 60;
@@ -30,19 +31,11 @@ function cronometro(tiempo) {
         if (tiempo < 0) {
             clearInterval(contTiempo);
             contadorTiempo.textContent = "00:00";
+
+            // Enviar automáticamente las respuestas guardadas
+            sendRespuestas();
         }
     }
-    if (tiempo < 0) {
-        clearInterval(contTiempo);
-        contadorTiempo.textContent = "00:00";
-    
-        // Enviar las respuestas automáticamente
-        sendRespuestas().then(() => {
-            // Redirigir después de enviar
-            window.location.href = "/prueba-completada";
-        });
-    }
-    
 }
 
 // Tener un tope para no llegar a preguntas de más
