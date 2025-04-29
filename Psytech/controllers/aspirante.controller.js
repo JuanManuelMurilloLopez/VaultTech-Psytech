@@ -723,6 +723,26 @@ exports.postRespuestasSerie = async (req, res, next) => {
             respuestas
         );
 
+        const [rows] = await Terman.verificarExistencia(
+            idAspirante,
+            idGrupo,
+            idPrueba
+        );
+    
+        if (rows.length === 0) {
+            await db.execute(
+                `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
+                VALUES (?, ?, ?, 2)`,
+                [idAspirante, idGrupo, idPrueba]
+            );
+        } else {
+            await Terman.updateEstatusPrueba(
+                idAspirante,
+                idGrupo,
+                idPrueba
+            );
+        }
+
         console.log("respuestasModel: ", respuestasModel);
 
         // Guardamos las respuestas

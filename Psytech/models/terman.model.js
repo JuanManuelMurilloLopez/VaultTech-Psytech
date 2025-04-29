@@ -41,6 +41,23 @@ class Terman {
         );
         return opcionesCorrectas;
     }
+
+    static updateEstatusPrueba(idAspirante, idGrupo, idPrueba, idEstatus = 1) {
+        return db.execute(
+            `UPDATE aspirantesgrupospruebas
+            SET idEstatus = ? 
+            WHERE idAspirante = ? AND idGrupo = ? AND idPrueba = ?`,
+            [idEstatus, idAspirante, idGrupo, idPrueba]
+        );
+    }
+
+    static verificarExistencia(idAspirante, idGrupo, idPrueba) {
+        return db.execute(
+            `SELECT * FROM aspirantesgrupospruebas 
+            WHERE idAspirante = ? AND idGrupo = ? AND idPrueba = ?`,
+            [idAspirante, idGrupo, idPrueba]
+        );
+    }
 }
 
 module.exports = Terman;

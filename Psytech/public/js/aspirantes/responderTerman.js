@@ -474,7 +474,7 @@ function finalizarSerie() {
                 permitirBotonAtras();
                 setTimeout(() => {
                     alert("¡Has terminado la prueba!");
-                    window.location.href = "/inicio/aspirante";
+                    window.location.href = "/aspirante/mis-pruebas";
                 }, 100);
             }
         })
