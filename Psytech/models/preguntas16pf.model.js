@@ -20,7 +20,7 @@ module.exports = class Pregunta16PF {
   }
 
   static getOpciones(idPregunta16PF) {
-    return db.execute("SELECT * FROM opciones16PF WHERE idPregunta16PF = ?", [
+    return db.execute("SELECT * FROM opciones16pf WHERE idPregunta16PF = ?", [
       idPregunta16PF,
     ]);
   }
