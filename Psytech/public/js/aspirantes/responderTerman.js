@@ -114,12 +114,17 @@ function completarRespuestasFaltantes() {
     preguntasRespondidas += preguntasFaltantes.length;
     actualizarProgresoGlobal();
 
-    preguntasFaltantes.forEach(p => {
-        return fetch(`/aspirante/prueba-terman/pregunta/${p.idPreguntaTerman}`, {
+    // Separamos la última para enviarla al final
+    const todasMenosLaUltima = preguntasFaltantes.slice(0, -1);
+    const ultimaPregunta = preguntasFaltantes[preguntasFaltantes.length - 1];
+
+    const promesas = todasMenosLaUltima.map(p => {
+        return fetch(`/aspirante/pruebas/responder/terman/pregunta/${p.idPreguntaTerman}`, {
             method: 'POST',
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
+                'csrf-token': csrfToken
             },
             body: JSON.stringify({
                 respuesta: 0,
@@ -127,6 +132,25 @@ function completarRespuestasFaltantes() {
             })
         });
     });
+
+    // Luego mandamos la última
+    if (ultimaPregunta) {
+        promesas.push(
+            fetch(`/aspirante/pruebas/responder/terman/pregunta/${ultimaPregunta.idPreguntaTerman}`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'csrf-token': csrfToken
+                },
+                body: JSON.stringify({
+                    respuesta: 0,
+                    tiempo: tiempoRespuesta
+                })
+            })
+        );
+    }
+    return Promise.all(promesas);
 }
 
 // ------------------------------------
@@ -235,7 +259,7 @@ function avanzarOSalir() {
 // -------------------------------
 // INICIAR LAS PREGUNTAS DE LA SERIE
 // -------------------------------
-function iniciarPreguntas(preguntas, desde=0) {
+function iniciarPreguntas(preguntas, desde = 0) {
     preguntasActuales = preguntas;
     indicePregunta = desde;
     tiemposRespuestas = [];
@@ -257,7 +281,6 @@ function mostrarPregunta(tipo, pregunta, desdeCallback) {
     tiempoInicio = Date.now();
 
     let contenido = `<p>${pregunta.numeroPregunta}. ${pregunta.preguntaTerman}</p>`;
-    let eventoRegistro;
     if (tipo === "radio") {
         contenido += pregunta.opciones.map(op => `
             <label>
@@ -346,7 +369,7 @@ function mostrarPregunta(tipo, pregunta, desdeCallback) {
         .then(res => res.json())
         .then(data => {
             console.log("Respuesta del backend:", data);
-            if (data.estado === "OK") {
+            if (data.ok) {
                 tiemposRespuestas.push({
                     idPregunta: pregunta.idPreguntaTerman,
                     opcion,
@@ -376,7 +399,7 @@ function mostrarPregunta(tipo, pregunta, desdeCallback) {
                 },
                 body: JSON.stringify({
                     respuesta: opcion,
-                    tiempo: tiempoRespuesta,
+                    tiempo: tiempoRespuesta
                 })
             })
         );
