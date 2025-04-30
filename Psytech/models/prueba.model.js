@@ -171,7 +171,7 @@ module.exports = class Prueba{
     static getPregunta16PF(numeroPregunta16PF){
         return db.execute(`
                             SELECT *
-                            FROM preguntas16PF
+                            FROM preguntas16pf
                             WHERE numeroPregunta16PF = ?
                 `, [numeroPregunta16PF]);
     }
@@ -179,7 +179,7 @@ module.exports = class Prueba{
     static getOpcionesByPregunta16PF(idPregunta){
         return db.execute(`
                             SELECT *
-                            FROM opciones16PF
+                            FROM opciones16pf
                             WHERE idPregunta16PF = ?
                 `, [idPregunta]); 
     }
