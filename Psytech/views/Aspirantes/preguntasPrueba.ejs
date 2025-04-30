@@ -11,122 +11,82 @@
 </head>
 <body>
   <div class="container mt-4">
-    <div class="cabeceraTest">
-      <h2 class="tituloTest text-center"><%= prueba.nombre %></h2>
-      <div class="headerOtis">
-        <div class="temporizadorOtis">
-          <span class="iconoReloj">⏱</span>
-          <span class="tiempoRestante" id="cronometro">2:00:00</span>
+    <div class="preguntasCaja">
+
+      <!-- Cabecera con título, progreso y cronómetro -->
+      <div class="cabeceraTest">
+        <h2 class="tituloTest text-center"><%= prueba.nombre %></h2>
+        <div class="headerOtis">
+          <div class="progresoOtis">
+            <label class="tituloProgreso">Progreso</label>
+            <span id="textoProgreso">0%</span>
+            <div class="barraExterna">
+              <div class="barraInterna" id="barraProgreso"></div>
+            </div>
+          </div>
+          <div class="temporizadorOtis">
+            <span class="iconoReloj">⏱</span>
+            <span class="tiempoRestante" id="cronometro">2:00:00</span>
+          </div>
         </div>
       </div>
-    </div>
 
-<div id="container">
-
-  <div class="progresoOtis">
-    <label class="tituloProgreso">Progreso</label>
-    <div class="barraExterna">
-      <progress
-        class="barraInterna" 
-        max="90"
-        value="0"
-        id="progressBar">
-      </progress>
+      <!-- Contenedor dinámico de preguntas -->
+      <div id="container">
+        <% if (prueba.idPrueba === 1 && pregunta) { %> <!-- Kostick -->
+          <div class="areaTexto">
+            <h5>Pregunta <%= pregunta.numeroPreguntaKostick %></h5>
+            <hr>
+          </div>
+          <input type="hidden" name="preguntaK" id="preguntaK" value="<%= pregunta.idPreguntaKostick %>" />
+          <div class="pregtext">
+            <span>Selecciona la frase con la que más te identifiques</span>
+          </div>
+          <div class="optionList">
+            <% opciones.forEach(opcion => { %>
+              <div class="option" id="option-<%= opcion.idOpcionKostick %>">
+                <input type="radio" name="answer" value="<%= opcion.idOpcionKostick %>" required />
+                <span><%= opcion.descripcionOpcionKostick %></span>
+              </div>
+            <% }) %>
+          </div>
+          <hr>
+          <input type="hidden" id="idAspirante" name="idAspirante" value="<%= idAspirante %>" />
+          <input type="hidden" id="idGrupo" name="idGrupo" value="<%= idGrupo %>" />
+          <footer>
+            <div class="text-end mt-4">
+              <button class="sigbtn btn btn-color--secondary" onclick="nextQuestion(event)">Siguiente</button>
+            </div>
+          </footer>
+        <% } else if (prueba.idPrueba === 2 && pregunta) { %> <!-- 16PF -->
+          <div class="areaTexto">
+            <h5>Pregunta <%= pregunta.numeroPregunta16PF %></h5>
+            <hr>
+          </div>
+          <input type="hidden" name="pregunta16" id="pregunta16" value="<%= pregunta.idPregunta16PF %>" />
+          <div class="pregtext">
+            <span><%= pregunta.pregunta16PF %></span>
+          </div>
+          <div class="optionList">
+            <% opciones.forEach(opcion => { %>
+              <div class="option" id="option-<%= opcion.idOpcion16PF %>">
+                <input type="radio" name="answer" value="<%= opcion.idOpcion16PF %>" required />
+                <span><%= opcion.descripcionOpcion16PF %></span>
+              </div>
+            <% }) %>
+          </div>
+          <hr>
+          <input type="hidden" id="idAspirante1" name="idAspirante1" value="<%= idAspirante %>" />
+          <input type="hidden" id="idGrupo1" name="idGrupo1" value="<%= idGrupo %>" />
+          <footer>
+            <div class="text-end mt-4">
+              <button class="sigbtn btn btn-color--secondary" onclick="nextQuestion1(event)">Siguiente</button>
+            </div>
+          </footer>
+        <% } %>
+      </div>
     </div>
   </div>
-  <br>
-  <br>
-
-  <!-- PRUEBA KOSTICK -->
-  <% if (prueba.idPrueba === 1) {%>
-    <% if (pregunta) { %>
-      <div class="areaTexto">
-        <h5>Pregunta <%= pregunta.numeroPreguntaKostick %></h5>
-        <hr>
-      </div>
-      <input
-      type="hidden"
-      name="preguntaK"
-      id="preguntaK"
-      value="<%= pregunta.idPreguntaKostick %>" />
-      <div class="pregtext">
-        <span>Selecciona la frase con la que más te identifiques</span>
-      </div>
-
-      <div class="opcionList">
-        <% if (opciones) { %> <% opciones.forEach(opcion => { %>
-          <div class="option" id="option-<%= opcion.idOpcionKostick %>">
-            <input
-            type="radio"
-            name="answer"
-            value="<%= opcion.idOpcionKostick %>"
-            required />
-            <span><%= opcion.descripcionOpcionKostick %></span>
-          </div>
-        <% }) %> <% } %>
-      </div>
-      <hr>
-
-    <input
-      type="hidden"
-      id="idAspirante"
-      name="idAspirante"
-      value="<%= idAspirante%>" />
-    <input type="hidden" id="idGrupo" name="idGrupo" value="<%= idGrupo%>" />
-    <div>
-      <button class="sigbtn btn btn-color--secondary" id="guardarPregunta" onclick="nextQuestion(event)">Siguiente</button>
-    </div>
-    <% } %>
-  <!-- PRUEBA 16PF -->
-  <%} else if (prueba.idPrueba === 2) {%>
-    <% if (pregunta) { %>
-      <div class="areaTexto">
-        <h5>Pregunta <%= pregunta.numeroPregunta16PF %></h5>
-        <hr>
-      </div>
-      <input
-      type="hidden"
-      name="pregunta16"
-      id="pregunta16"
-      value="<%=pregunta.idPregunta16PF%>" />
-      <div class="pregtext">
-        <span><%= pregunta.pregunta16PF %></span>
-      </div>
-      <div class="optionList">
-        <% if (opciones) { %> <% opciones.forEach(opcion => { %>
-          <div class="option" id="option-<%= opcion.idOpcion16PF %>">
-            <input
-            type="radio"
-            name="answer"
-            value="<%= opcion.idOpcion16PF %>"
-            required />
-            <span><%= opcion.descripcionOpcion16PF %></span>
-          </div>
-          <% }) %> <% } %>
-      </div>
-      <hr>
-      <input
-      type="hidden"
-      id="idAspirante1"
-      name="idAspirante1"
-      value="<%=idAspirante%>" />
-    <input
-      type="hidden"
-      id="idGrupo1"
-      name="idGrupo1"
-      value="<%= idGrupo%>" />
-      <div class="text-end mt-4">
-        <button class="sigbtn btn btn-color--secondary" id="guardarPregunta" onclick="nextQuestion1(event)">Siguiente</button>
-      </div>
-    <% } %>
-  <%}%>
-</div>
-</div>
-
-
-
-
-
 
   <script>
     const startTime = Date.now();
@@ -183,20 +143,6 @@
         .then((data) => {
           let htmlAct
 
-          let barraProgreso = `<div class="progresoOtis">
-                                  <label class="tituloProgreso">Progreso</label>
-                                  <div class="barraExterna">
-                                    <progress
-                                      class="barraInterna" 
-                                      max="90"
-                                      value="0"
-                                      id="progressBar">
-                                    </progress>
-                                  </div>
-                                </div>
-                                <br>
-                                <br>`;
-
           let divPregunta = ` <div class="areaTexto">
                                 <h5>Pregunta ${data.pregunta.numeroPreguntaKostick}</h5>
                                 <hr>
@@ -242,9 +188,9 @@
           }
           
           const container = document.getElementById("container");
-          htmlAct = barraProgreso + divPregunta + opciones + '<hr>' + hiddenInputs + siguienteBtn;
+          htmlAct = divPregunta + opciones + '<hr>' + hiddenInputs + siguienteBtn;
           container.innerHTML = htmlAct;
-          document.getElementById('progressBar').style.width = `${(data.pregunta.numeroPreguntaKostick / 90) * 100}%`;
+          pregContador(data.pregunta.numeroPreguntaKostick, 90);
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);
@@ -365,19 +311,6 @@
         })
         .then((data) => {
           let htmlAct
-          let barraProgreso = `<div class="progresoOtis">
-                                  <label class="tituloProgreso">Progreso</label>
-                                  <div class="barraExterna">
-                                    <progress
-                                      class="barraInterna" 
-                                      max="90"
-                                      value="0"
-                                      id="progressBar">
-                                    </progress>
-                                  </div>
-                                </div>
-                                <br>
-                                <br>`;
 
           let divPregunta = ` <div class="areaTexto">
                                 <h5>Pregunta ${data.pregunta.numeroPregunta16PF}</h5>
@@ -424,9 +357,9 @@
           }
           
           const container = document.getElementById("container");
-          htmlAct = barraProgreso + divPregunta + opciones + '<hr>' + hiddenInputs + siguienteBtn;
+          htmlAct = divPregunta + opciones + '<hr>' + hiddenInputs + siguienteBtn;
           container.innerHTML = htmlAct;
-          document.getElementById('progressBar').style.width = `${(data.pregunta.numeroPregunta16PF / 185) * 100}%`;
+          pregContador(data.pregunta.numeroPregunta16PF, 185);
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);
@@ -493,21 +426,57 @@
   </script>
 
   <script>
+    let totalSegundos = <%= prueba.duracion %>; // Duración en segundos
+    const nombrePrueba = "<%= prueba.nombre %>"; // 'Kostick' o '16PF'
 
-    let totalSegundos =  <%=prueba.duracion%>;
-    let cuentaRegresiva = setInterval(function() {
-        let horas = Math.floor(totalSegundos / 3600);
-        let minutos = Math.floor((totalSegundos % 3600) / 60);
-        let segundos = totalSegundos % 60;
-        let formatoTiempo = `${horas}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
-        document.getElementById("cronometro").innerHTML = formatoTiempo;
-        totalSegundos--;
-        if (totalSegundos < 0) {
-            clearInterval(cuentaRegresiva);
-            document.getElementById("cronometro").innerHTML = "TIME UP";
+    let cuentaRegresiva = setInterval(function () {
+      let horas = Math.floor(totalSegundos / 3600);
+      let minutos = Math.floor((totalSegundos % 3600) / 60);
+      let segundos = totalSegundos % 60;
+
+      let formatoTiempo = `${horas}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
+      document.getElementById("cronometro").innerHTML = formatoTiempo;
+
+      totalSegundos--;
+
+      if (totalSegundos < 0) {
+        clearInterval(cuentaRegresiva);
+        document.getElementById("cronometro").innerHTML = "TIME UP";
+
+        // Lógica para enviar respuestas según el tipo de prueba
+        if (nombrePrueba === "KOSTICK") {
+          entregar(); // Prueba Kostick
+        } else if (nombrePrueba === "PRUEBA DE 16PF") {
+          entregar1(); // Prueba 16PF
+        } else {
+          console.warn("No se reconoce el tipo de prueba para entregar automáticamente.");
         }
+
+        // Redireccionar después de un breve tiempo
+        setTimeout(() => {
+          window.location.href = "/prueba-completada";
+        }, 2000);
+      }
     }, 1000);
   </script>
+  <script>
+    // Tener un contador de en qué pregunta vas (progreso)
+    function pregContador(index, total) {
+    const barra = document.getElementById("barraProgreso");
+    const texto = document.getElementById("textoProgreso");
+
+    if (!barra || !texto) {
+        console.error("No se encontró el elemento de progreso.");
+        return;
+    }
+
+    let porcentaje = Math.floor((index / total) * 100);
+    barra.style.width = porcentaje + "%";
+    texto.textContent = `${porcentaje}% completado`;
+    }
+
+  </script>
+
 </body>
 </html>
 
