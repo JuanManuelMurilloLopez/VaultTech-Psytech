@@ -1418,6 +1418,7 @@ exports.get_respuestasA = (request, response, next) => {
                         datos: datosAspirante[0],
                         interpretaciones: interpretacionesKostick[0],
                         idAspirante: request.params.idAspirante || null,
+                        idGenero: rows[0],
                     });
                 })
                 .catch((error) => {

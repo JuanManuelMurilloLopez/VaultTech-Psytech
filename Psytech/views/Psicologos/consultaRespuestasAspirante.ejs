@@ -12,83 +12,10 @@
   <link rel="stylesheet" href="/css/includeCss/_navsidePsicologo.css">
   <!-- CSS cerrar sesión -->
   <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
+  <!-- Link css -->
+  <link rel="stylesheet" href="/css/psicologos/analisisKosticky16PF.css">
+
   
-  <style>
-    .fullHeight {
-      min-height: 160vh;
-      margin-top: 20px;
-    }
-    @media print {
-      .navbar,
-      .footer,
-      .descargar,
-      footer,
-      .navside, 
-      .boton-container, 
-      .btn-cerrar-sesion 
-      {
-        display: none;
-      }
-    }
-    
-    
-    .main {
-      min-height: 100vh;
-      width: 100%;
-      overflow: hidden;
-      transition: all 0.35s ease-in-out;
-      display: flex;
-      flex-direction: row;
-    }
-    
-    
-    .btn-color--secondary {
-      padding: 4px 28px;
-      border-radius: 10px;
-      font-size: 14px;
-      text-align: center;
-      background: var(--secondary, #294969);
-      color: var(--font-secondary, #fff);
-    }
-    
-    .btn-color--third {
-      padding: 4px 24px;
-      border-radius: 10px;
-      font-size: 14px;
-      text-align: center;
-      background: var(--third, #C1C1C1);
-      color: var(--font-primary, #000);
-    }
-    
-    .btn-color--secondary:hover {
-      background: var(--secondary-hover, #193858);
-      color: var(--font-secondary, #fff);
-    }
-    
-    .btn-color--third:hover {
-      background: var(--third-hover, #B1B1B1);
-      color: var(--font-primary, #000);
-    }
-    
-    .boton-container {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 60px;
-      margin-bottom: 40px;
-    }
-    
-    
-    :root{
-      --secondary: #294969;
-      --third: #C1C1C1;
-      --font-primary: #000;
-      --font-secondary: #fff;
-      --secondary-hover: #193858;
-      --third-hover:#B1B1B1;
-    }
-  </style>
 </head>
 <body>
 
@@ -102,8 +29,10 @@
     <%- include('../includes/_buttonCerrarSesion.ejs') %>
     
     <!-- Titulo y subtitulo -->
-    <div class="title has-text-weight-semibold mb-2">
-      Respuestas de: <%= datos.nombreUsuario %> <%= datos.apellidoPaterno %> <%= datos.apellidoMaterno %>
+    <div class="title-container">
+      <div class="title-text">
+        Respuestas de: <%= datos.nombreUsuario %> <%= datos.apellidoPaterno %> <%= datos.apellidoMaterno %>
+      </div>
     </div>
     <br />
     <div class="subtitle has-text-centered"><%= prueba %></div>
@@ -174,7 +103,7 @@
     <div class="boton-container">
       <!-- Boton de regresar - CHECAR RUTA YA QUE NO ESTA DEFINIDO IDINSTITUCION -->
       <a class="btn btn-color--third boton-regresar-abajo"
-      href="/psicologo/aspirantes/"  >Regresar</a>
+      href="#"  >Regresar</a>
       
       <!-- Boton de descargar/imprimir -->
       <button class="btn btn-color--secondary descargar" onclick="descargar()">
@@ -1900,19 +1829,44 @@ for (i = 1; i < 21; i++){
   }
 }
 
+
 document.getElementById("IM").innerHTML += `IM: ${nivelIM}% <br>Percentil: ${percentil}`;
 
+// Interpretacion con diseño de tarjetas
+document.getElementById("Interpretacion").innerHTML = `
+  <div class="interpretacion-container">
+    
+    <h3 class="section-title">ESCALAS PRIMARIAS</h3>
+    <div class="interpretacion-horizontal" id="primarias"></div>
+    
+    <h3 class="section-title">FACTORES GLOBALES</h3>
+    <div class="interpretacion-horizontal" id="globales"></div>
+  </div>
+`;
+
+
 for (let i = 0; i < 21; i++){
-  if (niveles[i] != 2){
+  if (niveles[i] != 2){ 
     fetch("/psicologo/interpretacion/<%= idAspirante %>/" + letras[i] + "/" + niveles[i], {
       method: "GET",
     })
     .then((result) => result.json())
     .then((data) => {
+        const factorHTML = `
+          <div class="interpretacion-card">
+            <div class="card-content">
+              <h3 class="card-title">${adj[i]}</h3>
+              <div class="card-text">
+                ${data.inter}
+              </div>
+            </div>
+          </div>
+        `;
+        
         if (i < 16){
-          document.getElementById("primarias").innerHTML += `${adj[i]}.- ${data.inter} <br>`;
+          document.getElementById("primarias").innerHTML += factorHTML;
         } else {
-          document.getElementById("globales").innerHTML += `${adj[i]}.- ${data.inter} <br>`;
+          document.getElementById("globales").innerHTML += factorHTML;
         }
     });
   }
@@ -1969,39 +1923,47 @@ for (let i = 0; i < 21; i++){
   ],
 };
 
-const config = {
+
+const config16PF = {
   type: "bar",
   data: data,
   options: {
     responsive: true,
     scales: {
-      y: {
-        beginAtZero: true,
-        max: 100,
-        title: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true,
+          max: 100,
+          callback: function(value) {
+            return value === 0 ? '' : value;
+          }
+        },
+        scaleLabel: {
           display: true,
-          text: "Valores"
+          labelString: "Valores"
         }
-      },
-      x: {
-        title: {
+      }],
+      xAxes: [{
+        scaleLabel: {
           display: true,
-          text: "Factores"
+          labelString: "Factores"
         }
-      }
-    }
-    ,
+      }]
+    },
     plugins: {
       legend: {
-          display: false,
-        },
+        display: false,
+      },
       tooltip: {
         callbacks: {
-          label: function (context) {
-            const valores = context.raw;
+          label: function (tooltipItem) {
+            const valores = tooltipItem.yLabel;
             return `${valores}%`;
           }
         }
+      },
+      datalabels: {
+        display: false
       }
     }
   },
@@ -2009,80 +1971,65 @@ const config = {
     {
       id: 'etiquetasExtremos',
       afterDraw(chart) {
-        const ctx = chart.ctx;
-        const xAxis = chart.scales.x;
-        const topY = chart.chartArea.top;
-        const bottomY = chart.chartArea.bottom;
-
-        ctx.save();
-        ctx.font = "12px";
-        ctx.fillStyle = "black";
-        ctx.textAlign = "center";
-
-        chart.data.labels.forEach((label, index) => {
-          const x = xAxis.getPixelForTick(index);
-          const labelHeight = 12;
+        try {
+          const ctx = chart.ctx;
+          const xAxis = chart.scales['x-axis-0'];
+          if (!xAxis) return;
+          
+          const topY = chart.chartArea.top;
+          const bottomY = chart.chartArea.bottom;
 
           ctx.save();
-          const labelWidth2 = ctx.measureText(adj2[index]).width;
-          ctx.translate(x, topY - labelHeight);
-          ctx.rotate(-Math.PI / 2);
+          ctx.font = "12px Arial";
+          ctx.fillStyle = "black";
+          ctx.textAlign = "center";
 
-          if (topY - labelHeight - labelWidth2 <= bottomY) {
-            ctx.fillText(adj2[index], -(labelWidth2/2 + 15), 0);
-          }
+          chart.data.labels.forEach((label, index) => {
+            try {
+              const x = xAxis.getPixelForTick(index);
+              const labelHeight = 12;
 
-          ctx.restore();
+              // Etiqueta superior
+              ctx.save();
+              if (adj2[index]) {
+                const labelWidth2 = ctx.measureText(adj2[index]).width;
+                ctx.translate(x, topY - labelHeight);
+                ctx.rotate(-Math.PI / 2);
 
-          ctx.save();
-          const labelWidth1 = ctx.measureText(adj1[index]).width;
-          ctx.translate(x, bottomY + labelHeight);
-          ctx.rotate(-Math.PI / 2);
+                if (topY - labelHeight - labelWidth2 <= bottomY) {
+                  ctx.fillText(adj2[index], -(labelWidth2/2 + 15), 0);
+                }
+              }
+              ctx.restore();
 
-          if (bottomY + labelHeight + labelWidth1 >= topY) {
-            ctx.fillText(adj1[index], (labelWidth1/2 + 15), 0);
-          }
+              // Etiqueta inferior
+              ctx.save();
+              if (adj1[index]) {
+                const labelWidth1 = ctx.measureText(adj1[index]).width;
+                ctx.translate(x, bottomY + labelHeight);
+                ctx.rotate(-Math.PI / 2);
 
-          ctx.restore();
-        });
-
-          const y40 = chart.scales.y.getPixelForValue(39);
-          const y60 = chart.scales.y.getPixelForValue(60);
-          const y50 = chart.scales.y.getPixelForValue(50);
-          const chartArea = chart.chartArea;
-
-          ctx.save();
-          ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
-          ctx.lineWidth = 2;
-          ctx.setLineDash([6, 6]);
-
-          ctx.beginPath();
-          ctx.moveTo(chartArea.left, y40 );
-          ctx.lineTo(chartArea.right, y40);
-          ctx.stroke();
-
-          ctx.beginPath();
-          ctx.moveTo(chartArea.left + (chartArea.right / 16), y60);
-          ctx.lineTo(chartArea.right, y60);
-          ctx.stroke();
-
-          ctx.beginPath();
-          ctx.moveTo(chartArea.left, y50);
-          ctx.lineTo(chartArea.left + (chartArea.right / 16), y50);
-          ctx.stroke();
-
-          ctx.restore();
+                if (bottomY + labelHeight + labelWidth1 >= topY) {
+                  ctx.fillText(adj1[index], (labelWidth1/2 + 15), 0);
+                }
+              }
+              ctx.restore();
+            } catch (e) {
+              console.error(`Error al procesar etiqueta ${index}:`, e);
+            }
+          });
+        } catch (e) {
+          console.error("Error en plugin etiquetasExtremos:", e);
+        }
       }
     }
   ]
 };
 
 
-// const myChart = new Chart(document.getElementById("grafico16PF"), config);
-// new Chart(ctx, config);
 
 const ctx = document.getElementById("graph").getContext("2d");
-const myChart = new Chart(ctx, config);
+const myChart = new Chart(ctx, config16PF);
 
                  }
 </script>
