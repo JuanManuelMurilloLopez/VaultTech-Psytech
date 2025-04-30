@@ -47,7 +47,7 @@ module.exports = class Resultados16PF {
 
   save() {
     return db.execute(
-      `INSERT INTO parametros16PF (
+      `INSERT INTO parametros16pf (
         idGrupo, idAspirante, A, B, C, E, F, G, H, I, L, M, 
           N, O, Q1, Q2, Q3, Q4, IM
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -77,7 +77,7 @@ module.exports = class Resultados16PF {
 
   static fetchAll(idGrupo, idAspirante) {
     return db.execute(
-      "SELECT * FROM parametros16PF WHERE idGrupo = ? AND idAspirante = ?",
+      "SELECT * FROM parametros16pf WHERE idGrupo = ? AND idAspirante = ?",
       [idGrupo, idAspirante]
     );
   }
