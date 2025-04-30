@@ -1428,15 +1428,20 @@ exports.get_respuestasA = (request, response, next) => {
           } else if (idPrueba == 2) {
             Resultados16PF.fetchAll(request.params.idGrupo, idAspirante).then(
               ([resultados, fieldData]) => {
-                console.log("Datos aspirante después del if: ");
-                console.log(datosAspirante);
-                response.render("Psicologos/consultaRespuestasAspirante", {
-                  prueba: "Personalidad 16 Factores (16 PF)",
-                  grupo: grupoRows[0],
-                  valores: resultados[0],
-                  datos: datosAspirante[0],
-                  interpretaciones: null,
-                  idAspirante: request.params.idAspirante || null,
+                Aspirante.getGenero(request.params.idAspirante)
+                .then(([rows, fieldData]) => {
+                    response.render("Psicologos/consultaRespuestasAspirante", {
+                        prueba: "Personalidad 16 Factores (16 PF)",
+                        grupo: grupoRows[0],
+                        valores: resultados[0],
+                        datos: datosAspirante[0],
+                        interpretaciones: null,
+                        idAspirante: request.params.idAspirante || null,
+                        idGenero: rows[0] || null,
+                      });
+                })
+                .catch((error) => {
+                    console.log(error);
                 });
               }
             );

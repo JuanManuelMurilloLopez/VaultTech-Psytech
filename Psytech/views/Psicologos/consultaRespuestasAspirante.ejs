@@ -903,8 +903,7 @@ if (valores.N >= 70 || valores.N <= 20 || valores.G >= 70 || valores.G <= 20 || 
   new Chart(ctx, config);
   insertarInterpretacionKostick(valores, interpretaciones);
 } else if (prueba === "Personalidad 16 Factores (16 PF)") {
-  //const genero = <%- JSON.stringify(datos.genero) %>;
-  const genero = 'Femenino';
+  const genero = <%- JSON.stringify(idGenero) %>;
 
 document.getElementById("Interpretacion").innerHTML += `<div id="primarias"><strong>ESCALAS PRIMARIAS<br></strong></div>
 <div id="globales"><strong><br>FACTORES GLOBALES</strong><br></div>`;
@@ -916,7 +915,7 @@ const adj2 = ["SOCIABLE", "RÁPIDO", "MADURO", "DOMINANTE", "ENTUSIASTA", "CONST
 let adj = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""];
 const letras = ['A', 'B', 'C', 'E', 'F', 'G', 'H', 'I', 'L', 'M', 'N', 'O', 'Q1', 'Q2', 'Q3', 'Q4', 'EX', 'AX', 'TM', 'IN', 'SC'];
 
-if (genero == 'Femenino'){
+if (genero == 1){
   switch (true) {
     case valores.A < 7:
     DES[0] = 1;
@@ -1170,7 +1169,7 @@ if (genero == 'Femenino'){
     DES[15] = 10;
     break;
   }
-} else if (genero == 'Masculino'){
+} else if (genero == 2){
   switch (true) {
     case valores.A < 5:
     DES[0] = 1;

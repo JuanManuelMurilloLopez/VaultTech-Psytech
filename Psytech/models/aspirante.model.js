@@ -133,4 +133,13 @@ module.exports = class Aspirante {
             `, [idAspirante]);
     }
 
+    static getGenero(idAspirante){
+        return db.execute(`
+                            SELECT idGenero
+                            FROM datospersonales
+                            WHERE idAspirante = ?
+                            AND idPrueba = 2;
+            `, [idAspirante]);
+    }
+
 }
