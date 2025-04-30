@@ -668,10 +668,10 @@ exports.getInfoSerie = (req, res, next) => {
             if (info.length === 0) {
                 throw new Error("No se encontró información para la serie con ese ID.");
             }
-            id = info[0].idSerieTerman
+            id = info[0].idSerieTerman;
             nombreSeccion = info[0].nombreSeccion;
             instruccion = info[0].instruccion;
-            duracion = info[0].duracion
+            duracion = info[0].duracion;
 
             return Terman.fetchPreguntaSerieById(idSerie);
         })
@@ -702,26 +702,27 @@ exports.getInfoSerie = (req, res, next) => {
         });
 };
 
-exports.postRespuestasSerie = async (req, res, next) => {
+exports.postRespuestaTerman = async (req, res, next) => {
     try {
         // Constantes de construcción
 
-        const idSerie = parseInt(req.params.idSerie);
-        const { respuestas } = req.body;
+        const idPreguntaTerman = parseInt(req.params.idPreguntaTerman);
+        const { respuesta, tiempo } = req.body;
         const idAspirante = req.session.idAspirante;
         const idGrupo = req.session.idGrupo;
         const idPrueba = 4;
 
-        // PASO 49 DE DIAGRAMA: Calificamos la serie
-        await calificarSerieTerman(idSerie, idAspirante, idGrupo, respuestas)
+        console.log("📥 req.params.idPreguntaTerman:", req.params.idPreguntaTerman);
+        console.log("📥 req.body:", req.body);
+        console.log("📥 req.session:", req.session.idAspirante);
+        console.log("📥 req.session:", req.session.idGrupo);
 
-        // PASO 69 DE DIAGRAMA: Creamos el modelo con esos datos 
-        const respuestasModel = new respuestasTerman(
-            idAspirante,
-            idGrupo,
-            idPrueba,
-            respuestas
-        );
+
+        const respuestas = new respuestasTerman(idAspirante, idGrupo, idPrueba, [
+            { idPregunta: idPreguntaTerman, opcion: respuesta, tiempo }
+        ]);
+
+        await respuestas.save();
 
         const [rows] = await Terman.verificarExistencia(
             idAspirante,
@@ -743,10 +744,6 @@ exports.postRespuestasSerie = async (req, res, next) => {
             );
         }
 
-        console.log("respuestasModel: ", respuestasModel);
-
-        // Guardamos las respuestas
-        await respuestasModel.save();
         res.status(200).json({ ok: true, message: "Respuestas guardadas" });
 
     } catch (error) {
@@ -754,3 +751,4 @@ exports.postRespuestasSerie = async (req, res, next) => {
         res.status(500).json({ error: "Error al guardar respuestas" });
     }
 };
+

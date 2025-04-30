@@ -11,6 +11,8 @@ async function calificarSerieTerman(idSerie, idAspirante, idGrupo, respuestas) {
         await calificacionesModel.save();
     }
 
+    console.log("Llego a calificarTerman")
+
     // 2. Traer calificación actual
     const calificacion = await calificacionesModel.fetchCalificacionById(idAspirante, idGrupo);
     const idCalificacionTerman = calificacion[0].idCalificacionTerman;
@@ -88,7 +90,7 @@ function calificarSerie1(respuestas, opcionesCorrectas) {
 
     // Por cada respuesta del aspirante, verificamos si es correcta
     respuestas.forEach(resp => {
-        const clave = `${resp.idPregunta}-${resp.opcion}`;
+        const clave = `${resp.idPreguntaTerman}-${resp.respuestaAbierta}`;
         if (correctas.has(clave)) {
             puntuacion += 1;
         }
@@ -106,7 +108,7 @@ function calificarSerie2(respuestas, opcionesCorrectas) {
     const correctas = new Set(opcionesCorrectas.map(op => `${op.idPreguntaTerman}-${op.opcionTerman}`));
 
     respuestas.forEach(resp => {
-        const clave = `${resp.idPregunta}-${resp.opcion}`;
+        const clave = `${resp.idPreguntaTerman}-${resp.respuestaAbierta}`;
         if (correctas.has(clave)) {
             puntuacion += 1;
         }
@@ -126,9 +128,9 @@ function calificarSerie3(respuestas, opcionesCorrectas) {
     const correctas = new Set(opcionesCorrectas.map(op => `${op.idPreguntaTerman}-${op.opcionTerman}`));
 
     respuestas.forEach(resp => {
-        const clave = `${resp.idPregunta}-${resp.opcion}`;
+        const clave = `${resp.idPreguntaTerman}-${resp.respuestaAbierta}`;
 
-        if (resp.opcion === 0) {
+        if (Number(resp.respuestaAbierta) === 0) {
             // No contestada, no afecta
             return;
         }
@@ -151,7 +153,7 @@ function calificarSerie3(respuestas, opcionesCorrectas) {
 function calificarSerie4(respuestas, opcionesCorrectas) {
     let puntuacion = 0;
 
-    // Creamos un mapa con claves: idPregunta -> Set de opciones correctas
+    // Creamos un mapa con claves: idPreguntaTerman -> Set de opciones correctas
     const correctasMap = new Map();
     opcionesCorrectas.forEach(({ idPreguntaTerman, opcionTerman }) => {
         if (!correctasMap.has(idPreguntaTerman)) {
@@ -162,18 +164,18 @@ function calificarSerie4(respuestas, opcionesCorrectas) {
 
     // Agrupar respuestas por pregunta
     const respuestasMap = new Map();
-    respuestas.forEach(({ idPregunta, opcion }) => {
-        if (!respuestasMap.has(idPregunta)) {
-            respuestasMap.set(idPregunta, []);
+    respuestas.forEach(({ idPreguntaTerman, respuestaAbierta }) => {
+        if (!respuestasMap.has(idPreguntaTerman)) {
+            respuestasMap.set(idPreguntaTerman, []);
         }
-        respuestasMap.get(idPregunta).push(opcion);
+        respuestasMap.get(idPreguntaTerman).push(Number(respuestaAbierta));
     });
 
     // Evaluar por pregunta
-    respuestasMap.forEach((opcionesUsuario, idPregunta) => {
+    respuestasMap.forEach((opcionesUsuario, idPreguntaTerman) => {
         if (opcionesUsuario.includes(0)) return;
 
-        const opcionesCorrectas = correctasMap.get(idPregunta);
+        const opcionesCorrectas = correctasMap.get(idPreguntaTerman);
         if (!opcionesCorrectas) return;
 
         const setUsuario = new Set(opcionesUsuario);
@@ -202,11 +204,11 @@ function calificarSerie5(respuestas, opcionesCorrectas) {
     opcionesCorrectas.forEach(op => {
     
         // En esta serie la respuesta real está en descripcionTerman
-    correctas.set(op.idPreguntaTerman, String(op.descripcionTerman).trim());
+        correctas.set(op.idPreguntaTerman, String(op.descripcionTerman).trim());
     });
 
-    respuestas.forEach(({ idPregunta, opcion }) => {
-        if (String(opcion).trim() === correctas.get(idPregunta)) {
+    respuestas.forEach(({ idPreguntaTerman, respuestaAbierta }) => {
+        if (String(respuestaAbierta).trim() === correctas.get(idPreguntaTerman)) {
             puntuacion += 1;
         }
     });
@@ -225,9 +227,9 @@ function calificarSerie6(respuestas, opcionesCorrectas) {
     const correctas = new Set(opcionesCorrectas.map(op => `${op.idPreguntaTerman}-${op.opcionTerman}`));
 
     respuestas.forEach(resp => {
-        if (resp.opcion === 0) return;
+        if (Number(resp.respuestaAbierta) === 0) return;
 
-        const clave = `${resp.idPregunta}-${resp.opcion}`;
+        const clave = `${resp.idPreguntaTerman}-${resp.respuestaAbierta}`;
         if (correctas.has(clave)) {
             puntuacion += 1;
         } else {
@@ -247,7 +249,7 @@ function calificarSerie7(respuestas, opcionesCorrectas) {
     const correctas = new Set(opcionesCorrectas.map(op => `${op.idPreguntaTerman}-${op.opcionTerman}`));
 
     respuestas.forEach(resp => {
-        const clave = `${resp.idPregunta}-${resp.opcion}`;
+        const clave = `${resp.idPreguntaTerman}-${resp.respuestaAbierta}`;
         if (correctas.has(clave)) {
             puntuacion += 1;
         }
@@ -265,12 +267,12 @@ function calificarSerie8(respuestas, opcionesCorrectas) {
     const correctas = new Set(opcionesCorrectas.map(op => `${op.idPreguntaTerman}-${op.opcionTerman}`));
 
     respuestas.forEach(resp => {
-        const clave = `${resp.idPregunta}-${resp.opcion}`;
 
-        if (resp.opcion === 0) {
+        if (Number(resp.respuestaAbierta) === 0) {
             return;
         }
 
+        const clave = `${resp.idPreguntaTerman}-${resp.respuestaAbierta}`;
         if (correctas.has(clave)) {
             puntuacion += 1;
         } else {
@@ -290,7 +292,7 @@ function calificarSerie9(respuestas, opcionesCorrectas) {
     const correctas = new Set(opcionesCorrectas.map(op => `${op.idPreguntaTerman}-${op.opcionTerman}`));
 
     respuestas.forEach(resp => {
-        const clave = `${resp.idPregunta}-${resp.opcion}`;
+        const clave = `${resp.idPreguntaTerman}-${resp.respuestaAbierta}`;
         if (correctas.has(clave)) {
             puntuacion += 1;
         }
@@ -320,15 +322,13 @@ function calificarSerie10(respuestas, opcionesCorrectas) {
     };
 
     const correctas = new Set(
-        opcionesCorrectas.map(op =>
-        normalizar(op.descripcionTerman)
-        )
+        opcionesCorrectas.map(op => normalizar(op.descripcionTerman))
     );
 
     respuestas.forEach(resp => {
-        if (!resp.opcion || resp.opcion === '0 - 0') return;
+        if (!resp.respuestaAbierta || resp.respuestaAbierta === '0 - 0') return;
 
-        if (correctas.has(normalizar(resp.opcion))) {
+        if (correctas.has(normalizar(resp.respuestaAbierta))) {
             puntuacion += 1;
         }
     });
@@ -480,13 +480,12 @@ function calcularRangoSerie(idSerie, puntaje) {
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 function calcularRangoCI(puntaje) {
-    if (puntaje >= 126) return 'Excelente';
-    if (puntaje >= 120 && puntaje <= 125) return 'Superior';
-    if (puntaje >= 111 && puntaje <= 119) return 'Superior al término medio';
-    if (puntaje >= 90 && puntaje <= 110) return 'Término medio';
-    if (puntaje >= 80 && puntaje <= 89) return 'Inferior al término medio';
-    if (puntaje >= 71 && puntaje <= 79) return 'Inferior';
-    return 'Deficiente';
+    if (puntaje >= 120) return 'Genio';
+    if (puntaje >= 111 && puntaje <= 119) return 'Superior';
+    if (puntaje >= 80 && puntaje <= 110) return 'Término medio';
+    if (puntaje >= 62 && puntaje <= 79) return 'Inferior al término medio';
+    if (puntaje >= 0 && puntaje <= 61) return 'Inferior';
+    return 'Sin rango definido';
 }
 
 const CI_LOOKUP = [
@@ -511,11 +510,23 @@ const CI_LOOKUP = [
 ];
 
 function calcularCI(puntaje) {
-    if (puntaje < 0 || puntaje >= CI_LOOKUP.length) {
+    if (puntaje < 0) {
+        puntaje = 0;
+    };
+    // Nadie puede sacar más de 207 puntos con TODAS las pruebas
+    if (puntaje > 207) {
         throw new Error(`Puntaje fuera de rango: ${puntaje}`);
-    }
-    return CI_LOOKUP[puntaje];
-}
+    };
+    // Cualquier puntuación arriba de 174 y menor o igual a 207, se toma el máximo.
+    if (puntaje >= 174) {
+        puntaje = 174;
+    };
 
+    const nuevoCI = CI_LOOKUP[puntaje];
+
+    console.log("El nuevo CI es: ", nuevoCI);
+
+    return nuevoCI;
+}
 
 module.exports = calificarSerieTerman;

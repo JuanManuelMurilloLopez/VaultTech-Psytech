@@ -55,6 +55,6 @@ router.get('/respuestas-enviadas', controller.getRespuestasEnviadas);
 
 router.get('/prueba-terman', controller.getResponderTerman);
 router.get('/prueba-terman/serie/:idSerie', controller.getInfoSerie);
-router.post('/prueba-terman/serie/:idSerie', controller.postRespuestasSerie);
+router.post('/prueba-terman/pregunta/:idPreguntaTerman', controller.postRespuestaTerman);
 
 module.exports = router;

@@ -85,4 +85,8 @@ router.get('/cuadernillo-colores/:idGrupo/:idAspirante/:idInstitucion', controll
 router.get('/respuestas-otis', controller.getRespuestasOtis);
 
 
+// Rutas de terman
+// router.get('/analisis-otis/:idGrupo/:idAspirante/:idInstitucion', controller.getAnalisisOtis);
+
+
 module.exports = router;

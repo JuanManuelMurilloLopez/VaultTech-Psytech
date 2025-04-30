@@ -28,7 +28,7 @@ class Terman {
 
     static async fetchOpcionesSerieById(idSerie) {
         const [opciones] = await db.execute(
-            'SELECT idPreguntaTerman, opcionTerman, descripcionTerman FROM opcionesterman WHERE idPreguntaTerman IN (SELECT idPreguntaTerman FROM preguntasTerman WHERE idSerieTerman = ?)',
+            'SELECT idPreguntaTerman, opcionTerman, descripcionTerman FROM opcionesterman WHERE idPreguntaTerman IN (SELECT idPreguntaTerman FROM preguntasterman WHERE idSerieTerman = ?)',
             [idSerie]
         );
         return opciones;
@@ -41,6 +41,14 @@ class Terman {
         );
         return opcionesCorrectas;
     }
+
+    static async fetchRespuestasAspiranteById(idAspirante, idGrupo, idSerie) {
+        const [respuestasAspirante] = await db.execute(
+            'SELECT p.numeroPregunta, p.preguntaTerman, o.descripcionTerman AS respuestaAspirante, r.tiempoRespuesta FROM respuestasterman r INNER JOIN preguntasterman p ON r.idPreguntaTerman = p.idPreguntaTerman INNER JOIN opcionesterman o ON o.idPreguntaTerman = p.idPreguntaTerman AND o.opcionTerman = r.respuestaAbierta WHERE p.idSerieTerman = ? AND r.idAspirante = ? AND r.idGrupo = ? ORDER BY p.numeroPregunta ASC;',
+            [idSerie, idAspirante, idGrupo]
+        )
+        return respuestasAspirante;
+    };
 
     static updateEstatusPrueba(idAspirante, idGrupo, idPrueba, idEstatus = 1) {
         return db.execute(

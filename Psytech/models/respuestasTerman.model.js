@@ -31,6 +31,69 @@ class respuestasTerman {
                 throw err;
             });
     }
+
+    async fetchRespuestasSerieById(idAspirante, idGrupo, idSerie) {
+        const [respuestasAspirante] = await db.execute(
+            'SELECT * from respuestasterman WHERE idAspirante = ? AND idGrupo = ? AND idPreguntaTerman IN (SELECT idPreguntaTerman FROM preguntasterman WHERE idSerieTerman = ?)',
+            [idAspirante, idGrupo, idSerie]
+        )
+        return respuestasAspirante;
+    }
+
+    async fetchRespuestasOpciones(idAspirante, idGrupo, idSerie) {
+        const [respuestasAspirante] = await db.execute(
+            `SELECT 
+                p.numeroPregunta,
+                p.preguntaTerman,
+                CASE 
+                    WHEN r.respuestaAbierta = 0 THEN 'No contestó'
+                    ELSE o.descripcionTerman
+                END AS respuestaAspirante,
+                r.tiempoRespuesta
+            FROM 
+                respuestasterman r
+            INNER JOIN 
+                preguntasterman p ON r.idPreguntaTerman = p.idPreguntaTerman
+            LEFT JOIN 
+                opcionesterman o ON o.idPreguntaTerman = p.idPreguntaTerman 
+                                AND o.opcionTerman = r.respuestaAbierta
+            WHERE 
+                p.idSerieTerman = ?
+                AND r.idAspirante = ?
+                AND r.idGrupo = ?
+            ORDER BY 
+                p.numeroPregunta ASC;`,
+            [idSerie, idAspirante, idGrupo]
+        );
+        return respuestasAspirante;
+    }
+
+    async fetchRespuestasTextoLibre(idAspirante, idGrupo, idSerie) {
+        const [respuestasAspirante] = await db.execute(
+            `SELECT 
+                p.numeroPregunta,
+                p.preguntaTerman,
+                CASE 
+                    WHEN r.respuestaAbierta = 0 THEN 'No contestó'
+                    ELSE r.respuestaAbierta
+                END AS respuestaAspirante,
+                r.tiempoRespuesta
+            FROM 
+                respuestasterman r
+            INNER JOIN 
+                preguntasterman p ON r.idPreguntaTerman = p.idPreguntaTerman
+            WHERE 
+                p.idSerieTerman = ?
+                AND r.idAspirante = ?
+                AND r.idGrupo = ?
+            ORDER BY 
+                p.numeroPregunta ASC;`,
+            [idSerie, idAspirante, idGrupo]
+        );
+        return respuestasAspirante;
+    }
+
+
 }
 
 module.exports = respuestasTerman;

@@ -19,6 +19,10 @@ let indicePregunta = 0;
 let tiemposRespuestas = []; 
 // Marca el inicio de cada pregunta
 let tiempoInicio;
+
+let serieFinalizada = false;
+let finalizandoSerie = false; 
+
 // ----------------------------
 // PREVENCIÓN DE RECARGA Y RETROCESO
 // ----------------------------
@@ -82,12 +86,14 @@ function aumentarProgreso() {
 // TRAER DATOS DE LA SERIE
 // ---------------------
 function traerSerie(idSerie) {
+    console.log("Llamando traerSerie con id:", idSerie);
     fetch(`/aspirante/prueba-terman/serie/${idSerie}`, {
         method: 'GET',
         credentials: 'include',
     })
     .then(res => res.json())
     .then(info => {
+        serieActual = info.id; 
         // Muestra las instrucciones + botón "Comenzar"
         mostrarSerie(info); 
     })
@@ -107,432 +113,379 @@ function completarRespuestasFaltantes() {
     // Barra de progreso
     preguntasRespondidas += preguntasFaltantes.length;
     actualizarProgresoGlobal();
+
     preguntasFaltantes.forEach(p => {
-        tiemposRespuestas.push({
-            idPregunta: p.idPreguntaTerman,
-            opcion: 0,
-            tiempo: tiempoRespuesta
+        return fetch(`/aspirante/prueba-terman/pregunta/${p.idPreguntaTerman}`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                respuesta: 0,
+                tiempo: tiempoRespuesta
+            })
         });
     });
 }
-// ----------------------------
-// ENVIAR RESPUESTAS AL SERVIDOR
-// ----------------------------
-function enviarRespuestas(respuestas) {
-    return fetch(`/aspirante/prueba-terman/serie/${serieActual}`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ respuestas })
-    });
-}
+
 // ------------------------------------
 // MOSTRAR INSTRUCCIONES DE LA SERIE
 // ------------------------------------
 function mostrarSerie(info) {
-    // Recibimos data con { id, nombreSeccion, duracion, instruccion, preguntas[] }
-    // Valor en segundos para esta serie
-    tiempoSerie = info.duracion; 
+    console.log("Entrando a mostrarSerie con info:", info);
+    tiempoSerie = info.duracion;
+    mostrarInstruccionesSerie(
+        info,
+        `Tiempo para esta serie: ${info.duracion} segundos`,
+        "Comenzar serie",
+        () => iniciarPreguntas(info.preguntas)
+    );
+}
+
+function mostrarInstruccionesSerie(info, tiempoVisible, textoBoton, callbackInicio) {
+    const instruccionesElem = document.getElementById('instrucciones-serie');
     const cronometroElem = document.getElementById('cronometro');
     cronometroElem.innerText = '';
     cronometroElem.style.display = 'none';
-    const instruccionesElem = document.getElementById('instrucciones-serie');
+
+    const extraInstruccion = (info.id === 4)
+        ? '<p><strong>SELECCIONA 2 OPCIONES POR CADA PREGUNTA</strong></p>'
+        : '';
+
     instruccionesElem.innerHTML = `
         <h3>Serie ${info.id}: ${info.nombreSeccion}</h3>
         <p>${info.instruccion}</p>
         <p><strong>TIP</strong>: Si no deseas responder la pregunta, solo da click en <strong>"No contestar"</strong>.<p>
+        ${extraInstruccion}
         <div id="tiempo-boton">
-        <p><strong>Tiempo para esta serie: </strong>${info.duracion} segundos</p>
-        <button id="comenzar-serie" 
-        class="comenzar btn-color--secondary">Comenzar serie</button>
+            <p><strong>${tiempoVisible}</strong></p>
+            <button id="comenzar-serie" class="comenzar btn-color--secondary">${textoBoton}</button>
         </div>
     `;
-    // Limpia el contenedor de preguntas
+
     document.getElementById('preguntas-serie').innerHTML = '';
-    // Al hacer clic en "Comenzar serie", se ocultan las instrucciones, se muestra el cronómetro y se inician las preguntas
+
     document.getElementById('comenzar-serie').addEventListener('click', () => {
         document.getElementById('tiempo-boton').remove();
-        iniciarPreguntas(info.preguntas);
+        callbackInicio();
     });
 }
+
+// -------------------------------
+// mostrarPreguntaDinamica
+// -------------------------------
+function mostrarPreguntaDinamica() {
+    const pregunta = preguntasActuales[indicePregunta];
+
+    const callback = () => {
+        if (indicePregunta < preguntasActuales.length) {
+            mostrarPreguntaDinamica();
+        } else {
+            finalizarSerie();
+        }
+    };
+
+    if (serieActual === 4) {
+        mostrarPregunta("checkbox", pregunta, callback);
+    } else if (serieActual === 5) {
+        mostrarPregunta("text", pregunta, callback);
+    } else if (serieActual === 10) {
+        mostrarPregunta("doubleText", pregunta, callback);
+    } else {
+        mostrarPregunta("radio", pregunta, callback);
+    }
+}
+
+function finalizarSerie() {
+    if (serieFinalizada || finalizandoSerie) return;
+    finalizandoSerie = true;
+
+    clearInterval(intervalo);
+
+    completarRespuestasFaltantes()
+        .then(() => {
+            serieFinalizada = true;   // solo la primera en completarse marcará esto
+            avanzarOSalir();
+        })
+        .catch(err => {
+            console.error("Error al completar respuestas faltantes:", err);
+            alert("Hubo un error al completar respuestas.");
+        })
+        .finally(() => {
+            finalizandoSerie = false; // suelta la bandera aunque haya error
+        });
+}
+
+function avanzarOSalir() {
+    serieActual++;
+    if (serieActual <= totalSeries) {
+        traerSerie(serieActual);
+    } else {
+        desactivarBloqueoDeSalida();
+        permitirBotonAtras();
+        setTimeout(() => {
+            alert("¡Has terminado la prueba!");
+            window.location.href = "/aspirante/mis-pruebas";
+        }, 100);
+    }
+};
+
+
 // -------------------------------
 // INICIAR LAS PREGUNTAS DE LA SERIE
 // -------------------------------
-function iniciarPreguntas(preguntas) {
+function iniciarPreguntas(preguntas, desde=0) {
     preguntasActuales = preguntas;
-    indicePregunta = 0;
+    indicePregunta = desde;
     tiemposRespuestas = [];
-    // Iniciamos el cronómetro global
-    iniciarCronometro(() => {
-        // Se acabó el tiempo => forzamos terminar la serie y marcar pendientes con 0
-        completarRespuestasFaltantes();
-        finalizarSerie();
-    });
-    // Dependiendo de la serieActual, usamos una función distinta
-    if (serieActual === 4) {
-        mostrarPreguntaActualSerie4();
-    } 
-    else if (serieActual === 5) {
-        // Un input text (una sola)
-        mostrarPreguntaActualSerie5();  
-    }
-    else if (serieActual === 10) {
-        // Dos inputs text
-        mostrarPreguntaActualSerie10(); 
-    }
-    else {
-        // Lógica genérica: radio
-        mostrarPreguntaActual(); 
-    }
+
+    // RESETEO
+    serieFinalizada = false;
+    finalizandoSerie = false;
+
+    iniciarCronometro(finalizarSerie);
+
+    mostrarPreguntaDinamica();
 }
+
 // -----------------------------------
-// MOSTRAR PREGUNTAS SERIE GENÉRICA (RADIO)
+// MOSTRAR PREGUNTAS SERIE GENÉRICA 
 // -----------------------------------
-function mostrarPreguntaActual() {
-    const pregunta = preguntasActuales[indicePregunta];
+function mostrarPregunta(tipo, pregunta, desdeCallback) {
     const contenedor = document.getElementById('preguntas-serie');
-    contenedor.innerHTML = `
-        <p>${pregunta.numeroPregunta}. ${pregunta.preguntaTerman}</p>
-        ${pregunta.opciones.map(op => `
+    tiempoInicio = Date.now();
+
+    let contenido = `<p>${pregunta.numeroPregunta}. ${pregunta.preguntaTerman}</p>`;
+    let eventoRegistro;
+    if (tipo === "radio") {
+        contenido += pregunta.opciones.map(op => `
             <label>
                 <input type="radio" name="respuesta_${pregunta.idPreguntaTerman}" value="${op.opcionTerman}">
                 ${op.descripcionTerman}
             </label>
-        `).join('<br>')}
-        <p id="error-seleccion" style="color: red; margin-top: 10px;"></p>
-        <div class="botones-preguntas">
-            <button id="no-contestar" class="no-contestar">No contestar</button>
-            <button id="siguiente-pregunta" 
-            class="btn siguiente" disabled>Siguiente</button>
-        </div>
-    `;
-    tiempoInicio = Date.now();
-    const errorSeleccion = document.getElementById('error-seleccion');
-    const siguienteBtn = document.getElementById('siguiente-pregunta');
-    const radios = document.querySelectorAll(`input[name="respuesta_${pregunta.idPreguntaTerman}"]`);
-    // Habilita el botón si se selecciona algo
-    radios.forEach(radio => {
-        radio.addEventListener('change', () => {
-            const seleccionado = document.querySelector(`input[name="respuesta_${pregunta.idPreguntaTerman}"]:checked`);
-            siguienteBtn.disabled = !seleccionado;
-            errorSeleccion.textContent = '';
-        });
-    });
-    function procesarRespuesta(usandoSeleccion) {
-        const tiempoRespuesta = Math.floor((Date.now() - tiempoInicio) / 1000);
-        const seleccion = document.querySelector(`input[name="respuesta_${pregunta.idPreguntaTerman}"]:checked`);
-        if (usandoSeleccion) {
-            if (!seleccion) {
-                errorSeleccion.textContent = 'Por favor selecciona una opción o usa "No contestar".';
-                return;
-            }
-        }
-        tiemposRespuestas.push({
-            idPregunta: pregunta.idPreguntaTerman,
-            opcion: seleccion ? seleccion.value : 0,
-            tiempo: tiempoRespuesta
-        });
-        aumentarProgreso();
-        indicePregunta++;
-        if (indicePregunta < preguntasActuales.length) {
-            mostrarPreguntaActual();
-        } else {
-            finalizarSerie();
-        }
+        `).join('<br>');
     }
-    document.getElementById('siguiente-pregunta').addEventListener('click', () => procesarRespuesta(true));
-    document.getElementById('no-contestar').addEventListener('click', () => procesarRespuesta(false));
-}
-// --------------------------------
-// MOSTRAR PREGUNTAS SERIE 4 (2 OPC)
-// --------------------------------
-function mostrarPreguntaActualSerie4() {
-    const pregunta = preguntasActuales[indicePregunta];
-    const contenedor = document.getElementById('preguntas-serie');
-    const maxSelections = 2;
-    contenedor.innerHTML = `
-        <p>${pregunta.numeroPregunta}. ${pregunta.preguntaTerman}</p>
-        ${pregunta.opciones.map(op => `
+
+    if (tipo === "checkbox") {
+        contenido += pregunta.opciones.map(op => `
             <label>
                 <input type="checkbox" name="respuesta_${pregunta.idPreguntaTerman}" value="${op.opcionTerman}">
                 ${op.descripcionTerman}
             </label>
-        `).join('<br>')}
-        <p id="error-seleccion"></p>
-        <div class="botones-preguntas">
-            <button id="no-contestar" class="no-contestar">No contestar</button>
-            <button id="siguiente-pregunta" 
-            class="btn siguiente" disabled>Siguiente</button>
-        </div>
-    `;
-    const checkboxes = contenedor.querySelectorAll(`input[name="respuesta_${pregunta.idPreguntaTerman}"]`);
-    const errorSeleccion = document.getElementById('error-seleccion');
-    const siguienteBtn = document.getElementById('siguiente-pregunta');
-    tiempoInicio = Date.now();
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function () {
-            const seleccionados = contenedor.querySelectorAll(`input[name="respuesta_${pregunta.idPreguntaTerman}"]:checked`);
-            
-            if (seleccionados.length > maxSelections) {
-                this.checked = false;
-                errorSeleccion.textContent = `Solo puedes seleccionar un máximo de ${maxSelections} opciones.`;
-                return;
-            }
-            // Feedback visual y control de botón
-            if (seleccionados.length === 1) {
-                siguienteBtn.disabled = false;
-            } else if (seleccionados.length === 2) {
-                errorSeleccion.textContent = '';
-                siguienteBtn.disabled = false;
-            } else {
-                errorSeleccion.textContent = '';
-                siguienteBtn.disabled = true;
-            }
-        });
-    });
-    function procesarRespuesta(conSeleccion) {
-        const tiempoRespuesta = Math.floor((Date.now() - tiempoInicio) / 1000);
-        const seleccionados = conSeleccion
-            ? contenedor.querySelectorAll(`input[name="respuesta_${pregunta.idPreguntaTerman}"]:checked`)
-            : [];
-        if (seleccionados.length === 1) {
-            errorSeleccion.textContent = `Debes seleccionar ${maxSelections} opciones o usar "No contestar".`;
-            return;
-        }
-        if (seleccionados.length === 2) {
-            seleccionados.forEach(cb => {
-                tiemposRespuestas.push({
-                    idPregunta: pregunta.idPreguntaTerman,
-                    opcion: parseInt(cb.value, 10),
-                    tiempo: tiempoRespuesta
-                });
-            });
-        } else {
-            tiemposRespuestas.push({
-                idPregunta: pregunta.idPreguntaTerman,
-                opcion: 0,
-                tiempo: tiempoRespuesta
-            });
-        }
-        aumentarProgreso();
-        indicePregunta++;
-        if (indicePregunta < preguntasActuales.length) {
-            mostrarPreguntaActualSerie4();
-        } else {
-            finalizarSerie();
-        }
+        `).join('<br>');
     }
-    document.getElementById('siguiente-pregunta').addEventListener('click', () => procesarRespuesta(true));
-    document.getElementById('no-contestar').addEventListener('click', () => procesarRespuesta(false));
-}
-// --------------------------------
-// MOSTRAR PREGUNTAS SERIE 5 (Cuadro de texto)
-// --------------------------------
-function mostrarPreguntaActualSerie5() {
-    const pregunta = preguntasActuales[indicePregunta];
-    const contenedor = document.getElementById('preguntas-serie');
-    contenedor.innerHTML = `
-        <p>${pregunta.numeroPregunta}. ${pregunta.preguntaTerman}</p>
-        <input type="text" id="respuestaTexto" placeholder="Escribe tu respuesta..." pattern="[0-9.\\/]*" inputmode="decimal" autocomplete="off">
-        <p id="error-seleccion"></p>
-        <div class="botones-preguntas">
-            <button id="no-contestar" class="no-contestar">No contestar</button>
-            <button id="siguiente-pregunta" 
-            class="btn siguiente" disabled>Siguiente</button>
-        </div>
-    `;
-    const input = document.getElementById('respuestaTexto');
-    const errorSeleccion = document.getElementById('error-seleccion');
-    const siguienteBtn = document.getElementById('siguiente-pregunta');
-    input.addEventListener('input', function () {
-        this.value = this.value.replace(/[^0-9./]/g, '');
-        const tieneValor = this.value.trim().length > 0;
-        // Habilita o deshabilita el botón según el contenido
-        siguienteBtn.disabled = !tieneValor;
-        // Limpia el mensaje de error si había uno
-        if (tieneValor) {
-            errorSeleccion.textContent = '';
-        }
-    });
-    tiempoInicio = Date.now();
-    function procesarRespuesta(texto) {
-        const tiempoRespuesta = Math.floor((Date.now() - tiempoInicio) / 1000);
-        tiemposRespuestas.push({
-            idPregunta: pregunta.idPreguntaTerman,
-            opcion: texto || 0,
-            tiempo: tiempoRespuesta
-        });
-        aumentarProgreso();
-        indicePregunta++;
-        if (indicePregunta < preguntasActuales.length) {
-            mostrarPreguntaActualSerie5();
-        } else {
-            finalizarSerie();
-        }
+
+    if (tipo === "text") {
+        contenido += `<input type="text" id="respuestaTexto" placeholder="Escribe tu respuesta..." pattern="[0-9.\\/]*" inputmode="decimal" autocomplete="off">`;
     }
-    siguienteBtn.addEventListener('click', () => {
-        const textoIngresado = input.value.trim();
-        if (!textoIngresado) {
-            errorSeleccion.textContent = 'Debes ingresar un valor o usar "No contestar".';
-            return;
-        }
-        procesarRespuesta(textoIngresado);
-    });
-    document.getElementById('no-contestar').addEventListener('click', () => {
-        procesarRespuesta(null);
-    });
-}
-// ---------------------------------------------
-// SERIE 10: DOS CUADROS DE TEXTO
-// ---------------------------------------------
-function mostrarPreguntaActualSerie10() {
-    const pregunta = preguntasActuales[indicePregunta];
-    const contenedor = document.getElementById('preguntas-serie');
-    contenedor.innerHTML = `
-        <p>${pregunta.numeroPregunta}. ${pregunta.preguntaTerman}</p>
-        <div id="serie10-input">
-            <input type="text" id="respuestaTextoA" placeholder="[ número 1 ]" pattern="[0-9.\\/]*" inputmode="decimal" autocomplete="off">
-            <span class="separador"> - </span>
-            <input type="text" id="respuestaTextoB" placeholder="[ número 2 ]" pattern="[0-9.\\/]*" inputmode="decimal" autocomplete="off">
-        </div>
-        <p id="error-seleccion"></p>
-        <div class="botones-preguntas">
-            <button id="no-contestar" class="no-contestar">No contestar</button>
-            <button id="siguiente-pregunta" 
-            class="btn siguiente" disabled>Siguiente</button>
-        </div>
-    `;
-    const inputA = document.getElementById('respuestaTextoA');
-    const inputB = document.getElementById('respuestaTextoB');
-    const siguienteBtn = document.getElementById('siguiente-pregunta');
-    const errorSeleccion = document.getElementById('error-seleccion');
-    tiempoInicio = Date.now();
-    // Validación de caracteres permitidos
-    [inputA, inputB].forEach(input => {
-        input.addEventListener('input', () => {
-            input.value = input.value.replace(/[^0-9./]/g, '');
-            const a = inputA.value.trim();
-            const b = inputB.value.trim();
-            // Habilita el botón si hay algo escrito en al menos uno
-            siguienteBtn.disabled = !(a || b);
-            // Limpia el mensaje de error mientras escribe
-            errorSeleccion.textContent = '';
-        });
-    });
-    function procesarRespuesta(usandoValores) {
-        const tiempoRespuesta = Math.floor((Date.now() - tiempoInicio) / 1000);
-        if (usandoValores) {
-            const textoA = inputA.value.trim();
-            const textoB = inputB.value.trim();
-            if (!textoA || !textoB) {
-                errorSeleccion.textContent = 'Debes escribir ambos números o usar "No contestar".';
-                return;
-            }
-            const textoFinal = `${textoA} - ${textoB}`;
-            tiemposRespuestas.push({
-                idPregunta: pregunta.idPreguntaTerman,
-                opcion: textoFinal,
-                tiempo: tiempoRespuesta
-            });
-        } else {
-            // En caso de no contestar
-            tiemposRespuestas.push({
-                idPregunta: pregunta.idPreguntaTerman,
-                opcion: '0 - 0',
-                tiempo: tiempoRespuesta
-            });
-        }
-        aumentarProgreso();
-        indicePregunta++;
-        if (indicePregunta < preguntasActuales.length) {
-            mostrarPreguntaActualSerie10();
-        } else {
-            finalizarSerie();
-        }
-    }
-    document.getElementById('siguiente-pregunta').addEventListener('click', () => procesarRespuesta(true));
-    document.getElementById('no-contestar').addEventListener('click', () => procesarRespuesta(false));
-}
-// ------------------------------------
-// FINALIZAR SERIE: ENVÍA RESPUESTAS
-// ------------------------------------
-function finalizarSerie() {
-    clearInterval(intervalo);
-    enviarRespuestas(tiemposRespuestas)
-        .then(() => {
-            serieActual++;
-            if (serieActual <= totalSeries) {
-                document.getElementById('preguntas-serie').innerHTML = '';
-                document.getElementById('instrucciones-serie').innerHTML = '';
-                document.getElementById('cronometro').innerText = '';
-                document.getElementById('cronometro').style.display = 'none';
-                mostrarInstruccionesSiguienteSerie(serieActual);
-            } else {
-                desactivarBloqueoDeSalida();
-                permitirBotonAtras();
-                setTimeout(() => {
-                    alert("¡Has terminado la prueba!");
-                    window.location.href = "/aspirante/mis-pruebas";
-                }, 100);
-            }
-        })
-        .catch(error => {
-            console.error("Error al enviar respuestas:", error);
-            alert("Hubo un error al guardar tus respuestas.");
-        });
-}
-// -----------------------------------------------------
-// MOSTRAR INSTRUCCIONES DE LA SIGUIENTE SERIE (FETCH)
-// -----------------------------------------------------
-function mostrarInstruccionesSiguienteSerie(idSerie) {
-    fetch(`/aspirante/prueba-terman/serie/${idSerie}`, {
-        method: 'GET',
-        credentials: 'include'
-    })
-    .then(res => res.json())
-    .then(data => {
-        const instruccionesElem = document.getElementById('instrucciones-serie');
-        const cronometroElem = document.getElementById('cronometro');
-        cronometroElem.innerText = '';
-        cronometroElem.style.display = 'none';
-        
-        if (serieActual === 4) {
-            instruccionesElem.innerHTML = `
-            <h3>Serie ${data.id}: ${data.nombreSeccion}</h3>
-            <p>${data.instruccion}</p>
-            <p><strong>TIP</strong>: Si no deseas responder la pregunta, solo da click en <strong>"No contestar"</strong>.<p>
-            <p><strong>SELECCIONA 2 OPCIONES POR CADA PREGUNTA</strong></p>
-            <div id="tiempo-boton">
-            <p><strong>Tiempo para esta serie: </strong>${data.duracion} segundos</p>
-            <button id="comenzar-serie" 
-            class="comenzar btn-color--secondary">Comenzar serie</button>
+
+    if (tipo === "doubleText") {
+        contenido += `
+            <div id="serie10-input">
+                <input type="text" id="respuestaTextoA" placeholder="[ número 1 ]" pattern="[0-9.\\/]*" inputmode="decimal" autocomplete="off">
+                <span class="separador"> - </span>
+                <input type="text" id="respuestaTextoB" placeholder="[ número 2 ]" pattern="[0-9.\\/]*" inputmode="decimal" autocomplete="off">
             </div>
         `;
-        } else {
-            instruccionesElem.innerHTML = `
-                <h3>Serie ${data.id}: ${data.nombreSeccion}</h3>
-                <p>${data.instruccion}</p>
-                <p><strong>TIP</strong>: Si no deseas responder la pregunta, solo da click en <strong>"No contestar"</strong>.<p>
-                <div id="tiempo-boton">
-                <p><strong>Tiempo para esta serie: </strong>${data.duracion} segundos</p>
-                <button id="comenzar-serie" 
-                class="comenzar btn-color--secondary">Comenzar serie</button>
-                </div>
-            `;
+    }
+
+    contenido += `
+        <p id="error-seleccion" style="color:red;"></p>
+        <div class="botones-preguntas">
+            <button id="no-contestar" class="no-contestar">No contestar</button>
+            <button id="siguiente-pregunta" 
+            class="btn siguiente" disabled>Siguiente</button>
+        </div>
+    `;
+
+    contenedor.innerHTML = contenido;
+    // Función de restricción para inputs
+    function permitirSoloNumerosYPuntosDiagonal(event) {
+        const regex = /^[0-9./\\]*$/;
+        if (!regex.test(event.target.value)) {
+            event.target.value = event.target.value.replace(/[^0-9./\\]/g, '');
         }
-        document.getElementById('comenzar-serie').addEventListener('click', () => {
-            document.getElementById('tiempo-boton').remove();
-            tiempoSerie = data.duracion;
-            iniciarPreguntas(data.preguntas);
+    }
+    // Ahora SÍ puedes buscar los inputs y agregar validación
+    if (tipo === "text") {
+        const input = document.getElementById('respuestaTexto');
+        input.addEventListener('input', permitirSoloNumerosYPuntosDiagonal);
+    }
+    if (tipo === "doubleText") {
+        const inputA = document.getElementById('respuestaTextoA');
+        const inputB = document.getElementById('respuestaTextoB');
+        inputA.addEventListener('input', permitirSoloNumerosYPuntosDiagonal);
+        inputB.addEventListener('input', permitirSoloNumerosYPuntosDiagonal);
+    }
+
+    const btnNoContestar = document.getElementById('no-contestar');
+    const btnSiguiente = document.getElementById('siguiente-pregunta');
+    const error = document.getElementById('error-seleccion');
+
+    function procesar(opcion) {
+        const tiempoRespuesta = Math.floor((Date.now() - tiempoInicio) / 1000);
+
+        console.log("Procesando respuesta:", {
+            idPregunta: pregunta?.idPreguntaTerman,
+            opcion,
+            tiempo: tiempoRespuesta
+        });
+    
+        fetch(`/aspirante/prueba-terman/pregunta/${pregunta.idPreguntaTerman}`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                respuesta: opcion,
+                tiempo: tiempoRespuesta
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("Respuesta del backend:", data);
+            if (data.estado === "OK") {
+                tiemposRespuestas.push({
+                    idPregunta: pregunta.idPreguntaTerman,
+                    opcion,
+                    tiempo: tiempoRespuesta
+                });
+    
+                aumentarProgreso();
+                indicePregunta++;
+                desdeCallback();
+            } else {
+                console.error("Error al guardar respuesta:", data);
+            }
+        })
+        .catch(err => {
+            console.error("Error de red al guardar respuesta:", err);
+        });
+    }
+    function procesarMultiple(opciones) {
+        const tiempoRespuesta = Math.floor((Date.now() - tiempoInicio) / 1000);
+    
+        const promesas = opciones.map(opcion => 
+            fetch(`/aspirante/prueba-terman/pregunta/${pregunta.idPreguntaTerman}`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    respuesta: opcion,
+                    tiempo: tiempoRespuesta,
+                })
+            })
+        );
+    
+        Promise.all(promesas)
+        .then(() => {
+            tiemposRespuestas.push({
+                idPregunta: pregunta.idPreguntaTerman,
+                opcion: opciones.join(', '),
+                tiempo: tiempoRespuesta
+            });
+    
+            aumentarProgreso();
+            indicePregunta++;
+            desdeCallback();
+        })
+        .catch(err => {
+            console.error("Error de red al guardar respuestas múltiples:", err);
+        });
+    }
+    // Agrega lógica específica por tipo
+    if (tipo === "radio") {
+        const radios = document.querySelectorAll(`input[name="respuesta_${pregunta.idPreguntaTerman}"]`);
+        radios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                btnSiguiente.disabled = false;
+                error.textContent = '';
+            });
+        });
+
+        btnSiguiente.addEventListener('click', () => {
+            const seleccionado = document.querySelector(`input[name="respuesta_${pregunta.idPreguntaTerman}"]:checked`);
+            if (!seleccionado) {
+                error.textContent = 'Selecciona una opción o usa "No contestar".';
+                return;
+            }
+            procesar(seleccionado.value);
+        });
+
+    } else if (tipo === "checkbox") {
+        const maxSelections = 2;
+        const checkboxes = document.querySelectorAll(`input[name="respuesta_${pregunta.idPreguntaTerman}"]`);
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', () => {
+                const seleccionados = document.querySelectorAll(`input[name="respuesta_${pregunta.idPreguntaTerman}"]:checked`);
+                if (seleccionados.length > maxSelections) {
+                    cb.checked = false;
+                    error.textContent = `Máximo ${maxSelections} opciones.`;
+                } else {
+                    btnSiguiente.disabled = !(seleccionados.length === maxSelections);
+                    error.textContent = '';
+                }
+            });
+        });
+
+        btnSiguiente.addEventListener('click', () => {
+            const seleccionados = document.querySelectorAll(`input[name="respuesta_${pregunta.idPreguntaTerman}"]:checked`);
+            if (seleccionados.length !== maxSelections) {
+                error.textContent = `Selecciona exactamente ${maxSelections} opciones.`;
+                return;
+            }
+        
+            const opciones = Array.from(seleccionados).map(cb => cb.value);
+            procesarMultiple(opciones);
         });
         
-    })
-    .catch(error => {
-        console.error("Error al traer instrucciones de la siguiente serie:", error);
+
+    } else if (tipo === "text") {
+        const input = document.getElementById('respuestaTexto');
+        input.addEventListener('input', () => {
+            btnSiguiente.disabled = input.value.trim().length === 0;
+            error.textContent = '';
+        });
+
+        btnSiguiente.addEventListener('click', () => {
+            const val = input.value.trim();
+            if (!val) {
+                error.textContent = 'Ingresa una respuesta o selecciona "No contestar".';
+                return;
+            }
+            procesar(val);
+        });
+
+    } else if (tipo === "doubleText") {
+        const a = document.getElementById('respuestaTextoA');
+        const b = document.getElementById('respuestaTextoB');
+
+        [a, b].forEach(el => el.addEventListener('input', () => {
+            btnSiguiente.disabled = !(a.value.trim() && b.value.trim());
+            error.textContent = '';
+        }));
+
+        btnSiguiente.addEventListener('click', () => {
+            if (!a.value.trim() || !b.value.trim()) {
+                error.textContent = 'Debes llenar ambos campos.';
+                return;
+            }
+            procesar(`${a.value.trim()} - ${b.value.trim()}`);
+        });
+    }
+
+    // Omitir
+    btnNoContestar.addEventListener('click', () => {
+        const valorOmitido = (tipo === "doubleText") ? '0 - 0' : 0;
+        procesar(valorOmitido);
     });
 }
+
 // ----------------------------------
 // EVENTOS INICIALES AL CARGAR LA VISTA
 // ----------------------------------
