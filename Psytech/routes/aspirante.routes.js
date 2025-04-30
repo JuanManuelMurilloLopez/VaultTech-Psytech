@@ -67,6 +67,8 @@ router.post('/datos-personales-kostick', controller.postDatosPersonalesKostick);
 
 router.get('/datos-personales-16PF', controller.getDatosPersonales16PF);
 router.post('/datos-personales-16PF', controller.postDatosPersonales16PF);
+
+router.get("/pruebaCompletada/:idPrueba", controller.get_pruebaCompletadaK16);
   
 // router.get("/preguntasPrueba/:idPrueba", controller.get_preguntasPrueba);
 router.post("/preguntasPrueba/:idPrueba", controller.post_preguntasPrueba);

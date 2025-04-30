@@ -125,4 +125,12 @@ module.exports = class Aspirante {
             `)
     }
 
+    static fetchGrupo(idAspirante){
+        return db.execute(`
+                            SELECT idGrupo
+                            FROM gruposaspirantes
+                            WHERE idAspirante = ?
+            `, [idAspirante]);
+    }
+
 }

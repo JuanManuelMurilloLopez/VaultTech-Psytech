@@ -52,6 +52,7 @@ module.exports = class Prueba{
             idPrueba,
             idAspirante
         ]);
+
     
         // Si no se actualizó ningún registro, hacer INSERT
         if (result.affectedRows === 0) {
@@ -73,6 +74,48 @@ module.exports = class Prueba{
     
         return result;
     }    
+
+    // Solo para 16PF
+    static async saveDatosPersonales16PF(idAspirante, idGrupo, idPrueba, datosPersonales) {
+        // Intentar actualizar primero
+        const [result] = await db.execute(`
+            UPDATE datospersonales 
+            SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, 
+                puestoSolicitado = ?, fecha = NOW(), idGenero = ?
+            WHERE idGrupo = ? AND idPrueba = ? AND idAspirante = ?
+        `, [
+            datosPersonales.nombre,
+            datosPersonales.apellidoPaterno, 
+            datosPersonales.apellidoMaterno,
+            datosPersonales.puestoSolicitado,
+            datosPersonales.idGenero,
+            idGrupo,
+            idPrueba,
+            idAspirante
+        ]);
+
+    
+        // Si no se actualizó ningún registro, hacer INSERT
+        if (result.affectedRows === 0) {
+            return db.execute(`
+                INSERT INTO datospersonales 
+                (idDatosPersonales, idGrupo, idPrueba, idAspirante, nombre, 
+                apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha, idGenero)
+                VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, NOW(), ?)
+            `, [
+                idGrupo,
+                idPrueba,
+                idAspirante,
+                datosPersonales.nombre,
+                datosPersonales.apellidoPaterno, 
+                datosPersonales.apellidoMaterno,
+                datosPersonales.puestoSolicitado,
+                datosPersonales.idGenero
+            ]);
+        }
+    
+        return result;
+    }
 
     static getAreaOtis(){
         return db.execute(

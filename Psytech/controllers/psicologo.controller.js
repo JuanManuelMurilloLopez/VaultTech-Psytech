@@ -14,6 +14,11 @@ const InfoPruebas = require('../models/infoPruebas.model');
 const FormatoEntrevista = require('../models/formatoDeEntrevista.model.js');
 const Familiar = require('../models/formularioFamiliares.model.js');
 
+const ResultadosKostick = require('../models/resultadosKostick.model.js');
+const Resultados16PF = require('../models/resultados16PF.model.js');
+const InterpretacionKostick = require('../models/interpretacionKostick.js');
+const Interpretaciones16PF = require('../models/interpretacion16PF.model.js');
+
 const xlsx = require('xlsx');
 const fs = require('fs');
 const Usuario = require('../models/usuario.model.js');
@@ -1385,33 +1390,53 @@ exports.getPruebaOtis = async (req, res, next) => {
 };
 //16PF y Kostick
 exports.get_respuestasA = (request, response, next) => {
+
     const idAspirante = request.params.idAspirante;
     const idPrueba = request.params.idprueba;
+
+    console.log("ID Aspirante recibido:", idAspirante);
+    console.log("ID Prueba recibida:", idPrueba);
   
-    Aspirante.fetchOne(idAspirante).then(([datosAspirante, fieldData]) => {
-      PerteneceGrupo.fetchOne(idAspirante).then(([rows, fieldData]) => {
-        Grupo.fetchOneId(rows[0].idGrupo).then(([grupoRows, fieldData]) => {
+    Aspirante.getInformacionAspirante(idAspirante).then(([datosAspirante, fieldData]) => {
+        console.log("Datos Aspirante antes del if: ");
+        console.log(datosAspirante);
+      Aspirante.fetchGrupo(idAspirante).then(([rows, fieldData]) => {
+        Grupo.fetchOne(request.params.idGrupo).then(([grupoRows, fieldData]) => {
           if (idPrueba == 1) {
-            ResultadosKostick.fetchAll(rows[0].idGrupo, idAspirante).then(
-              (resultados) => {
-                response.render("consultaRespuestasAspirante", {
-                  usuario: request.session.usuario || "",
-                  prueba: "Kostick",
-                  grupo: grupoRows[0],
-                  valores: resultados[0][0],
-                  datos: datosAspirante[0],
-                });
+            ResultadosKostick.fetchAll(request.params.idGrupo, request.params.idAspirante).then(
+              ([resultados, fieldData]) => {
+                console.log("Resultados Kostick:");
+                console.log(resultados[0]);
+                console.log("Datos:" );
+                console.log(datosAspirante);
+                InterpretacionKostick.fetchAll()
+                .then((interpretacionesKostick) => {
+                    response.render("Psicologos/consultaRespuestasAspirante", {
+                        prueba: "El inventario de Percepción Kostick",
+                        grupo: grupoRows[0],
+                        valores: resultados[0],
+                        datos: datosAspirante[0],
+                        interpretaciones: interpretacionesKostick[0],
+                        idAspirante: request.params.idAspirante || null,
+                    });
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
               }
             );
           } else if (idPrueba == 2) {
-            Resultados16PF.fetchAll(rows[0].idGrupo, idAspirante).then(
-              (resultados) => {
-                response.render("consultaRespuestasAspirante", {
-                  usuario: request.session.usuario || "",
-                  prueba: "PRUEBA DE 16PF",
-                  grupo: grupoRows,
-                  valores: resultados[0][0],
+            Resultados16PF.fetchAll(request.params.idGrupo, idAspirante).then(
+              ([resultados, fieldData]) => {
+                console.log("Datos aspirante después del if: ");
+                console.log(datosAspirante);
+                response.render("Psicologos/consultaRespuestasAspirante", {
+                  prueba: "Personalidad 16 Factores (16 PF)",
+                  grupo: grupoRows[0],
+                  valores: resultados[0],
                   datos: datosAspirante[0],
+                  interpretaciones: null,
+                  idAspirante: request.params.idAspirante || null,
                 });
               }
             );
@@ -1419,7 +1444,22 @@ exports.get_respuestasA = (request, response, next) => {
         });
       });
     });
-  };
+};
+
+exports.get_interpretaciones16PF = (request, response, next) => {
+    let columna = request.params.columna;
+    let nivel = request.params.nivel;
+    Interpretaciones16PF.interpretacion(columna, nivel)
+    .then(([rows]) => {
+        if(rows.length > 0){
+            inter = rows[0].resp;
+            response.status(200).json({ inter });
+        }
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
 
   // Consulta informacion prueba Colores
     exports.getPruebaColores = async (req, res, next) => {

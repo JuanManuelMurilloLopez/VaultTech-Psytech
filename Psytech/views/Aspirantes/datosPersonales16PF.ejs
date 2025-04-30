@@ -36,6 +36,18 @@
           <label for="puestoSolicitado" class="form-label">Postgrado solicitado</label>
           <input type="text" class="form-control" name="puestoSolicitado" required />
         </div>
+
+        <!--Input Género-->
+        <div class="mb-3">
+          <label class="form-label" for="idGenero">Género</label> <br>
+
+          <select class="form-select" name="idGenero" id="idGenero">
+              <% for(genero of generos){ %>
+                  <option value="<%= genero.idGenero %>"> <%= genero.nombreGenero %> </option>
+              <% } %>
+          </select>
+
+      </div>
       
         <div class="text-end mt-4">
           <button type="submit" class="btn btn-color--secondary">Continuar</button>

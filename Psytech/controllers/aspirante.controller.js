@@ -9,6 +9,7 @@ const PruebaOtis = require('../models/prueba.model');
 const OpcionOtis = require('../models/opcionOtis.model.js');
 const Aspirante = require('../models/aspirante.model');
 
+
 //hartman requires
 const PruebaHartman = require('../models/prueba.model');
 const hartman = require('../models/hartman.model');
@@ -17,6 +18,7 @@ const hartmanAnalysisModel = require('../models/hartmanAnalysis.model.js');
 const Prueba = require('../models/prueba.model');
 const RespondeKostick = require('../models/respondeKostick.model.js');
 const Responde16PF = require('../models/responde16pf.model.js');
+const ResultadosKostick = require('../models/resultadosKostick.model.js');
 
 //Rutas del portal de los Aspirantes
 exports.getPruebas = (request, response) => {
@@ -826,7 +828,18 @@ exports.get_instrucciones = (request, response, next) => {
         request.session.idGrupo = rows[0].idGrupo;
         Prueba.updateEstatusPruebaK16(request.session.idAspirante, request.session.idGrupo, 2, 'En progreso')
         .then(() => {
-            response.render('Aspirantes/datosPersonales16PF');
+            Genero.fetchAll()
+            .then(([rows, fieldData]) => {
+                const generos = rows;
+                console.log("Generos: ");
+                console.log(generos);
+                response.render('Aspirantes/datosPersonales16PF', {
+                    generos: generos || [],
+                })
+            })
+            .catch((error) => {
+                console.log(error);
+            });
         })
         .catch((error) => {
             console.log(error);
@@ -843,7 +856,7 @@ exports.get_instrucciones = (request, response, next) => {
     .then(([rows, fieldData]) => {
         const grupo = rows[0];
         request.session.idGrupo = grupo.idGrupo;
-        Prueba.saveDatosPersonales(request.session.idAspirante, grupo.idGrupo, 2, request.body)
+        Prueba.saveDatosPersonales16PF(request.session.idAspirante, grupo.idGrupo, 2, request.body)
         .then(() => {
             response.render(`Aspirantes/autoPost16PF`, {
                 idAspirante: request.session.idAspirante,
@@ -1008,16 +1021,14 @@ exports.get_instrucciones = (request, response, next) => {
   
   /* Controlador que guarda la última pregunta de 16PF */
   exports.pruebaCompletada = (request, response, next) => {
+    console.log("Entra pruebaCompletada (Controlador)");
+    console.log(request.body);
     const idOpcionKostick = request.body.idOpcionKostick;
     const idGrupo = request.body.idGrupo;
     const idAspirante = request.body.idAspirante;
     const idPreguntaKostick = request.body.idPreguntaKostick;
     const tiempo = request.body.tiempo;
     const idPrueba = 1;
-  
-    if (!request.session.index) {
-      return response.redirect("/login");
-    }
   
     const newRespondeKostick = new RespondeKostick(
       idPreguntaKostick,
@@ -1092,6 +1103,198 @@ exports.get_instrucciones = (request, response, next) => {
       });
   };
   
+
+exports.get_pruebaCompletadaK16 = async (request, response, next)=> {
+
+    if(request.params.idPrueba == 1){
+        const letras = [
+
+            "G",
+            "L",
+            "I",
+            "T",
+            "V",
+            "S",
+            "R",
+            "D",
+            "C",
+            "E",
+            "W",
+            "F",
+            "K",
+            "Z",
+            "O",
+            "B",
+            "X",
+            "P",
+            "A",
+            "N",
+          ];
+        
+          const m = [
+            // G
+            [[1, 11, 21, 31, 41, 51, 61, 71, 81], []],
+            // L
+            [[12, 22, 32, 42, 52, 62, 72, 82], [81]],
+            // I
+            [
+              [23, 33, 43, 53, 63, 73, 83],
+              [82, 71],
+            ],
+            // T
+            [
+              [34, 44, 54, 64, 74, 84],
+              [83, 72, 61],
+            ],
+            // V
+            [
+              [45, 55, 65, 75, 85],
+              [84, 73, 62, 51],
+            ],
+            // S
+            [
+              [56, 66, 76, 86],
+              [85, 74, 63, 52, 41],
+            ],
+            // R
+            [
+              [67, 77, 87],
+              [86, 75, 64, 53, 42, 31],
+            ],
+            // D
+            [
+              [78, 88],
+              [87, 76, 65, 54, 43, 32, 21],
+            ],
+            // C
+            [[89], [88, 77, 66, 55, 44, 33, 22, 11]],
+            // E
+            [[], [89, 78, 67, 56, 45, 34, 23, 12, 1]],
+            // W
+            [[90, 80, 70, 60, 50, 40, 30, 20, 10], []],
+            // F
+            [[79, 69, 59, 49, 39, 29, 19, 9], [10]],
+            // K
+            [
+              [68, 58, 48, 38, 28, 18, 8],
+              [9, 20],
+            ],
+            // Z
+            [
+              [57, 47, 37, 27, 17, 7],
+              [8, 19, 30],
+            ],
+            // O
+            [
+              [46, 36, 26, 16, 6],
+              [7, 18, 29, 40],
+            ],
+            // B
+            [
+              [35, 25, 15, 5],
+              [6, 17, 28, 39, 50],
+            ],
+            // X
+            [
+              [24, 14, 4],
+              [5, 16, 27, 38, 49, 60],
+            ],
+            // P
+            [
+              [13, 3],
+              [4, 15, 26, 37, 48, 59, 70],
+            ],
+            // A
+            [[2], [3, 14, 25, 36, 47, 58, 69, 80]],
+            // N
+            [[], [2, 13, 24, 35, 46, 57, 68, 79, 90]],
+          ];
+        
+          let suma = new Array(m.length).fill(0);
+        
+          try {
+            //Calificar
+        
+            const promesas = [];
+        
+            let pregunta = 0;
+            const size = m.length;
+        
+            for (let l = 0; l < size; l++) {
+              for (let o = 0; o <= 1; o++) {
+                let opcion = "a";
+                if (o === 0) {
+                  opcion = "a";
+                } else {
+                  opcion = "b";
+                }
+                for (let p = 0; p < m[l][o].length; p++) {
+                  pregunta = m[l][o][p];
+                  const letra = l;
+                  promesas.push(
+                    RespondeKostick.fetchRespuesta(
+                      request.session.idGrupo,
+                      request.session.idAspirante,
+                      pregunta
+                    )
+                      .then((respuesta) => {
+                        console.log("Opción Kostick: ", respuesta[0][0].opcionKostick);
+                        console.log("Opción: ", opcion);
+                        if (respuesta[0][0].opcionKostick === opcion) {
+                          suma[letra]++;
+                        }
+                      })
+                      .catch((err) => {
+                        console.error(`Error en pregunta ${pregunta}:`, err);
+                      })
+                  );
+                }
+              }
+            }
+            await Promise.all(promesas);
+        
+            for (let i = 0; i < letras.length; i++) {
+              console.log(letras[i] + ": " + suma[i]);
+            }
+          } catch (err) {
+            console.error("Error general:", err);
+            response.status(500).send("Ocurrió un error al calificar la prueba");
+          }
+        
+          const mis_resultadosKostick = new ResultadosKostick(
+            request.session.idGrupo,
+            request.session.idAspirante,
+            suma[0],
+            suma[1],
+            suma[2],
+            suma[3],
+            suma[4],
+            suma[5],
+            suma[6],
+            suma[7],
+            suma[8],
+            suma[9],
+            suma[10],
+            suma[11],
+            suma[12],
+            suma[13],
+            suma[14],
+            suma[15],
+            suma[16],
+            suma[17],
+            suma[18],
+            suma[19]
+          );
+          mis_resultadosKostick.save().then(() => {
+            response.render('Aspirantes/pruebaCompletada');
+          })
+    } else {
+        response.render('Aspirantes/pruebaCompletada');
+    }
+
+
+}
+
   /* Controlador que lleva a la vista con mensaje de prueba completada*/
   exports.get_pruebaCompletada = (request, response, next) => {
     Aspirante.fetchOne(request.session.idAspirante).then(([aspirante]) => {

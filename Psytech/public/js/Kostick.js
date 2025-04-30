@@ -124,8 +124,8 @@ const letras = [
           const letra = l;
           promesas.push(
             RespondeKostick.fetchRespuesta(
-              request.session.grupo,
-              request.session.idUsuario.idUsuario,
+              request.session.idGrupo,
+              request.session.idAspirante,
               pregunta
             )
               .then((respuesta) => {
@@ -153,8 +153,8 @@ const letras = [
   }
 
   const mis_resultadosKostick = new ResultadosKostick(
-    request.session.grupo,
-    request.session.idUsuario.idUsuario,
+    request.session.idGrupo,
+    request.session.idAspirante,
     suma[0],
     suma[1],
     suma[2],

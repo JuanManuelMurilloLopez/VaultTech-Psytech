@@ -300,8 +300,8 @@
           return response.json();
         })
         .then((data) => {
-          alert(data.message);
-          window.location.href = "/aspirante/pruebaCompletada";
+          alert(data.message); 
+          window.location.href = "/aspirante/pruebaCompletada/<%= prueba.idPrueba %>";
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);
@@ -484,7 +484,7 @@
         })
         .then((data) => {
           alert(data.message);
-          window.location.href = "/aspirante/pruebaCompletada";
+          window.location.href = "/aspirante/pruebaCompletada/<%= prueba.idPrueba %>";
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);

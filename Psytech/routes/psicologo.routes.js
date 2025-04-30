@@ -88,6 +88,9 @@ router.get('/respuestas-otis', controller.getRespuestasOtis);
 router.get('/analisis-hartman/:idGrupo/:idAspirante/:idInstitucion', controller.getAnalisisHartman);
 
 // 16Pf y KOSTICK
-router.get("/consultaRespuestasAspirante/:idusuario/:idprueba", controller.get_respuestasA);
+router.get("/analisis-16PF/:idprueba/:idGrupo/:idAspirante/:idInstitucion", controller.get_respuestasA);
+router.get("/analisis-KOSTICK/:idprueba/:idGrupo/:idAspirante/:idInstitucion", controller.get_respuestasA);
+
+router.get("/interpretacion/:idAspirante/:columna/:nivel", controller.get_interpretaciones16PF);
 
 module.exports = router;
