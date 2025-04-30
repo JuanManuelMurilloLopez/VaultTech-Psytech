@@ -220,6 +220,15 @@ exports.postInstruccionesColores = (req, res) => {
     res.redirect('/aspirante/datos-personales-colores');
 };
 
+// Mostrar instrucciones Hartman
+exports.getInstruccionesHartman = (request, response, next) => {
+    response.render('Aspirantes/instruccionesHartman');
+};
+
+exports.postInstruccionesHartman = (req, res) => {
+    res.redirect('/aspirante/prueba-hartman/fase1');
+};
+
 // Formulario datos personales
 exports.getDatosPersonalesOtis = (request, response, next) => {
     response.render('Aspirantes/datosPersonalesOtis');
