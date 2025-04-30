@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba HARTMAN</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS link -->
+    <link rel="stylesheet" href="/css/aspirantes/instruccionesHartman.css">
+    
+</head>
+<body class="bg-light">
+    <div class="container">
+        <h1 class="text-center">Prueba HARTMAN</h1>
+        
+        <h4 class="fw-bold">INSTRUCCIONES</h4>
+        <p>Lea esta página y haga lo que se le indica.</p>
+        
+        <p>Esta prueba contiene dos fases. En la primera fase, encontrará usted 18 frases, cada una de estas representa algo a lo cual un individuo puede asignarle
+            diferentes valores (bueno o malo) dependiendo de sus propias consideraciones acerca de qué es bueno o malo.</p>
+        <p><strong>Lea cuidadosamente todas las frases.</strong></p>
+
+        <p>En la segunda fase, encontrará usted 18 citas, cada una de estas representa algo a lo cual un individuo puede asignarle
+            diferentes valores (bueno o malo) dependiendo de sus propias consideraciones acerca de qué es bueno o malo.</p>
+        <p><strong>Lea cuidadosamente todas las citas.</strong></p>
+        
+        <p>Relacione el número 1 con la frase que en su opinión representa el valor más alto, o sea la frase que usted considera que expresa el mejor valor.</p>
+        <p>Relacione el número 2 con la frase que usted considera está en segundo lugar, y así sucesivamente. Enumere todas las frases o citas en sentido descendente utilizando un número
+            diferente para cada una de las 18 frases (3, 4 ,5 y así sucesivamente) hasta llegar al número 18 que deberá representar aquella que usted considera que expresa lo peor.</p>
+        
+        <p><strong>No juzgue las frases o citas por la importancia sino exclusivamente por la bondad o maldad que contienen. Concéntrese en su tarea.</strong></p>
+
+        <p class="fw-bold">Decida rápidamente qué número le va a asignar a cada una de las frases o citas. 
+            Esta prueba suele llevar alrededor de 10 minutos, sin embargo, cuenta con 2 horas para completarla.</p>
+        
+        <div class="d-flex justify-content-between mt-5">
+            <a href="/aspirante/mis-pruebas" class="btn btn-secondary">Regresar</a>
+
+            <form action="/aspirante/instrucciones-hartman" method="POST">
+                <button type="submit" class="btn btn-color--secondary">Iniciar Prueba</button>
+            </form>
+        </div>
+
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

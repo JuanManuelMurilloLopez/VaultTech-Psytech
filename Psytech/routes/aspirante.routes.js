@@ -54,6 +54,8 @@ router.get('/prueba-completada', controller.getPruebaCompletada);
 router.get('/respuestas-enviadas', controller.getRespuestasEnviadas);
 
 // Rutas prueba Hartman
+router.get('/instrucciones-hartman', controller.getInstruccionesHartman);
+router.post('/instrucciones-hartman', controller.postInstruccionesHartman);
 
 router.get('/prueba-hartman/fase1', controller.getHartmanFase1 );
 router.post('/prueba-hartman/fase1', controller.postHartmanFase1);
