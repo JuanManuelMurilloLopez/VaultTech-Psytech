@@ -21,6 +21,9 @@ const Interpretaciones16PF = require('../models/interpretacion16PF.model.js');
 const RespondeKostick = require('../models/respondeKostick.model.js');
 const Responde16PF = require('../models/responde16pf.model.js');
 
+const PreguntaKostick = require('../models/preguntasKostick.model.js');
+const Pregunta16PF = require('../models/preguntas16pf.model.js');
+
 const xlsx = require('xlsx');
 const fs = require('fs');
 const Usuario = require('../models/usuario.model.js');
@@ -1511,16 +1514,29 @@ exports.getCuadernilloKostick = (request, response, next) => {
                     const resultados = rows;
                     const opciones = resultados.map(r => r.opcionKostick);
                     const descripcionOpciones = resultados.map(r => r.descripcionOpcionKostick);
-                    response.render('Psicologos/cuadernilloKostick', {
-                        prueba: "El inventario de Percepción Kostick",
-                        grupo: grupo || null,
-                        valores: resultados[0][0],
-                        datos: datosAspirante || null,
-                        aspirante: datosAspirante || null,
-                        preguntas: preguntasKostick || [],
-                        opciones: opciones || [],
-                        descripcion: descripcionOpciones || [],
+                    Prueba.getDatosPersonalesAspiranteKostick(idGrupo, idAspirante)
+                    .then(([rows, fieldData]) => {
+                        const datosPersonales = rows;
+                        console.log("preguntas kostick: ");
+                        console.log(preguntasKostick);
+                        response.render('Psicologos/cuadernilloKostick', {
+                            prueba: "El inventario de Percepción Kostick",
+                            grupo: grupo || null,
+                            valores: resultados[0][0],
+                            datos: datosPersonales || null,
+                            aspirante: datosAspirante || null,
+                            preguntas: preguntasKostick || [],
+                            opciones: opciones || [],
+                            descripcion: descripcionOpciones || [],
+                            idAspirante: request.params.idAspirante,
+                            idInstitucion: request.params.idInstitucion,
+                            idGrupo: request.params.idGrupo,
+                        })
                     })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                    
                 })
                 .catch((error) => {
                     console.log(error);

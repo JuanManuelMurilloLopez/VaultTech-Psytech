@@ -53,7 +53,7 @@ module.exports = class RespondeKostick {
                         WHERE idOpcionKostick IN 
                                                 (SELECT idOpcionKostick 
                                                   FROM respondekostick 
-                                                  WHERE idGrupo ? 
+                                                  WHERE idGrupo = ? 
                                                   AND idAspirante = ?)
       `, [idGrupo, idAspirante]);
   }
