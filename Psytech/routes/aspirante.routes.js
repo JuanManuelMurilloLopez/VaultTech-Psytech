@@ -39,8 +39,6 @@ router.get('/prueba-completada', controller.getPruebaCompletada);
 
 //router.get('/instrucciones-hartman', controller.get_instrucciones_hartman);
 
-//router.get('/instrucciones-terman', controller.get_instrucciones_terman);
-
 router.get('/instrucciones-colores', controller.getInstruccionesColores);
 router.post('/instrucciones-colores', controller.postInstruccionesColores);
 router.get('/datos-personales-colores', controller.getDatosPersonalesColores);
@@ -53,6 +51,11 @@ router.get('/prueba-completada', controller.getPruebaCompletada);
 
 router.get('/respuestas-enviadas', controller.getRespuestasEnviadas);
 
+// Rutas para prueba Terman
+
+router.get('/prueba-terman', controller.getResponderTerman);
+router.get('/prueba-terman/serie/:idSerie', controller.getInfoSerie);
+router.post('/prueba-terman/pregunta/:idPreguntaTerman', controller.postRespuestaTerman);
 // Rutas prueba Hartman
 router.get('/instrucciones-hartman', controller.getInstruccionesHartman);
 router.post('/instrucciones-hartman', controller.postInstruccionesHartman);

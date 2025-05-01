@@ -14,6 +14,15 @@ const InfoPruebas = require('../models/infoPruebas.model');
 const FormatoEntrevista = require('../models/formatoDeEntrevista.model.js');
 const Familiar = require('../models/formularioFamiliares.model.js');
 
+// Modelos terman
+const respuestasTermanModel = require('../models/respuestasTerman.model.js');
+const calificacionesTerman = require('../models/calificacionesTerman.model.js');
+const calificacionTerman = new calificacionesTerman();
+const resultadosSeriesTerman = require('../models/resultadosSeriesTerman.model.js');
+const resultadoSerieTerman = new resultadosSeriesTerman();
+
+// Middleware de apoyo para calificar Terman
+const calificarSerieTerman = require("../middleware/calificarTerman.js");
 const ResultadosKostick = require('../models/resultadosKostick.model.js');
 const Resultados16PF = require('../models/resultados16PF.model.js');
 const InterpretacionKostick = require('../models/interpretacionKostick.js');
@@ -153,78 +162,76 @@ exports.getGrupos = (request, response, next) => {
 // Get
 exports.getRegistrarGrupo = (req, res, next) => {
     Promise.all([
-      Grupo.getInstituciones(),
-      Grupo.getNiveles(),
-      Grupo.getPruebas()
+        Grupo.getInstituciones(),
+        Grupo.getNiveles(),
+        Grupo.getPruebas()
     ])
-      .then(([instituciones, niveles, pruebas]) => {
+    .then(([instituciones, niveles, pruebas]) => {
         res.render('Psicologos/registrarGrupo.ejs', {
-          listadoInstituciones: instituciones[0],
-          listadoNiveles: niveles[0],
-          listadoPruebas: pruebas[0],
-          error: '',
-          idInstitucion: req.params.idInstitucion,
-        });
-      })
-      .catch(err => {
+        listadoInstituciones: instituciones[0],
+        listadoNiveles: niveles[0],
+        listadoPruebas: pruebas[0],
+        error: '',
+        idInstitucion: req.params.idInstitucion,});
+    })
+    .catch(err => {
         console.log(err);
         res.send('Error al cargar formulario');
-      });
-  };
+    });
+};
 
 // Post
   exports.postRegistrarGrupo = (req, res, next) => {
     const {
-      nombreGrupo,
-      carrera,
-      semestre,
-      anio,
-      idNivelAcademico,
-      pruebasSeleccionadas,
-      fechaLimite
+        nombreGrupo,
+        carrera,
+        semestre,
+        anio,
+        idNivelAcademico,
+        pruebasSeleccionadas,
+        fechaLimite
     } = req.body;
-  
+
     Grupo.existe(nombreGrupo)
-      .then(([rows]) => {
+    .then(([rows]) => {
         if (rows.length > 0) {
-          return Promise.all([
-            Grupo.getInstituciones(),
-            Grupo.getNiveles(),
-            Grupo.getPruebas()
-          ]).then(([instituciones, niveles, pruebas]) => {
+            return Promise.all([
+                Grupo.getInstituciones(),
+                Grupo.getNiveles(),
+                Grupo.getPruebas()
+            ]).then(([instituciones, niveles, pruebas]) => {
             return res.render('Psicologos/registrarGrupo', {
-              error: 'El grupo ya está registrado.',
-              listadoInstituciones: instituciones[0],
-              listadoNiveles: niveles[0],
-              listadoPruebas: pruebas[0],
-              idInstitucion: req.params.idInstitucion,
+                error: 'El grupo ya está registrado.',
+                listadoInstituciones: instituciones[0],
+                listadoNiveles: niveles[0],
+                listadoPruebas: pruebas[0],
+                idInstitucion: req.params.idInstitucion,
+                });
             });
-          });
         }
-  
+
         const grupo = new Grupo(
-          nombreGrupo,
-          carrera,
-          semestre,
-          anio,
-          req.params.idInstitucion,
-          idNivelAcademico,
-          fechaLimite
+            nombreGrupo,
+            carrera,
+            semestre,
+            anio,
+            req.params.idInstitucion,
+            idNivelAcademico,
+            fechaLimite
         );
   
         return grupo.saveGrupoYPruebas(pruebasSeleccionadas);
-      })
-      .then(() => {
-        exports.getGrupos(req, res, next);
-      })
-      .catch(error => {
-        console.log('Error al registrar grupo:', error);
-        if (!res.headersSent) {
-          res.send('Error al registrar grupo');
-        }
-      });
+        })
+        .then(() => {
+            exports.getGrupos(req, res, next);
+        })
+        .catch(error => {
+            console.log('Error al registrar grupo:', error);
+            if (!res.headersSent) {
+            res.send('Error al registrar grupo');
+            }
+        });
 };
-  
 
 exports.getInformacionGrupo = (request, response, next) => {
     Grupo.fetchOne(request.params.idGrupo)
@@ -1391,6 +1398,127 @@ exports.getPruebaOtis = async (req, res, next) => {
             mensaje: 'Error al cargar la guía de respuestas OTIS',
             error: error
         });
+    }
+};
+
+// Análisis Terman
+
+exports.getRespuestasSerie = async (req, res) => {
+    const { idAspirante, idGrupo, idSerie } = req.params;
+
+    try {
+        let respuestas = [];
+
+        if ([5, 10].includes(parseInt(idSerie))) {
+            // Series de texto libre
+            respuestas = await respuestasTermanModel.fetchRespuestasTextoLibre(idAspirante, idGrupo, idSerie);
+        } else {
+            // Series normales con opciones
+            respuestas = await respuestasTermanModel.fetchRespuestasOpciones(idAspirante, idGrupo, idSerie);
+        }
+
+        console.log(respuestas);
+        return res.json({ success: true, respuestas });
+    } catch (error) {
+        console.error("Error trayendo respuestas de Terman:", error);
+        return res.status(500).json({ success: false, message: "Error interno del servidor." });
+    }
+};
+
+
+
+function obtenerTotalPorSerie(numeroSerie) {
+    const totales = {
+        1: 16, 2: 22, 3: 30, 4: 18, 5: 24,
+        6: 20, 7: 20, 8: 17, 9: 18, 10: 22
+    };
+    return totales[numeroSerie] || 1; // Por si acaso
+}
+
+function reglaDeTres(valor, totalMaximo) {
+    return (valor / totalMaximo) * 100;
+}
+
+exports.getAnalisisTerman = async (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+
+    try {
+        // console.log("Entró al try de getAnalisisTerman");
+        // 1. Buscar calificación
+        const calificacionExistente = await calificacionTerman.fetchCalificacionById(idAspirante, idGrupo);
+        // console.log("calificacionExistente:", calificacionExistente);
+
+        // 2. Si NO existe, hacemos la calificación
+        if (!calificacionExistente || calificacionExistente.length === 0) {
+            console.log('No existe análisis previo. Calificando...');
+
+            // Calificar series
+            const series = [1,2,3,4,5,6,7,8,9,10];
+            for (const idSerie of series) {
+                const respuestasAspirante = await respuestasTermanModel.fetchRespuestasSerieById(idAspirante, idGrupo, idSerie);
+                if (idSerie >= 1 && idSerie <= 9) {
+                    for (const resp of respuestasAspirante) {
+                        if (typeof resp.respuestaAbierta === 'string') {
+                            resp.respuestaAbierta = parseInt(resp.respuestaAbierta, 10);
+                        }
+                    }
+                }
+
+                // console.log(respuestasAspirante);
+
+                if (respuestasAspirante.length > 0) {
+                    await calificarSerieTerman(idSerie, idAspirante, idGrupo, respuestasAspirante);
+                }
+            }
+        }
+
+        // 3. Buscar usuario y análisis ya guardado
+        const [rows] = await Aspirante.getInformacionAspirante(idAspirante);
+        const aspiranteData = rows[0];
+        const calificacion = await calificacionTerman.fetchCalificacionById(idAspirante, idGrupo);
+        const series = await resultadoSerieTerman.fetchSeriesById(idAspirante, idGrupo);
+
+        // console.log("AspiranteData: ", aspiranteData)
+        // console.log("Calificación: ", calificacion)
+        // console.log("Series: ", series)
+
+        if (!aspiranteData || !calificacion || !series || series.length === 0) {
+            return response.status(404).send("No se encontraron datos suficientes para el análisis.");
+        }
+
+        const resultados = series.map(serie => ({
+            numero: serie.idSerieTerman,
+            categoria: serie.categoria,
+            puntuacion: serie.puntuacion,
+            rango: serie.rango,
+            porcentaje: reglaDeTres(serie.puntuacion, obtenerTotalPorSerie(serie.idSerieTerman))
+        }));
+        
+        console.log(resultados);
+
+        const resumen = {
+            nombreCompleto: `${aspiranteData.nombreUsuario} ${aspiranteData.apellidoPaterno} ${aspiranteData.apellidoMaterno}`,
+            puntosTotales: calificacion[0].puntosTotales,
+            rango: calificacion[0].rango,
+            coeficienteIntelectual: calificacion[0].coeficienteIntelectual
+        };
+        
+        console.log(resumen);
+
+        // 4. Renderizar
+        return response.render('Psicologos/analisisTerman', {
+            resumen,
+            resultados,
+            resultadosJSON: JSON.stringify(resultados),
+            idAspirante,
+            idGrupo,
+            idInstitucion: request.params.idInstitucion || null,
+        });
+        
+
+    } catch (error) {
+        console.error('Error en get_analisisTerman:', error);
     }
 };
 //16PF y Kostick

@@ -8,6 +8,11 @@ const PruebaColores = require('../models/prueba.model');
 const PruebaOtis = require('../models/prueba.model');
 const OpcionOtis = require('../models/opcionOtis.model.js');
 const Aspirante = require('../models/aspirante.model');
+const Terman = require('../models/terman.model');
+const respuestasTerman = require('../models/respuestasTerman.model');
+
+// Middlewares de apoyo
+const calificarSerieTerman = require("../middleware/calificarTerman.js");
 
 
 //hartman requires
@@ -314,6 +319,7 @@ exports.getPruebaOtis = (request, response, next) => {
     PruebaOtis.getGrupoPrueba(request.session.idAspirante, idPrueba)
         .then(([rows, fieldData]) => {
             if (rows.length > 0) {
+                console.log( request.session.idGrupo);
                 request.session.idGrupo = rows[0].idGrupo;
                 request.session.idPrueba = idPrueba;
             } else {
@@ -615,6 +621,126 @@ exports.getPruebaCompletada = (request, response, next) => {
 
 exports.getRespuestasEnviadas = (request, response, next) => {
     response.render('Aspirantes/respuestasEnviadas');
+};
+
+// Controladores para prueba Terman
+
+exports.getResponderTerman = (req, res, next) => {
+    res.render("Aspirantes/responderTerman", {
+        title: "Responder Terman"
+    });
+};
+
+exports.getInfoSerie = (req, res, next) => {
+    const idSerie = parseInt(req.params.idSerie);
+    console.log("Valor recibido en req.params.idSerie:", idSerie);
+
+    if (!idSerie || isNaN(idSerie)) {
+        return res.status(400).json({ error: "ID de serie inválido o no proporcionado." });
+    }
+
+    const idPrueba = 4;
+    let nombreSeccion, instruccion, preguntas, opciones;
+
+    console.log(req.session.idAspirante)
+
+    Terman.getGrupoPrueba(req.session.idAspirante, idPrueba)
+        .then(([rows, fieldData]) => {
+            if (rows.length > 0) {
+                req.session.idGrupo = rows[0].idGrupo;
+                req.session.idPrueba = idPrueba;
+            } else {
+                console.log("No se encontró grupo para este aspirante y prueba");
+            }
+
+            return Terman.fetchSerieInfoById(idSerie);
+        })
+        .then(info => {
+            if (info.length === 0) {
+                throw new Error("No se encontró información para la serie con ese ID.");
+            }
+            id = info[0].idSerieTerman;
+            nombreSeccion = info[0].nombreSeccion;
+            instruccion = info[0].instruccion;
+            duracion = info[0].duracion;
+
+            return Terman.fetchPreguntaSerieById(idSerie);
+        })
+        .then(preguntasRows => {
+            preguntas = preguntasRows;
+            return Terman.fetchOpcionesSerieById(idSerie);
+        })
+        .then(opcionesRows => {
+            opciones = opcionesRows;
+
+            // Adjunta las opciones a cada pregunta
+            const preguntasConOpciones = preguntas.map(p => {
+                p.opciones = opciones.filter(o => o.idPreguntaTerman === p.idPreguntaTerman);
+                return p;
+            });
+
+            res.json({
+                id,
+                nombreSeccion,
+                instruccion,
+                duracion,
+                preguntas: preguntasConOpciones
+            });
+        })
+        .catch(error => {
+            console.error("Error al cargar serie:", error);
+            res.status(500).json({ error: "Error al cargar la serie." });
+        });
+};
+
+exports.postRespuestaTerman = async (req, res, next) => {
+    try {
+        // Constantes de construcción
+
+        const idPreguntaTerman = parseInt(req.params.idPreguntaTerman);
+        const { respuesta, tiempo } = req.body;
+        const idAspirante = req.session.idAspirante;
+        const idGrupo = req.session.idGrupo;
+        const idPrueba = 4;
+
+        console.log("📥 req.params.idPreguntaTerman:", req.params.idPreguntaTerman);
+        console.log("📥 req.body:", req.body);
+        console.log("📥 req.session:", req.session.idAspirante);
+        console.log("📥 req.session:", req.session.idGrupo);
+
+
+        const respuestas = new respuestasTerman(idAspirante, idGrupo, idPrueba, [
+            { idPregunta: idPreguntaTerman, opcion: respuesta, tiempo }
+        ]);
+
+        await respuestas.save();
+
+        const [rows] = await Terman.verificarExistencia(
+            idAspirante,
+            idGrupo,
+            idPrueba
+        );
+    
+        if (rows.length === 0) {
+            await db.execute(
+                `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
+                VALUES (?, ?, ?, 2)`,
+                [idAspirante, idGrupo, idPrueba]
+            );
+        } else {
+            await Terman.updateEstatusPrueba(
+                idAspirante,
+                idGrupo,
+                idPrueba
+            );
+        }
+
+        res.status(200).json({ ok: true, message: "Respuestas guardadas" });
+
+    } catch (error) {
+        console.log("Algo salió mal en post_respuestasSerie:", error);
+        res.status(500).json({ error: "Error al guardar respuestas" });
+    }
 };
 
 
