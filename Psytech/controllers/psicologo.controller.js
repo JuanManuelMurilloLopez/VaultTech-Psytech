@@ -1573,16 +1573,28 @@ exports.getCuadernillo16PF = (request, response, next) => {
                     const resultados = rows;
                     const opciones = resultados.map(r => r.opcion16PF);
                     const descripcionOpciones = resultados.map(r => r.descripcionOpcion16PF);
-                    response.render('Psicologos/cuadernillo16PF', {
-                        prueba: "Personalidad 16 Factores (16 PF)",
-                        grupo: grupo || null,
-                        valores: resultados[0][0],
-                        datos: datosAspirante || null,
-                        aspirante: datosAspirante || null,
-                        preguntas: preguntas16PF || [],
-                        opciones: opciones || [],
-                        descripcion: descripcionOpciones || [],
+                    Prueba.getDatosPersonalesAspiranteKostick(idGrupo, idAspirante)
+                    .then(([rows, fieldData]) => {
+                        const datosPersonales = rows;
+                        console.log("Preguntas 16PF");
+                        console.log(preguntas16PF);
+                        response.render('Psicologos/cuadernillo16PF', {
+                            prueba: "Personalidad 16 Factores (16 PF)",
+                            grupo: grupo || null,
+                            valores: resultados[0][0],
+                            datos: datosPersonales || null,
+                            aspirante: datosAspirante || null,
+                            preguntas: preguntas16PF || [],
+                            opciones: opciones || [],
+                            descripcion: descripcionOpciones || [],
+                            idAspirante: request.params.idAspirante,
+                            idInstitucion: request.params.idInstitucion,
+                            idGrupo: request.params.idGrupo,
+                        })
                     })
+                    .catch((error) => {
+                        console.log(error);
+                    });
                 })
                 .catch((error) => {
                     console.log(error);
