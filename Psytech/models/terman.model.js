@@ -44,7 +44,7 @@ class Terman {
 
     static async fetchRespuestasAspiranteById(idAspirante, idGrupo, idSerie) {
         const [respuestasAspirante] = await db.execute(
-            'SELECT p.numeroPregunta, p.preguntaTerman, o.descripcionTerman AS respuestaAspirante, r.tiempoRespuesta FROM respuestasterman r INNER JOIN preguntasterman p ON r.idPreguntaTerman = p.idPreguntaTerman INNER JOIN opcionesterman o ON o.idPreguntaTerman = p.idPreguntaTerman AND o.opcionTerman = r.respuestaAbierta WHERE p.idSerieTerman = ? AND r.idAspirante = ? AND r.idGrupo = ? ORDER BY p.numeroPregunta ASC;',
+            'SELECT p.numeroPregunta, p.preguntaTerman, o.descripcionTerman AS respuestaAspirante, r.tiempoRespuesta FROM respuestastermanaspirante r INNER JOIN preguntasterman p ON r.idPreguntaTerman = p.idPreguntaTerman INNER JOIN opcionesterman o ON o.idPreguntaTerman = p.idPreguntaTerman AND o.opcionTerman = r.respuestaAbierta WHERE p.idSerieTerman = ? AND r.idAspirante = ? AND r.idGrupo = ? ORDER BY p.numeroPregunta ASC;',
             [idSerie, idAspirante, idGrupo]
         )
         return respuestasAspirante;

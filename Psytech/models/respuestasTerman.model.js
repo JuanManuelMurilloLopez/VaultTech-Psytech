@@ -32,15 +32,15 @@ class respuestasTerman {
             });
     }
 
-    async fetchRespuestasSerieById(idAspirante, idGrupo, idSerie) {
+    static async fetchRespuestasSerieById(idAspirante, idGrupo, idSerie) {
         const [respuestasAspirante] = await db.execute(
-            'SELECT * from respuestasterman WHERE idAspirante = ? AND idGrupo = ? AND idPreguntaTerman IN (SELECT idPreguntaTerman FROM preguntasterman WHERE idSerieTerman = ?)',
+            'SELECT * from respuestastermanaspirante WHERE idAspirante = ? AND idGrupo = ? AND idPreguntaTerman IN (SELECT idPreguntaTerman FROM preguntasterman WHERE idSerieTerman = ?)',
             [idAspirante, idGrupo, idSerie]
         )
         return respuestasAspirante;
     }
 
-    async fetchRespuestasOpciones(idAspirante, idGrupo, idSerie) {
+    static async fetchRespuestasOpciones(idAspirante, idGrupo, idSerie) {
         const [respuestasAspirante] = await db.execute(
             `SELECT 
                 p.numeroPregunta,
@@ -51,7 +51,7 @@ class respuestasTerman {
                 END AS respuestaAspirante,
                 r.tiempoRespuesta
             FROM 
-                respuestasterman r
+                respuestastermanaspirante r
             INNER JOIN 
                 preguntasterman p ON r.idPreguntaTerman = p.idPreguntaTerman
             LEFT JOIN 
@@ -68,7 +68,7 @@ class respuestasTerman {
         return respuestasAspirante;
     }
 
-    async fetchRespuestasTextoLibre(idAspirante, idGrupo, idSerie) {
+    static async fetchRespuestasTextoLibre(idAspirante, idGrupo, idSerie) {
         const [respuestasAspirante] = await db.execute(
             `SELECT 
                 p.numeroPregunta,
@@ -79,7 +79,7 @@ class respuestasTerman {
                 END AS respuestaAspirante,
                 r.tiempoRespuesta
             FROM 
-                respuestasterman r
+                respuestastermanaspirante r
             INNER JOIN 
                 preguntasterman p ON r.idPreguntaTerman = p.idPreguntaTerman
             WHERE 

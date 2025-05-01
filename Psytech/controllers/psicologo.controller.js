@@ -17,8 +17,10 @@ const Familiar = require('../models/formularioFamiliares.model.js');
 // Modelos terman
 const respuestasTermanModel = require('../models/respuestasTerman.model.js');
 const calificacionesTerman = require('../models/calificacionesTerman.model.js');
+const calificacionTerman = new calificacionesTerman();
 const resultadosSeriesTerman = require('../models/resultadosSeriesTerman.model.js');
-const terman = require('../models/terman.model.js');
+const resultadoSerieTerman = new resultadosSeriesTerman();
+
 // Middleware de apoyo para calificar Terman
 const calificarSerieTerman = require("../middleware/calificarTerman.js");
 
@@ -1316,6 +1318,30 @@ exports.getPruebaOtis = async (req, res, next) => {
 
 // Análisis Terman
 
+exports.getRespuestasSerie = async (req, res) => {
+    const { idAspirante, idGrupo, idSerie } = req.params;
+
+    try {
+        let respuestas = [];
+
+        if ([5, 10].includes(parseInt(idSerie))) {
+            // Series de texto libre
+            respuestas = await respuestasTermanModel.fetchRespuestasTextoLibre(idAspirante, idGrupo, idSerie);
+        } else {
+            // Series normales con opciones
+            respuestas = await respuestasTermanModel.fetchRespuestasOpciones(idAspirante, idGrupo, idSerie);
+        }
+
+        console.log(respuestas);
+        return res.json({ success: true, respuestas });
+    } catch (error) {
+        console.error("Error trayendo respuestas de Terman:", error);
+        return res.status(500).json({ success: false, message: "Error interno del servidor." });
+    }
+};
+
+
+
 function obtenerTotalPorSerie(numeroSerie) {
     const totales = {
         1: 16, 2: 22, 3: 30, 4: 18, 5: 24,
@@ -1331,43 +1357,37 @@ function reglaDeTres(valor, totalMaximo) {
 exports.getAnalisisTerman = async (request, response, next) => {
     const idAspirante = request.params.idAspirante;
     const idGrupo = request.params.idGrupo;
-    const idPrueba = 4;
-    const sesionAspirante = await sesionPruebaModel.fetchById({ idAspirante, idGrupo, idPrueba });
 
     try {
+        // console.log("🧪 Entró al try de getAnalisisTerman");
         // 1. Buscar calificación
         const calificacionExistente = await calificacionTerman.fetchCalificacionById(idAspirante, idGrupo);
+        // console.log("calificacionExistente:", calificacionExistente);
 
         // 2. Si NO existe, hacemos la calificación
         if (!calificacionExistente || calificacionExistente.length === 0) {
             console.log('No existe análisis previo. Calificando...');
 
-            const sesionAspirante = await sesionPruebaModel.fetchById({ idAspirante, idGrupo, idPrueba });
-
-            if (!sesionAspirante || sesionAspirante.length === 0) {
-                return response.status(403).render('error/error.pug', {
-                    message: "No hay asignación de prueba Terman para este aspirante.",
-                    volverAtras: true
-                });
-            }
-
-
-        // Calificar series
-        const series = [1,2,3,4,5,6,7,8,9,10];
-        for (const idSerie of series) {
-            const respuestasAspirante = await respuestasTerman.fetchRespuestasSerieById(idAspirante, idGrupo, idSerie);
-            if (idSerie >= 1 && idSerie <= 9) {
-                for (const resp of respuestasAspirante) {
-                    if (typeof resp.respuestaAbierta === 'string') {
-                        resp.respuestaAbierta = parseInt(resp.respuestaAbierta, 10);
+            // Calificar series
+            const series = [1,2,3,4,5,6,7,8,9,10];
+            for (const idSerie of series) {
+                const respuestasAspirante = await respuestasTermanModel.fetchRespuestasSerieById(idAspirante, idGrupo, idSerie);
+                if (idSerie >= 1 && idSerie <= 9) {
+                    for (const resp of respuestasAspirante) {
+                        if (typeof resp.respuestaAbierta === 'string') {
+                            resp.respuestaAbierta = parseInt(resp.respuestaAbierta, 10);
+                        }
                     }
                 }
-            }
-            if (respuestasAspirante.length > 0) {
-                await calificarSerieTerman(idSerie, idAspirante, idGrupo, respuestasAspirante);
+
+                console.log(respuestasAspirante);
+
+                if (respuestasAspirante.length > 0) {
+                    await calificarSerieTerman(idSerie, idAspirante, idGrupo, respuestasAspirante);
+                    // console.log("Entra?")
+                }
             }
         }
-    }
 
         // 3. Buscar usuario y análisis ya guardado
         const [rows] = await Aspirante.getInformacionAspirante(idAspirante);
@@ -1376,6 +1396,9 @@ exports.getAnalisisTerman = async (request, response, next) => {
         const series = await resultadoSerieTerman.fetchSeriesById(idAspirante, idGrupo);
 
         console.log("AspiranteData: ", aspiranteData)
+        console.log("Calificación: ", calificacion)
+        console.log("Series: ", series)
+
         /*
         
         console.log("calificacion: ", calificacion)
@@ -1391,22 +1414,27 @@ exports.getAnalisisTerman = async (request, response, next) => {
             puntuacion: serie.puntuacion,
             rango: serie.rango,
             porcentaje: reglaDeTres(serie.puntuacion, obtenerTotalPorSerie(serie.idSerieTerman))
-        }));        
+        }));
+        
+        console.log(resultados);
 
         const resumen = {
-            nombreCompleto: `${aspiranteData.nombre} ${aspiranteData.apellidoPaterno} ${aspiranteData.apellidoMaterno}`,
+            nombreCompleto: `${aspiranteData.nombreUsuario} ${aspiranteData.apellidoPaterno} ${aspiranteData.apellidoMaterno}`,
             puntosTotales: calificacion[0].puntosTotales,
             rango: calificacion[0].rango,
             coeficienteIntelectual: calificacion[0].coeficienteIntelectual
         };
         
+        console.log(resumen);
 
         // 4. Renderizar
-        return response.render('pruebas/terman/analisisTerman.pug', {
+        return response.render('Psicologos/analisisTerman', {
             resumen,
             resultados,
             resultadosJSON: JSON.stringify(resultados),
-            estatusPrueba: sesionAspirante[0].estatus
+            idAspirante,
+            idGrupo,
+            idInstitucion: request.params.idInstitucion || null,
         });
         
 
