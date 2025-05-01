@@ -118,8 +118,8 @@
 <!-- Script del navside -->
 <script src="/js/_navside.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 <script>
   function descargar() {
     window.print();
@@ -655,1381 +655,1317 @@ if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valo
   
 
 <script class="grafica">
-                console.log("Valores en vista:");
-                 const valores = <%- JSON.stringify(valores) %>;
-                 console.log(valores);
-                 let data;
-                 const ctx = document.getElementById("graph").getContext("2d");
-                 const prueba = <%- JSON.stringify(prueba) %>;
+    console.log("Valores en vista:");
+    const valores = <%- (typeof valores !== 'undefined' && valores) ? JSON.stringify(valores) : '{}' %>;              
+    console.log(valores);
+    const ctx = document.getElementById("graph").getContext("2d");
+    const prueba = <%- JSON.stringify(prueba) %>;
+    let myChart;
 
-                 if (prueba === "El inventario de Percepción Kostick") {
-                   const interpretaciones = <%- JSON.stringify(interpretaciones) %>;
-                   const descripcionesKostickBaja = {
-                   "C": "Desordenada",
-                   "D": "No Detallista",
-                   "R": "Práctico",
-                   "O": "No Nec. Afecto",
-                   "B": "Individualista",
-                   "S": "Retraído",
-                   "X": "Reservado",
-                   "V": "Trabajo de Oficina",
-                   "T": "No Activo",
-                   "I": "Lento",
-                   "P": "Sin Don de Mando",
-                   "L": "Sin Liderazgo",
-                   "A": "Conformista",
-                   "G": "No es Esfuerza",
-                   "N": "No Persevera",
-                   "W": "Se Ajusta a Cambios",
-                   "F": "Rebelde",
-                   "K": "Pasivo",
-                   "E": "Expresivo",
-                   "Z": "Nec. de Estabilidad"
-                  };
-                  const descripcionesKostickAlta = {
-                   "C": "Tipo Organizado",
-                   "D": "Trabaja con Detalles",
-                   "R": "Tipo Teórico",
-                   "O": "Nec. Afecto",
-                   "B": "Nec. Pertenencia",
-                   "S": "Extensión Social",
-                   "X": "Nec. Reconocimiento",
-                   "V": "Vigor Físico",
-                   "T": "Activo",
-                   "I": "Impulsivo",
-                   "P": "Necesidad de Controlar",
-                   "L": "Liderazgo",
-                   "A": "Nec. de Logro",
-                   "G": "Tenaz e intensp",
-                   "N": "Perseverante",
-                   "W": "Nec. de reglas",
-                   "F": "Sumiso",
-                   "K": "A la Defensiva",
-                   "E": "Inhibido",
-                   "Z": "Nec. de Cambio"
-                  };
-                    data = {
-                     labels: [
-                       "C",
-                       "D",
-                       "R",
-                       "O",
-                       "B",
-                       "S",
-                       "X",
-                       "V",
-                       "T",
-                       "I",
-                       "P",
-                       "L",
-                       "A",
-                       "G",
-                       "N",
-                       "W",
-                       "F",
-                       "K",
-                       "E",
-                       "Z",
-                     ],
-                     datasets: [
-                       {
-                         label: "Gráfico de Resultados Kostick",
-                         data: [
-                           valores.C,
-                           valores.D,
-                           valores.R,
-                           valores.O,
-                           valores.B,
-                           valores.S,
-                           valores.X,
-                           valores.V,
-                           valores.T,
-                           valores.I,
-                           valores.P,
-                           valores.L,
-                           valores.A,
-                           valores.G,
-                           valores.N,
-                           valores.W,
-                           valores.F,
-                           valores.K,
-                           valores.E,
-                           valores.Z,
-                         ],
-                         backgroundColor: [
-                           "rgba(173, 216, 230, 0.7)",
-                           "rgba(173, 216, 230, 0.7)",
-                           "rgba(173, 216, 230, 0.7)",
-                           "rgba(70, 130, 180, 0.7)",
-                           "rgba(70, 130, 180, 0.7)",
-                           "rgba(70, 130, 180, 0.7)",
-                           "rgba(70, 130, 180, 0.7)",
-                           "rgba(135, 206, 235, 0.7)",
-                           "rgba(135, 206, 235, 0.7)",
-                           "rgba(30, 144, 255, 0.7)",
-                           "rgba(30, 144, 255, 0.7)",
-                           "rgba(30, 144, 255, 0.7)",
-                           "rgba(0, 0, 205, 0.7)",
-                           "rgba(0, 0, 205, 0.7)",
-                           "rgba(0, 0, 205, 0.7)",
-                           "rgba(65, 105, 225, 0.7)",
-                           "rgba(65, 105, 225, 0.7)",
-                           "rgba(25, 25, 112, 0.7)",
-                           "rgba(25, 25, 112, 0.7)",
-                           "rgba(25, 25, 112, 0.7)",
-                         ],
-                         borderColor: [
-                           "rgba(173, 216, 230, 1)",
-                           "rgba(173, 216, 230, 1)",
-                           "rgba(173, 216, 230, 1)",
-                           "rgba(70, 130, 180, 1)",
-                           "rgba(70, 130, 180, 1)",
-                           "rgba(70, 130, 180, 1)",
-                           "rgba(70, 130, 180, 1)",
-                           "rgba(135, 206, 235, 1)",
-                           "rgba(135, 206, 235, 1)",
-                           "rgba(30, 144, 255, 1)",
-                           "rgba(30, 144, 255, 1)",
-                           "rgba(30, 144, 255, 1)",
-                           "rgba(0, 0, 205, 1)",
-                           "rgba(0, 0, 205, 1)",
-                           "rgba(0, 0, 205, 1)",
-                           "rgba(65, 105, 225, 1)",
-                           "rgba(65, 105, 225, 1)",
-                           "rgba(25, 25, 112, 1)",
-                           "rgba(25, 25, 112, 1)",
-                           "rgba(25, 25, 112, 1)",
-                         ],
-                         borderWidth: 1,
-                       },
-                     ],
-                   };
+    if (prueba === "El inventario de Percepción Kostick") {
+        const interpretaciones = <%- JSON.stringify(interpretaciones) %>;
+        const descripcionesKostickBaja = {
+            "C": "Desordenada",
+            "D": "No Detallista",
+            "R": "Práctico",
+            "O": "No Nec. Afecto",
+            "B": "Individualista",
+            "S": "Retraído",
+            "X": "Reservado",
+            "V": "Trabajo de Oficina",
+            "T": "No Activo",
+            "I": "Lento",
+            "P": "Sin Don de Mando",
+            "L": "Sin Liderazgo",
+            "A": "Conformista",
+            "G": "No es Esfuerza",
+            "N": "No Persevera",
+            "W": "Se Ajusta a Cambios",
+            "F": "Rebelde",
+            "K": "Pasivo",
+            "E": "Expresivo",
+            "Z": "Nec. de Estabilidad"
+        };
+        const descripcionesKostickAlta = {
+            "C": "Tipo Organizado",
+            "D": "Trabaja con Detalles",
+            "R": "Tipo Teórico",
+            "O": "Nec. Afecto",
+            "B": "Nec. Pertenencia",
+            "S": "Extensión Social",
+            "X": "Nec. Reconocimiento",
+            "V": "Vigor Físico",
+            "T": "Activo",
+            "I": "Impulsivo",
+            "P": "Necesidad de Controlar",
+            "L": "Liderazgo",
+            "A": "Nec. de Logro",
+            "G": "Tenaz e intensp",
+            "N": "Perseverante",
+            "W": "Nec. de reglas",
+            "F": "Sumiso",
+            "K": "A la Defensiva",
+            "E": "Inhibido",
+            "Z": "Nec. de Cambio"
+        };
 
-                   const config = {
-    type: "bar",
-    data: data,
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true,
-          title: {
-            display: true,
-            text: "Valores",
-          },
-        },
-        x: {
-          title: {
-            display: true,
-            text: "Factores",
+        const data = {
+            labels: [
+                "C", "D", "R", "O", "B", "S", "X", "V", "T", "I", 
+                "P", "L", "A", "G", "N", "W", "F", "K", "E", "Z"
+            ],
+            datasets: [
+                {
+                    label: "Gráfico de Resultados Kostick",
+                    data: [
+                        valores.C, valores.D, valores.R, valores.O, valores.B,
+                        valores.S, valores.X, valores.V, valores.T, valores.I,
+                        valores.P, valores.L, valores.A, valores.G, valores.N,
+                        valores.W, valores.F, valores.K, valores.E, valores.Z
+                    ],
+                    backgroundColor: [
+                        "rgba(173, 216, 230, 0.7)", "rgba(173, 216, 230, 0.7)", "rgba(173, 216, 230, 0.7)",
+                        "rgba(70, 130, 180, 0.7)", "rgba(70, 130, 180, 0.7)", "rgba(70, 130, 180, 0.7)", "rgba(70, 130, 180, 0.7)",
+                        "rgba(135, 206, 235, 0.7)", "rgba(135, 206, 235, 0.7)",
+                        "rgba(30, 144, 255, 0.7)", "rgba(30, 144, 255, 0.7)", "rgba(30, 144, 255, 0.7)",
+                        "rgba(0, 0, 205, 0.7)", "rgba(0, 0, 205, 0.7)", "rgba(0, 0, 205, 0.7)",
+                        "rgba(65, 105, 225, 0.7)", "rgba(65, 105, 225, 0.7)",
+                        "rgba(25, 25, 112, 0.7)", "rgba(25, 25, 112, 0.7)", "rgba(25, 25, 112, 0.7)"
+                    ],
+                    borderColor: [
+                        "rgba(173, 216, 230, 1)", "rgba(173, 216, 230, 1)", "rgba(173, 216, 230, 1)",
+                        "rgba(70, 130, 180, 1)", "rgba(70, 130, 180, 1)", "rgba(70, 130, 180, 1)", "rgba(70, 130, 180, 1)",
+                        "rgba(135, 206, 235, 1)", "rgba(135, 206, 235, 1)",
+                        "rgba(30, 144, 255, 1)", "rgba(30, 144, 255, 1)", "rgba(30, 144, 255, 1)",
+                        "rgba(0, 0, 205, 1)", "rgba(0, 0, 205, 1)", "rgba(0, 0, 205, 1)",
+                        "rgba(65, 105, 225, 1)", "rgba(65, 105, 225, 1)",
+                        "rgba(25, 25, 112, 1)", "rgba(25, 25, 112, 1)", "rgba(25, 25, 112, 1)"
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        };
+
+        const config = {
+            type: "bar",
+            data: data,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "Valores"
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: "Factores"
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    annotation: {
+                        annotations: {
+                            line1: {
+                                type: 'line',
+                                yMin: 40,
+                                yMax: 40,
+                                borderColor: 'rgb(255, 0, 0, 0.5)',
+                                borderWidth: 2,
+                                borderDash: [6, 6],
+                                label: {
+                                    content: 'Límite 40',
+                                    enabled: true,
+                                    position: 'center'
+                                }
+                            },
+                            line2: {
+                                type: 'line',
+                                yMin: 60,
+                                yMax: 60,
+                                borderColor: 'rgb(255, 0, 0, 0.5)',
+                                borderWidth: 2,
+                                borderDash: [6, 6]
+                            }
+                        }
+                    }
+                }
+            },
+            plugins: [
+            {
+                    id: 'etiquetasDuales',
+                    afterDraw(chart) {
+                        const ctx = chart.ctx;
+                        const xAxis = chart.scales.x;
+                        if(!xAxis) return;
+                        
+                        const baseY = chart.chartArea.bottom;
+                        const topY = chart.chartArea.top;
+
+                        ctx.save();
+                        ctx.font = "bold 12px Arial";
+                        ctx.fillStyle = "#fffff";
+
+                        chart.data.datasets.forEach(dataset => {
+                            dataset.data.forEach((value, index) => {
+                                const bar = chart.getDatasetMeta(0).data[index];
+                                const x = bar.x;
+                                const descripcionBaja = descripcionesKostickBaja[chart.data.labels[index]] || chart.data.labels[index];
+                                const descripcionAlta = descripcionesKostickAlta[chart.data.labels[index]] || chart.data.labels[index];
+
+                                // Etiquetas INFERIORES (base)
+                                ctx.save();
+                                ctx.textBaseline = "top";
+                                ctx.translate(x - 3, baseY - 10);
+                                ctx.rotate(-Math.PI/2);
+                                ctx.fillText(descripcionBaja, 0, 0);
+                                ctx.restore();
+
+                                // Etiquetas SUPERIORES (tope)
+                                ctx.save();
+                                ctx.textBaseline = "bottom";
+                                ctx.translate(x - 3, topY + 10);
+                                ctx.rotate(Math.PI/2);
+                                ctx.fillText(descripcionAlta, 0, 0);
+                                ctx.restore();
+                            });
+                        });
+                        ctx.restore();
+
+                        // Dibujamos manualmente las líneas si no usamos el plugin de anotaciones
+                        const y40 = chart.scales.y.getPixelForValue(40);
+                        const y60 = chart.scales.y.getPixelForValue(60);
+                        const chartArea = chart.chartArea;
+
+                        ctx.save();
+                        ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+                        ctx.lineWidth = 2;
+                        ctx.setLineDash([6, 6]);
+
+                        // Línea en y=40
+                        ctx.beginPath();
+                        ctx.moveTo(chartArea.left, y40);
+                        ctx.lineTo(chartArea.right, y40);
+                        ctx.stroke();
+
+                        // Línea en y=60
+                        ctx.beginPath();
+                        ctx.moveTo(chartArea.left, y60);
+                        ctx.lineTo(chartArea.right, y60);
+                        ctx.stroke();
+
+                        ctx.restore();
+                    }
+                }
+            ]
+        };
+        
+        // Inicializar la grafica de Kostick
+        myChart = new Chart(ctx, config);
+        
+        insertarInterpretacionKostick(valores, interpretaciones);
+      } else if (prueba === "Personalidad 16 Factores (16 PF)") {
+        const genero = <%- JSON.stringify(idGenero) %>;
+
+        document.getElementById("Interpretacion").innerHTML += `<div id="primarias"><strong>ESCALAS PRIMARIAS<br></strong></div>
+        <div id="globales"><strong><br>FACTORES GLOBALES</strong><br></div>`;
+
+        let DES = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let niveles = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        const adj1 = ["RETRAIDO", "LENTO", "INFANTIL", "SUMISO", "TACITURNO", "VARIABLE", "TIMIDO", "EMOCIONAL", "SOSPECHOSO", "EXCENTRICO", "SIMPLE", "INSEGURO", "RUTINARIO", "DEPENDIENTE", "DESCONTROLADO", "TENSO", "EXTRAVERSIÓN BAJA", "ANSIEDAD BAJA", "DUREZA BAJA", "INDEPENDENCIA BAJA", "AUTOCONTROL BAJO"];
+        const adj2 = ["SOCIABLE", "RÁPIDO", "MADURO", "DOMINANTE", "ENTUSIASTA", "CONSTANTE", "AVENTURADO", "RACIONAL", "CONFIABLE", "CONVENCIONAL", "SOFISTICADO", "SEGURO DE SÍ", "INNOVADOR", "AUTOSUFICIENTE", "CONTROLADO", "ESTABLE", "EXTRAVERSIÓN ALTA", "ANSIEDAD ALTA", "DUREZA ALTA", "INDEPENDENCIA ALTA", "AUTOCONTROL ALTO"];
+        let adj = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""];
+        const letras = ['A', 'B', 'C', 'E', 'F', 'G', 'H', 'I', 'L', 'M', 'N', 'O', 'Q1', 'Q2', 'Q3', 'Q4', 'EX', 'AX', 'TM', 'IN', 'SC'];
+
+        if (genero == 1){
+          switch (true) {
+            case valores.A < 7:
+            DES[0] = 1;
+            break;
+            case valores.A < 9:
+            DES[0] = 2;
+            break;
+            case valores.A < 12:
+            DES[0] = 3;
+            break;
+            case valores.A < 14:
+            DES[0] = 4;
+            break;
+            case valores.A < 16:
+            DES[0] = 5;
+            break;
+            case valores.A < 18:
+            DES[0] = 6;
+            break;
+            case valores.A < 20:
+            DES[0] = 7;
+            break;
+            case valores.A < 21:
+            DES[0] = 8;
+            break;
+            case valores.A < 22:
+            DES[0] = 9;
+            break;
+            default:
+            DES[0] = 10;
+            break;
+          }
+          switch (true) {
+            case valores.C < 4:
+            DES[2] = 1;
+            break;
+            case valores.C < 7:
+            DES[2] = 2;
+            break;
+            case valores.C < 10:
+            DES[2] = 3;
+            break;
+            case valores.C < 13:
+            DES[2] = 4;
+            break;
+            case valores.C < 16:
+            DES[2] = 5;
+            break;
+            case valores.C < 18:
+            DES[2] = 6;
+            break;
+            case valores.C < 19:
+            DES[2] = 7;
+            break;
+            case valores.C < 21:
+            DES[2] = 8;
+            break;
+            default:
+            DES[2] = 9;
+            break;
+          }
+
+          switch (true) {
+            case valores.E < 4:
+            DES[3] = 1;
+            break;
+            case valores.E < 6:
+            DES[3] = 2;
+            break;
+            case valores.E < 8:
+            DES[3] = 3;
+            break;
+            case valores.E < 11:
+            DES[3] = 4;
+            break;
+            case valores.E < 14:
+            DES[3] = 5;
+            break;
+            case valores.E < 16:
+            DES[3] = 6;
+            break;
+            case valores.E < 18:
+            DES[3] = 7;
+            break;
+            case valores.E < 19:
+            DES[3] = 8;
+            break;
+            default:
+            DES[3] = 9;
+            break;
+          }
+
+          switch (true) {
+            case valores.F < 4:
+            DES[4] = 1;
+            break;
+            case valores.F < 6:
+            DES[4] = 2;
+            break;
+            case valores.F < 9:
+            DES[4] = 3;
+            break;
+            case valores.F < 12:
+            DES[4] = 4;
+            break;
+            case valores.F < 14:
+            DES[4] = 5;
+            break;
+            case valores.F < 16:
+            DES[4] = 6;
+            break;
+            case valores.F < 18:
+            DES[4] = 7;
+            break;
+            case valores.F < 19:
+            DES[4] = 8;
+            break;
+            case valores.F < 20:
+            DES[4] = 9;
+            break;
+            default:
+            DES[4] = 10;
+            break;
+          }
+
+          switch (true) {
+            case valores.I < 4:
+            DES[7] = 1;
+            break;
+            case valores.I < 7:
+            DES[7] = 2;
+            break;
+            case valores.I < 9:
+            DES[7] = 3;
+            break;
+            case valores.I < 12:
+            DES[7] = 4;
+            break;
+            case valores.I < 14:
+            DES[7] = 5;
+            break;
+            case valores.I < 17:
+            DES[7] = 6;
+            break;
+            case valores.I < 19:
+            DES[7] = 7;
+            break;
+            case valores.I < 21:
+            DES[7] = 8;
+            break;
+            case valores.I < 22:
+            DES[7] = 9;
+            break;
+            default:
+            DES[7] = 10;
+            break;
+          }
+
+          switch (true) {
+            case valores.O < 4:
+            DES[11] = 1;
+            break;
+            case valores.O < 5:
+            DES[11] = 2;
+            break;
+            case valores.O < 7:
+            DES[11] = 3;
+            break;
+            case valores.O < 10:
+            DES[11] = 4;
+            break;
+            case valores.O < 13:
+            DES[11] = 5;
+            break;
+            case valores.O < 16:
+            DES[11] = 6;
+            break;
+            case valores.O < 18:
+            DES[11] = 7;
+            break;
+            case valores.O < 20:
+            DES[11] = 8;
+            break;
+            default:
+            DES[11] = 9;
+            break;
+          }
+
+          switch (true) {
+            case valores.Q1 < 11:
+            DES[12] = 1;
+            break;
+            case valores.Q1 < 14:
+            DES[12] = 2;
+            break;
+            case valores.Q1 < 17:
+            DES[12] = 3;
+            break;
+            case valores.Q1 < 20:
+            DES[12] = 4;
+            break;
+            case valores.Q1 < 21:
+            DES[12] = 5;
+            break;
+            case valores.Q1 < 22:
+            DES[12] = 6;
+            break;
+            case valores.Q1 < 24:
+            DES[12] = 7;
+            break;
+            case valores.Q1 < 26:
+            DES[12] = 8;
+            break;
+            case valores.Q1 < 28:
+            DES[12] = 9;
+            break;
+            default:
+            DES[12] = 10;
+            break;
+          }
+
+          switch (true) {
+            case valores.Q4 < 2:
+            DES[15] = 1;
+            break;
+            case valores.Q4 < 3:
+            DES[15] = 2;
+            break;
+            case valores.Q4 < 5:
+            DES[15] = 3;
+            break;
+            case valores.Q4 < 7:
+            DES[15] = 4;
+            break;
+            case valores.Q4 < 10:
+            DES[15] = 5;
+            break;
+            case valores.Q4 < 13:
+            DES[15] = 6;
+            break;
+            case valores.Q4 < 16:
+            DES[15] = 7;
+            break;
+            case valores.Q4 < 18:
+            DES[15] = 8;
+            break;
+            case valores.Q4 < 20:
+            DES[15] = 9;
+            break;
+            default:
+            DES[15] = 10;
+            break;
+          }
+        } else if (genero == 2){
+          switch (true) {
+            case valores.A < 5:
+            DES[0] = 1;
+            break;
+            case valores.A < 8:
+            DES[0] = 2;
+            break;
+            case valores.A < 10:
+            DES[0] = 3;
+            break;
+            case valores.A < 12:
+            DES[0] = 4;
+            break;
+            case valores.A < 14:
+            DES[0] = 5;
+            break;
+            case valores.A < 16:
+            DES[0] = 6;
+            break;
+            case valores.A < 18:
+            DES[0] = 7;
+            break;
+            case valores.A < 20:
+            DES[0] = 8;
+            break;
+            case valores.A < 22:
+            DES[0] = 9;
+            break;
+            default:
+            DES[0] = 10;
+            break;
+          }
+          switch (true) {
+            case valores.C < 6:
+            DES[2] = 1;
+            break;
+            case valores.C < 9:
+            DES[2] = 2;
+            break;
+            case valores.C < 12:
+            DES[2] = 3;
+            break;
+            case valores.C < 15:
+            DES[2] = 4;
+            break;
+            case valores.C < 17:
+            DES[2] = 5;
+            break;
+            case valores.C < 18:
+            DES[2] = 6;
+            break;
+            case valores.C < 19:
+            DES[2] = 7;
+            break;
+            case valores.C < 20:
+            DES[2] = 8;
+            break;
+            default:
+            DES[2] = 9;
+            break;
+          }
+
+          switch (true) {
+            case valores.E < 6:
+            DES[3] = 1;
+            break;
+            case valores.E < 8:
+            DES[3] = 2;
+            break;
+            case valores.E < 10:
+            DES[3] = 3;
+            break;
+            case valores.E < 13:
+            DES[3] = 4;
+            break;
+            case valores.E < 15:
+            DES[3] = 5;
+            break;
+            case valores.E < 17:
+            DES[3] = 6;
+            break;
+            case valores.E < 19:
+            DES[3] = 7;
+            break;
+            case valores.E < 20:
+            DES[3] = 8;
+            break;
+            default:
+            DES[3] = 9;
+            break;
+          }
+
+          switch (true) {
+            case valores.F < 3:
+            DES[4] = 1;
+            break;
+            case valores.F < 5:
+            DES[4] = 2;
+            break;
+            case valores.F < 8:
+            DES[4] = 3;
+            break;
+            case valores.F < 10:
+            DES[4] = 4;
+            break;
+            case valores.F < 13:
+            DES[4] = 5;
+            break;
+            case valores.F < 15:
+            DES[4] = 6;
+            break;
+            case valores.F < 17:
+            DES[4] = 7;
+            break;
+            case valores.F < 19:
+            DES[4] = 8;
+            break;
+            case valores.F < 20:
+            DES[4] = 9;
+            break;
+            default:
+            DES[4] = 10;
+            break;
+          }
+
+          switch (true) {
+            case valores.I < 1:
+            DES[7] = 1;
+            break;
+            case valores.I < 2:
+            DES[7] = 2;
+            break;
+            case valores.I < 4:
+            DES[7] = 3;
+            break;
+            case valores.I < 6:
+            DES[7] = 4;
+            break;
+            case valores.I < 8:
+            DES[7] = 5;
+            break;
+            case valores.I < 11:
+            DES[7] = 6;
+            break;
+            case valores.I < 14:
+            DES[7] = 7;
+            break;
+            case valores.I < 17:
+            DES[7] = 8;
+            break;
+            case valores.I < 20:
+            DES[7] = 9;
+            break;
+            default:
+            DES[7] = 10;
+            break;
+          }
+
+          switch (true) {
+            case valores.O < 1:
+            DES[11] = 1;
+            break;
+            case valores.O < 3:
+            DES[11] = 2;
+            break;
+            case valores.O < 5:
+            DES[11] = 3;
+            break;
+            case valores.O < 8:
+            DES[11] = 4;
+            break;
+            case valores.O < 10:
+            DES[11] = 5;
+            break;
+            case valores.O < 13:
+            DES[11] = 6;
+            break;
+            case valores.O < 16:
+            DES[11] = 7;
+            break;
+            case valores.O < 18:
+            DES[11] = 8;
+            break;
+            case valores.O < 20:
+            DES[11] = 9;
+            break;
+            default:
+            DES[11] = 10;
+            break;
+          }
+
+          switch (true) {
+            case valores.Q1 < 10:
+            DES[12] = 1;
+            break;
+            case valores.Q1 < 13:
+            DES[12] = 2;
+            break;
+            case valores.Q1 < 15:
+            DES[12] = 3;
+            break;
+            case valores.Q1 < 18:
+            DES[12] = 4;
+            break;
+            case valores.Q1 < 21:
+            DES[12] = 5;
+            break;
+            case valores.Q1 < 24:
+            DES[12] = 6;
+            break;
+            case valores.Q1 < 26:
+            DES[12] = 7;
+            break;
+            case valores.Q1 < 28:
+            DES[12] = 8;
+            break;
+            default:
+            DES[12] = 9;
+            break;
+          }
+
+          switch (true) {
+            case valores.Q4 < 1:
+            DES[15] = 1;
+            break;
+            case valores.Q4 < 2:
+            DES[15] = 2;
+            break;
+            case valores.Q4 < 3:
+            DES[15] = 3;
+            break;
+            case valores.Q4 < 6:
+            DES[15] = 4;
+            break;
+            case valores.Q4 < 9:
+            DES[15] = 5;
+            break;
+            case valores.Q4 < 12:
+            DES[15] = 6;
+            break;
+            case valores.Q4 < 15:
+            DES[15] = 7;
+            break;
+            case valores.Q4 < 18:
+            DES[15] = 8;
+            break;
+            case valores.Q4 < 20:
+            DES[15] = 9;
+            break;
+            default:
+            DES[15] = 10;
+            break;
           }
         }
-      },
-      plugins: {
-        legend: {
-          display: false // Oculta la leyenda del label 'Ventas'
-        },
-        annotation: {
-          annotations: [
-            {
-              type: 'line',
-              yMin: 40,
-              yMax: 60,
-              borderColor: 'rgb(255, 0, 255)',
-              borderWidth: 2,
-              borderDash: [6, 6],
-              label: {
-                content: 'Límite 40',
-                enabled: true,
-                position: 'center'
-              }
-            },
-          ]
+
+        switch (true) {
+        case valores.B < 4:
+        DES[1] = 1;
+        break;
+        case valores.B < 5:
+        DES[1] = 2;
+        break;
+        case valores.B < 6:
+        DES[1] = 3;
+        break;
+        case valores.B < 8:
+        DES[1] = 4;
+        break;
+        case valores.B < 9:
+        DES[1] = 5;
+        break;
+        case valores.B < 10:
+        DES[1] = 6;
+        break;
+        case valores.B < 11:
+        DES[1] = 7;
+        break;
+        case valores.B < 12:
+        DES[1] = 8;
+        break;
+        case valores.B < 13:
+        DES[1] = 9;
+        break;
+        default:
+        DES[1] = 10;
+        break;
         }
-      }
-    },
-    plugins: [
-      {
-        id: 'etiquetasDuales',
-        afterDraw(chart) {
-          const ctx = chart.ctx;
-          //const xAxis = chart.scales.x;
-          const xAxis = chart.scales['x-axis-0'];
-          if(!xAxis) return;
-          //const baseY = chart.scales.y.getPixelForValue(0);
-          const yScale = chart.scales['y-axis-0'];
-          const baseY = yScale.getPixelForValue(0);
-          const topY = chart.chartArea.top;
 
-          ctx.save();
-          ctx.font = "bold 12px Arial";
-          ctx.fillStyle = "#fffff";
-
-          chart.data.datasets.forEach(dataset => {
-            dataset.data.forEach((value, index) => {
-              const bar = chart.getDatasetMeta(0).data[index];
-              const x = bar.x;
-              const descripcionBaja = descripcionesKostickBaja[chart.data.labels[index]] || chart.data.labels[index];
-              const descripcionAlta = descripcionesKostickAlta[chart.data.labels[index]] || chart.data.labels[index];
-
-              // Etiquetas INFERIORES (base)
-              ctx.save();
-              ctx.textBaseline = "top";
-              ctx.translate(x - 3, baseY - 10);
-              ctx.rotate(-Math.PI/2);
-              ctx.fillText(descripcionBaja, 0, 0);
-              ctx.restore();
-
-              // Etiquetas SUPERIORES (tope)
-              ctx.save();
-              ctx.textBaseline = "bottom";
-              ctx.translate(x - 3, topY + 10);
-              ctx.rotate(Math.PI/2);
-              ctx.fillText(descripcionAlta, 0, 0);
-              ctx.restore();
-            });
-          });
-          ctx.restore();
-
-          // Dibujamos manualmente las líneas si no usamos el plugin de anotaciones
-          //const y40 = chart.scales.y.getPixelForValue(40);
-          //const y60 = chart.scales.y.getPixelForValue(60);
-          const y40 = yScale.getPixelForValue(40);
-          const y60 = yScale.getPixelForValue(60);
-
-          const chartArea = chart.chartArea;
-
-          ctx.save();
-          ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
-          ctx.lineWidth = 2;
-          ctx.setLineDash([6, 6]);
-
-          // Línea en y=40
-          ctx.beginPath();
-          ctx.moveTo(chartArea.left, y40);
-          ctx.lineTo(chartArea.right, y40);
-          ctx.stroke();
-
-          // Línea en y=60
-          ctx.beginPath();
-          ctx.moveTo(chartArea.left, y60);
-          ctx.lineTo(chartArea.right, y60);
-          ctx.stroke();
-
-          ctx.restore();
+        switch (true) {
+        case valores.G < 2:
+        DES[5] = 1;
+        break;
+        case valores.G < 5:
+        DES[5] = 2;
+        break;
+        case valores.G < 7:
+        DES[5] = 3;
+        break;
+        case valores.G < 10:
+        DES[5] = 4;
+        break;
+        case valores.G < 12:
+        DES[5] = 5;
+        break;
+        case valores.G < 15:
+        DES[5] = 6;
+        break;
+        case valores.G < 18:
+        DES[5] = 7;
+        break;
+        case valores.G < 20:
+        DES[5] = 8;
+        break;
+        case valores.G < 22:
+        DES[5] = 9;
+        break;
+        default:
+        DES[5] = 10;
+        break;
         }
-      }
-    ]
-  };
-  new Chart(ctx, config);
-  insertarInterpretacionKostick(valores, interpretaciones);
-} else if (prueba === "Personalidad 16 Factores (16 PF)") {
-  const genero = <%- JSON.stringify(idGenero) %>;
 
-document.getElementById("Interpretacion").innerHTML += `<div id="primarias"><strong>ESCALAS PRIMARIAS<br></strong></div>
-<div id="globales"><strong><br>FACTORES GLOBALES</strong><br></div>`;
+        switch (true) {
+        case valores.H < 2:
+        DES[6] = 2;
+        break;
+        case valores.H < 5:
+        DES[6] = 3;
+        break;
+        case valores.H < 8:
+        DES[6] = 4;
+        break;
+        case valores.H < 12:
+        DES[6] = 5;
+        break;
+        case valores.H < 15:
+        DES[6] = 6;
+        break;
+        case valores.H < 18:
+        DES[6] = 7;
+        break;
+        case valores.H < 20:
+        DES[6] = 8;
+        break;
+        default:
+        DES[6] = 9;
+        break;
+        }
 
-let DES = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-let niveles = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-const adj1 = ["RETRAIDO", "LENTO", "INFANTIL", "SUMISO", "TACITURNO", "VARIABLE", "TIMIDO", "EMOCIONAL", "SOSPECHOSO", "EXCENTRICO", "SIMPLE", "INSEGURO", "RUTINARIO", "DEPENDIENTE", "DESCONTROLADO", "TENSO", "EXTRAVERSIÓN BAJA", "ANSIEDAD BAJA", "DUREZA BAJA", "INDEPENDENCIA BAJA", "AUTOCONTROL BAJO"];
-const adj2 = ["SOCIABLE", "RÁPIDO", "MADURO", "DOMINANTE", "ENTUSIASTA", "CONSTANTE", "AVENTURADO", "RACIONAL", "CONFIABLE", "CONVENCIONAL", "SOFISTICADO", "SEGURO DE SÍ", "INNOVADOR", "AUTOSUFICIENTE", "CONTROLADO", "ESTABLE", "EXTRAVERSIÓN ALTA", "ANSIEDAD ALTA", "DUREZA ALTA", "INDEPENDENCIA ALTA", "AUTOCONTROL ALTO"];
-let adj = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""];
-const letras = ['A', 'B', 'C', 'E', 'F', 'G', 'H', 'I', 'L', 'M', 'N', 'O', 'Q1', 'Q2', 'Q3', 'Q4', 'EX', 'AX', 'TM', 'IN', 'SC'];
+        switch (true) {
+        case valores.L < 2:
+        DES[8] = 1;
+        break;
+        case valores.L < 3:
+        DES[8] = 2;
+        break;
+        case valores.L < 5:
+        DES[8] = 3;
+        break;
+        case valores.L < 8:
+        DES[8] = 4;
+        break;
+        case valores.L < 10:
+        DES[8] = 5;
+        break;
+        case valores.L < 13:
+        DES[8] = 6;
+        break;
+        case valores.L < 16:
+        DES[8] = 7;
+        break;
+        case valores.L < 18:
+        DES[8] = 8;
+        break;
+        case valores.L < 20:
+        DES[8] = 9;
+        break;
+        default:
+        DES[8] = 10;
+        break;
+        }
 
-if (genero == 1){
-  switch (true) {
-    case valores.A < 7:
-    DES[0] = 1;
-    break;
-    case valores.A < 9:
-    DES[0] = 2;
-    break;
-    case valores.A < 12:
-    DES[0] = 3;
-    break;
-    case valores.A < 14:
-    DES[0] = 4;
-    break;
-    case valores.A < 16:
-    DES[0] = 5;
-    break;
-    case valores.A < 18:
-    DES[0] = 6;
-    break;
-    case valores.A < 20:
-    DES[0] = 7;
-    break;
-    case valores.A < 21:
-    DES[0] = 8;
-    break;
-    case valores.A < 22:
-    DES[0] = 9;
-    break;
-    default:
-    DES[0] = 10;
-    break;
-  }
-  switch (true) {
-    case valores.C < 4:
-    DES[2] = 1;
-    break;
-    case valores.C < 7:
-    DES[2] = 2;
-    break;
-    case valores.C < 10:
-    DES[2] = 3;
-    break;
-    case valores.C < 13:
-    DES[2] = 4;
-    break;
-    case valores.C < 16:
-    DES[2] = 5;
-    break;
-    case valores.C < 18:
-    DES[2] = 6;
-    break;
-    case valores.C < 19:
-    DES[2] = 7;
-    break;
-    case valores.C < 21:
-    DES[2] = 8;
-    break;
-    default:
-    DES[2] = 9;
-    break;
-  }
+        switch (true) {
+        case valores.M < 1:
+        DES[9] = 2;
+        break;
+        case valores.M < 2:
+        DES[9] = 3;
+        break;
+        case valores.M < 4:
+        DES[9] = 4;
+        break;
+        case valores.M < 7:
+        DES[9] = 5;
+        break;
+        case valores.M < 10:
+        DES[9] = 6;
+        break;
+        case valores.M < 14:
+        DES[9] = 7;
+        break;
+        case valores.M < 17:
+        DES[9] = 8;
+        break;
+        case valores.M < 20:
+        DES[9] = 9;
+        break;
+        default:
+        DES[9] = 10;
+        break;
+        }
 
-  switch (true) {
-    case valores.E < 4:
-    DES[3] = 1;
-    break;
-    case valores.E < 6:
-    DES[3] = 2;
-    break;
-    case valores.E < 8:
-    DES[3] = 3;
-    break;
-    case valores.E < 11:
-    DES[3] = 4;
-    break;
-    case valores.E < 14:
-    DES[3] = 5;
-    break;
-    case valores.E < 16:
-    DES[3] = 6;
-    break;
-    case valores.E < 18:
-    DES[3] = 7;
-    break;
-    case valores.E < 19:
-    DES[3] = 8;
-    break;
-    default:
-    DES[3] = 9;
-    break;
-  }
+        switch (true) {
+        case valores.N < 1:
+        DES[10] = 1;
+        break;
+        case valores.N < 3:
+        DES[10] = 2;
+        break;
+        case valores.N < 5:
+        DES[10] = 3;
+        break;
+        case valores.N < 8:
+        DES[10] = 4;
+        break;
+        case valores.N < 11:
+        DES[10] = 5;
+        break;
+        case valores.N < 14:
+        DES[10] = 6;
+        break;
+        case valores.N < 16:
+        DES[10] = 7;
+        break;
+        case valores.N < 18:
+        DES[10] = 8;
+        break;
+        case valores.N < 20:
+        DES[10] = 9;
+        break;
+        default:
+        DES[10] = 10;
+        break;
+        }
 
-  switch (true) {
-    case valores.F < 4:
-    DES[4] = 1;
-    break;
-    case valores.F < 6:
-    DES[4] = 2;
-    break;
-    case valores.F < 9:
-    DES[4] = 3;
-    break;
-    case valores.F < 12:
-    DES[4] = 4;
-    break;
-    case valores.F < 14:
-    DES[4] = 5;
-    break;
-    case valores.F < 16:
-    DES[4] = 6;
-    break;
-    case valores.F < 18:
-    DES[4] = 7;
-    break;
-    case valores.F < 19:
-    DES[4] = 8;
-    break;
-    case valores.F < 20:
-    DES[4] = 9;
-    break;
-    default:
-    DES[4] = 10;
-    break;
-  }
+        switch (true) {
+        case valores.Q2 < 1:
+        DES[13] = 2;
+        break;
+        case valores.Q2 < 3:
+        DES[13] = 3;
+        break;
+        case valores.Q2 < 5:
+        DES[13] = 4;
+        break;
+        case valores.Q2 < 7:
+        DES[13] = 5;
+        break;
+        case valores.Q2 < 10:
+        DES[13] = 6;
+        break;
+        case valores.Q2 < 14:
+        DES[13] = 7;
+        break;
+        case valores.Q2 < 17:
+        DES[13] = 8;
+        break;
+        case valores.Q2 < 19:
+        DES[13] = 9;
+        break;
+        default:
+        DES[13] = 10;
+        break;
+        }
 
-  switch (true) {
-    case valores.I < 4:
-    DES[7] = 1;
-    break;
-    case valores.I < 7:
-    DES[7] = 2;
-    break;
-    case valores.I < 9:
-    DES[7] = 3;
-    break;
-    case valores.I < 12:
-    DES[7] = 4;
-    break;
-    case valores.I < 14:
-    DES[7] = 5;
-    break;
-    case valores.I < 17:
-    DES[7] = 6;
-    break;
-    case valores.I < 19:
-    DES[7] = 7;
-    break;
-    case valores.I < 21:
-    DES[7] = 8;
-    break;
-    case valores.I < 22:
-    DES[7] = 9;
-    break;
-    default:
-    DES[7] = 10;
-    break;
-  }
+        switch (true) {
+        case valores.Q3 < 3:
+        DES[14] = 1;
+        break;
+        case valores.Q3 < 6:
+        DES[14] = 2;
+        break;
+        case valores.Q3 < 9:
+        DES[14] = 3;
+        break;
+        case valores.Q3 < 12:
+        DES[14] = 4;
+        break;
+        case valores.Q3 < 15:
+        DES[14] = 5;
+        break;
+        case valores.Q3 < 17:
+        DES[14] = 6;
+        break;
+        case valores.Q3 < 19:
+        DES[14] = 7;
+        break;
+        case valores.Q3 < 20:
+        DES[14] = 8;
+        break;
+        default:
+        DES[14] = 9;
+        break;
+        }
 
-  switch (true) {
-    case valores.O < 4:
-    DES[11] = 1;
-    break;
-    case valores.O < 5:
-    DES[11] = 2;
-    break;
-    case valores.O < 7:
-    DES[11] = 3;
-    break;
-    case valores.O < 10:
-    DES[11] = 4;
-    break;
-    case valores.O < 13:
-    DES[11] = 5;
-    break;
-    case valores.O < 16:
-    DES[11] = 6;
-    break;
-    case valores.O < 18:
-    DES[11] = 7;
-    break;
-    case valores.O < 20:
-    DES[11] = 8;
-    break;
-    default:
-    DES[11] = 9;
-    break;
-  }
+        let nivelIM = 0;
+        switch (true) {
+        case valores.IM < 6:
+        nivelIM = 10;
+        break;
+        case valores.IM < 8:
+        nivelIM = 20;
+        break;
+        case valores.IM < 10:
+        nivelIM = 30;
+        break;
+        case valores.IM < 12:
+        nivelIM = 40;
+        break;
+        case valores.IM < 15:
+        nivelIM = 50;
+        break;
+        case valores.IM < 17:
+        nivelIM = 60;
+        break;
+        case valores.IM < 19:
+        nivelIM = 70;
+        break;
+        case valores.IM < 21:
+        nivelIM = 80;
+        break;
+        case valores.IM < 23:
+        nivelIM = 90;
+        break;
+        default:
+        nivelIM = 100;
+        break;
+        }
 
-  switch (true) {
-    case valores.Q1 < 11:
-    DES[12] = 1;
-    break;
-    case valores.Q1 < 14:
-    DES[12] = 2;
-    break;
-    case valores.Q1 < 17:
-    DES[12] = 3;
-    break;
-    case valores.Q1 < 20:
-    DES[12] = 4;
-    break;
-    case valores.Q1 < 21:
-    DES[12] = 5;
-    break;
-    case valores.Q1 < 22:
-    DES[12] = 6;
-    break;
-    case valores.Q1 < 24:
-    DES[12] = 7;
-    break;
-    case valores.Q1 < 26:
-    DES[12] = 8;
-    break;
-    case valores.Q1 < 28:
-    DES[12] = 9;
-    break;
-    default:
-    DES[12] = 10;
-    break;
-  }
+        let percentil = 0;
+        switch (true) {
+        case valores.IM < 5:
+        percentil = 1;
+        break;
+        case valores.IM == 5:
+        percentil = 2;
+        break;
+        case valores.IM == 6:
+        percentil = 4;
+        break;
+        case valores.IM == 7:
+        percentil = 6;
+        break;
+        case valores.IM == 8:
+        percentil = 9;
+        break;
+        case valores.IM == 9:
+        percentil = 14;
+        break;
+        case valores.IM == 10:
+        percentil = 19;
+        break;
+        case valores.IM == 11:
+        percentil = 24;
+        break;
+        case valores.IM == 12:
+        percentil = 31;
+        break;
+        case valores.IM == 13:
+        percentil = 38;
+        break;
+        case valores.IM == 14:
+        percentil = 46;
+        break;
+        case valores.IM == 15:
+        percentil = 54;
+        break;
+        case valores.IM == 16:
+        percentil = 62;
+        break;
+        case valores.IM == 17:
+        percentil = 70;
+        break;
+        case valores.IM == 18:
+        percentil = 78;
+        break;
+        case valores.IM == 19:
+        percentil = 84;
+        break;
+        case valores.IM == 20:
+        percentil = 90;
+        break;
+        case valores.IM == 21:
+        percentil = 94;
+        break;
+        case valores.IM == 22:
+        percentil = 97;
+        break;
+        default:
+        percentil = 99;
+        break;
+        }
 
-  switch (true) {
-    case valores.Q4 < 2:
-    DES[15] = 1;
-    break;
-    case valores.Q4 < 3:
-    DES[15] = 2;
-    break;
-    case valores.Q4 < 5:
-    DES[15] = 3;
-    break;
-    case valores.Q4 < 7:
-    DES[15] = 4;
-    break;
-    case valores.Q4 < 10:
-    DES[15] = 5;
-    break;
-    case valores.Q4 < 13:
-    DES[15] = 6;
-    break;
-    case valores.Q4 < 16:
-    DES[15] = 7;
-    break;
-    case valores.Q4 < 18:
-    DES[15] = 8;
-    break;
-    case valores.Q4 < 20:
-    DES[15] = 9;
-    break;
-    default:
-    DES[15] = 10;
-    break;
-  }
-} else if (genero == 2){
-  switch (true) {
-    case valores.A < 5:
-    DES[0] = 1;
-    break;
-    case valores.A < 8:
-    DES[0] = 2;
-    break;
-    case valores.A < 10:
-    DES[0] = 3;
-    break;
-    case valores.A < 12:
-    DES[0] = 4;
-    break;
-    case valores.A < 14:
-    DES[0] = 5;
-    break;
-    case valores.A < 16:
-    DES[0] = 6;
-    break;
-    case valores.A < 18:
-    DES[0] = 7;
-    break;
-    case valores.A < 20:
-    DES[0] = 8;
-    break;
-    case valores.A < 22:
-    DES[0] = 9;
-    break;
-    default:
-    DES[0] = 10;
-    break;
-  }
-  switch (true) {
-    case valores.C < 6:
-    DES[2] = 1;
-    break;
-    case valores.C < 9:
-    DES[2] = 2;
-    break;
-    case valores.C < 12:
-    DES[2] = 3;
-    break;
-    case valores.C < 15:
-    DES[2] = 4;
-    break;
-    case valores.C < 17:
-    DES[2] = 5;
-    break;
-    case valores.C < 18:
-    DES[2] = 6;
-    break;
-    case valores.C < 19:
-    DES[2] = 7;
-    break;
-    case valores.C < 20:
-    DES[2] = 8;
-    break;
-    default:
-    DES[2] = 9;
-    break;
-  }
+        DES[16] = Math.floor(4 + (DES[0] * 0.3) + (DES[4] * 0.3) + (DES[6] * 0.2) - (DES[10] * 0.3) - (DES[13] * 0.3));
+        DES[17] = Math.floor(1.6 + (DES[8] * 0.3) + (DES[11] * 0.4) + (DES[15] * 0.4) - (DES[2] * 0.4));
+        DES[18] = Math.floor(13.8 - (DES[0] * 0.2) - (DES[7] * 0.5) - (DES[9] * 0.3) - (DES[12] * 0.5));
+        DES[19] = Math.floor((DES[3] * 0.6) + (DES[6] * 0.3) + (DES[8] * 0.2) + (DES[12] * 0.3) - 2.2);
+        DES[20] = Math.floor(3.8 + (DES[5] * 0.4) + (DES[14] * 0.4) - (DES[4] * 0.2) - (DES[9] * 0.3));
 
-  switch (true) {
-    case valores.E < 6:
-    DES[3] = 1;
-    break;
-    case valores.E < 8:
-    DES[3] = 2;
-    break;
-    case valores.E < 10:
-    DES[3] = 3;
-    break;
-    case valores.E < 13:
-    DES[3] = 4;
-    break;
-    case valores.E < 15:
-    DES[3] = 5;
-    break;
-    case valores.E < 17:
-    DES[3] = 6;
-    break;
-    case valores.E < 19:
-    DES[3] = 7;
-    break;
-    case valores.E < 20:
-    DES[3] = 8;
-    break;
-    default:
-    DES[3] = 9;
-    break;
-  }
+        switch (true){
+          case DES[0] < 4:
+            niveles[0] = 1;
+            adj[0] = adj1[0]
+            break;
+          case DES[0] < 6:
+            niveles[0] = 2;
+            break;
+          default:
+            niveles[0] = 3;
+            adj[0] = adj2[0]
+            break;
+        }
 
-  switch (true) {
-    case valores.F < 3:
-    DES[4] = 1;
-    break;
-    case valores.F < 5:
-    DES[4] = 2;
-    break;
-    case valores.F < 8:
-    DES[4] = 3;
-    break;
-    case valores.F < 10:
-    DES[4] = 4;
-    break;
-    case valores.F < 13:
-    DES[4] = 5;
-    break;
-    case valores.F < 15:
-    DES[4] = 6;
-    break;
-    case valores.F < 17:
-    DES[4] = 7;
-    break;
-    case valores.F < 19:
-    DES[4] = 8;
-    break;
-    case valores.F < 20:
-    DES[4] = 9;
-    break;
-    default:
-    DES[4] = 10;
-    break;
-  }
-
-  switch (true) {
-    case valores.I < 1:
-    DES[7] = 1;
-    break;
-    case valores.I < 2:
-    DES[7] = 2;
-    break;
-    case valores.I < 4:
-    DES[7] = 3;
-    break;
-    case valores.I < 6:
-    DES[7] = 4;
-    break;
-    case valores.I < 8:
-    DES[7] = 5;
-    break;
-    case valores.I < 11:
-    DES[7] = 6;
-    break;
-    case valores.I < 14:
-    DES[7] = 7;
-    break;
-    case valores.I < 17:
-    DES[7] = 8;
-    break;
-    case valores.I < 20:
-    DES[7] = 9;
-    break;
-    default:
-    DES[7] = 10;
-    break;
-  }
-
-  switch (true) {
-    case valores.O < 1:
-    DES[11] = 1;
-    break;
-    case valores.O < 3:
-    DES[11] = 2;
-    break;
-    case valores.O < 5:
-    DES[11] = 3;
-    break;
-    case valores.O < 8:
-    DES[11] = 4;
-    break;
-    case valores.O < 10:
-    DES[11] = 5;
-    break;
-    case valores.O < 13:
-    DES[11] = 6;
-    break;
-    case valores.O < 16:
-    DES[11] = 7;
-    break;
-    case valores.O < 18:
-    DES[11] = 8;
-    break;
-    case valores.O < 20:
-    DES[11] = 9;
-    break;
-    default:
-    DES[11] = 10;
-    break;
-  }
-
-  switch (true) {
-    case valores.Q1 < 10:
-    DES[12] = 1;
-    break;
-    case valores.Q1 < 13:
-    DES[12] = 2;
-    break;
-    case valores.Q1 < 15:
-    DES[12] = 3;
-    break;
-    case valores.Q1 < 18:
-    DES[12] = 4;
-    break;
-    case valores.Q1 < 21:
-    DES[12] = 5;
-    break;
-    case valores.Q1 < 24:
-    DES[12] = 6;
-    break;
-    case valores.Q1 < 26:
-    DES[12] = 7;
-    break;
-    case valores.Q1 < 28:
-    DES[12] = 8;
-    break;
-    default:
-    DES[12] = 9;
-    break;
-  }
-
-  switch (true) {
-    case valores.Q4 < 1:
-    DES[15] = 1;
-    break;
-    case valores.Q4 < 2:
-    DES[15] = 2;
-    break;
-    case valores.Q4 < 3:
-    DES[15] = 3;
-    break;
-    case valores.Q4 < 6:
-    DES[15] = 4;
-    break;
-    case valores.Q4 < 9:
-    DES[15] = 5;
-    break;
-    case valores.Q4 < 12:
-    DES[15] = 6;
-    break;
-    case valores.Q4 < 15:
-    DES[15] = 7;
-    break;
-    case valores.Q4 < 18:
-    DES[15] = 8;
-    break;
-    case valores.Q4 < 20:
-    DES[15] = 9;
-    break;
-    default:
-    DES[15] = 10;
-    break;
-  }
-}
-
-switch (true) {
-case valores.B < 4:
-DES[1] = 1;
-break;
-case valores.B < 5:
-DES[1] = 2;
-break;
-case valores.B < 6:
-DES[1] = 3;
-break;
-case valores.B < 8:
-DES[1] = 4;
-break;
-case valores.B < 9:
-DES[1] = 5;
-break;
-case valores.B < 10:
-DES[1] = 6;
-break;
-case valores.B < 11:
-DES[1] = 7;
-break;
-case valores.B < 12:
-DES[1] = 8;
-break;
-case valores.B < 13:
-DES[1] = 9;
-break;
-default:
-DES[1] = 10;
-break;
-}
-
-switch (true) {
-case valores.G < 2:
-DES[5] = 1;
-break;
-case valores.G < 5:
-DES[5] = 2;
-break;
-case valores.G < 7:
-DES[5] = 3;
-break;
-case valores.G < 10:
-DES[5] = 4;
-break;
-case valores.G < 12:
-DES[5] = 5;
-break;
-case valores.G < 15:
-DES[5] = 6;
-break;
-case valores.G < 18:
-DES[5] = 7;
-break;
-case valores.G < 20:
-DES[5] = 8;
-break;
-case valores.G < 22:
-DES[5] = 9;
-break;
-default:
-DES[5] = 10;
-break;
-}
-
-switch (true) {
-case valores.H < 2:
-DES[6] = 2;
-break;
-case valores.H < 5:
-DES[6] = 3;
-break;
-case valores.H < 8:
-DES[6] = 4;
-break;
-case valores.H < 12:
-DES[6] = 5;
-break;
-case valores.H < 15:
-DES[6] = 6;
-break;
-case valores.H < 18:
-DES[6] = 7;
-break;
-case valores.H < 20:
-DES[6] = 8;
-break;
-default:
-DES[6] = 9;
-break;
-}
-
-switch (true) {
-case valores.L < 2:
-DES[8] = 1;
-break;
-case valores.L < 3:
-DES[8] = 2;
-break;
-case valores.L < 5:
-DES[8] = 3;
-break;
-case valores.L < 8:
-DES[8] = 4;
-break;
-case valores.L < 10:
-DES[8] = 5;
-break;
-case valores.L < 13:
-DES[8] = 6;
-break;
-case valores.L < 16:
-DES[8] = 7;
-break;
-case valores.L < 18:
-DES[8] = 8;
-break;
-case valores.L < 20:
-DES[8] = 9;
-break;
-default:
-DES[8] = 10;
-break;
-}
-
-switch (true) {
-case valores.M < 1:
-DES[9] = 2;
-break;
-case valores.M < 2:
-DES[9] = 3;
-break;
-case valores.M < 4:
-DES[9] = 4;
-break;
-case valores.M < 7:
-DES[9] = 5;
-break;
-case valores.M < 10:
-DES[9] = 6;
-break;
-case valores.M < 14:
-DES[9] = 7;
-break;
-case valores.M < 17:
-DES[9] = 8;
-break;
-case valores.M < 20:
-DES[9] = 9;
-break;
-default:
-DES[9] = 10;
-break;
-}
-
-switch (true) {
-case valores.N < 1:
-DES[10] = 1;
-break;
-case valores.N < 3:
-DES[10] = 2;
-break;
-case valores.N < 5:
-DES[10] = 3;
-break;
-case valores.N < 8:
-DES[10] = 4;
-break;
-case valores.N < 11:
-DES[10] = 5;
-break;
-case valores.N < 14:
-DES[10] = 6;
-break;
-case valores.N < 16:
-DES[10] = 7;
-break;
-case valores.N < 18:
-DES[10] = 8;
-break;
-case valores.N < 20:
-DES[10] = 9;
-break;
-default:
-DES[10] = 10;
-break;
-}
-
-switch (true) {
-case valores.Q2 < 1:
-DES[13] = 2;
-break;
-case valores.Q2 < 3:
-DES[13] = 3;
-break;
-case valores.Q2 < 5:
-DES[13] = 4;
-break;
-case valores.Q2 < 7:
-DES[13] = 5;
-break;
-case valores.Q2 < 10:
-DES[13] = 6;
-break;
-case valores.Q2 < 14:
-DES[13] = 7;
-break;
-case valores.Q2 < 17:
-DES[13] = 8;
-break;
-case valores.Q2 < 19:
-DES[13] = 9;
-break;
-default:
-DES[13] = 10;
-break;
-}
-
-switch (true) {
-case valores.Q3 < 3:
-DES[14] = 1;
-break;
-case valores.Q3 < 6:
-DES[14] = 2;
-break;
-case valores.Q3 < 9:
-DES[14] = 3;
-break;
-case valores.Q3 < 12:
-DES[14] = 4;
-break;
-case valores.Q3 < 15:
-DES[14] = 5;
-break;
-case valores.Q3 < 17:
-DES[14] = 6;
-break;
-case valores.Q3 < 19:
-DES[14] = 7;
-break;
-case valores.Q3 < 20:
-DES[14] = 8;
-break;
-default:
-DES[14] = 9;
-break;
-}
-
-let nivelIM = 0;
-switch (true) {
-case valores.IM < 6:
-nivelIM = 10;
-break;
-case valores.IM < 8:
-nivelIM = 20;
-break;
-case valores.IM < 10:
-nivelIM = 30;
-break;
-case valores.IM < 12:
-nivelIM = 40;
-break;
-case valores.IM < 15:
-nivelIM = 50;
-break;
-case valores.IM < 17:
-nivelIM = 60;
-break;
-case valores.IM < 19:
-nivelIM = 70;
-break;
-case valores.IM < 21:
-nivelIM = 80;
-break;
-case valores.IM < 23:
-nivelIM = 90;
-break;
-default:
-nivelIM = 100;
-break;
-}
-
-let percentil = 0;
-switch (true) {
-case valores.IM < 5:
-percentil = 1;
-break;
-case valores.IM == 5:
-percentil = 2;
-break;
-case valores.IM == 6:
-percentil = 4;
-break;
-case valores.IM == 7:
-percentil = 6;
-break;
-case valores.IM == 8:
-percentil = 9;
-break;
-case valores.IM == 9:
-percentil = 14;
-break;
-case valores.IM == 10:
-percentil = 19;
-break;
-case valores.IM == 11:
-percentil = 24;
-break;
-case valores.IM == 12:
-percentil = 31;
-break;
-case valores.IM == 13:
-percentil = 38;
-break;
-case valores.IM == 14:
-percentil = 46;
-break;
-case valores.IM == 15:
-percentil = 54;
-break;
-case valores.IM == 16:
-percentil = 62;
-break;
-case valores.IM == 17:
-percentil = 70;
-break;
-case valores.IM == 18:
-percentil = 78;
-break;
-case valores.IM == 19:
-percentil = 84;
-break;
-case valores.IM == 20:
-percentil = 90;
-break;
-case valores.IM == 21:
-percentil = 94;
-break;
-case valores.IM == 22:
-percentil = 97;
-break;
-default:
-percentil = 99;
-break;
-}
-
-DES[16] = Math.floor(4 + (DES[0] * 0.3) + (DES[4] * 0.3) + (DES[6] * 0.2) - (DES[10] * 0.3) - (DES[13] * 0.3));
-DES[17] = Math.floor(1.6 + (DES[8] * 0.3) + (DES[11] * 0.4) + (DES[15] * 0.4) - (DES[2] * 0.4));
-DES[18] = Math.floor(13.8 - (DES[0] * 0.2) - (DES[7] * 0.5) - (DES[9] * 0.3) - (DES[12] * 0.5));
-DES[19] = Math.floor((DES[3] * 0.6) + (DES[6] * 0.3) + (DES[8] * 0.2) + (DES[12] * 0.3) - 2.2);
-DES[20] = Math.floor(3.8 + (DES[5] * 0.4) + (DES[14] * 0.4) - (DES[4] * 0.2) - (DES[9] * 0.3));
-
-switch (true){
-  case DES[0] < 4:
-    niveles[0] = 1;
-    adj[0] = adj1[0]
-    break;
-  case DES[0] < 6:
-    niveles[0] = 2;
-    break;
-  default:
-    niveles[0] = 3;
-    adj[0] = adj2[0]
-    break;
-}
-
-for (i = 1; i < 21; i++){
-  switch (true){
-    case DES[i] < 4:
-      niveles[i] = 1;
-      adj[i] = adj1[i];
-      break;
-    case DES[i] < 7:
-      niveles[i] = 2;
-      break;
-    default:
-      niveles[i] = 3;
-      adj[i] = adj2[i];
-      break;
-  }
-}
+        for (i = 1; i < 21; i++){
+          switch (true){
+            case DES[i] < 4:
+              niveles[i] = 1;
+              adj[i] = adj1[i];
+              break;
+            case DES[i] < 7:
+              niveles[i] = 2;
+              break;
+            default:
+              niveles[i] = 3;
+              adj[i] = adj2[i];
+              break;
+          }
+        }
 
 
-document.getElementById("IM").innerHTML += `IM: ${nivelIM}% <br>Percentil: ${percentil}`;
+        document.getElementById("IM").innerHTML += `IM: ${nivelIM}% <br>Percentil: ${percentil}`;
 
-// Interpretacion con diseño de tarjetas
-document.getElementById("Interpretacion").innerHTML = `
-  <div class="interpretacion-container">
-    
-    <h3 class="section-title">ESCALAS PRIMARIAS</h3>
-    <div class="interpretacion-horizontal" id="primarias"></div>
-    
-    <h3 class="section-title">FACTORES GLOBALES</h3>
-    <div class="interpretacion-horizontal" id="globales"></div>
-  </div>
-`;
-
-
-for (let i = 0; i < 21; i++){
-  if (niveles[i] != 2){ 
-    fetch("/psicologo/interpretacion/<%= idAspirante %>/" + letras[i] + "/" + niveles[i], {
-      method: "GET",
-    })
-    .then((result) => result.json())
-    .then((data) => {
-        const factorHTML = `
-          <div class="interpretacion-card">
-            <div class="card-content">
-              <h3 class="card-title">${adj[i]}</h3>
-              <div class="card-text">
-                ${data.inter}
-              </div>
-            </div>
+        // Interpretacion con diseño de tarjetas
+        document.getElementById("Interpretacion").innerHTML = `
+          <div class="interpretacion-container">
+            
+            <h3 class="section-title">ESCALAS PRIMARIAS</h3>
+            <div class="interpretacion-horizontal" id="primarias"></div>
+            
+            <h3 class="section-title">FACTORES GLOBALES</h3>
+            <div class="interpretacion-horizontal" id="globales"></div>
           </div>
         `;
+
+
+        for (let i = 0; i < 21; i++){
+          if (niveles[i] != 2){ 
+            fetch("/psicologo/interpretacion/<%= idAspirante %>/" + letras[i] + "/" + niveles[i], {
+              method: "GET",
+            })
+            .then((result) => result.json())
+            .then((data) => {
+                const factorHTML = `
+                  <div class="interpretacion-card">
+                    <div class="card-content">
+                      <h3 class="card-title">${adj[i]}</h3>
+                      <div class="card-text">
+                        ${data.inter}
+                      </div>
+                    </div>
+                  </div>
+                `;
+                
+                if (i < 16){
+                  document.getElementById("primarias").innerHTML += factorHTML;
+                } else {
+                  document.getElementById("globales").innerHTML += factorHTML;
+                }
+            });
+          }
+        }
+
+
+        const data16PF = {
+          labels: [
+            "A", "B", "C", "E", "F", "G", "H", "I", "L", "M",
+            "N", "O", "Q1", "Q2", "Q3", "Q4",
+          ],
+          datasets: [
+            {
+              label: "Personalidad 16 Factores",
+              data: DES.slice(0, 16).map(value => value * 10),
+              backgroundColor: DES.map((value, index) => {
+                if (index > 0) {
+                  return (value >= 4 && value < 7) 
+                    ? "rgba(30, 144, 255, 0.7)"
+                    : "rgba(173, 216, 230, 0.7)";
+                } else {
+                  return (value >= 4 && value < 6) 
+                    ? "rgba(30, 144, 255, 0.7)"
+                    : "rgba(173, 216, 230, 0.7)";
+                }
+              }),
+              borderColor: DES.map((value, index) => {
+                if (index > 0) {
+                  return (value >= 4 && value < 7) 
+                    ? "rgba(30, 144, 255, 0.7)"
+                    : "rgba(173, 216, 230, 0.7)";
+                } else {
+                  return (value >= 4 && value < 6) 
+                    ? "rgba(30, 144, 255, 0.7)"
+                    : "rgba(173, 216, 230, 0.7)";
+                }
+              }),
+              borderWidth: 1,
+            },
+          ],
+        };
+
+        const config16PF = {
+            type: "bar",
+            data: data16PF,
+            options: {
+              responsive: true,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  max: 100,
+                  ticks: {
+                    callback: function(value) {
+                      return value === 0 ? '' : value;
+                    }
+                  },
+                  title: {
+                    display: true,
+                    text: "Valores"
+                  }
+                },
+                x: {
+                  title: {
+                    display: true,
+                    text: "Factores"
+                  }
+                }
+              },
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      const valores = context.parsed.y;
+                      return `${valores}%`;
+                    }
+                  }
+                },
+                datalabels: {
+                  display: false
+                }
+              }
+            },
+            plugins: [
+              {
+                id: 'etiquetasExtremos',
+                afterDraw(chart) {
+                  try {
+                    const ctx = chart.ctx;
+                    const xAxis = chart.scales.x;
+                    if (!xAxis) return;
+                    
+                    const topY = chart.chartArea.top;
+                    const bottomY = chart.chartArea.bottom;
+
+                    ctx.save();
+                    ctx.font = "12px Arial";
+                    ctx.fillStyle = "black";
+                    ctx.textAlign = "center";
+
+                    for (let index = 0; index < chart.data.labels.length; index++) {
+                      const label = chart.data.labels[index];
+                      try {
+                        const x = xAxis.getPixelForValue(label);
+                        const labelHeight = 12;
+                        
+                        // Etiqueta superior
+                        if (adj2 && adj2[index]) {
+                          ctx.save();
+                          const labelWidth2 = ctx.measureText(adj2[index]).width;
+                          ctx.translate(x, topY - labelHeight);
+                          ctx.rotate(-Math.PI / 2);
+                          
+                          const posX2 = -1 * (labelWidth2/2 + 15);
+                          
+                          if (topY - labelHeight - labelWidth2 <= bottomY) {
+                            ctx.fillText(adj2[index], posX2, 0);
+                          }
+                          ctx.restore();
+                        }
+                        
+                        // Etiqueta inferior
+                        if (adj1 && adj1[index]) {
+                          ctx.save();
+                          const labelWidth1 = ctx.measureText(adj1[index]).width;
+                          ctx.translate(x, bottomY + labelHeight);
+                          ctx.rotate(-Math.PI / 2);
+                          
+                          const posX1 = (labelWidth1/2 + 15);
+                          
+                          if (bottomY + labelHeight + labelWidth1 >= topY) {
+                            ctx.fillText(adj1[index], posX1, 0);
+                          }
+                          ctx.restore();
+                        }
+                      } catch (e) {
+                        console.error(`Error al procesar etiqueta ${index}:`, e);
+                      }
+                    }
+                    ctx.restore();
+                  } catch (e) {
+                    console.error("Error en plugin etiquetasExtremos:", e);
+                  }
+                }
+              }
+            ]
+        };
+
+        // Inicializar la grafica de 16PF
+        myChart = new Chart(ctx, config16PF);
         
-        if (i < 16){
-          document.getElementById("primarias").innerHTML += factorHTML;
-        } else {
-          document.getElementById("globales").innerHTML += factorHTML;
-        }
-    });
-  }
-}
-
-
- data = {
-  labels: [
-    "A",
-    "B",
-    "C",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "L",
-    "M",
-    "N",
-    "O",
-    "Q1",
-    "Q2",
-    "Q3",
-    "Q4",
-  ],
-  datasets: [
-    {
-      label: "Personalidad 16 Factores",
-      data: DES.map(value => value * 10),
-      backgroundColor: DES.map((value, index) => {
-        if (index > 0) {
-          return (value >= 4 && value < 7) 
-            ? "rgba(30, 144, 255, 0.7)"
-            : "rgba(173, 216, 230, 0.7)";
-        } else {
-          return (value >= 4 && value < 6) 
-            ? "rgba(30, 144, 255, 0.7)"
-            : "rgba(173, 216, 230, 0.7)";
-        }
-      }),
-      borderColor: DES.map((value, index) => {
-        if (index > 0) {
-          return (value >= 4 && value < 7) 
-            ? "rgba(30, 144, 255, 0.7)"
-            : "rgba(173, 216, 230, 0.7)";
-        } else {
-          return (value >= 4 && value < 6) 
-            ? "rgba(30, 144, 255, 0.7)"
-            : "rgba(173, 216, 230, 0.7)";
-        }
-      }),
-      borderWidth: 1,
-    },
-  ],
-};
-
-
-const config16PF = {
-  type: "bar",
-  data: data,
-  options: {
-    responsive: true,
-    scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true,
-          max: 100,
-          callback: function(value) {
-            return value === 0 ? '' : value;
-          }
-        },
-        scaleLabel: {
-          display: true,
-          labelString: "Valores"
-        }
-      }],
-      xAxes: [{
-        scaleLabel: {
-          display: true,
-          labelString: "Factores"
-        }
-      }]
-    },
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        callbacks: {
-          label: function (tooltipItem) {
-            const valores = tooltipItem.yLabel;
-            return `${valores}%`;
-          }
-        }
-      },
-      datalabels: {
-        display: false
       }
-    }
-  },
-  plugins: [
-    {
-      id: 'etiquetasExtremos',
-      afterDraw(chart) {
-        try {
-          const ctx = chart.ctx;
-          const xAxis = chart.scales['x-axis-0'];
-          if (!xAxis) return;
-          
-          const topY = chart.chartArea.top;
-          const bottomY = chart.chartArea.bottom;
-
-          ctx.save();
-          ctx.font = "12px Arial";
-          ctx.fillStyle = "black";
-          ctx.textAlign = "center";
-
-          chart.data.labels.forEach((label, index) => {
-            try {
-              const x = xAxis.getPixelForTick(index);
-              const labelHeight = 12;
-
-              // Etiqueta superior
-              ctx.save();
-              if (adj2[index]) {
-                const labelWidth2 = ctx.measureText(adj2[index]).width;
-                ctx.translate(x, topY - labelHeight);
-                ctx.rotate(-Math.PI / 2);
-
-                if (topY - labelHeight - labelWidth2 <= bottomY) {
-                  ctx.fillText(adj2[index], -(labelWidth2/2 + 15), 0);
-                }
-              }
-              ctx.restore();
-
-              // Etiqueta inferior
-              ctx.save();
-              if (adj1[index]) {
-                const labelWidth1 = ctx.measureText(adj1[index]).width;
-                ctx.translate(x, bottomY + labelHeight);
-                ctx.rotate(-Math.PI / 2);
-
-                if (bottomY + labelHeight + labelWidth1 >= topY) {
-                  ctx.fillText(adj1[index], (labelWidth1/2 + 15), 0);
-                }
-              }
-              ctx.restore();
-            } catch (e) {
-              console.error(`Error al procesar etiqueta ${index}:`, e);
-            }
-          });
-        } catch (e) {
-          console.error("Error en plugin etiquetasExtremos:", e);
-        }
-      }
-    }
-  ]
-};
-
-
-
-const ctx = document.getElementById("graph").getContext("2d");
-const myChart = new Chart(ctx, config16PF);
-
-                 }
 </script>
