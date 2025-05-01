@@ -136,14 +136,14 @@
 
     // SUBORDINACIÓN ----------------------------------------------
 
-    if (valores.W >= 70 || valores.W <= 20 || valores.F >= 70 || valores.F <= 20) {
+    if (valores.W >= 7 || valores.W <= 2 || valores.F >= 7 || valores.F <= 2) {
       const s = document.createElement('div');
       s.className = 'subtitle';
       s.textContent = 'Subordinación'
       interpretacionDiv.appendChild(s);
 
       // W
-      if (valores.W >= 70) {
+      if (valores.W >= 7) {
         i = 38;
 
         const positivo = document.createElement('p');
@@ -153,7 +153,7 @@
         const negativo = document.createElement('p');
         negativo.textContent = interpretaciones[i].negativo;
         interpretacionDiv.appendChild(negativo);
-      } else if (valores.W <= 20){
+      } else if (valores.W <= 2){
         i = 39;
 
         const positivo = document.createElement('p'); 
@@ -166,7 +166,7 @@
       }
 
       // F
-      if (valores.F >= 70) {
+      if (valores.F >= 7) {
         i = 36;
 
         const positivo = document.createElement('p');
@@ -176,7 +176,7 @@
         const negativo = document.createElement('p');
         negativo.textContent = interpretaciones[i].negativo;
         interpretacionDiv.appendChild(negativo);
-      } else if (valores.F <= 20){
+      } else if (valores.F <= 2){
         i = 37;
 
         const positivo = document.createElement('p'); 
@@ -191,7 +191,7 @@
 
 
     // NATURALEZA EMOCIONAL ----------------------------------------------
-  if (valores.K >= 70 || valores.K <= 20 || valores.E >= 70 || valores.E <= 20 || valores.Z >= 70 || valores.Z <= 20){
+  if (valores.K >= 7 || valores.K <= 2 || valores.E >= 7 || valores.E <= 2 || valores.Z >= 7 || valores.Z <= 2){
     const ne = document.createElement('div');
     ne.className = 'subtitle';
     ne.textContent = 'Naturaleza Emocional'
@@ -199,7 +199,7 @@
 
     // K
     
-    if (valores.K >= 70) {
+    if (valores.K >= 7) {
       i = 34;
 
       const positivo = document.createElement('p');
@@ -209,7 +209,7 @@
       const negativo = document.createElement('p');
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
-    } else if (valores.K <= 20){
+    } else if (valores.K <= 2){
       i = 35;
 
       const positivo = document.createElement('p'); 
@@ -222,7 +222,7 @@
     }
 
     // E
-    if (valores.E >= 70) {
+    if (valores.E >= 7) {
       i = 32;
 
       const positivo = document.createElement('p');
@@ -232,7 +232,7 @@
       const negativo = document.createElement('p');
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
-    } else if (valores.E <= 20){
+    } else if (valores.E <= 2){
       i = 33;
 
       const positivo = document.createElement('p'); 
@@ -245,7 +245,7 @@
     }
 
     // Z
-    if (valores.Z >= 70) {
+    if (valores.Z >= 7) {
       i = 30;
 
       const positivo = document.createElement('p');
@@ -255,7 +255,7 @@
       const negativo = document.createElement('p');
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
-    } else if (valores.Z <= 20){
+    } else if (valores.Z <= 2){
       i = 31;
 
       const positivo = document.createElement('p'); 
@@ -268,7 +268,7 @@
     }
   }
     // ADAPTACION AL TRABAJO ----------------------------------------------
-    if(valores.C >= 70 || valores.C <= 20 || valores.D >= 70 || valores.D <= 20 || valores.R >= 70 || valores.R <= 20){
+    if(valores.C >= 7 || valores.C <= 2 || valores.D >= 7 || valores.D <= 2 || valores.R >= 7 || valores.R <= 2){
     const aat = document.createElement('div');
     aat.className = 'subtitle';
     aat.textContent = 'Adaptación al Trabajo'
@@ -276,7 +276,7 @@
 
     // C
  
-    if (valores.C >= 70) {
+    if (valores.C >= 7) {
       i = 28;
 
       const positivo = document.createElement('p');
@@ -286,7 +286,7 @@
       const negativo = document.createElement('p');
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
-    } else if (valores.C <= 20){
+    } else if (valores.C <= 2){
       i = 29;
 
       const positivo = document.createElement('p'); 
@@ -299,7 +299,7 @@
     }
 
     // D
-    if (valores.D >= 70) {
+    if (valores.D >= 7) {
       i = 26;
 
       const positivo = document.createElement('p');
@@ -309,7 +309,7 @@
       const negativo = document.createElement('p');
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
-    } else if (valores.D <= 20){
+    } else if (valores.D <= 2){
       i = 27;
 
       const positivo = document.createElement('p'); 
@@ -322,7 +322,7 @@
     }
 
     // R
-    if (valores.R >= 70) {
+    if (valores.R >= 7) {
       i = 24;
 
       const positivo = document.createElement('p');
@@ -332,7 +332,7 @@
       const negativo = document.createElement('p');
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
-    } else if (valores.R <= 20){
+    } else if (valores.R <= 2){
       i = 25;
 
       const positivo = document.createElement('p'); 
@@ -345,14 +345,14 @@
     }
   }
     // NATURALEZA SOCIAL ----------------------------------------------
-    if (valores.X >= 70 || valores.X <= 20 || valores.S >= 70 || valores.S <= 20 || valores.B >= 70 || valores.B <= 20 || valores.O >= 70 || valores.O <= 20){
+    if (valores.X >= 7 || valores.X <= 2 || valores.S >= 7 || valores.S <= 2 || valores.B >= 7 || valores.B <= 2 || valores.O >= 7 || valores.O <= 2){
     const ns = document.createElement('div');
     ns.className = 'subtitle';
     ns.textContent = 'Naturaleza Social'
     interpretacionDiv.appendChild(ns);
 
     // O
-    if (valores.O >= 70) {
+    if (valores.O >= 7) {
       i = 22;
 
       const positivo = document.createElement('p');
@@ -363,7 +363,7 @@
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
 
-    } else if (valores.O <= 20){
+    } else if (valores.O <= 2){
       i = 23;
 
       const positivo = document.createElement('p'); 
@@ -376,7 +376,7 @@
     }
 
     // B
-    if (valores.B >= 70) {
+    if (valores.B >= 7) {
       i = 20;
 
       const positivo = document.createElement('p');
@@ -386,7 +386,7 @@
       const negativo = document.createElement('p');
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
-    } else if (valores.B <= 20){
+    } else if (valores.B <= 2){
       i = 21;
 
       const positivo = document.createElement('p'); 
@@ -399,7 +399,7 @@
     }
 
     // S
-    if (valores.S >= 70) {
+    if (valores.S >= 7) {
       i = 18;
 
       const positivo = document.createElement('p');
@@ -409,7 +409,7 @@
       const negativo = document.createElement('p');
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
-    } else if (valores.S <= 20){
+    } else if (valores.S <= 2){
       i = 19;
 
       const positivo = document.createElement('p'); 
@@ -422,7 +422,7 @@
     }
 
     // X
-    if (valores.X >= 70) {
+    if (valores.X >= 7) {
       i = 16;
 
       const positivo = document.createElement('p');
@@ -432,7 +432,7 @@
       const negativo = document.createElement('p');
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
-    } else if (valores.X <= 20){
+    } else if (valores.X <= 2){
       i = 17;
 
       const positivo = document.createElement('p'); 
@@ -446,14 +446,14 @@
   }
     // MODO DE VIDA ----------------------------------------------
 
-    if(valores.T >= 80 || valores.T <= 10 || valores.V >= 70 || valores.T <= 20 ){
+    if(valores.T >= 8 || valores.T <= 1 || valores.V >= 7 || valores.T <= 2 ){
     const mdv = document.createElement('div');
     mdv.className = 'subtitle';
     mdv.textContent = 'Modo de Vida'
     interpretacionDiv.appendChild(mdv);
 
     // V
-    if (valores.V >= 70) {
+    if (valores.V >= 7) {
       i = 14;
 
       const positivo = document.createElement('p');
@@ -463,7 +463,7 @@
       const negativo = document.createElement('p');
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
-    } else if (valores.V <= 20){
+    } else if (valores.V <= 2){
       i = 15;
 
       const positivo = document.createElement('p'); 
@@ -476,7 +476,7 @@
     }
 
     // T
-    if (valores.T >= 80) {
+    if (valores.T >= 8) {
       i = 12;
 
       const positivo = document.createElement('p');
@@ -486,7 +486,7 @@
       const negativo = document.createElement('p');
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
-    } else if (valores.T <= 10){
+    } else if (valores.T <= 1){
       i = 13;
 
       const positivo = document.createElement('p'); 
@@ -499,14 +499,14 @@
     }
   }
     // LIDERAZGO ----------------------------------------------
-if (valores.L >= 70 || valores.L <= 20 ||valores.P >= 70 || valores.P <= 10 || valores.I >= 70 || valores.L <= 20 ){
+if (valores.L >= 7 || valores.L <= 2 ||valores.P >= 7 || valores.P <= 1 || valores.I >= 7 || valores.L <= 2 ){
     const l = document.createElement('div');
     l.className = 'subtitle';
     l.textContent = 'Liderazgo'
     interpretacionDiv.appendChild(l);
 
     // I
-    if (valores.I >= 70) {
+    if (valores.I >= 7) {
       i = 10;
 
       const positivo = document.createElement('p');
@@ -516,7 +516,7 @@ if (valores.L >= 70 || valores.L <= 20 ||valores.P >= 70 || valores.P <= 10 || v
       const negativo = document.createElement('p');
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
-    } else if (valores.I <= 20){
+    } else if (valores.I <= 2){
       i = 11;
 
       const positivo = document.createElement('p'); 
@@ -529,7 +529,7 @@ if (valores.L >= 70 || valores.L <= 20 ||valores.P >= 70 || valores.P <= 10 || v
     }
 
     // P
-    if (valores.P >= 70) {
+    if (valores.P >= 7) {
       i = 8;
 
       const positivo = document.createElement('p');
@@ -539,7 +539,7 @@ if (valores.L >= 70 || valores.L <= 20 ||valores.P >= 70 || valores.P <= 10 || v
       const negativo = document.createElement('p');
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
-    } else if (valores.P <= 10){
+    } else if (valores.P <= 1){
       i = 9;
 
       const positivo = document.createElement('p'); 
@@ -552,7 +552,7 @@ if (valores.L >= 70 || valores.L <= 20 ||valores.P >= 70 || valores.P <= 10 || v
     }
 
     //L
-    if (valores.L >= 70) {
+    if (valores.L >= 7) {
       i = 6;
 
       const positivo = document.createElement('p');
@@ -562,7 +562,7 @@ if (valores.L >= 70 || valores.L <= 20 ||valores.P >= 70 || valores.P <= 10 || v
       const negativo = document.createElement('p');
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
-    } else if (valores.L <= 20){
+    } else if (valores.L <= 2){
       i = 7;
 
       const positivo = document.createElement('p'); 
@@ -575,14 +575,14 @@ if (valores.L >= 70 || valores.L <= 20 ||valores.P >= 70 || valores.P <= 10 || v
     }
   }
     // GRADO DE ENERGIA ----------------------------------------------
-if (valores.N >= 70 || valores.N <= 20 || valores.G >= 70 || valores.G <= 20 || valores.A >= 70 || valores.A <= 20){
+if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valores.A >= 7 || valores.A <= 2){
     const gde = document.createElement('div');
     gde.className = 'subtitle';
     gde.textContent = 'Grado de Energía'
     interpretacionDiv.appendChild(gde);
 
     // A
-    if (valores.A >= 70) {
+    if (valores.A >= 7) {
       i = 4;
 
       const positivo = document.createElement('p');
@@ -592,7 +592,7 @@ if (valores.N >= 70 || valores.N <= 20 || valores.G >= 70 || valores.G <= 20 || 
       const negativo = document.createElement('p');
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
-    } else if (valores.A <= 20){
+    } else if (valores.A <= 2){
       i = 5;
 
       const positivo = document.createElement('p'); 
@@ -605,7 +605,7 @@ if (valores.N >= 70 || valores.N <= 20 || valores.G >= 70 || valores.G <= 20 || 
     }
 
     // G
-    if (valores.G >= 80) {
+    if (valores.G >= 8) {
       i = 2;
 
       const positivo = document.createElement('p');
@@ -615,7 +615,7 @@ if (valores.N >= 70 || valores.N <= 20 || valores.G >= 70 || valores.G <= 20 || 
       const negativo = document.createElement('p');
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
-    } else if (valores.G <= 20){
+    } else if (valores.G <= 2){
       i = 3;
 
       const positivo = document.createElement('p'); 
@@ -628,7 +628,7 @@ if (valores.N >= 70 || valores.N <= 20 || valores.G >= 70 || valores.G <= 20 || 
     }
 
     // N
-    if (valores.N >= 70) {
+    if (valores.N >= 7) {
       i = 0;
 
       const positivo = document.createElement('p');
@@ -638,7 +638,7 @@ if (valores.N >= 70 || valores.N <= 20 || valores.G >= 70 || valores.G <= 20 || 
       const negativo = document.createElement('p');
       negativo.textContent = interpretaciones[i].negativo;
       interpretacionDiv.appendChild(negativo);
-    } else if (valores.N <= 20){
+    } else if (valores.N <= 2){
       i = 1;
 
       const positivo = document.createElement('p'); 
