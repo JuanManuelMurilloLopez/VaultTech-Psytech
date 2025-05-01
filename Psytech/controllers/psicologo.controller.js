@@ -1359,7 +1359,7 @@ exports.getAnalisisTerman = async (request, response, next) => {
     const idGrupo = request.params.idGrupo;
 
     try {
-        // console.log("🧪 Entró al try de getAnalisisTerman");
+        // console.log("Entró al try de getAnalisisTerman");
         // 1. Buscar calificación
         const calificacionExistente = await calificacionTerman.fetchCalificacionById(idAspirante, idGrupo);
         // console.log("calificacionExistente:", calificacionExistente);
@@ -1380,11 +1380,10 @@ exports.getAnalisisTerman = async (request, response, next) => {
                     }
                 }
 
-                console.log(respuestasAspirante);
+                // console.log(respuestasAspirante);
 
                 if (respuestasAspirante.length > 0) {
                     await calificarSerieTerman(idSerie, idAspirante, idGrupo, respuestasAspirante);
-                    // console.log("Entra?")
                 }
             }
         }
@@ -1395,15 +1394,10 @@ exports.getAnalisisTerman = async (request, response, next) => {
         const calificacion = await calificacionTerman.fetchCalificacionById(idAspirante, idGrupo);
         const series = await resultadoSerieTerman.fetchSeriesById(idAspirante, idGrupo);
 
-        console.log("AspiranteData: ", aspiranteData)
-        console.log("Calificación: ", calificacion)
-        console.log("Series: ", series)
+        // console.log("AspiranteData: ", aspiranteData)
+        // console.log("Calificación: ", calificacion)
+        // console.log("Series: ", series)
 
-        /*
-        
-        console.log("calificacion: ", calificacion)
-        console.log("series: ", series)
-        */
         if (!aspiranteData || !calificacion || !series || series.length === 0) {
             return response.status(404).send("No se encontraron datos suficientes para el análisis.");
         }

@@ -11,7 +11,7 @@ async function calificarSerieTerman(idSerie, idAspirante, idGrupo, respuestas) {
         await calificacionesModel.save();
     }
 
-    // console.log("Llego a calificarTerman")
+    console.log("Llego a calificarTerman")
 
     // 2. Traer calificación actual
     const calificacion = await calificacionesModel.fetchCalificacionById(idAspirante, idGrupo);

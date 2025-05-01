@@ -124,7 +124,6 @@ function completarRespuestasFaltantes() {
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                'csrf-token': csrfToken
             },
             body: JSON.stringify({
                 respuesta: 0,
@@ -141,7 +140,6 @@ function completarRespuestasFaltantes() {
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                    'csrf-token': csrfToken
                 },
                 body: JSON.stringify({
                     respuesta: 0,
@@ -254,7 +252,6 @@ function avanzarOSalir() {
         }, 100);
     }
 };
-
 
 // -------------------------------
 // INICIAR LAS PREGUNTAS DE LA SERIE
