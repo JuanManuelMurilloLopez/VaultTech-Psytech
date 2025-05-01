@@ -36,6 +36,23 @@ module.exports = class Prueba{
             AND idGrupo = ?`, [idAspirante, idGrupo])
     }
 
+    static getDatosPersonalesAspiranteKostick(idGrupo, idAspirante){
+        return db.execute(`SELECT nombre, apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha 
+            FROM datospersonales 
+            WHERE idAspirante = ? 
+            AND idPrueba = 1
+            AND idGrupo = ?`, [idAspirante, idGrupo])
+    }
+
+    static getDatosPersonalesAspirante16PF(idGrupo, idAspirante){
+        return db.execute(`SELECT nombre, apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha, generos.nombreGenero 
+            FROM datospersonales, generos
+            WHERE datospersonales.idGenero = generos.idGenero 
+            AND idAspirante = ? 
+            AND idPrueba = 2
+            AND idGrupo = ?`, [idAspirante, idGrupo])
+    }
+
     static async saveDatosPersonales(idAspirante, idGrupo, idPrueba, datosPersonales) {
         // Intentar actualizar primero
         const [result] = await db.execute(`

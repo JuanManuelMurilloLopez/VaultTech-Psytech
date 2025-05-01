@@ -18,6 +18,11 @@ const ResultadosKostick = require('../models/resultadosKostick.model.js');
 const Resultados16PF = require('../models/resultados16PF.model.js');
 const InterpretacionKostick = require('../models/interpretacionKostick.js');
 const Interpretaciones16PF = require('../models/interpretacion16PF.model.js');
+const RespondeKostick = require('../models/respondeKostick.model.js');
+const Responde16PF = require('../models/responde16pf.model.js');
+
+const PreguntaKostick = require('../models/preguntasKostick.model.js');
+const Pregunta16PF = require('../models/preguntas16pf.model.js');
 
 const xlsx = require('xlsx');
 const fs = require('fs');
@@ -1419,6 +1424,9 @@ exports.get_respuestasA = (request, response, next) => {
                         interpretaciones: interpretacionesKostick[0],
                         idAspirante: request.params.idAspirante || null,
                         idGenero: rows[0],
+                        idAspirante: request.params.idAspirante,
+                        idGrupo: request.params.idGrupo,
+                        idInstitucion: request.params.idInstitucion,
                     });
                 })
                 .catch((error) => {
@@ -1439,6 +1447,9 @@ exports.get_respuestasA = (request, response, next) => {
                         interpretaciones: null,
                         idAspirante: request.params.idAspirante || null,
                         idGenero: rows[0].idGenero || null,
+                        idAspirante: request.params.idAspirante,
+                        idGrupo: request.params.idGrupo,
+                        idInstitucion: request.params.idInstitucion,
                       });
                 })
                 .catch((error) => {
@@ -1490,3 +1501,121 @@ exports.get_interpretaciones16PF = (request, response, next) => {
         next(error);
     }
 };
+
+// Cuadernillo Kostick
+exports.getCuadernilloKostick = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    Aspirante.fetchOne(idAspirante)
+    .then(([rows, fieldData]) => {
+        const datosAspirante = rows[0];
+        Grupo.fetchOne(idGrupo)
+        .then(([rows, fieldData]) => {
+            const grupo = rows[0];
+            PreguntaKostick.fetchAll()
+            .then(([rows, fieldData]) => {
+                const preguntasKostick = rows;
+                RespondeKostick.fetchRespuestasAspirante(idGrupo, idAspirante)
+                .then(([rows, fieldData]) => {
+                    const resultados = rows;
+                    const opciones = resultados.map(r => r.opcionKostick);
+                    const descripcionOpciones = resultados.map(r => r.descripcionOpcionKostick);
+                    Prueba.getDatosPersonalesAspiranteKostick(idGrupo, idAspirante)
+                    .then(([rows, fieldData]) => {
+                        const datosPersonales = rows;
+                        console.log("preguntas kostick: ");
+                        console.log(preguntasKostick);
+                        response.render('Psicologos/cuadernilloKostick', {
+                            prueba: "El inventario de Percepción Kostick",
+                            grupo: grupo || null,
+                            valores: resultados[0][0],
+                            datos: datosPersonales || null,
+                            aspirante: datosAspirante || null,
+                            preguntas: preguntasKostick || [],
+                            opciones: opciones || [],
+                            descripcion: descripcionOpciones || [],
+                            idAspirante: request.params.idAspirante,
+                            idInstitucion: request.params.idInstitucion,
+                            idGrupo: request.params.idGrupo,
+                        })
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                    
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+// Cuadernillo 16PF
+exports.getCuadernillo16PF = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    Aspirante.fetchOne(idAspirante)
+    .then(([rows, fieldData]) => {
+        const datosAspirante = rows[0];
+        Grupo.fetchOne(idGrupo)
+        .then(([rows, fieldData]) => {
+            const grupo = rows[0];
+            Pregunta16PF.fetchAll()
+            .then(([rows, fieldData]) => {
+                const preguntas16PF = rows;
+                Responde16PF.fetchRespuestasAspirante(idGrupo, idAspirante)
+                .then(([rows, fieldData]) => {
+                    const resultados = rows;
+                    const opciones = resultados.map(r => r.opcion16PF);
+                    const descripcionOpciones = resultados.map(r => r.descripcionOpcion16PF);
+                    Prueba.getDatosPersonalesAspiranteKostick(idGrupo, idAspirante)
+                    .then(([rows, fieldData]) => {
+                        const datosPersonales = rows;
+                        console.log("Preguntas 16PF");
+                        console.log(preguntas16PF);
+                        response.render('Psicologos/cuadernillo16PF', {
+                            prueba: "Personalidad 16 Factores (16 PF)",
+                            grupo: grupo || null,
+                            valores: resultados[0][0],
+                            datos: datosPersonales || null,
+                            aspirante: datosAspirante || null,
+                            preguntas: preguntas16PF || [],
+                            opciones: opciones || [],
+                            descripcion: descripcionOpciones || [],
+                            idAspirante: request.params.idAspirante,
+                            idInstitucion: request.params.idInstitucion,
+                            idGrupo: request.params.idGrupo,
+                        })
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+  

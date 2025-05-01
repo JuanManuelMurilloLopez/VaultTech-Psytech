@@ -45,4 +45,17 @@ module.exports = class RespondeKostick {
       [idGrupo, idAspirante, numeroPreguntaKostick]
     );
   }
+
+  static fetchRespuestasAspirante(idGrupo, idAspirante){
+    return db.execute(`
+                        SELECT * 
+                        FROM opcioneskostick 
+                        WHERE idOpcionKostick IN 
+                                                (SELECT idOpcionKostick 
+                                                  FROM respondekostick 
+                                                  WHERE idGrupo = ? 
+                                                  AND idAspirante = ?)
+      `, [idGrupo, idAspirante]);
+  }
+
 };

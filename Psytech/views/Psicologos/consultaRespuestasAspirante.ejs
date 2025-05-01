@@ -103,8 +103,14 @@
     <!-- Contenedor de botones (regresar e imprimir) -->
     <div class="boton-container">
       <!-- Boton de regresar - CHECAR RUTA YA QUE NO ESTA DEFINIDO IDINSTITUCION -->
-      <a class="btn btn-color--third boton-regresar-abajo"
-      href="#"  >Regresar</a>
+       <% if (prueba === 'El inventario de Percepción Kostick') { %>
+        <a class="btn btn-color--third boton-regresar-abajo"
+        href="/psicologo/cuadernillo-KOSTICK/<%= idGrupo %>/<%= idAspirante %>/<%= idInstitucion %>"  >Regresar</a>
+       <% } else {%>
+        <a class="btn btn-color--third boton-regresar-abajo"
+        href="/psicologo/cuadernillo-16PF/<%= idGrupo %>/<%= idAspirante %>/<%= idInstitucion %>"  >Regresar</a>
+        <% } %>
+      
       
       <!-- Boton de descargar/imprimir -->
       <button class="btn btn-color--secondary descargar" onclick="descargar()">
@@ -879,8 +885,8 @@ if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valo
 
         let DES = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         let niveles = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        const adj1 = ["RETRAIDO", "LENTO", "INFANTIL", "SUMISO", "TACITURNO", "VARIABLE", "TIMIDO", "EMOCIONAL", "SOSPECHOSO", "EXCENTRICO", "SIMPLE", "INSEGURO", "RUTINARIO", "DEPENDIENTE", "DESCONTROLADO", "TENSO", "EXTRAVERSIÓN BAJA", "ANSIEDAD BAJA", "DUREZA BAJA", "INDEPENDENCIA BAJA", "AUTOCONTROL BAJO"];
-        const adj2 = ["SOCIABLE", "RÁPIDO", "MADURO", "DOMINANTE", "ENTUSIASTA", "CONSTANTE", "AVENTURADO", "RACIONAL", "CONFIABLE", "CONVENCIONAL", "SOFISTICADO", "SEGURO DE SÍ", "INNOVADOR", "AUTOSUFICIENTE", "CONTROLADO", "ESTABLE", "EXTRAVERSIÓN ALTA", "ANSIEDAD ALTA", "DUREZA ALTA", "INDEPENDENCIA ALTA", "AUTOCONTROL ALTO"];
+        const adj1 = ["RETRAIDO", "LENTO", "INFANTIL", "SUMISO", "TACITURNO", "VARIABLE", "TIMIDO", "EMOCIONAL", "CONFIABLE", "EXCENTRICO", "SIMPLE", "INSEGURO", "RUTINARIO", "DEPENDIENTE", "DESCONTROLADO", "TENSO", "EXTRAVERSIÓN BAJA", "ANSIEDAD BAJA", "DUREZA BAJA", "INDEPENDENCIA BAJA", "AUTOCONTROL BAJO"];
+        const adj2 = ["SOCIABLE", "RÁPIDO", "MADURO", "DOMINANTE", "ENTUSIASTA", "CONSTANTE", "AVENTURADO", "RACIONAL", "SOSPECHOSO", "CONVENCIONAL", "SOFISTICADO", "SEGURO DE SÍ", "INNOVADOR", "AUTOSUFICIENTE", "CONTROLADO", "ESTABLE", "EXTRAVERSIÓN ALTA", "ANSIEDAD ALTA", "DUREZA ALTA", "INDEPENDENCIA ALTA", "AUTOCONTROL ALTO"];
         let adj = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""];
         const letras = ['A', 'B', 'C', 'E', 'F', 'G', 'H', 'I', 'L', 'M', 'N', 'O', 'Q1', 'Q2', 'Q3', 'Q4', 'EX', 'AX', 'TM', 'IN', 'SC'];
         console.log(genero);
