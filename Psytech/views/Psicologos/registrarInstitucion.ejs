@@ -19,7 +19,7 @@
 </head>
 
 
-<body class="bg-light">
+<body>
 
     <div class="main">
         <!-- Navside -->
@@ -30,9 +30,11 @@
             <%- include('../includes/_buttonCerrarSesion.ejs') %>
             <span><%= error %></span>
             <h1 class="text-center">REGISTRAR NUEVA INSTITUCIÓN</h1>
-           <form action="/psicologo/registrar-institucion" method="POST">
+            <hr>
+
+            <form action="/psicologo/registrar-institucion" method="POST">
                 <!-- Campo Nombre -->
-                <div class="form-floating mb-3">
+                <div class="form-floating mt-5 mb-3">
                     <input type="" class="form-control" id="" placeholder="" name="nombreInstitucion" required>
                     <label for="">Nombre</label>
                 </div>
@@ -46,16 +48,18 @@
             
                 <br>
     
-                    <!-- Botones de navegación "Regresar y Guardar" -->
-                <button type="button" class="btn btn-color--third"
-                onclick="window.location.href=
-                '/psicologo/catalogo-instituciones'"
-                >Regresar</button>
-    
-                <button type="submit" class="btn btn-color--secondary"
-                onclick="confirm('¿Está seguro de guardar los cambios?')"
-                >Guardar</button>
-           </form>
+                <!-- Botones de navegación "Regresar y Guardar" -->
+                <div class="d-flex justify-content-between mb-4 mt-5">
+                    <button type="button" class="btn btn-color--third"
+                    onclick="window.location.href=
+                    '/psicologo/catalogo-instituciones'"
+                    >Regresar</button>
+        
+                    <button type="submit" class="btn btn-color--secondary"
+                    onclick="confirm('¿Está seguro de guardar los cambios?')"
+                    >Guardar</button>
+                </div>
+            </form>
     
             
         </div>

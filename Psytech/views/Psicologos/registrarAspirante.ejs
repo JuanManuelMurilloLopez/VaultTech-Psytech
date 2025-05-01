@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 </head>
 
-<body class="bg-light">
+<body>
 
     <div class="main">
 
@@ -77,7 +77,7 @@
                     </div>
     
                     <!--Input País de origen-->
-                    <div class="">
+                    <div class="mb-3">
                         <label class="form-label" for="idPais">País de origen</label> <br>
     
                         <select class="form-select" name="idPais" id="idPais">
@@ -89,7 +89,7 @@
                     </div>
     
                     <!--Input Estado-->
-                    <div class="">
+                    <div class="mb-3">
                         <label class="form-label" for="idEstado">Estado de residencia</label> <br>
     
                         <select class="form-select" name="idEstado" id="iEstado">
@@ -102,8 +102,10 @@
 
                         <br><br>
 
-                    <a href="/psicologo/informacion-grupos/<%= idGrupo %>/<%= idInstitucion %>"" class="btn btn-color--third">Regresar</a> 
+                    <div class="d-flex justify-content-between mb-4">
+                        <a href="/psicologo/informacion-grupos/<%= idGrupo %>/<%= idInstitucion %>" class="btn btn-color--third">Regresar</a> 
                     <button class="btn btn-color--secondary" type="submit">Guardar</button>
+                    </div>
     
                 </form>
             </div>

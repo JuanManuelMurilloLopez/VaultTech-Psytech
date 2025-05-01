@@ -9,14 +9,14 @@
     "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
     rel="stylesheet">
     <!-- Link css -->
-    <link rel="stylesheet" href="/css/psicologos/registrarAspirante.css">
+    <link rel="stylesheet" href="/css/psicologos/editarAspirante.css">
     <!-- CSS navside -->
     <link rel="stylesheet" href="/css/includeCss/_navsidePsicologo.css">
     <!-- CSS cerrar sesión -->
     <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 </head>
 
-<body class="bg-light">
+<body>
 
     <div class="main">
 
@@ -77,7 +77,7 @@
                     </div>
     
                     <!--Input País de origen-->
-                    <div class="">
+                    <div class="mb-3">
                         <label class="form-label" for="idPais">País de origen</label> <br>
     
                         <select class="form-select" name="idPais" id="idPais">
@@ -92,7 +92,7 @@
                     </div>
     
                     <!--Input Estado-->
-                    <div class="">
+                    <div class="mb-4">
                         <label class="form-label" for="idEstado">Estado de residencia</label> <br>
     
                         <select class="form-select" name="idEstado" id="idEstado">
@@ -106,23 +106,26 @@
     
                     </div>
 
-                    <div class="mb-3">
+                    <div class="">
                         <h4 class="mb-3">Estatus:</h4>
                         <div class="d-flex gap-2 align-items-center">
-                          <% if (usuario.estatusUsuario === 1) { %>
-                            <button type="button" id="toggleEstatusBtn" class="btn btn-danger">Desactivar</button>
-                          <% } else { %>
-                            <button type="button" id="toggleEstatusBtn" class="btn btn-info">Activar</button>
-                          <% } %>
-                      
-                          <input type="hidden" id="estatusUsuario" name="estatusUsuario" value="<%= usuario.estatusUsuario === 1 ? '1' : '0' %>">
+                            <% if (usuario.estatusUsuario === 1) { %>
+                                <button type="button" id="toggleEstatusBtn" class="btn btn-danger">Desactivar</button>
+                            <% } else { %>
+                                <button type="button" id="toggleEstatusBtn" class="btn btn-info">Activar</button>
+                            <% } %>
+                            
+                            <input type="hidden" id="estatusUsuario" name="estatusUsuario" value="<%= usuario.estatusUsuario === 1 ? '1' : '0' %>">
                         </div>
                     </div>
                     
                         <br><br>
 
-                    <a href="/psicologo/aspirantes/<%= aspirante.idAspirante %>/<%= idGrupo %>/<%= idInstitucion %>"" class="btn btn-color--third">Regresar</a> 
-                    <button class="btn btn-color--secondary" type="submit">Guardar</button>
+                    <div class="d-flex justify-content-between mb-4">
+                        <a href="/psicologo/aspirantes/<%= aspirante.idAspirante %>/<%= idGrupo %>/<%= idInstitucion %>" class="btn btn-color--third">Regresar</a> 
+                        <button class="btn btn-color--secondary" type="submit">Guardar</button>
+                    </div>
+                    
     
                 </form>
             </div>
@@ -135,18 +138,18 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-          const toggleBtn = document.getElementById('toggleEstatusBtn');
-          const estatusInput = document.getElementById('estatusUsuario');
+            const toggleBtn = document.getElementById('toggleEstatusBtn');
+            const estatusInput = document.getElementById('estatusUsuario');
         
-          toggleBtn.addEventListener('click', function() {
-            const estaActiva = estatusInput.value === '1';
-        
-            estatusInput.value = estaActiva ? '0' : '1';
-        
-            toggleBtn.textContent = estaActiva ? 'Activar' : 'Desactivar';
-            toggleBtn.classList.toggle('btn-danger', !estaActiva);
-            toggleBtn.classList.toggle('btn-info', estaActiva);
-          });
+            toggleBtn.addEventListener('click', function() {
+                const estaActiva = estatusInput.value === '1';
+            
+                estatusInput.value = estaActiva ? '0' : '1';
+            
+                toggleBtn.textContent = estaActiva ? 'Activar' : 'Desactivar';
+                toggleBtn.classList.toggle('btn-danger', !estaActiva);
+                toggleBtn.classList.toggle('btn-info', estaActiva);
+            });
         });
     </script>
 

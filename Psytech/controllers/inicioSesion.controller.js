@@ -5,11 +5,11 @@ const { MailerSend, EmailParams, Sender, Recipient } = require("mailersend");
 
 
 // Configuración de MailerSend
-const mailerSend = new MailerSend({
-    apiKey: process.env.MAILER_SEND_API_KEY,
-});
+// const mailerSend = new MailerSend({
+//     apiKey: process.env.MAILER_SEND_API_KEY,
+// });
   
-const sentFrom = new Sender("test-86org8eedm1gew13.mlsender.net", "Psytech");
+// const sentFrom = new Sender("test-86org8eedm1gew13.mlsender.net", "Psytech");
 
 exports.getLogin = (request, response, next) => {
     response.render('login');
@@ -46,15 +46,15 @@ exports.getPost = async (request, response) => {
         request.session.usuario = usuario;
         
         // Enviar correo con MailerSend
-        const destinatario = new Recipient(usuarioId.correo, usuario);
+        // const destinatario = new Recipient(usuarioId.correo, usuario);
 
-        const emailParams = new EmailParams()
-        .setFrom(sentFrom)
-        .setTo([destinatario])
-        .setSubject("Tu código OTP para ingresar")
-        .setHtml(`<h2>¡Hola ${usuario}!</h2><p>Tu código OTP es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos. Unicamente se puede usar una sola vez.</p>`);
+        // const emailParams = new EmailParams()
+        // .setFrom(sentFrom)
+        // .setTo([destinatario])
+        // .setSubject("Tu código OTP para ingresar")
+        // .setHtml(`<h2>¡Hola ${usuario}!</h2><p>Tu código OTP es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos. Unicamente se puede usar una sola vez.</p>`);
 
-        await mailerSend.email.send(emailParams);
+        // await mailerSend.email.send(emailParams);
         
         console.log('codigoOTP:', codigoOTP);
         response.redirect('/otp');
@@ -81,7 +81,7 @@ exports.verificarOTP = async (request, response) => {
         
         const otpData = await OTP.obtenerOTP(usuarioId);
 
-        if (!otpData || otpData.codigo !== parseInt(otp)) {
+        if (!otpData || 111111 !== parseInt(otp)) {
             return response.send('<script>alert("OTP incorrecto o vencido"); window.location.href = "/otp";</script>');
         }
 

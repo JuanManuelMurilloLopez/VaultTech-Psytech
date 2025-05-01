@@ -72,17 +72,17 @@
                 <div class="mb-3">
                     <h4 class="mb-3">Estatus: </h4>
                     <div class="d-flex gap-2 align-items-center">
-                        <button type="button" id="estatusActivoBtn" class="me-2 btn <%= coordinador.estatusUsuario ? 'btn-info' : 'btn-outline-info' %>">Activa</button>
+                        <button type="button" id="estatusActivoBtn" class="me-2 btn <%= coordinador.estatusUsuario ? 'btn-info' : 'btn-outline-info' %>">Activo</button>
                         <button type="button" id="estatusInactivoBtn" class="btn <%= !coordinador.estatusUsuario ? 'btn-danger' : 'btn-outline-danger' %>">Desactivar</button>
                         <input type="hidden" id="estatusUsuario" name="estatusUsuario" value="<%= coordinador.estatusUsuario === 1 ? 'true' : 'false' %>">
                     </div>
                 </div>
             
-                <div>
-                    <a class="btn btn-color--third btn-sm" 
+                <div class="d-flex justify-content-between mt-5 mb-4">
+                    <a class="btn btn-color--third" 
                     href="/coordinador/coordinadores-registrados"
                     >Regresar</a>
-                    <button type="submit" class="btn btn-color--secondary btn-sm" onclick="return confirmarGuardado()">Guardar</button>
+                    <button type="submit" class="btn btn-color--secondary" onclick="return confirmarGuardado()">Guardar</button>
                     <script>
                     function confirmarGuardado() {
                         return confirm("¿Estás seguro de guardar?");
