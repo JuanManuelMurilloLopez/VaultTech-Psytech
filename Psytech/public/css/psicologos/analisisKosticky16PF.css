@@ -164,3 +164,52 @@
     margin-bottom: 20px;
     text-align: left;
   }
+
+  .card-text {
+    text-align: justify;
+  }
+
+  .interpretacion-card p {
+    text-align: justify;
+  }
+
+/* KOSTICK */
+/* Estilo para los subtitulos dimensiones */
+#textos .subtitle {
+  color: #294969;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 25px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #294969;
+  padding-bottom: 5px;
+}
+
+/* Estilo parrafos */
+#textos p {
+  text-align: justify;
+  margin-bottom: 15px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Estilos parrafos (positivos y negativos) */
+#textos p:nth-of-type(odd):not(.subtitle) {
+  border-left: 4px solid #4a8eda; 
+}
+
+#textos p:nth-of-type(even):not(.subtitle) {
+  border-left: 4px solid #294969; 
+}
+
+/* Titulo de interpretacion */
+#Interpretacion .title {
+  color: #294969;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  text-align: center;
+}

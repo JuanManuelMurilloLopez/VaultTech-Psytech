@@ -128,7 +128,7 @@
 
 <script>
   function insertarInterpretacionKostick(valores, interpretaciones) {
-    const interpretacionDiv = document.getElementById('textos');
+    const interpretacionDiv = document.getElementById('textos'); 
   
     // Interpretación para extremos
 
@@ -774,8 +774,8 @@ if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valo
                         annotations: {
                             line1: {
                                 type: 'line',
-                                yMin: 40,
-                                yMax: 40,
+                                yMin: 4,
+                                yMax: 4,
                                 borderColor: 'rgb(255, 0, 0, 0.5)',
                                 borderWidth: 2,
                                 borderDash: [6, 6],
@@ -787,8 +787,8 @@ if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valo
                             },
                             line2: {
                                 type: 'line',
-                                yMin: 60,
-                                yMax: 60,
+                                yMin: 6,
+                                yMax: 6,
                                 borderColor: 'rgb(255, 0, 0, 0.5)',
                                 borderWidth: 2,
                                 borderDash: [6, 6]
@@ -839,8 +839,8 @@ if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valo
                         ctx.restore();
 
                         // Dibujamos manualmente las líneas si no usamos el plugin de anotaciones
-                        const y40 = chart.scales.y.getPixelForValue(40);
-                        const y60 = chart.scales.y.getPixelForValue(60);
+                        const y4 = chart.scales.y.getPixelForValue(4);
+                        const y6 = chart.scales.y.getPixelForValue(6);
                         const chartArea = chart.chartArea;
 
                         ctx.save();
@@ -850,14 +850,14 @@ if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valo
 
                         // Línea en y=40
                         ctx.beginPath();
-                        ctx.moveTo(chartArea.left, y40);
-                        ctx.lineTo(chartArea.right, y40);
+                        ctx.moveTo(chartArea.left, y4);
+                        ctx.lineTo(chartArea.right, y4);
                         ctx.stroke();
 
                         // Línea en y=60
                         ctx.beginPath();
-                        ctx.moveTo(chartArea.left, y60);
-                        ctx.lineTo(chartArea.right, y60);
+                        ctx.moveTo(chartArea.left, y6);
+                        ctx.lineTo(chartArea.right, y6);
                         ctx.stroke();
 
                         ctx.restore();
@@ -1955,7 +1955,31 @@ if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valo
                         console.error(`Error al procesar etiqueta ${index}:`, e);
                       }
                     }
+
+                    // Dibujar lineas de referencia para 39 y 60 
+                    const y40 = chart.scales.y.getPixelForValue(39);
+                    const y60 = chart.scales.y.getPixelForValue(60);
+                    const chartArea = chart.chartArea;
+                    
+                    ctx.save();
+                    ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([6, 6]);
+                    
+                    // Línea en y=39
+                    ctx.beginPath();
+                    ctx.moveTo(chartArea.left, y40);
+                    ctx.lineTo(chartArea.right, y40);
+                    ctx.stroke();
+                    
+                    // Línea en y=60
+                    ctx.beginPath();
+                    ctx.moveTo(chartArea.left, y60);
+                    ctx.lineTo(chartArea.right, y60);
+                    ctx.stroke();
+                    
                     ctx.restore();
+                    
                   } catch (e) {
                     console.error("Error en plugin etiquetasExtremos:", e);
                   }
