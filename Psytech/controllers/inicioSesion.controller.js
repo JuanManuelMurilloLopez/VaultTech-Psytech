@@ -81,7 +81,7 @@ exports.verificarOTP = async (request, response) => {
         
         const otpData = await OTP.obtenerOTP(usuarioId);
 
-        if (!otpData || 111111 !== parseInt(otp)) {
+        if (!otpData || otpData.codigo !== parseInt(otp)) {
             return response.send('<script>alert("OTP incorrecto o vencido"); window.location.href = "/otp";</script>');
         }
 
