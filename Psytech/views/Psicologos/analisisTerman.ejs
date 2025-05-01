@@ -14,6 +14,9 @@
     <!-- CSS cerrar sesión -->
     <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 
+    <!-- CSS para imprimir -->
+    <link rel="stylesheet" href="/css/psicologos/analisisTerman.print.css" media="print">
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -33,7 +36,7 @@
                     </div>
                 </div>
 
-                <div class="box mt-4">
+                <div class="contenedor-secciones mt-4">
 
                     <h5 class="titulo-seccion">Porcentajes de categorías</h5>
                     <hr>
@@ -111,7 +114,7 @@
             </div>
 
             <div class="boton-container">
-                <button class="button is-info" id="generarPDF">Descargar como PDF</button>
+                <!-- <button class="button is-info" id="generarPDF">Descargar como PDF</button> -->
                 <a class="btn btn-color--third boton-regresar-abajo" href="/psicologo/aspirantes/<%= idAspirante %>/<%= idGrupo %>/<%= idInstitucion %>">Regresar</a>
             </div>
 
@@ -121,7 +124,69 @@
     <!-- Variables para el frontend -->
     <script>
         const resultadosTerman = <%- resultadosJSON %>;
+    
+        // Boton de imprimir análisis
+
+        document.addEventListener('DOMContentLoaded', function() {
+        // Definir estilos del boton
+        const buttonStyles = {
+            className: 'btn btn-color--secondary',
+            innerHTML: 'Imprimir Análisis',
+            style: {
+            padding: '6px 24px',
+            fontSize: '16px'
+            }
+        };
+        
+        // Buscar el contenedor
+        let container = document.querySelector('.boton-container');
+        
+        if (!container) {
+            // Si no existe, crear uno nuevo
+            container = document.createElement('div');
+            container.className = 'boton-container';
+            
+            // Estilos para el nuevo contenedor
+            Object.assign(container.style, {
+            display: 'flex',
+            justifyContent: 'flex-end',
+            marginTop: '60px',
+            marginBottom: '40px',
+            width: '100%'
+            });
+            
+            // Insertar en la pag
+            const mainContainer = document.querySelector('.container');
+            if (mainContainer) {
+            mainContainer.appendChild(container);
+            }
+        } else {
+            // Ajustar el contenedor que existe
+            Object.assign(container.style, {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%'
+            });
+        }
+        
+        // Crear boton de imprimir
+        const printButton = document.createElement('button');
+        
+        // Poner estilos y propiedades
+        printButton.className = buttonStyles.className;
+        printButton.innerHTML = buttonStyles.innerHTML;
+        Object.assign(printButton.style, buttonStyles.style);
+        
+        // Poner funcion de imprimir
+        printButton.addEventListener('click', () => window.print());
+        
+        // Agregar al contenedor
+        container.appendChild(printButton);
+        });
     </script>
+
+    
     <script src="/js/psicologos/graficaTerman.js"></script>
     <script src="/js/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>

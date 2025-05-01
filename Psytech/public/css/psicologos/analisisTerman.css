@@ -193,15 +193,6 @@ table {
     align-items: center;
 }
 
-.contenedor-botones {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.contenedor-botones button{
-    margin: 20px !important;
-}
 
 #grafica-container {
     width: 100%;
@@ -215,6 +206,50 @@ table {
     height: auto !important;
 }
 
-.box {
+.boton-container {
     width: 100%;
+    text-align: left;
+    margin-top: 60px;
+    margin-bottom: 40px;
+    padding-left: 15px; 
+}
+
+.container .boton-regresar-abajo {
+    position: static;
+    display: inline-block;
+    font-size: 16px;
+    padding: 6px 24px;
+    z-index: 1;
+}
+
+.btn{
+    padding: 0;
+}
+
+.btn-color--secondary{
+    padding: 4px 28px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+    background: var(--secondary);
+    color: var(--font-secondary);
+}
+
+.btn-color--third{
+    padding: 4px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+    background: var(--third);
+    color: var(--font-primary);
+}
+
+.btn-color--third:hover{
+    background: var(--third-hover);
+    color: var(--font-primary);
+}
+
+.btn-color--secondary:hover{
+    background: var(--secondary-hover);
+    color: var(--font-secondary);
 }
