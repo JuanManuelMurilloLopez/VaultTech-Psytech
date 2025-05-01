@@ -871,7 +871,7 @@ if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valo
         
         insertarInterpretacionKostick(valores, interpretaciones);
       } else if (prueba === "Personalidad 16 Factores (16 PF)") {
-        const genero = <%- JSON.stringify(idGenero) %>;
+        const genero = <%- JSON.stringify(idGenero.idGenero) %>;
 
         document.getElementById("Interpretacion").innerHTML += `<div id="primarias"><strong>ESCALAS PRIMARIAS<br></strong></div>
         <div id="globales"><strong><br>FACTORES GLOBALES</strong><br></div>`;
@@ -882,7 +882,7 @@ if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valo
         const adj2 = ["SOCIABLE", "RÁPIDO", "MADURO", "DOMINANTE", "ENTUSIASTA", "CONSTANTE", "AVENTURADO", "RACIONAL", "CONFIABLE", "CONVENCIONAL", "SOFISTICADO", "SEGURO DE SÍ", "INNOVADOR", "AUTOSUFICIENTE", "CONTROLADO", "ESTABLE", "EXTRAVERSIÓN ALTA", "ANSIEDAD ALTA", "DUREZA ALTA", "INDEPENDENCIA ALTA", "AUTOCONTROL ALTO"];
         let adj = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""];
         const letras = ['A', 'B', 'C', 'E', 'F', 'G', 'H', 'I', 'L', 'M', 'N', 'O', 'Q1', 'Q2', 'Q3', 'Q4', 'EX', 'AX', 'TM', 'IN', 'SC'];
-
+        console.log(genero);
         if (genero == 1){
           switch (true) {
             case valores.A < 7:
