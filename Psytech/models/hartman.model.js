@@ -29,9 +29,6 @@ class Hartman {
 
     // Ejecuta todas las promesas y retorna una única promesa que representa la operación global
     return Promise.all(promesas)
-      .then(() => {
-        console.log('Todas las respuestas se han guardado correctamente.');
-      })
       .catch(err => {
         console.error('Error al guardar respuestas:', err);
         throw err;

@@ -1399,21 +1399,13 @@ exports.get_respuestasA = (request, response, next) => {
     const idAspirante = request.params.idAspirante;
     const idPrueba = request.params.idprueba;
 
-    console.log("ID Aspirante recibido:", idAspirante);
-    console.log("ID Prueba recibida:", idPrueba);
   
     Aspirante.getInformacionAspirante(idAspirante).then(([datosAspirante, fieldData]) => {
-        console.log("Datos Aspirante antes del if: ");
-        console.log(datosAspirante);
       Aspirante.fetchGrupo(idAspirante).then(([rows, fieldData]) => {
         Grupo.fetchOne(request.params.idGrupo).then(([grupoRows, fieldData]) => {
           if (idPrueba == 1) {
             ResultadosKostick.fetchAll(request.params.idGrupo, request.params.idAspirante).then(
               ([resultados, fieldData]) => {
-                console.log("Resultados Kostick:");
-                console.log(resultados[0]);
-                console.log("Datos:" );
-                console.log(datosAspirante);
                 InterpretacionKostick.fetchAll()
                 .then((interpretacionesKostick) => {
                     response.render("Psicologos/consultaRespuestasAspirante", {
@@ -1523,8 +1515,6 @@ exports.getCuadernilloKostick = (request, response, next) => {
                     Prueba.getDatosPersonalesAspiranteKostick(idGrupo, idAspirante)
                     .then(([rows, fieldData]) => {
                         const datosPersonales = rows;
-                        console.log("preguntas kostick: ");
-                        console.log(preguntasKostick);
                         response.render('Psicologos/cuadernilloKostick', {
                             prueba: "El inventario de Percepción Kostick",
                             grupo: grupo || null,
@@ -1582,8 +1572,6 @@ exports.getCuadernillo16PF = (request, response, next) => {
                     Prueba.getDatosPersonalesAspiranteKostick(idGrupo, idAspirante)
                     .then(([rows, fieldData]) => {
                         const datosPersonales = rows;
-                        console.log("Preguntas 16PF");
-                        console.log(preguntas16PF);
                         response.render('Psicologos/cuadernillo16PF', {
                             prueba: "Personalidad 16 Factores (16 PF)",
                             grupo: grupo || null,

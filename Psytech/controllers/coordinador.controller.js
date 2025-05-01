@@ -210,8 +210,6 @@ exports.postRegistrarCoordinador = (request, response, next) => {
             1
         );
 
-        console.log('Guardando coordinador:', coordinador);
-
         return coordinador.saveCoordinador()
             .then(() => {
                 exports.getCoordinadoresRegistrados(request, response, next);

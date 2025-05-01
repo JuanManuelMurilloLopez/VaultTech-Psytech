@@ -658,7 +658,6 @@ exports.postHartmanFase1 = (request, response, next) => {
     const tiempoInicio = request.session.tiempoInicio;
     const tiempoFin = Date.now();
     const tiempoTotalSegundos = Math.floor((tiempoFin - tiempoInicio) / 1000);
-    console.log("Contador detenido:", tiempoFin, " -> Tiempo total:", tiempoTotalSegundos, "segundos");
 
     const idAspirante = request.session.idAspirante;
     const idGrupo = request.session.idGrupo;
@@ -666,7 +665,6 @@ exports.postHartmanFase1 = (request, response, next) => {
 
     const totalPreguntas = Object.keys(request.body).filter(key => key.startsWith("respuesta_")).length;
     const tiempoPromedio = totalPreguntas > 0 ? tiempoTotalSegundos / totalPreguntas : 0;
-    console.log("Tiempo promedio por pregunta:", tiempoPromedio);
 
     const respuestas = Object.entries(request.body)
         .filter(([pregunta_id]) => pregunta_id.startsWith("respuesta_"))
@@ -700,7 +698,6 @@ exports.postHartmanFase1 = (request, response, next) => {
 exports.getHartmanFase2 = async (request, response, next) => {
     try {
         tiempoInicio = Date.now();
-        console.log("Contador iniciado:", tiempoInicio);
         const fasePregunta = 2;
         const [rows] = await hartman.fetchFase1(fasePregunta);
 
@@ -840,8 +837,6 @@ exports.get_instrucciones = (request, response, next) => {
             Genero.fetchAll()
             .then(([rows, fieldData]) => {
                 const generos = rows;
-                console.log("Generos: ");
-                console.log(generos);
                 response.render('Aspirantes/datosPersonales16PF', {
                     generos: generos || [],
                 })
@@ -1030,8 +1025,6 @@ exports.get_instrucciones = (request, response, next) => {
   
   /* Controlador que guarda la última pregunta de 16PF */
   exports.pruebaCompletada = (request, response, next) => {
-    console.log("Entra pruebaCompletada (Controlador)");
-    console.log(request.body);
     const idOpcionKostick = request.body.idOpcionKostick;
     const idGrupo = request.body.idGrupo;
     const idAspirante = request.body.idAspirante;
@@ -1247,8 +1240,6 @@ exports.get_pruebaCompletadaK16 = async (request, response, next)=> {
                       pregunta
                     )
                       .then((respuesta) => {
-                        console.log("Opción Kostick: ", respuesta[0][0].opcionKostick);
-                        console.log("Opción: ", opcion);
                         if (respuesta[0][0].opcionKostick === opcion) {
                           suma[letra]++;
                         }
@@ -1261,10 +1252,6 @@ exports.get_pruebaCompletadaK16 = async (request, response, next)=> {
               }
             }
             await Promise.all(promesas);
-        
-            for (let i = 0; i < letras.length; i++) {
-              console.log(letras[i] + ": " + suma[i]);
-            }
           } catch (err) {
             console.error("Error general:", err);
             response.status(500).send("Ocurrió un error al calificar la prueba");
