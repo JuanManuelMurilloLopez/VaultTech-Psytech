@@ -89,9 +89,8 @@ router.get('/respuestas-otis', controller.getRespuestasOtis);
 
 // Ruta para obtener las respuestas de una serie Terman por INDIVIDUAL
 router.get('/analisis-terman/:idAspirante/:idGrupo/serie/:idSerie', controller.getRespuestasSerie);
+router.get('/analisis-terman/:idGrupo/:idAspirante/:idInstitucion', controller.getAnalisisTerman);
 router.get('/analisis-terman/:idAspirante/:idGrupo/Test%20de%20Aptitud%20Mental%20TERMAN', controller.getAnalisisTerman);
-
-router.get('/analisis-terman/:idGrupo/:idAspirante/:idInstitucion', controller.getAnalisisColores);
 
 
 module.exports = router;
