@@ -102,8 +102,14 @@
     <!-- Contenedor de botones (regresar e imprimir) -->
     <div class="boton-container">
       <!-- Boton de regresar - CHECAR RUTA YA QUE NO ESTA DEFINIDO IDINSTITUCION -->
-      <a class="btn btn-color--third boton-regresar-abajo"
-      href="#"  >Regresar</a>
+       <% if (prueba === 'El inventario de Percepción Kostick') { %>
+        <a class="btn btn-color--third boton-regresar-abajo"
+        href="/psicologo/cuadernillo-KOSTICK/<%= idGrupo %>/<%= idAspirante %>/<%= idInstitucion %>"  >Regresar</a>
+       <% } else {%>
+        <a class="btn btn-color--third boton-regresar-abajo"
+        href="/psicologo/cuadernillo-16PF/<%= idGrupo %>/<%= idAspirante %>/<%= idInstitucion %>"  >Regresar</a>
+        <% } %>
+      
       
       <!-- Boton de descargar/imprimir -->
       <button class="btn btn-color--secondary descargar" onclick="descargar()">

@@ -1424,6 +1424,9 @@ exports.get_respuestasA = (request, response, next) => {
                         interpretaciones: interpretacionesKostick[0],
                         idAspirante: request.params.idAspirante || null,
                         idGenero: rows[0],
+                        idAspirante: request.params.idAspirante,
+                        idGrupo: request.params.idGrupo,
+                        idInstitucion: request.params.idInstitucion,
                     });
                 })
                 .catch((error) => {
@@ -1444,6 +1447,9 @@ exports.get_respuestasA = (request, response, next) => {
                         interpretaciones: null,
                         idAspirante: request.params.idAspirante || null,
                         idGenero: rows[0].idGenero || null,
+                        idAspirante: request.params.idAspirante,
+                        idGrupo: request.params.idGrupo,
+                        idInstitucion: request.params.idInstitucion,
                       });
                 })
                 .catch((error) => {
