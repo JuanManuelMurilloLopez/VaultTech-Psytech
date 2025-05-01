@@ -871,7 +871,7 @@ if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valo
         
         insertarInterpretacionKostick(valores, interpretaciones);
       } else if (prueba === "Personalidad 16 Factores (16 PF)") {
-        const genero = <%- JSON.stringify(idGenero.idGenero) %>;
+        const genero = <%- JSON.stringify(idGenero) %>;
 
         document.getElementById("Interpretacion").innerHTML += `<div id="primarias"><strong>ESCALAS PRIMARIAS<br></strong></div>
         <div id="globales"><strong><br>FACTORES GLOBALES</strong><br></div>`;

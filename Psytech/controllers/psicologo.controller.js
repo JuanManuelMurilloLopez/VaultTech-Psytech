@@ -1438,7 +1438,7 @@ exports.get_respuestasA = (request, response, next) => {
                         datos: datosAspirante[0],
                         interpretaciones: null,
                         idAspirante: request.params.idAspirante || null,
-                        idGenero: rows[0] || null,
+                        idGenero: rows[0].idGenero || null,
                       });
                 })
                 .catch((error) => {
