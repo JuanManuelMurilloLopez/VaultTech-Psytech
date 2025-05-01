@@ -24,6 +24,19 @@
     flex-direction: row;
 }
 
+.registrar-psicologo{
+    border-radius: 20px;
+    font-size: 16px;
+    padding: 10px 32px;
+    background: var(--secondary);
+    color: var(--font-secondary);
+}
+
+.registrar-psicologo:hover{
+    background: var(--secondary-hover);
+    color: var(--font-secondary);
+}
+
 /* Estilos de lista psicologos */
 
 .btn-color--primary{

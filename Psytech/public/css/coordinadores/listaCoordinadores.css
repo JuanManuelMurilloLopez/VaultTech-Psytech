@@ -25,6 +25,19 @@
     flex-direction: row;
 }
 
+.registrar-coordinador{
+    border-radius: 20px;
+    font-size: 16px;
+    padding: 10px 32px;
+    background: var(--secondary);
+    color: var(--font-secondary);
+}
+
+.registrar-coordinador:hover{
+    background: var(--secondary-hover);
+    color: var(--font-secondary);
+}
+
 /* Estilos de lista coordinadores */
 .btn-color--primary{
     background: var(--primary);
