@@ -1,5 +1,5 @@
 @media print {
-    /* Configuracion de pagina */
+    /* Configuración de pagina */
     @page {
       size: A4;
       margin: 1.5cm 1cm;
@@ -102,7 +102,7 @@
       font-weight: bold;
       padding: 10px;
       border: none; 
-      background-color: transparent; 
+      background-color: transparent !important; 
       page-break-inside: avoid;
     }
     
@@ -187,7 +187,7 @@
       height: 20px;
       margin: 0 auto;
     }
-    
+
     #Interpretacion {
       page-break-before: auto; 
       margin-top: 30px;
@@ -198,12 +198,12 @@
       font-size: 18pt;
       font-weight: bold;
       margin-bottom: 25px;
-      text-align: left; 
+      text-align: left;
       border-bottom: 1px solid rgba(200, 200, 200, 0.5); 
       padding-bottom: 10px;
       page-break-after: avoid;
     }
-    
+
     #textos .subtitle {
       color: #294969;
       font-size: 16pt;
@@ -221,9 +221,12 @@
       margin-bottom: 15px;
       padding: 10px 15px;
       border-radius: 5px;
-      background-color: #ffffff;
+      background-color: transparent !important; 
       border: 1px solid #dee2e6;
       page-break-inside: avoid;
+      box-shadow: none !important; 
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
     
     #textos p:nth-of-type(odd):not(.subtitle) {
@@ -234,17 +237,7 @@
       border-left: 4px solid #294969;
     }
     
-    .interpretacion-container .section-title,
-    #Interpretacion .title {
-      page-break-after: avoid !important;
-      break-after: avoid !important;
-    }
-    
-    .interpretacion-container .section-title + .interpretacion-horizontal {
-      page-break-before: avoid !important;
-      break-before: avoid !important;
-    }
-    
+    /* Estilos 16PF */
     .interpretacion-container {
       margin-top: 20px;
       margin-bottom: 30px;
@@ -269,16 +262,19 @@
       gap: 10px;
       margin-bottom: 20px;
     }
-    
+
     .interpretacion-card {
       flex: 0 0 calc(50% - 10px);
       max-width: calc(50% - 10px);
-      background-color: #ffffff;
+      background-color: transparent !important; 
       border: 1px solid #dee2e6;
       border-radius: 8px;
       margin-bottom: 15px;
       overflow: hidden;
       page-break-inside: avoid;
+      box-shadow: none !important; 
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
     
     .card-content {
@@ -300,11 +296,56 @@
       text-align: justify;
     }
   
+    /* Cards sin borde 16PF y Kostick */
+    .card, 
+    .card-content {
+      background-color: transparent !important;
+      box-shadow: none !important;
+      border: none !important;
+    }
+    
+    /* Ajustes tarjetas y cajas */
+    .box, 
+    .has-shadow,
+    .card-body {
+      box-shadow: none !important;
+      -webkit-box-shadow: none !important;
+    }
+    
+    .bg-white,
+    .bg-light,
+    .card,
+    .interpretacion-card,
+    #textos p,
+    .table th,
+    .table td {
+      background-color: transparent !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
     .section-title + .interpretacion-horizontal {
       page-break-before: avoid;
       page-break-inside: avoid;
     }
+
+    .interpretacion-container .section-title,
+    #Interpretacion .title {
+      page-break-after: avoid !important;
+      break-after: avoid !important;
+    }
     
+    .interpretacion-container .section-title + .interpretacion-horizontal {
+      page-break-before: avoid !important;
+      break-before: avoid !important;
+    }
+
+    #primarias, #globales {
+      page-break-before: auto;
+      page-break-inside: avoid; 
+    }
+    
+    /* Evitar saltos de pagina */
     h1, h2, h3, h4, h5, h6, 
     .title-text, .subtitle, 
     .card-title, .section-title {
@@ -315,12 +356,7 @@
     p, li {
       page-break-inside: avoid;
     }
-    
-    #primarias, #globales {
-      page-break-before: auto; 
-      page-break-inside: avoid; 
-    }
-    
+
     .columns, .column {
       page-break-inside: avoid;
     }
