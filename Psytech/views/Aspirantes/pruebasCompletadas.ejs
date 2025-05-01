@@ -45,12 +45,18 @@
                                         const estatus = estatusPrueba[pruebaCompleta.nombreEstatus] || 'prueba-default'; 
 
                                         let rutaPrueba = '';
-                                        if (pruebaCompleta.nombre === 'Colores de Luscher') 
-                                            rutaPrueba = '/aspirante/instrucciones-colores';
-                                        if (pruebaCompleta.nombre === 'OTIS') 
-                                            rutaPrueba = '/aspirante/instrucciones-otis';
-                                        if (pruebaCompleta.nombre === 'HARTMAN') 
-                                            rutaPrueba = '/aspirante/prueba-hartman/fase1';
+                                        if (prueba.nombre === 'Colores de Luscher') rutaPrueba = '/aspirante/instrucciones-colores';
+                                        if (prueba.nombre === 'OTIS') rutaPrueba = '/aspirante/instrucciones-otis';
+                                        if (prueba.nombre === 'TERMAN') rutaPrueba = '/aspirante/prueba-terman';
+                                        if (prueba.nombre === 'HARTMAN') rutaPrueba = '/aspirante/instrucciones-hartman';
+                                        if (prueba.nombre === 'KOSTICK') {
+                                            console.log(prueba);
+                                            rutaPrueba = '/aspirante/instruccionesPrueba/KOSTICK';
+                                        }
+                                        if (prueba.nombre === 'PRUEBA DE 16PF') {
+                                            console.log(prueba);
+                                            rutaPrueba = '/aspirante/instruccionesPrueba/PRUEBA DE 16PF';
+                                        }
                                     %>
                                     <% if (estatusPrueba[pruebaCompleta.nombreEstatus]) { %>
                                         <span class="card-estatus <%= estatus %>">
