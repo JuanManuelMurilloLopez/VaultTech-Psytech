@@ -119,7 +119,7 @@ function completarRespuestasFaltantes() {
     const ultimaPregunta = preguntasFaltantes[preguntasFaltantes.length - 1];
 
     const promesas = todasMenosLaUltima.map(p => {
-        return fetch(`/aspirante/pruebas/responder/terman/pregunta/${p.idPreguntaTerman}`, {
+        return fetch(`/aspirante/prueba-terman/pregunta/${p.idPreguntaTerman}`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -136,7 +136,7 @@ function completarRespuestasFaltantes() {
     // Luego mandamos la última
     if (ultimaPregunta) {
         promesas.push(
-            fetch(`/aspirante/pruebas/responder/terman/pregunta/${ultimaPregunta.idPreguntaTerman}`, {
+            fetch(`/aspirante/prueba-terman/pregunta/${ultimaPregunta.idPreguntaTerman}`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
