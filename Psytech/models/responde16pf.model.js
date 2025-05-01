@@ -37,4 +37,17 @@ module.exports = class Responde16PF {
         };
       });
   }
+
+  static fetchRespuestasAspirante(idGrupo, idAspirante){
+    return db.execute(`
+                        SELECT *
+                        FROM opciones16pf
+                        WHERE idOPcion16PF IN 
+                                              (SELECT idOpcion16PF
+                                                FROM responde16pf
+                                                WHERE idGrupo = ?
+                                                AND idAspirante = ?)
+      `, [idGrupo, idAspirante]);
+  }
+
 };

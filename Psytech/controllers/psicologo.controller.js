@@ -18,6 +18,8 @@ const ResultadosKostick = require('../models/resultadosKostick.model.js');
 const Resultados16PF = require('../models/resultados16PF.model.js');
 const InterpretacionKostick = require('../models/interpretacionKostick.js');
 const Interpretaciones16PF = require('../models/interpretacion16PF.model.js');
+const RespondeKostick = require('../models/respondeKostick.model.js');
+const Responde16PF = require('../models/responde16pf.model.js');
 
 const xlsx = require('xlsx');
 const fs = require('fs');
@@ -1490,3 +1492,96 @@ exports.get_interpretaciones16PF = (request, response, next) => {
         next(error);
     }
 };
+
+// Cuadernillo Kostick
+exports.getCuadernilloKostick = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    Aspirante.fetchOne(idAspirante)
+    .then(([rows, fieldData]) => {
+        const datosAspirante = rows[0];
+        Grupo.fetchOne(idGrupo)
+        .then(([rows, fieldData]) => {
+            const grupo = rows[0];
+            PreguntaKostick.fetchAll()
+            .then(([rows, fieldData]) => {
+                const preguntasKostick = rows;
+                RespondeKostick.fetchRespuestasAspirante(idGrupo, idAspirante)
+                .then(([rows, fieldData]) => {
+                    const resultados = rows;
+                    const opciones = resultados.map(r => r.opcionKostick);
+                    const descripcionOpciones = resultados.map(r => r.descripcionOpcionKostick);
+                    response.render('Psicologos/cuadernilloKostick', {
+                        prueba: "El inventario de Percepción Kostick",
+                        grupo: grupo || null,
+                        valores: resultados[0][0],
+                        datos: datosAspirante || null,
+                        aspirante: datosAspirante || null,
+                        preguntas: preguntasKostick || [],
+                        opciones: opciones || [],
+                        descripcion: descripcionOpciones || [],
+                    })
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+// Cuadernillo 16PF
+exports.getCuadernillo16PF = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    Aspirante.fetchOne(idAspirante)
+    .then(([rows, fieldData]) => {
+        const datosAspirante = rows[0];
+        Grupo.fetchOne(idGrupo)
+        .then(([rows, fieldData]) => {
+            const grupo = rows[0];
+            Pregunta16PF.fetchAll()
+            .then(([rows, fieldData]) => {
+                const preguntas16PF = rows;
+                Responde16PF.fetchRespuestasAspirante(idGrupo, idAspirante)
+                .then(([rows, fieldData]) => {
+                    const resultados = rows;
+                    const opciones = resultados.map(r => r.opcion16PF);
+                    const descripcionOpciones = resultados.map(r => r.descripcionOpcion16PF);
+                    response.render('Psicologos/cuadernillo16PF', {
+                        prueba: "Personalidad 16 Factores (16 PF)",
+                        grupo: grupo || null,
+                        valores: resultados[0][0],
+                        datos: datosAspirante || null,
+                        aspirante: datosAspirante || null,
+                        preguntas: preguntas16PF || [],
+                        opciones: opciones || [],
+                        descripcion: descripcionOpciones || [],
+                    })
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+  
