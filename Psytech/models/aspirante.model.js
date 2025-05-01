@@ -117,4 +117,29 @@ module.exports = class Aspirante {
             `, [institucionProcedencia, idPais, idEstado, idAspirante])
     }
 
+    static fetchCorreos(){
+        return db.execute(`
+                            SELECT correo
+                            FROM aspirantes, usuarios
+                            WHERE aspirantes.idUsuario = usuarios.idUsuario
+            `)
+    }
+
+    static fetchGrupo(idAspirante){
+        return db.execute(`
+                            SELECT idGrupo
+                            FROM gruposaspirantes
+                            WHERE idAspirante = ?
+            `, [idAspirante]);
+    }
+
+    static getGenero(idAspirante){
+        return db.execute(`
+                            SELECT idGenero
+                            FROM datospersonales
+                            WHERE idAspirante = ?
+                            AND idPrueba = 2;
+            `, [idAspirante]);
+    }
+
 }

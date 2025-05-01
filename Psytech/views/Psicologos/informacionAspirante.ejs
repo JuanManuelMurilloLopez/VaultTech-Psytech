@@ -28,7 +28,7 @@
             <!-- Boton de cerrar sesión -->
             <%- include('../includes/_buttonCerrarSesion.ejs') %>
 
-            <h3 class="text-center">INFORMACION ASPIRANTE</h3><br>
+            <h3 class="text-center">INFORMACIÓN ASPIRANTE</h3><br>
 
             <div class="aspirante-info">
                 <h4 class="aspirante-titulo"> Nombre del aspirante: </h4>
@@ -84,7 +84,9 @@
                         <button  class="btn btn-color--secondary" 
                         onclick= "window.open('/expedientes/<%= informacionAspirante.cv %>', '_blank')"
                         >Ver</button>
-                    <% } %> 
+                    <% } else { %>
+                        <span class="document-status">Este aspirante no ha subido su CV</span>
+                    <% } %>
                 </div><br><br>
                 <div class="d-flex align-items-center">
                     <img class="document-icon" src="/images/document.svg" alt="ícono de documento">
@@ -93,6 +95,8 @@
                         <button  class="btn btn-color--secondary"
                         onclick= "window.open('/expedientes/<%= informacionAspirante.kardex %>', '_blank')"
                         >Ver</button>
+                    <% } else { %>
+                        <span class="document-status">Este aspirante no ha subido su Kardex</span>
                     <% } %>
                 </div>
             </div><br>
@@ -107,7 +111,7 @@
                         <a href="/psicologo/respuestas-formato-entrevista/<%= idGrupo %>/<%= aspirante %>/<%= idInstitucion %>"
                             class="btn btn-color--secondary">Ver</a>
                     <% } else { %>
-                        <span class="formato-status">Este aspirante no ha respondido el formato de entrevista</span>
+                        <span class="document-status">Este aspirante no ha respondido el formato de entrevista</span>
                     <% } %>
                 </div>
             </div><br>
@@ -135,6 +139,9 @@
                                             if (prueba.nombre === 'Colores de Luscher') rutaPrueba = '/psicologo/cuadernillo-colores';
                                             if (prueba.nombre === 'OTIS') rutaPrueba = '/psicologo/cuadernillo-otis';
                                             if (prueba.nombre === 'TERMAN') rutaPrueba = '/psicologo/analisis-terman';
+                                            if (prueba.nombre === 'HARTMAN') rutaPrueba = '/psicologo/analisis-hartman';
+                                            if(prueba.nombre === 'PRUEBA DE 16PF') rutaPrueba = '/psicologo/cuadernillo-16PF';
+                                            if(prueba.nombre === 'KOSTICK') rutaPrueba = '/psicologo/cuadernillo-KOSTICK';
                                         %>
                                         <% if (estatusPrueba[prueba.nombreEstatus]) { %>
                                             <span class="card-estatus <%= estatus %>">

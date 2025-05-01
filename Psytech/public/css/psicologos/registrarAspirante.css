@@ -54,3 +54,9 @@
     background: var(--primary-hover);
     color: var(--font-primary);
 }
+
+input.form-control::placeholder,
+textarea.form-control::placeholder {
+  opacity: 0.55;
+  
+}

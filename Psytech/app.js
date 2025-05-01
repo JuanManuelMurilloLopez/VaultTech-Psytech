@@ -30,6 +30,7 @@ app.use(
         scriptSrc: [
           "'self'",
           "https://cdn.jsdelivr.net",
+          "https://code.jquery.com",
           "https://unpkg.com",
           "'unsafe-inline'",
           "'unsafe-hashes'"

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instrucciones Prueba</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- CSS link -->
+  <link rel="stylesheet" href="/css/aspirantes/instruccionesOtis.css">
+</head>
+<body class="bg-light">
+  <div class="container">
+    <h1 class="text-center"><%= prueba.nombre %></h1>
+    
+    <h4 class="fw-bold">INSTRUCCIONES</h4>
+    
+    <% if (prueba.nombre === 'KOSTICK') { %>
+      <p>Hay 90 pares de frases, usted debe escoger de cada par aquella frase que sea más afín con su forma de ser o de pensar.</p>
+      <p>A veces tendrá la impresión de que ninguna refleja esa afinidad o, al contrario, que ambas lo hacen; en todo caso, usted debe optar por alguna de las dos.</p>
+      <p>Esta prueba debería tomarle aproximadamente de 20 a 30 minutos, y aunque no es cronometrada, contará con 2 horas para contestarla.</p>
+      <p><strong>No podrá regresar una vez que haya respondido una pregunta.</strong></p>
+    <% } else if (prueba.nombre === '16PF') { %>
+      <p>A continuación encontrará una serie de frases que permitirán conocer sus actitudes e intereses.</p>
+      <p>En general, no existen contestaciones correctas o incorrectas, porque las personas tienen distintos intereses y ven las cosas desde distintos puntos de vista.</p>
+      <p>Conteste con sinceridad; de esta forma se podrá conocer mejor su forma de ser. Cada frase contiene tres posibles respuestas (A, B y C) y normalmente la alternativa B viene con un interrogante, para ser señalada cuando no es posible decidirse entre la A ó la C. Intente inclinarse por las opciones de respuesta A o C. Sólo en caso de que no pueda decidirse, escoja la letra B.</p>
+      <p>Seleccione la opción que más se aplica a usted. Esta prueba debería tomarle aproximadamente de 30 a 45 minutos, sin embargo, no es cronometrada.</p>
+      <p><strong>No podrá regresar una vez que haya respondido una pregunta.</strong></p>
+    <% } %>
+
+    <p class="fw-bold">A continuación, podrá iniciar la prueba. Recuerde que el tiempo es limitado, así que intente concentrarse lo mejor posible.</p>
+
+    <div class="d-flex justify-content-between mt-5">
+      <a href="/aspirante/mis-pruebas" class="btn btn-secondary">Regresar</a>
+
+      <button id="botonIniciar" type="button" class="btn btn-color--secondary">Iniciar Prueba</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('botonIniciar').addEventListener('click', function () {
+      <% if (prueba.nombre === 'KOSTICK') { %>
+        window.location.href = "/aspirante/datos-personales-KOSTICK";
+      <% } else { %>
+        window.location.href = "/aspirante/datos-personales-16PF";
+      <% } %>
+    });
+  </script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

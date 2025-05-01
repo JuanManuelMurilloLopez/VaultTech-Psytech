@@ -35,45 +35,45 @@
                 <form action="" method="POST">
     
                     <!--Input nombre-->
-                    <div class="">
-                        <label class="form-label" for="nombreUsuario">Nombre</label> <br><%=  %>
+                    <div class="form-floating mb-3">
                         <input type="" class="form-control"  id="nombreUsuario" value="<%= usuario.nombreUsuario %>" name="nombreUsuario" required>
+                        <label class="form-label" for="nombreUsuario">Nombre</label> <%=  %>
                     </div>
     
                     <!--Input Apellido Paterno-->
-                    <div class="">
-                        <label class="form-label" for="apellidoPaterno">Apellido Paterno</label> <br>
+                    <div class="form-floating mb-3">
                         <input type="" class="form-control" id="apellidoPaterno" value="<%= usuario.apellidoPaterno %>" name="apellidoPaterno" required>
+                        <label class="form-label" for="apellidoPaterno">Apellido Paterno</label> 
                     </div>
     
                     <!--Input Apellido Materno-->
-                    <div class="">
-                        <label class="form-label" for="apellidoMaterno">Apellido Materno</label> <br>
+                    <div class="form-floating mb-3">
                         <input type="" class="form-control" id="apellidoMaterno" value="<%= usuario.apellidoMaterno %>" name="apellidoMaterno">
+                        <label class="form-label" for="apellidoMaterno">Apellido Materno</label>
                     </div>
     
                     <!--Input institución de procedencia-->
-                    <div class="">
-                        <label class="form-label" for="institucionProcedencia">Institución de Procedencia</label> <br>
+                    <div class="form-floating mb-3">
                         <input type="" class="form-control" id="institucionProcedencia" value="<%= aspirante.institucionProcedencia %>" name="institucionProcedencia" required>
+                        <label class="form-label" for="institucionProcedencia">Institución de Procedencia</label>
                     </div>
     
                     <!--Input Correo-->
-                    <div class="">
-                        <label class="form-label" for="correo">Correo</label> <br>
+                    <div class="form-floating mb-3">
                         <input type="email" class="form-control" id="correo" value="<%= usuario.correo %>" name="correo" required>
+                        <label class="form-label" for="correo">Correo</label>
                     </div>
     
                     <!--Input Lada-->
-                    <div class="">
-                        <label class="form-label" for="lada">Lada telefónica</label> <br>
+                    <div class="form-floating mb-3">
                         <input type="number" class="form-control" id="lada" value="<%= usuario.lada %>" name="lada" required>
+                        <label class="form-label" for="lada">Lada telefónica</label>
                     </div>
     
                     <!--Input Número de teléfono-->
-                    <div class="">
-                        <label class="form-label" for="numeroTelefono">Número de teléfono</label> <br>
+                    <div class="form-floating mb-3">
                         <input type="number" class="form-control" id="numeroTelefono" value="<%= usuario.numeroTelefono %>" name="numeroTelefono" required>
+                        <label class="form-label" for="numeroTelefono">Número de teléfono</label>
                     </div>
     
                     <!--Input País de origen-->

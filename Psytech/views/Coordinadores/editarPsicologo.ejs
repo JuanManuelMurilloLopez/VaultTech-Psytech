@@ -35,39 +35,40 @@
                 </div>
             <% } %>
             <form action="/coordinador/editar-psicologo/<%= psicologo.idUsuario %>" method="POST" onsubmit="return validarFormulario()">
-                <div>
-                    <!--Input nombre-->
-                    <div class="mb-3">
-                        <label class="form-label" for="nombreUsuario">Nombre</label>
-                        <input class="form-control" type="text" name="nombreUsuario" id="nombreUsuario" value="<%= psicologo.nombreUsuario %>" required>
+                <!--Input nombre-->
+                <div class="form-floating mb-3">
+                    <input class="form-control" type="text" name="nombreUsuario" id="nombreUsuario" placeholder="Nombre" value="<%= psicologo.nombreUsuario %>" required>
+                    <label class="form-label" for="nombreUsuario">Nombre</label>
+                </div>
+                <!--Input Apellido Paterno-->
+                <div class="form-floating mb-3">
+                    <input class="form-control" type="text" name="apellidoPaterno" id="apellidoPaterno" placeholder="Apellido Paterno" value="<%= psicologo.apellidoPaterno %>" required>
+                    <label class="form-label" for="apellidoPaterno">Apellido Paterno</label>
+                </div>
+                <!--Input Apellido Materno-->
+                <div class="form-floating mb-3">
+                    <input class="form-control" type="text" name="apellidoMaterno" id="apellidoMaterno" placeholder="Apellido Materno" value="<%= psicologo.apellidoMaterno %>">
+                    <label class="form-label" for="apellidoMaterno">Apellido Materno</label>
+                </div>
+                <!--Input Correo-->
+                <div class="form-floating mb-3">
+                    <input class="form-control" type="text" name="correo" id="correo" placeholder="Correo electrónico" value="<%= psicologo.correo %>" required>
+                    <label class="form-label" for="correo">Correo electrónico</label>
+                </div>
+                <!-- Input oculto de usuario -->
+                <input type="hidden" name="usuario" id="usuario" value="<%= psicologo.correo %>">  
+                <!--Input Lada-->
+                <div class="mb-3">
+                    <label class="form-label" for="lada">Lada telefónica</label>
+                    <div class="input-group">
+                        <span class="input-group-text">+</span>
+                        <input class="form-control" type="text" name="lada" id="lada" value="<%= psicologo.lada || '+052' %>" required>
                     </div>
-                    <!--Input Apellido Paterno-->
-                    <div class="mb-3">
-                        <label class="form-label" for="apellidoPaterno">Apellido Paterno</label>
-                        <input class="form-control" type="text" name="apellidoPaterno" id="apellidoPaterno" value="<%= psicologo.apellidoPaterno %>" required>
-                    </div>
-                    <!--Input Apellido Materno-->
-                    <div class="mb-3">
-                        <label class="form-label" for="apellidoMaterno">Apellido Materno</label>
-                        <input class="form-control" type="text" name="apellidoMaterno" id="apellidoMaterno" value="<%= psicologo.apellidoMaterno %>">
-                    </div>
-                    <!--Input Correo-->
-                    <div class="mb-3">
-                        <label class="form-label" for="correo">Correo electrónico</label>
-                        <input class="form-control" type="email" name="correo" id="correo" value="<%= psicologo.correo %>" required>
-                    </div>
-                    <!-- Input oculto de usuario -->
-                    <input type="hidden" name="usuario" id="usuario" value="<%= psicologo.correo %>">  
-                    <!--Input Lada-->
-                    <div class="mb-3">
-                        <label class="form-label" for="lada">Lada</label>
-                        <input class="form-control" type="text" name="lada" id="lada" value="<%= psicologo.lada || '+052' %>">
-                    </div>
-                    <!--Input Número-->
-                    <div class="mb-3">
-                        <label class="form-label" for="numeroTelefono">Número de teléfono</label>
-                        <input class="form-control" type="text" name="numeroTelefono" id="numeroTelefono" value="<%= psicologo.numeroTelefono %>" required>
-                    </div>
+                </div>                    
+                <!--Input Número-->
+                <div class="form-floating mb-3">
+                    <input class="form-control" type="text" name="numeroTelefono" id="numeroTelefono" placeholder="Número de teléfono" value="<%= psicologo.numeroTelefono %>" required>
+                    <label class="form-label" for="numeroTelefono">Número de teléfono</label>
                 </div>
             
                 <!-- Estatus del psicólogo -->
@@ -80,10 +81,16 @@
                     </div>
                 </div>
             
-                <!-- Botones de navegación "Regresar y Guardar" -->
-                <div class="d-flex justify-content-between mb-4">
-                    <a class="btn btn-color--third" href="/coordinador/psicologos-registrados">Regresar</a>
-                    <button type="submit" class="btn btn-color--secondary">Guardar</button>
+                <div>
+                    <a class="btn btn-color--third btn-sm" 
+                    href="/coordinador/psicologos-registrados"
+                    >Regresar</a>
+                    <button type="submit" class="btn btn-color--secondary btn-sm" onclick="return confirmarGuardado()">Guardar</button>
+                    <script>
+                    function confirmarGuardado() {
+                        return confirm("¿Estás seguro de guardar?");
+                    }
+                    </script>
                 </div>
             </form>            
         </div>

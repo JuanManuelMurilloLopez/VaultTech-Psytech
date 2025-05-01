@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 </head>
 
-<body class="bg-light">
+<body>
 
     <div class="main">
 
@@ -28,10 +28,13 @@
             <%- include('../includes/_buttonCerrarSesion.ejs') %>
             
             <h1 class="text-center mt-5">SUBIR DOCUMENTOS</h1>
-            <hr class="w-50 mx-auto">
+            <hr>
             
             <p class="text-center text-muted">
                 En esta sección podrás subir tus documentos de Curriculum Vitae (CV) y Kardex.
+            </p>
+            <p class="text-center instrucciones">
+                Debes subir los documentos uno por uno, no es posible subir los dos a la vez.
             </p>
 
             <div class="row">
@@ -55,7 +58,7 @@
                                 </div>
                                 <br>
                                 <br>
-                                <button type="submit" class="btn btn-color--secondary">Subir Archivo</button>
+                                <button type="submit" class="btn btn-color--secondary">Subir Kardex</button>
                             </form>
                         </div>
                     </div>
@@ -87,7 +90,7 @@
                                 </div>
                                 <br>
                                 <br>
-                                <button type="submit" class="btn btn-color--secondary">Subir Archivo</button>
+                                <button type="submit" class="btn btn-color--secondary">Subir CV</button>
                             </form>
                         </div>
                     </div>
@@ -100,7 +103,7 @@
                     </div>
                     <% } %>
 
-        </div>
+        </div><br>
     </div>
 
     <!-- Bootstrap JS -->

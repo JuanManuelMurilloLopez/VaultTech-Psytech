@@ -56,5 +56,36 @@ router.get('/respuestas-enviadas', controller.getRespuestasEnviadas);
 router.get('/prueba-terman', controller.getResponderTerman);
 router.get('/prueba-terman/serie/:idSerie', controller.getInfoSerie);
 router.post('/prueba-terman/pregunta/:idPreguntaTerman', controller.postRespuestaTerman);
+// Rutas prueba Hartman
+router.get('/instrucciones-hartman', controller.getInstruccionesHartman);
+router.post('/instrucciones-hartman', controller.postInstruccionesHartman);
+
+router.get('/prueba-hartman/fase1', controller.getHartmanFase1 );
+router.post('/prueba-hartman/fase1', controller.postHartmanFase1);
+router.get('/prueba-hartman/fase2', controller.getHartmanFase2);
+router.post('/prueba-hartman/fase2', controller.postHartmanFase2);
+// 16Pf y KOSTICK
+router.get("/instruccionesPrueba/:idPrueba", controller.get_instrucciones);
+
+router.get('/datos-personales-kostick', controller.getDatosPersonalesKostick);
+router.post('/datos-personales-kostick', controller.postDatosPersonalesKostick);
+
+router.get('/datos-personales-16PF', controller.getDatosPersonales16PF);
+router.post('/datos-personales-16PF', controller.postDatosPersonales16PF);
+
+router.get("/pruebaCompletada/:idPrueba", controller.get_pruebaCompletadaK16);
+  
+// router.get("/preguntasPrueba/:idPrueba", controller.get_preguntasPrueba);
+router.post("/preguntasPrueba/:idPrueba", controller.post_preguntasPrueba);
+
+router.post("/siguientePregunta", controller.post_siguientePregunta);
+
+router.post("/pruebaCompletada", controller.pruebaCompletada);
+
+router.get("/pruebaCompletada", controller.get_pruebaCompletada);
+
+router.post("/siguientePregunta1", controller.post_siguientePregunta1);
+
+router.post("/pruebaCompletada1", controller.pruebaCompletada1);
 
 module.exports = router;

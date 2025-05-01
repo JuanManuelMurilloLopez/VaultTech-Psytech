@@ -23,6 +23,15 @@ const resultadoSerieTerman = new resultadosSeriesTerman();
 
 // Middleware de apoyo para calificar Terman
 const calificarSerieTerman = require("../middleware/calificarTerman.js");
+const ResultadosKostick = require('../models/resultadosKostick.model.js');
+const Resultados16PF = require('../models/resultados16PF.model.js');
+const InterpretacionKostick = require('../models/interpretacionKostick.js');
+const Interpretaciones16PF = require('../models/interpretacion16PF.model.js');
+const RespondeKostick = require('../models/respondeKostick.model.js');
+const Responde16PF = require('../models/responde16pf.model.js');
+
+const PreguntaKostick = require('../models/preguntasKostick.model.js');
+const Pregunta16PF = require('../models/preguntas16pf.model.js');
 
 const xlsx = require('xlsx');
 const fs = require('fs');
@@ -45,7 +54,6 @@ exports.getCatalogoInstituciones = (request, response, next) => {
     Institucion.fetchAll()
     .then(([rows, fieldData]) => {
         const arregloInstituciones = rows;
-        console.log("Instituciones Registradas: ", arregloInstituciones);
         response.render('Psicologos/catalogoInstituciones', {
             arregloInstituciones: arregloInstituciones || [],
         });
@@ -173,8 +181,7 @@ exports.getRegistrarGrupo = (req, res, next) => {
 };
 
 // Post
-exports.postRegistrarGrupo = (req, res, next) => {
-    console.log("Request Body", req.body);
+  exports.postRegistrarGrupo = (req, res, next) => {
     const {
         nombreGrupo,
         carrera,
@@ -212,8 +219,7 @@ exports.postRegistrarGrupo = (req, res, next) => {
             idNivelAcademico,
             fechaLimite
         );
-        console.log("Grupo", grupo);
-
+  
         return grupo.saveGrupoYPruebas(pruebasSeleccionadas);
         })
         .then(() => {
@@ -234,7 +240,6 @@ exports.getInformacionGrupo = (request, response, next) => {
         Grupo.getAspirantes(request.params.idGrupo)
         .then(([rows, fieldData]) => {
             const aspirantes = rows;
-            console.log(grupo);
             response.render('Psicologos/informacionGrupo.ejs', {
                 grupo: grupo || null,
                 aspirantes: aspirantes || [],
@@ -337,7 +342,6 @@ exports.postEditarGrupo = (request, response, next) => {
         estatusGrupo
     } = request.body;
     
-    console.log("estatusGrupo recibido:", estatusGrupo); 
     
     // Cambiar estatusGrupo a 1 (activo) o 0 (inactivo) para guardarlo en la base de datos
     // Si no se manda un nuevo valor, usar el mismo estatus que ya tenía
@@ -351,7 +355,6 @@ exports.postEditarGrupo = (request, response, next) => {
         }
         
         const grupoActual = rows[0];
-        console.log("Estatus actual del grupo:", grupoActual.estatusGrupo);
         
         // Si no se manda el estatusGrupo desde el formulario dejar el que ya estaba
         if (estatusGrupo === undefined || estatusGrupo === null) {
@@ -360,8 +363,6 @@ exports.postEditarGrupo = (request, response, next) => {
             // Convertir a 1 o 0 segun el valor recibido
             estatus = estatusGrupo === 'true' ? 1 : 0;
         }
-        
-        console.log("Estatus que se usará:", estatus);
         
         // Ciclo escolar semestre y año
         const cicloEscolar = `${semestre} ${anio}`;
@@ -425,7 +426,6 @@ exports.getAspirante = (request, response, next) => {
             Aspirante.getFormatoEntrevista(request.params.idAspirante, request.params.idGrupo)
             .then(([rows, fieldData]) => {
                 const formatoEntrevista = rows;
-                console.log(formatoEntrevista);
                 response.render('Psicologos/informacionAspirante', {
                     informacionAspirante: informacionAspirante || [],
                     idGrupo: request.params.idGrupo || null,
@@ -522,11 +522,19 @@ exports.getRegistrarAspirantes = (request, response, next) => {
         .then(([rows, fieldData]) => {
             const estados = rows;
             
-            response.render('Psicologos/registrarAspirante', {
-                paises: paises || [],
-                estados: estados || [],
-                idGrupo: request.params.idGrupo,
-                idInstitucion: request.params.idInstitucion,
+            Aspirante.fetchCorreos()
+            .then(([rows, fieldData]) => {
+                const correosRegistrados = rows;
+                response.render('Psicologos/registrarAspirante', {
+                    paises: paises || [],
+                    estados: estados || [],
+                    idGrupo: request.params.idGrupo,
+                    idInstitucion: request.params.idInstitucion,
+                    correosRegistrados: correosRegistrados,
+                });
+            })
+            .catch((error) => {
+                console.log(error);
             });
         })
         .catch((error) => {console.log(error)});
@@ -552,7 +560,6 @@ exports.postRegistrarAspirantes = (request, response, next) => {
                 }
                 Promise.all(promesas)
                 .then(([rows, fieldData]) => {
-                    console.log("Proceso terminado");
                     exports.getInformacionGrupo(request, response, next);
                 })
                 .catch((error) => {
@@ -615,7 +622,6 @@ exports.getEditarAspirantes = (request, response, next) => {
 };
 
 exports.postEditarAspirantes = (request, response, next) => {
-    console.log(request.body);
 
     Aspirante.modificarAspirante(
                                 request.params.idAspirante, 
@@ -645,7 +651,6 @@ exports.getRespuestasFormatoEntrevista = (request, response, next) => {
     FormatoEntrevista.getRespuestasFormatoAspirante(request.params.idGrupo, request.params.idAspirante)
     .then(([rows, fieldData]) => {
         const respuestasAspirante = rows;
-        console.log(respuestasAspirante);
         response.render('Psicologos/respuestasFormatoDeEntrevista', {
             respuestasAspirante: respuestasAspirante || [],
             aspirante: request.params.idAspirante || null,
@@ -690,9 +695,6 @@ exports.getInformacionFamiliar = (request, response, next) => {
             }
         }))
 
-        console.log(nodos);
-        console.log(links);
-
         response.render('Psicologos/informacionFamiliar', {
             informacionFamiliar: {
                 nodos: nodos || [],
@@ -722,7 +724,6 @@ exports.getCatalogoPruebas = (request, response, next) => {
 };
 
 exports.getPruebaOtis = (request, response, next) => {
-    console.log('Prueba OTIS');
     response.render('Psicologos/infoPruebaOtis');
 };
 
@@ -816,8 +817,6 @@ exports.getAnalisisOtis = (request, response, next) => {
         Prueba.getPuntajeBrutoOtis(request.params.idAspirante, request.params.idGrupo)
         .then(([rows, fieldData]) => {
             const puntajeBruto = rows[0].puntajeBruto;
-            console.log("Informacion Analisis: ", informacionAnalisis);
-            console.log("Puntaje Bruto: ", puntajeBruto);
             response.render('Psicologos/analisisOtis.ejs', {
                 informacionAnalisis: informacionAnalisis || [],
                 puntajeBruto: puntajeBruto || 0,
@@ -1262,10 +1261,96 @@ function interpretarMovilidad(movilidad) {
 }
 
 exports.getRespuestasOtis = (request, response, next) => {
-    console.log('Respuestas Otis');
     response.render('Psicologos/respuestasOtis');
 };
 
+const consultaResultados = require('../models/consultaResultados.model.js');
+ const {
+     buscarValor, // Importa la función
+     DIM,
+     DIF,
+     dimGeneral,
+     dimPorcentaje,
+     INT,
+     DI,
+     DIS,
+     VQ,
+     Equilibrio_BQR,
+     Equilibrio_BQA,
+     Equilibrio_CQ1,
+     Equilibrio_CQ2
+ } = require('../public/js/aspirantes/encuentraValor.js');
+
+exports.getAnalisisHartman = async (request, response, next) => {
+    const { idGrupo, idAspirante, idInstitucion } = request.params;
+
+    try {
+        const [rows] = await consultaResultados.fetchHartmanAspirante(idAspirante, idGrupo);
+
+        if (!rows || rows.length === 0) {
+            return response.status(404).send("No se encontraron resultados de Hartman.");
+        }
+
+         // Procesa los datos del analisis de hartman para poder graficarlos
+        const analisisProcesado = {
+            MundoInterno: {
+                DimI: rows[0].citaDimI != null ? buscarValor(rows[0].citaDimI, DIM) : 0,
+                DimE: rows[0].citaDimE != null ? buscarValor(rows[0].citaDimE, DIM) : 0,
+                DimS: rows[0].citaDimS != null ? buscarValor(rows[0].citaDimS, DIM) : 0,
+                DiF: rows[0].citaDif != null ? buscarValor(rows[0].citaDif, DIF) : 0,
+                DimGeneral: rows[0].citaDimGeneral != null ? buscarValor(rows[0].citaDimGeneral, dimGeneral) : 0,
+                DimPorcentaje: rows[0].citaDimPorcentaje != null ? buscarValor(rows[0].citaDimPorcentaje, dimPorcentaje) : 0,
+                IntI: rows[0].citaIntI != null ? buscarValor(rows[0].citaIntI, INT) : 0,
+                IntE: rows[0].citaIntE != null ? buscarValor(rows[0].citaIntE, INT) : 0,
+                IntS: rows[0].citaIntS != null ? buscarValor(rows[0].citaIntS, INT) : 0,
+                IntGeneral: rows[0].citaIntGeneral != null ? buscarValor(rows[0].citaIntGeneral, DIM) : 0,
+                IntPorcentaje: rows[0].citaIntPorcentaje != null ? buscarValor(rows[0].citaIntPorcentaje, dimPorcentaje) : 0,
+                Di: rows[0].citaDi != null ? buscarValor(rows[0].citaDi, DI) : 0,
+                Dis: rows[0].citaDIS != null ? buscarValor(rows[0].citaDIS, DIS) : 0,
+                Sq1: rows[0].citaSQ1 != null ? buscarValor(rows[0].citaSQ1, VQ) : 0,
+                Sq2: rows[0].citaSQ2 != null ? buscarValor(rows[0].citaSQ2, DIM) : 0,
+            },
+            MundoExterno: {
+                DimI: rows[0].fraseDimI != null ? buscarValor(rows[0].fraseDimI, DIM) : 0,
+                DimE: rows[0].fraseDimE != null ? buscarValor(rows[0].fraseDimE, DIM) : 0,
+                DimS: rows[0].fraseDimS != null ? buscarValor(rows[0].fraseDimS, DIM) : 0,
+                DiF: rows[0].fraseDif != null ? buscarValor(rows[0].fraseDif, DIF) : 0,
+                DimGeneral: rows[0].fraseDimGeneral != null ? buscarValor(rows[0].fraseDimGeneral, dimGeneral) : 0,
+                DimPorcentaje: rows[0].fraseDimPorcentaje != null ? buscarValor(rows[0].fraseDimPorcentaje, dimPorcentaje) : 0,
+                IntI: rows[0].fraseIntI != null ? buscarValor(rows[0].fraseIntI, INT) : 0,
+                IntE: rows[0].fraseIntE != null ? buscarValor(rows[0].fraseIntE, INT) : 0,
+                IntS: rows[0].fraseIntS != null ? buscarValor(rows[0].fraseIntS, INT) : 0,
+                IntGeneral: rows[0].fraseIntGeneral != null ? buscarValor(rows[0].fraseIntGeneral, DIM) : 0,
+                IntPorcentaje: rows[0].fraseIntPorcentaje != null ? buscarValor(rows[0].fraseIntPorcentaje, dimPorcentaje) : 0,
+                Di: rows[0].fraseDi != null ? buscarValor(rows[0].fraseDi, DI) : 0,
+                Dis: rows[0].fraseDIS != null ? buscarValor(rows[0].fraseDIS, DIS) : 0,
+                Vq1: rows[0].fraseVQ1 != null ? buscarValor(rows[0].fraseVQ1, VQ) : 0,
+                Vq2: rows[0].fraseVQ2 != null ? buscarValor(rows[0].fraseVQ2, DIM) : 0,
+            },
+            Equilibrio: {
+                Bqr1: rows[0].BQr1 != null ? buscarValor(rows[0].BQr1, Equilibrio_BQR) : 0,
+                Bqr2: rows[0].BQr2 != null ? buscarValor(rows[0].BQr2, Equilibrio_BQR) : 0,
+                Bqa1: rows[0].BQa1 != null ? buscarValor(rows[0].BQa1, Equilibrio_BQA) : 0,
+                Bqa2: rows[0].BQa2 != null ? buscarValor(rows[0].BQa2,DIM) : 0, 
+                Cq1: rows[0].CQ1 != null ? buscarValor(rows[0].CQ1, Equilibrio_CQ1) : 0,
+                Cq2: rows[0].CQ2 != null ? buscarValor(rows[0].CQ2, Equilibrio_CQ2) : 0,
+            }
+        };
+
+         response.render('Psicologos/analisisHartman.ejs', {
+            datos: analisisProcesado,
+            analisisHartman: rows,
+            idGrupo,
+            idAspirante,
+            idInstitucion
+         });
+ 
+
+     } catch (error) {
+         console.error("Error al obtener o procesar los datos de Hartman:", error);
+         response.status(500).send("Error al procesar el análisis de Hartman");
+     }
+};
 // Consulta informacion prueba Otis
 exports.getPruebaOtis = async (req, res, next) => {
     try {
@@ -1436,3 +1521,229 @@ exports.getAnalisisTerman = async (request, response, next) => {
         console.error('Error en get_analisisTerman:', error);
     }
 };
+//16PF y Kostick
+exports.get_respuestasA = (request, response, next) => {
+
+    const idAspirante = request.params.idAspirante;
+    const idPrueba = request.params.idprueba;
+
+    console.log("ID Aspirante recibido:", idAspirante);
+    console.log("ID Prueba recibida:", idPrueba);
+  
+    Aspirante.getInformacionAspirante(idAspirante).then(([datosAspirante, fieldData]) => {
+        console.log("Datos Aspirante antes del if: ");
+        console.log(datosAspirante);
+      Aspirante.fetchGrupo(idAspirante).then(([rows, fieldData]) => {
+        Grupo.fetchOne(request.params.idGrupo).then(([grupoRows, fieldData]) => {
+          if (idPrueba == 1) {
+            ResultadosKostick.fetchAll(request.params.idGrupo, request.params.idAspirante).then(
+              ([resultados, fieldData]) => {
+                console.log("Resultados Kostick:");
+                console.log(resultados[0]);
+                console.log("Datos:" );
+                console.log(datosAspirante);
+                InterpretacionKostick.fetchAll()
+                .then((interpretacionesKostick) => {
+                    response.render("Psicologos/consultaRespuestasAspirante", {
+                        prueba: "El inventario de Percepción Kostick",
+                        grupo: grupoRows[0],
+                        valores: resultados[0],
+                        datos: datosAspirante[0],
+                        interpretaciones: interpretacionesKostick[0],
+                        idAspirante: request.params.idAspirante || null,
+                        idGenero: rows[0],
+                        idAspirante: request.params.idAspirante,
+                        idGrupo: request.params.idGrupo,
+                        idInstitucion: request.params.idInstitucion,
+                    });
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+              }
+            );
+          } else if (idPrueba == 2) {
+            Resultados16PF.fetchAll(request.params.idGrupo, idAspirante).then(
+              ([resultados, fieldData]) => {
+                Aspirante.getGenero(request.params.idAspirante)
+                .then(([rows, fieldData]) => {
+                    response.render("Psicologos/consultaRespuestasAspirante", {
+                        prueba: "Personalidad 16 Factores (16 PF)",
+                        grupo: grupoRows[0],
+                        valores: resultados[0],
+                        datos: datosAspirante[0],
+                        interpretaciones: null,
+                        idAspirante: request.params.idAspirante || null,
+                        idGenero: rows[0].idGenero || null,
+                        idAspirante: request.params.idAspirante,
+                        idGrupo: request.params.idGrupo,
+                        idInstitucion: request.params.idInstitucion,
+                      });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+              }
+            );
+          }
+        });
+      });
+    });
+};
+
+exports.get_interpretaciones16PF = (request, response, next) => {
+    let columna = request.params.columna;
+    let nivel = request.params.nivel;
+    Interpretaciones16PF.interpretacion(columna, nivel)
+    .then(([rows]) => {
+        if(rows.length > 0){
+            inter = rows[0].resp;
+            response.status(200).json({ inter });
+        }
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+  // Consulta informacion prueba Colores
+    exports.getPruebaColores = async (req, res, next) => {
+    try {
+        // ID colores
+        const idPruebaColores = 6;
+        
+        // Obtener info general de la prueba
+        const [infoPrueba] = await InfoPruebas.getInfoPrueba(idPruebaColores);
+        
+        // Obtener colores de la base de datos
+        const [colores] = await InfoPruebas.getColores();
+        
+        // Renderizar la vista con los datos
+        res.render('psicologos/infoPruebaColores', {  
+            pageTitle: infoPrueba.length > 0 ? infoPrueba[0].nombrePrueba : 'Prueba de Colores',
+            infoPrueba: infoPrueba.length > 0 ? infoPrueba[0] : null,
+            colores: colores
+        });
+    } catch (error) {
+        console.error('Error al obtener datos de colores:', error);
+        next(error);
+    }
+};
+
+// Cuadernillo Kostick
+exports.getCuadernilloKostick = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    Aspirante.fetchOne(idAspirante)
+    .then(([rows, fieldData]) => {
+        const datosAspirante = rows[0];
+        Grupo.fetchOne(idGrupo)
+        .then(([rows, fieldData]) => {
+            const grupo = rows[0];
+            PreguntaKostick.fetchAll()
+            .then(([rows, fieldData]) => {
+                const preguntasKostick = rows;
+                RespondeKostick.fetchRespuestasAspirante(idGrupo, idAspirante)
+                .then(([rows, fieldData]) => {
+                    const resultados = rows;
+                    const opciones = resultados.map(r => r.opcionKostick);
+                    const descripcionOpciones = resultados.map(r => r.descripcionOpcionKostick);
+                    Prueba.getDatosPersonalesAspiranteKostick(idGrupo, idAspirante)
+                    .then(([rows, fieldData]) => {
+                        const datosPersonales = rows;
+                        console.log("preguntas kostick: ");
+                        console.log(preguntasKostick);
+                        response.render('Psicologos/cuadernilloKostick', {
+                            prueba: "El inventario de Percepción Kostick",
+                            grupo: grupo || null,
+                            valores: resultados[0][0],
+                            datos: datosPersonales || null,
+                            aspirante: datosAspirante || null,
+                            preguntas: preguntasKostick || [],
+                            opciones: opciones || [],
+                            descripcion: descripcionOpciones || [],
+                            idAspirante: request.params.idAspirante,
+                            idInstitucion: request.params.idInstitucion,
+                            idGrupo: request.params.idGrupo,
+                        })
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                    
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+// Cuadernillo 16PF
+exports.getCuadernillo16PF = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    Aspirante.fetchOne(idAspirante)
+    .then(([rows, fieldData]) => {
+        const datosAspirante = rows[0];
+        Grupo.fetchOne(idGrupo)
+        .then(([rows, fieldData]) => {
+            const grupo = rows[0];
+            Pregunta16PF.fetchAll()
+            .then(([rows, fieldData]) => {
+                const preguntas16PF = rows;
+                Responde16PF.fetchRespuestasAspirante(idGrupo, idAspirante)
+                .then(([rows, fieldData]) => {
+                    const resultados = rows;
+                    const opciones = resultados.map(r => r.opcion16PF);
+                    const descripcionOpciones = resultados.map(r => r.descripcionOpcion16PF);
+                    Prueba.getDatosPersonalesAspiranteKostick(idGrupo, idAspirante)
+                    .then(([rows, fieldData]) => {
+                        const datosPersonales = rows;
+                        console.log("Preguntas 16PF");
+                        console.log(preguntas16PF);
+                        response.render('Psicologos/cuadernillo16PF', {
+                            prueba: "Personalidad 16 Factores (16 PF)",
+                            grupo: grupo || null,
+                            valores: resultados[0][0],
+                            datos: datosPersonales || null,
+                            aspirante: datosAspirante || null,
+                            preguntas: preguntas16PF || [],
+                            opciones: opciones || [],
+                            descripcion: descripcionOpciones || [],
+                            idAspirante: request.params.idAspirante,
+                            idInstitucion: request.params.idInstitucion,
+                            idGrupo: request.params.idGrupo,
+                        })
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+  

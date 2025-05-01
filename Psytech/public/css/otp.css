@@ -20,7 +20,7 @@
 
 .form-label{
     display: flex;
-    margin-left: 2.1rem;
+    margin-left: 2rem;
     color: var(--secondary);
 }
 

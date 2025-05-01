@@ -84,6 +84,16 @@ router.get('/cuadernillo-colores/:idGrupo/:idAspirante/:idInstitucion', controll
 
 router.get('/respuestas-otis', controller.getRespuestasOtis);
 
+// Vista con el análisis de la prueba Hartman del aspirante
+router.get('/analisis-hartman/:idGrupo/:idAspirante/:idInstitucion', controller.getAnalisisHartman);
+
+// 16Pf y KOSTICK
+router.get("/analisis-16PF/:idprueba/:idGrupo/:idAspirante/:idInstitucion", controller.get_respuestasA);
+router.get("/analisis-KOSTICK/:idprueba/:idGrupo/:idAspirante/:idInstitucion", controller.get_respuestasA);
+router.get('/cuadernillo-KOSTICK/:idGrupo/:idAspirante/:idInstitucion', controller.getCuadernilloKostick);
+router.get('/cuadernillo-16PF/:idGrupo/:idAspirante/:idInstitucion', controller.getCuadernillo16PF);
+
+router.get("/interpretacion/:idAspirante/:columna/:nivel", controller.get_interpretaciones16PF);
 
 // Rutas de terman
 

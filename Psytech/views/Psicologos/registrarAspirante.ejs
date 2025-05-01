@@ -35,45 +35,45 @@
                 <form action="" method="POST">
     
                     <!--Input nombre-->
-                    <div class="">
-                        <label class="form-label" for="nombreUsuario">Nombre</label> <br>
+                    <div class="form-floating mb-3">
                         <input type="" class="form-control"  id="nombreUsuario" placeholder="Juan" name="nombreUsuario" required>
+                        <label class="form-label" for="nombreUsuario">Nombre</label>
                     </div>
     
                     <!--Input Apellido Paterno-->
-                    <div class="">
-                        <label class="form-label" for="apellidoPaterno">Apellido Paterno</label> <br>
+                    <div class="form-floating mb-3">
                         <input type="" class="form-control" id="apellidoPaterno" placeholder="Pérez" name="apellidoPaterno" required>
+                        <label class="form-label" for="apellidoPaterno">Apellido Paterno</label>
                     </div>
     
                     <!--Input Apellido Materno-->
-                    <div class="">
-                        <label class="form-label" for="apellidoMaterno">Apellido Materno</label> <br>
+                    <div class="form-floating mb-3">    
                         <input type="" class="form-control" id="apellidoMaterno" placeholder="Pérez" name="apellidoMaterno">
+                        <label class="form-label" for="apellidoMaterno">Apellido Materno</label>
                     </div>
     
                     <!--Input institución de procedencia-->
-                    <div class="">
-                        <label class="form-label" for="institucionProcedencia">Institución de Procedencia</label> <br>
+                    <div class="form-floating mb-3">
                         <input type="" class="form-control" id="institucionProcedencia" placeholder="Tec de Monterrey" name="institucionProcedencia" required>
+                        <label class="form-label" for="institucionProcedencia">Institución de Procedencia</label>
                     </div>
     
                     <!--Input Correo-->
-                    <div class="">
-                        <label class="form-label" for="correo">Correo</label> <br>
+                    <div class="form-floating mb-3">
                         <input type="email" class="form-control" id="correo" placeholder="ejemplo@gmail.com" name="correo" required>
+                        <label class="form-label" for="correo">Correo</label>
                     </div>
     
                     <!--Input Lada-->
-                    <div class="">
-                        <label class="form-label" for="lada">Lada telefónica</label> <br>
+                    <div class="form-floating mb-3">
                         <input type="number" class="form-control" id="lada" placeholder="52" name="lada" required>
+                        <label class="form-label" for="lada">Lada telefónica</label>
                     </div>
     
                     <!--Input Número de teléfono-->
-                    <div class="">
-                        <label class="form-label" for="numeroTelefono">Número de teléfono</label> <br>
+                    <div class="form-floating mb-3">
                         <input type="number" class="form-control" id="numeroTelefono" placeholder="1234567890" name="numeroTelefono" required>
+                        <label class="form-label" for="numeroTelefono">Número de teléfono</label>
                     </div>
     
                     <!--Input País de origen-->
@@ -117,5 +117,30 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Incluir el script del navside -->
     <script src="/js/_navside.js"></script>
+
+    <script>
+
+        const correosRegistrados = <%- JSON.stringify(correosRegistrados) %>;
+
+        console.log(correosRegistrados);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const correoInput = document.getElementById('correo');
+
+            form.addEventListener('submit', function(event){
+                const correoIngresado = correoInput.value.trim().toLowerCase();
+
+                const correoExistente = correosRegistrados.some(correo => correo.correo.toLowerCase() === correoIngresado);
+                console.log(correoExistente);
+                if(correoExistente){
+                    event.preventDefault();
+                    alert('Este correo ya está registrado');
+                    correoInput.focus();
+                }
+            })
+        })
+    </script>
+
 </body>
 </html>

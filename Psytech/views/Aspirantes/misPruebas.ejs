@@ -52,6 +52,16 @@
                                         if (prueba.nombre === 'Colores de Luscher') rutaPrueba = '/aspirante/instrucciones-colores';
                                         if (prueba.nombre === 'OTIS') rutaPrueba = '/aspirante/instrucciones-otis';
                                         if (prueba.nombre === 'TERMAN') rutaPrueba = '/aspirante/prueba-terman';
+                                        if (prueba.nombre === 'HARTMAN') rutaPrueba = '/aspirante/instrucciones-hartman';
+                                        if (prueba.nombre === 'KOSTICK') {
+                                            console.log(prueba);
+                                            rutaPrueba = '/aspirante/instruccionesPrueba/KOSTICK';
+                                        }
+                                        if (prueba.nombre === 'PRUEBA DE 16PF') {
+                                            console.log(prueba);
+                                            rutaPrueba = '/aspirante/instruccionesPrueba/PRUEBA DE 16PF';
+                                        }
+
                                     %>
                                     <% if (estatusPrueba[prueba.nombreEstatus]) { %>
                                         <span class="card-estatus <%= estatus %>">
@@ -70,21 +80,25 @@
                                     <div class="d-flex justify-content-between">
                                         <!-- CAMBIO CODIGO: href ruta -->
                                         <a href="<%= rutaPrueba %>" class="btn btn-color--secondary">Realizar prueba</a>
-                                        <span>
-                                            <%= prueba.duracion %> 
-                                            <% if (prueba.duracion != null) { %>
-                                                min
-                                            <% } %>
-                                        </span>
+                                        <% 
+                                            const duracionMin = Math.round(prueba.duracion / 60); 
+                                            const mostrarDuracion = duracionMin > 0;
+                                        %>
+                                        <% if (mostrarDuracion) { %>
+                                            <span>Duración: <%= duracionMin %> min</span>
+                                        <% } %>
+
                                     </div>
                                 <% } else {%>
                                     <div class="d-flex justify-content-between">
-                                        <span>
-                                            <%= prueba.duracion %> 
-                                            <% if (prueba.duracion != null) { %>
-                                                min
-                                            <% } %>
-                                        </span>
+                                        <% 
+                                            const duracionMin = Math.round(prueba.duracion / 60); 
+                                            const mostrarDuracion = duracionMin > 0;
+                                        %>
+                                        <% if (mostrarDuracion) { %>
+                                            <span>Duración: <%= duracionMin %> min</span>
+                                        <% } %>
+
                                     </div>
                                 <% } %>
 
