@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Respuestas Terman</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="/css/stylesLayout.css">
+    <link rel="stylesheet" href="/css/stylesCarruselTerman.css">
+</head>
+<body>
+    <div class="site">
+        <header>
+            <% include ../includes/navbar.ejs %>
+        </header>
+
+        <main>
+            <div id="contenedor-carrusel" class="container"
+                data-id-aspirante="<%= idAspirante %>"
+                data-id-grupo="<%= idGrupo %>"
+                data-nombre-completo="<%= nombreCompleto %>"
+                data-estatus-prueba="<%= estatusPrueba %>">
+
+                <h1 class="title has-text-centered mt-4">Respuestas Test de Aptitud Mental Terman</h1>
+                <h3 class="subtitle has-text-centered mb-5" id="nombre-aspirante"><%= nombreCompleto %></h3>
+                <h3 class="subtitle has-text-centered mb-5">Estatus de la prueba: <%= estatusPrueba %></h3>
+
+                <!-- Aquí se cargará dinámicamente el carrusel -->
+                <div id="carrusel-series"></div>
+
+                <div class="contenedor-botones">
+                    <button class="button is-info" id="generarPDF">Descargar como PDF</button>
+                    <a class="button is-link is-light" href="javascript:void(0)" onclick="window.history.back()">← Regresar</a>
+                </div>
+            </div>
+        </main>
+
+        <footer class="has-text-centered mt-5"></footer>
+    </div>
+
+    <!-- Variables de ayuda -->
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+    <script src="/js/psicologa/respuestas/carruselTerman.js"></script>
+    <script src="/js/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+</body>
+</html>

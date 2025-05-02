@@ -2,6 +2,13 @@ const db = require('../util/database');
 
 module.exports = class Prueba{
 
+    static fetchOneByName(nombrePrueba){
+        return db.execute(`
+                            SELECT *
+                            FROM pruebas
+                            WHERE nombre = ?
+            `, [nombrePrueba]);
+    }
 
     // Ya no leera archivos, que devolvera promesa vacia
     static fetchInstrucciones() {
@@ -12,11 +19,37 @@ module.exports = class Prueba{
     }
 
     // Obtiene los datos personales de un aspirante según el grupo y la prueba OTIS.
-    static getDatosPersonalesAspirante(idGrupo, idAspirante){
+    static getDatosPersonalesAspiranteOtis(idGrupo, idAspirante){
         return db.execute(`SELECT nombre, apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha 
             FROM datospersonales 
             WHERE idAspirante = ? 
             AND idPrueba = 5
+            AND idGrupo = ?`, [idAspirante, idGrupo])
+    }
+
+    // Obtiene los datos personales de un aspirante según el grupo y la prueba OTIS.
+    static getDatosPersonalesAspiranteColores(idGrupo, idAspirante){
+        return db.execute(`SELECT nombre, apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha 
+            FROM datospersonales 
+            WHERE idAspirante = ? 
+            AND idPrueba = 6
+            AND idGrupo = ?`, [idAspirante, idGrupo])
+    }
+
+    static getDatosPersonalesAspiranteKostick(idGrupo, idAspirante){
+        return db.execute(`SELECT nombre, apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha 
+            FROM datospersonales 
+            WHERE idAspirante = ? 
+            AND idPrueba = 1
+            AND idGrupo = ?`, [idAspirante, idGrupo])
+    }
+
+    static getDatosPersonalesAspirante16PF(idGrupo, idAspirante){
+        return db.execute(`SELECT nombre, apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha, generos.nombreGenero 
+            FROM datospersonales, generos
+            WHERE datospersonales.idGenero = generos.idGenero 
+            AND idAspirante = ? 
+            AND idPrueba = 2
             AND idGrupo = ?`, [idAspirante, idGrupo])
     }
 
@@ -36,6 +69,7 @@ module.exports = class Prueba{
             idPrueba,
             idAspirante
         ]);
+
     
         // Si no se actualizó ningún registro, hacer INSERT
         if (result.affectedRows === 0) {
@@ -57,6 +91,48 @@ module.exports = class Prueba{
     
         return result;
     }    
+
+    // Solo para 16PF
+    static async saveDatosPersonales16PF(idAspirante, idGrupo, idPrueba, datosPersonales) {
+        // Intentar actualizar primero
+        const [result] = await db.execute(`
+            UPDATE datospersonales 
+            SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, 
+                puestoSolicitado = ?, fecha = NOW(), idGenero = ?
+            WHERE idGrupo = ? AND idPrueba = ? AND idAspirante = ?
+        `, [
+            datosPersonales.nombre,
+            datosPersonales.apellidoPaterno, 
+            datosPersonales.apellidoMaterno,
+            datosPersonales.puestoSolicitado,
+            datosPersonales.idGenero,
+            idGrupo,
+            idPrueba,
+            idAspirante
+        ]);
+
+    
+        // Si no se actualizó ningún registro, hacer INSERT
+        if (result.affectedRows === 0) {
+            return db.execute(`
+                INSERT INTO datospersonales 
+                (idDatosPersonales, idGrupo, idPrueba, idAspirante, nombre, 
+                apellidoPaterno, apellidoMaterno, puestoSolicitado, fecha, idGenero)
+                VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, NOW(), ?)
+            `, [
+                idGrupo,
+                idPrueba,
+                idAspirante,
+                datosPersonales.nombre,
+                datosPersonales.apellidoPaterno, 
+                datosPersonales.apellidoMaterno,
+                datosPersonales.puestoSolicitado,
+                datosPersonales.idGenero
+            ]);
+        }
+    
+        return result;
+    }
 
     static getAreaOtis(){
         return db.execute(
@@ -92,6 +168,38 @@ module.exports = class Prueba{
     static getPreguntas16PF(){}
 
     static getPreguntasHartman(){}
+
+    static getPreguntaKostick(numeroPreguntaKostick){
+        return db.execute(`
+                            SELECT *
+                            FROM preguntaskostick
+                            WHERE numeroPreguntaKostick = ?
+            `, [numeroPreguntaKostick]);
+    }
+
+    static getOpcionesByPregunta(idPregunta){
+        return db.execute(`
+                            SELECT *
+                            FROM opcioneskostick
+                            WHERE idPreguntaKostick = ?
+                `, [idPregunta]); 
+    }
+
+    static getPregunta16PF(numeroPregunta16PF){
+        return db.execute(`
+                            SELECT *
+                            FROM preguntas16pf
+                            WHERE numeroPregunta16PF = ?
+                `, [numeroPregunta16PF]);
+    }
+
+    static getOpcionesByPregunta16PF(idPregunta){
+        return db.execute(`
+                            SELECT *
+                            FROM opciones16pf
+                            WHERE idPregunta16PF = ?
+                `, [idPregunta]); 
+    }
 
     static getPreguntasKostick(){}
 
@@ -218,6 +326,57 @@ module.exports = class Prueba{
                 AND opcionesotis.esCorrecta = 1
                 GROUP BY idAspirante
             `, [idAspirante, idGrupo]);
+    }
+
+    static getRespuestasColores(idAspirante, idGrupo) {
+        return db.execute(`
+            SELECT fase, idColor, posicion
+            FROM seleccionescolores
+            WHERE idAspirante = ? AND idGrupo = ?
+            ORDER BY fase, posicion
+        `, [idAspirante, idGrupo]);
+    }
+
+    
+    static getSeleccionesColores(idGrupo, idAspirante) {
+        return db.execute(`
+            SELECT 
+                SC.idSeleccionColores, 
+                SC.idColor, 
+                SC.posicion, 
+                SC.fase,
+                C.nombreColor, 
+                C.numeroColor, 
+                C.hexColor  
+            FROM seleccionescolores SC
+            JOIN colores C ON SC.idColor = C.idColor
+            WHERE SC.idAspirante = ?
+            AND SC.idGrupo = ?
+            AND SC.idPrueba = 6
+            ORDER BY SC.fase, SC.posicion
+            `, [idAspirante, idGrupo]);
+    }   
+
+    // Nombre aspirante analisis colores
+    static getInformacionAspirante(idAspirante) {
+        return db.execute(`
+            SELECT u.nombreUsuario, u.apellidoPaterno, u.apellidoMaterno
+            FROM usuarios u
+            JOIN aspirantes a ON u.idUsuario = a.idUsuario
+            WHERE a.idAspirante = ?
+        `, [idAspirante]);
+    }
+
+    static updateEstatusPruebaK16(idAspirante, idGrupo, idPrueba, estatus){
+        return db.execute(`
+                            UPDATE aspirantesgrupospruebas
+                            SET idEstatus = (SELECT idEstatus
+                                                FROM estatusprueba
+                                                WHERE nombreEstatus = ?)
+                            WHERE idAspirante = ?
+                            AND idGrupo = ?
+                            AND idPrueba = ?
+            `, [estatus, idAspirante, idGrupo, idPrueba]);
     }
 
 }

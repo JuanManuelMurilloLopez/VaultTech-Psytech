@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 
 :root{
-    --secondary: #294969;
+    --secondary: #2e5276;
     --third: #C1C1C1;
     --font-primary: #000;
     --font-secondary: #fff;
-    --secondary-hover: #193858;
+    --secondary-hover: #092846;
     --third-hover:#B1B1B1;
 }
 
@@ -23,35 +23,6 @@
     transition: all 0.35s ease-in-out;
     display: flex;
     flex-direction: row;
-}
-
-.buscar{
-    flex-grow: 1;
-    height: 48px;
-    border-radius: 30px;
-    border: solid 2px #919191;
-    margin-right: 60px;
-}
-
-.buscar:focus-within{
-    border: 4px #7fc1ff solid;
-}
-
-.barra{
-    display: flex;
-    justify-content: space-between;
-    margin: 0 20px;
-    align-items: center;
-    height: 48px;
-}
-
-.barra input{
-    border: none;
-    background-color: inherit;
-    padding: 0 8px 0 0;
-    font-size: 16px;
-    flex-grow: 1;
-    outline: none;
 }
 
 .card{
@@ -108,11 +79,13 @@
 .registrar-institucion{
     border-radius: 20px;
     font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 32px;
+    padding: 10px 32px;
     background: var(--secondary);
+    color: var(--font-secondary);
+}
+
+.registrar-institucion:hover{
+    background: var(--secondary-hover);
     color: var(--font-secondary);
 }
 

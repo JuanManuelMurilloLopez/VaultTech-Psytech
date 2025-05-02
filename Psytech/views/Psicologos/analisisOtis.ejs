@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="/css/includeCss/_navsidePsicologo.css">
     <!-- CSS cerrar sesión -->
     <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
+    <!-- CSS para imprimir -->
+    <link rel="stylesheet" href="/css/psicologos/analisisOtis.print.css" media="print">
 
 </head>
 
@@ -51,7 +53,7 @@
                 <% } %>
                 <div class="col-md-4">
                     <div class="card text-center shadow-sm p-4 border-0">
-                      <h5 class="text-uppercase text-muted fw-semibold mb-2">Puntaje Bruto</h5>
+                      <h5 class="text-uppercase text-muted fw-semibold mb-2">Respuestas Correctas</h5>
                       <p id="puntajeBruto" class="display-3 fw-bold mb-0">
                         <%= puntajeBruto %>
                       </p>
@@ -131,10 +133,11 @@
                 
             </div>
 
-            <div><%=  %>
+            <div class="botones-container">
                 <a class="btn btn-color--third"
                 href="/psicologo/cuadernillo-otis/<%= idGrupo %>/<%= idAspirante %>/<%= idInstitucion %>"
                 >Regresar</a>
+                <button class="btn btn-color--secondary" onclick="window.print()">Imprimir Análisis</button>
             </div>
             
             
@@ -240,6 +243,5 @@
 
     </script>
 
-    
-
 </body>
+</html>

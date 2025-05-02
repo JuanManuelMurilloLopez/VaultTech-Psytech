@@ -1,22 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
 :root{
     --secondary: #294969;
     --third: #C1C1C1;
     --font-primary: #000;
+    --font-secondary: #fff;
     --secondary-hover: #193858;
-    --third-hover:#B1B1B1;
+    --third-hover: #B1B1B1;
+    --danger: #C30101;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Lato", sans-serif;
+    box-sizing: border-box;
+}
+
+.main{
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    transition: all 0.35s ease-in-out;
+    display: flex;
+    flex-direction: row;
+}
+
+.container {
+    padding: 20px 30px 80px 30px;
+    width: 100%;
+}
+
+/* Titulos */
+.text-center {
+    color: var(--font-primary);
+    font-size: 32px;
+    font-weight: 600;
+    margin-top: 20px;
+}
+
+.titulo-seccion {
+    color: var(--secondary);
+    font-size: 20px;
+    font-weight: 500;
+    margin-top: 20px;
+}
+
+/* Preguntas y respuestas */
+.respuestas-container {
+    padding: 0 15px;
+}
+
+.pregunta-row {
+    margin-bottom: 30px;
+}
+
+.pregunta-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.pregunta-texto {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.correcta {
+    color: var(--font-primary);
+}
+
+.estado-respuesta {
+    font-weight: 600;
+}
+
+/* Opciones */
+.opciones-container {
+    padding-left: 15px;
+}
+
+.opcion-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.opcion-numero {
+    width: 30px;
+    font-size: 18px;
+}
+
+.opcion-radio {
+    width: 24px;
+    height: 24px;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.radio-checked {
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    border: 1.5px solid #000;
+    position: relative;
+}
+
+.radio-checked::after {
+    content: "";
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background-color: #000;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.radio-unchecked {
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    border: 1.5px solid #000;
+}
+
+.opcion-texto {
+    font-size: 18px;
+}
+
+/* Boton */
+.boton-container {
+    width: 100%;
+    text-align: left;
+    margin-top: 60px;
+    margin-bottom: 40px;
+    padding-left: 15px; 
+}
+
+.container .boton-regresar-abajo {
+    position: static;
+    display: inline-block;
+    font-size: 16px;
+    padding: 6px 24px;
+    z-index: 1;
 }
 
 .btn-color--third{
+    padding: 4px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
     background: var(--third);
     color: var(--font-primary);
 }
 
-.btn-color--third:hover{
-    background: var(--third-hover);
+.btn-color--third:hover {
+    background-color: var(--third-hover);
     color: var(--font-primary);
-}
-
-.btn-color--secondary:hover{
-    background: var(--secondary-hover);
-    color: var(--font-secondary);
 }

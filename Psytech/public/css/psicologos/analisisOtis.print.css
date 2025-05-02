@@ -1,0 +1,230 @@
+@media print {
+    
+    /* ESTILOS GENERALES DEL DOCUMENTO */
+    body {
+      background: white !important;
+      font-size: 11pt !important;
+      color: black !important;
+      -webkit-print-color-adjust: exact !important; 
+      print-color-adjust: exact !important; 
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+    }
+    
+    /* ELEMENTOS A OCULTAR */
+    nav,
+    button,
+    .btn,
+    a.btn,
+    .botones-container,
+    #buttonCerrarSesion,
+    .main > *:first-child, /* Oculta el navbar */
+    [class*="navside"] {
+      display: none !important;
+    }
+  
+    /* AJUSTES DEL CONTENEDOR PRINCIPAL */
+    .main {
+      width: 100% !important;
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      min-height: auto !important;
+      overflow: visible !important;
+    }
+  
+    .container {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+    
+    /* ESTILOS DE HEADER Y TITULO */
+    .text-center {
+      margin-top: 0 !important;
+      margin-bottom: 10px !important;
+      font-size: 22pt !important;              
+    }
+    
+    .nombre-aspirante {
+      margin-bottom: 10px !important; 
+      font-size: 16pt !important;              
+    }
+    
+    /* ESPACIO ENTRE EL NOMBRE Y RESULTADOS GENERALES */
+    h1.text-center + br, 
+    h4.nombre-aspirante + br,
+    br + br {
+      display: none !important; 
+    }
+    
+    /* RESULTADOS GENERALES */
+    .fw-bolder, h3.fw-bolder {
+      font-size: 18pt !important;
+      color: #294969 !important;
+      margin-top: 10px !important; 
+      margin-bottom: 15px !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      page-break-after: avoid !important;
+      border-bottom: 1px solid #ddd !important;
+      padding-bottom: 5px !important;
+    }
+    
+    
+    .row.g-4:first-of-type {
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+    }
+    
+    /* TARJETAS DE INFORMACION */
+    .card {
+      border: 1px solid #ddd !important;
+      box-shadow: none !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      padding: 15px !important;
+      margin: 10px !important;
+      background-color: white !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    
+    /* TEXTOS DE LAS TARJETAS */
+    .text-uppercase {
+      color: #666 !important;
+      font-size: 14pt !important;
+      margin-bottom: 5px !important;
+    }
+    
+    /* VALORES NUMERICOS */
+    .display-3 {
+      font-size: 28pt !important;
+      font-weight: bold !important;
+      margin: 5px 0 !important;
+    }
+    
+    /* Mantener colores originales */
+    #puntajeBruto, #ci, #nivelIntelectual {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    
+    /* GRAFICOS */
+    canvas {
+      max-width: 100% !important;
+      height: auto !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    
+    #graficaPieRespuestas {
+      max-width: 250px !important;
+      max-height: 250px !important;
+      margin: 0 auto !important;
+    }
+    
+    /* CAMBIO: Grafica de areas a ancho completo */
+    canvas#graficaAreas {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: 350px !important;
+      page-break-inside: avoid !important;
+      margin: 0 auto 30px auto !important;
+      display: block !important;
+    }
+    
+    /* CAMBIO: Area de resultados por area en columna */
+    .row.g-4:nth-of-type(3) {
+      flex-direction: column !important;
+      width: 100% !important;
+      align-items: center !important;
+    }
+    
+    /* Grafica ancho completo */
+    .row.g-4:nth-of-type(3) .col-md-4:first-of-type {
+      flex: 0 0 100% !important;
+      max-width: 100% !important;
+      width: 100% !important;
+      margin-bottom: 20px !important;
+    }
+    
+    /* Tabla debajo */
+    .row.g-4:nth-of-type(3) .col-md-4:last-of-type {
+      flex: 0 0 80% !important;
+      max-width: 80% !important;
+      width: 80% !important;
+      margin: 0 auto !important;
+    }
+    
+    /* NIVEL INTELECTUAL */
+    #nivelIntelectual {
+      font-size: 20pt !important;
+      font-weight: bold !important;
+      text-align: center !important;
+    }
+    
+    /* TABLA DE RESULTADOS POR AREA */
+    table.table {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 20px auto !important;
+      border-collapse: collapse !important;
+    }
+    
+    .table th {
+      background-color: #2c3e50 !important; 
+      color: white !important;
+      font-size: 12pt !important;
+      padding: 8px !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    
+    .table td {
+      font-size: 11pt !important;
+      padding: 8px !important;
+      border: 1px solid #ddd !important;
+    }
+    
+    /* DISPOSICION DE CUADRICULA */
+    .row {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      width: 100% !important;
+      margin: 15px 0 !important;
+      page-break-inside: avoid !important;
+    }
+    
+    .col-md-4, .col-md-12 {
+      position: relative !important;
+      padding: 0 15px !important;
+    }
+    
+    .col-md-4 {
+      flex: 0 0 33.333333% !important;
+      max-width: 33.333333% !important;
+    }
+    
+    .col-md-12 {
+      flex: 0 0 100% !important;
+      max-width: 100% !important;
+    }
+    
+    /* CONTROL DE SALTOS DE PAGINA */
+    .row.g-4:nth-of-type(2) {
+      page-break-after: always !important;
+      break-after: always !important;
+    }
+    
+    /* Evita saltos de pagina dentro de secciones */
+    #puntajeBruto, #ci, #nivelIntelectual {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+  }

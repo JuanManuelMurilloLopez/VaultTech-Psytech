@@ -5,11 +5,11 @@ const { MailerSend, EmailParams, Sender, Recipient } = require("mailersend");
 
 
 // Configuración de MailerSend
-const mailerSend = new MailerSend({
-    apiKey: process.env.MAILER_SEND_API_KEY,
-  });
+// const mailerSend = new MailerSend({
+//     apiKey: process.env.MAILER_SEND_API_KEY,
+// });
   
-  const sentFrom = new Sender("vaulttech@laing.mx ", "Psytech");
+// const sentFrom = new Sender("test-86org8eedm1gew13.mlsender.net", "Psytech");
 
 exports.getLogin = (request, response, next) => {
     response.render('login');
@@ -21,18 +21,9 @@ exports.getOtp = (request, response, next) => {
 };
 
 exports.getPost = async (request, response) => {
-    const {usuario} = request.body;
+    let {usuario} = request.body;
 
-    /* Verificar si el checkbox está marcado
-    if (!terminos) {
-        return response.send(`
-            <script>
-                alert('Debes aceptar los Términos y Condiciones para continuar.');
-                window.location.href = '/login';
-            </script>
-        `);
-    }
-    */
+    usuario = usuario.trim();
 
     try {
         const usuarioData  = await Usuario.fetchOne(usuario);
@@ -40,6 +31,11 @@ exports.getPost = async (request, response) => {
 
         if (!usuarioId) {
             return response.send('<script>alert("Usuario no encontrado"); window.location.href = "/login";</script>');
+        }
+
+        //Validar el estatusUsuario
+        if (usuarioId.estatusUsuario !== 1) {
+            return response.send('<script>alert("Usuario inactivo, comunícate con soporte."); window.location.href = "/login";</script>');
         }
 
         const codigoOTP = crypto.randomInt(100000, 999999);
@@ -50,15 +46,15 @@ exports.getPost = async (request, response) => {
         request.session.usuario = usuario;
         
         // Enviar correo con MailerSend
-        const destinatario = new Recipient(usuarioId.correo, usuario);
+        // const destinatario = new Recipient(usuarioId.correo, usuario);
 
-        const emailParams = new EmailParams()
-        .setFrom(sentFrom)
-        .setTo([destinatario])
-        .setSubject("Tu código OTP para ingresar")
-        .setHtml(`<h2>¡Hola ${usuario}!</h2><p>Tu código OTP es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos.</p>`);
+        // const emailParams = new EmailParams()
+        // .setFrom(sentFrom)
+        // .setTo([destinatario])
+        // .setSubject("Tu código OTP para ingresar")
+        // .setHtml(`<h2>¡Hola ${usuario}!</h2><p>Tu código OTP es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos. Unicamente se puede usar una sola vez.</p>`);
 
-        await mailerSend.email.send(emailParams);
+        // await mailerSend.email.send(emailParams);
         
         console.log('codigoOTP:', codigoOTP);
         response.redirect('/otp');
@@ -78,14 +74,16 @@ exports.verificarOTP = async (request, response) => {
         if (!usuarioId) {
             return res.send('<script>alert("Usuario no encontrado"); window.location.href = "/login";</script>');
         }
+
+        if (usuarioId.estatusUsuario === 0) {
+            return response.send('<script>alert("Tu cuenta está desactivada. Contacta al administrador."); window.location.href = "/login";</script>');
+        }
         
         const otpData = await OTP.obtenerOTP(usuarioId);
 
-      if (!otpData || otpData.codigo !== parseInt(otp)) {
-        return response.send('<script>alert("OTP incorrecto o vencido"); window.location.href = "/otp";</script>');
-      }
-
-
+        if (!otpData || otpData.codigo !== parseInt(otp)) {
+            return response.send('<script>alert("OTP incorrecto o vencido"); window.location.href = "/otp";</script>');
+        }
 
       await OTP.usarOTP(otpData.idOTP);
       

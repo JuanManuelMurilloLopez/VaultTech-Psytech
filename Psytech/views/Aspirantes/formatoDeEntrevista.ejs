@@ -16,6 +16,19 @@
         <h1 class="text-center">FORMATO DE ENTREVISTA</h1>
         <hr><br>
 
+        <h5 class="intucciones-formato">Instrucciones generales</h5><br>
+
+        <p class="formulario-advertencia">
+            <span class="fw-bold">Nota:</span> Si ya ha contesto este formato, no es necesario volver a llenarlo.
+        </p>
+        <p>
+            Este formulario recopila información personal, académica, laboral y familiar. Por favor, asegúrese de responder cada pregunta de forma precisa de acuerdo con su situación actual. <br><br>
+            El formulario consta de aproximadamente 75 preguntas, además de una sección sobre información familiar. Le recomendamos contestarlo con el tiempo suficiente para hacerlo con calma y atención. <br><br>
+
+            Si alguna pregunta no aplica a su situación actual, puede responder con "N/A" o "0", según corresponda.
+        </p><br>
+
+        
         <form action="/aspirante/formato-entrevista" method="POST"> 
 
             <!-- Ciclo for para generar preguntas dinamicamente -->
@@ -37,11 +50,11 @@
                         </label>
                         <% if (pregunta.tipoPregunta == 'textarea') { %>
                             <textarea name="<%= pregunta.idPreguntaFormatoEntrevista %>" 
-                                rows="5" class="form-control textarea" >
+                                rows="5" class="form-control textarea" required>
                             </textarea>
                         <% } else { %>
                             <input type="<%= pregunta.tipoPregunta %>" class="form-control input" 
-                            name="<%= pregunta.idPreguntaFormatoEntrevista %>">
+                            name="<%= pregunta.idPreguntaFormatoEntrevista %>" required>
                         <% } %>
                     </div>
 

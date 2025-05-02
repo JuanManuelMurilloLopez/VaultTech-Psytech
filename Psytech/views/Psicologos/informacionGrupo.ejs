@@ -54,9 +54,9 @@
                     Registrar Aspirante
                 </a>
 
-                <a href="/psicologo/importar-aspirantes" 
+                <a href="/psicologo/importar-aspirantes/<%= idInstitucion %>/<%= grupo.idGrupo %>" 
                 class="importar-aspirante">
-                    Importar Aspirante
+                    Importar Aspirantes
                 </a>
             </div>
 
@@ -97,13 +97,53 @@
             </table>
             <br>
         
-            <a class="btn btn-color--third" 
+            <a class="btn btn-color--third mb-5" 
             href="/psicologo/grupos/<%= idInstitucion %>"
-            >Regresar</a> <br>
+            >Regresar</a>
     </div>
     
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Incluir el script del navside -->
     <script src="/js/_navside.js"></script>
+
+    <script>
+    const inputBuscar = document.getElementById('buscar');
+    const tabla = document.querySelector('tbody');
+
+    inputBuscar.addEventListener('keyup', () => {
+        const valor = inputBuscar.value.trim();
+
+        fetch(`/psicologo/buscar-aspirantes/<%= grupo.idGrupo %>/${encodeURIComponent(valor)}`)
+            .then((response) => response.json())
+            .then(data => {
+                tabla.innerHTML = '';
+
+                if (data.length === 0) {
+                    tabla.innerHTML = `<tr><td colspan="5">No se encontraron aspirantes</td></tr>`;
+                    return;
+                }
+
+                data.forEach(aspirante => {
+                    tabla.innerHTML += `
+                        <tr>
+                            <td>${aspirante.nombreUsuario}</td>
+                            <td>${aspirante.apellidoPaterno}</td>
+                            <td>${aspirante.apellidoMaterno || ''}</td>
+                            <td>
+                                <span class="${aspirante.estatusUsuario === 1 ? 'activo' : 'inactivo'}">
+                                    ${aspirante.estatusUsuario === 1 ? 'Activo' : 'Inactivo'}
+                                </span>
+                            </td>
+                            <td><a href="/psicologo/aspirantes/${aspirante.idAspirante}/<%= grupo.idGrupo %>/<%= idInstitucion %>">Ver Aspirante</a></td>
+                        </tr>
+                    `;
+                });
+            })
+            .catch((error) => {
+                console.error('Error al buscar aspirantes:', error);
+            });
+    });
+    </script>
+
 </body>

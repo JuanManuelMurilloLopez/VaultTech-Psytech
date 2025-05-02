@@ -1,0 +1,267 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+:root{
+    --secondary: #294969;
+    --third: #C1C1C1;
+    --font-primary: #000;
+    --font-secondary: #fff;
+    --secondary-hover: #193858;
+    --third-hover: #B1B1B1;
+    --danger: #C30101;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Lato", sans-serif;
+    box-sizing: border-box;
+}
+
+.main{
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    transition: all 0.35s ease-in-out;
+    display: flex;
+    flex-direction: row;
+}
+
+.container {
+    padding: 20px 30px 80px 30px;
+    width: 100%;
+}
+
+/* Titulos */
+.text-center {
+    color: var(--font-primary);
+    font-size: 32px;
+    font-weight: 600;
+    margin-top: 20px;
+}
+
+.titulo-seccion {
+    color: var(--secondary);
+    font-size: 20px;
+    font-weight: 500;
+    margin-top: 20px;
+}
+
+/* Descripcion */
+.descripcion {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.descripcion p {
+    color: #666;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Instrucciones */
+.instrucciones {
+    margin-bottom: 2rem;
+    border: 1px solid rgba(0,0,0,0.125);
+    border-radius: 0.25rem;
+}
+
+.instrucciones .card-header {
+    background-color: #f8f9fa;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid rgba(0,0,0,0.125);
+}
+
+.instrucciones .card-body {
+    padding: 1.5rem;
+}
+
+.instrucciones p {
+    color: #333;
+    line-height: 1.6;
+}
+
+.instrucciones h6 {
+    font-weight: 600;
+    color: #333;
+    margin-top: 1rem;
+}
+
+.instrucciones ol {
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.instrucciones li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.instrucciones .fw-bold {
+    background-color: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    text-align: center;
+}
+
+/* Contenedor tarjetas de colores */
+.colores-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 3rem;
+}
+
+/* Tarjeta individual de color */
+.color-card {
+    display: flex;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+    height: 180px;
+}
+
+.color-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Muestra de color */
+.color-muestra {
+    width: 120px;
+    height: 100%;
+    flex-shrink: 0;
+}
+
+/* Informacion del color */
+.color-info {
+    padding: 15px;
+    flex-grow: 1;
+}
+
+.color-info h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #333;
+    font-size: 1.3rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.info-detalle p {
+    margin: 6px 0;
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.4;
+}
+
+/* Seccin interpretacion */
+.interpretacion {
+    background-color: #f8f9fa;
+    padding: 2rem;
+    border-radius: 8px;
+    margin: 2rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.interpretacion h2 {
+    color: #333;
+    font-size: 1.6rem;
+    margin-bottom: 1.2rem;
+    text-align: center;
+}
+
+.interpretacion p {
+    margin-bottom: 1rem;
+    color: #555;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.interpretacion-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+.interpretacion-item {
+    padding: 12px 15px;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+}
+
+.color-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.interpretacion-detalle {
+    margin-top: 5px;
+    display: block;
+}
+
+/* Boton de regresar */
+.boton-container {
+    width: 100%;
+    text-align: left;
+    margin-top: 60px;
+    margin-bottom: 40px;
+    padding-left: 15px;
+}
+
+.container .boton-regresar-abajo {
+    position: static;
+    display: inline-block;
+    font-size: 16px;
+    padding: 6px 24px;
+    z-index: 1;
+}
+
+.btn-color--third{
+    padding: 4px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+    background: var(--third);
+    color: var(--font-primary);
+}
+
+.btn-color--third:hover {
+    background-color: var(--third-hover);
+    color: var(--font-primary);
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .colores-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .interpretacion-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .color-card {
+        height: auto;
+        flex-direction: column;
+    }
+    
+    .color-muestra {
+        width: 100%;
+        height: 80px;
+    }
+    
+    .main {
+        flex-direction: column;
+    }
+}

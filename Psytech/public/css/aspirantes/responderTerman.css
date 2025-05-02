@@ -1,0 +1,328 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+/* Botones Colores */
+:root{
+    --primary: #95B6BC;
+    --secondary: #294969;
+    --third: #C1C1C1;
+    --font-primary: #000;
+    --font-secondary: #fff;
+    --primary-hover: #7BA1A8;
+    --secondary-hover: #193858;
+    --third-hover:#B1B1B1;
+}
+
+/* -- Contenido en main --  */
+
+.site{
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centrado vertical */
+    align-items: center; /* Centrado horizontal */
+    margin: 90px auto;
+}
+
+.tituloTest{
+    font-size: 46px;
+    font-weight: 500;
+    margin-bottom: 40px;
+}
+
+/* -- BARRA DE PROGRESO -- */
+
+progress::-webkit-progress-value {
+    transition: width 0.5s ease;
+}
+
+#progreso-texto {
+    margin-bottom: 20px !important;
+}
+
+
+/* -- CONTENDEDOR DE ADVERTENCIA -- */
+
+#advertencia-inicial{
+    width: 95%;
+    margin: auto;
+}
+
+.advertencia {
+    background: rgba(255, 228, 228, 50);
+    border-radius: 20px;
+    margin-bottom: 50px;
+    padding: 20px 20px;
+}
+
+.titulo-advertencia{
+    font-size: 32px;
+    font-weight: 500;
+}
+
+.text-advertencia{
+    font-size: 18px;
+}
+
+.instrucciones{
+    font-size: 18px;
+    margin-bottom: 90px;
+}
+
+.botones-inicio {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 1.5rem;
+}
+
+.volver{
+    padding: 8px 50px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.iniciar{
+    padding: 8px 40px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.comenzar{
+    margin-top: 20px;
+    padding: 8px 40px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.no-contestar {
+    color: #fff;
+    background: #A00505;
+    margin-top: 20px;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.siguiente{
+    color: #fff;
+    background: #294969;
+    margin-top: 20px;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.siguiente:hover{
+    color: #fff;
+    background: #122d49;
+}
+
+.btn:disabled {
+    background-color: #deeff3; /* Cambia esto al color que quieras */
+    color: #666; /* Texto más suave si gustas */
+    cursor: not-allowed;
+    opacity: 2; /* Por si Bootstrap lo hace transparente */
+}
+
+
+/*  CONTENDEDOR DE SERIES 
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+*/
+
+#contenedor-serie {
+    width: 100%;
+    max-width: 960px;     /* Controlas que no se extienda demasiado en pantallas grandes */
+    margin: 0 auto;        /* Centrado horizontal */
+    padding: 1rem;    
+}
+
+.headerTerman {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 12px 0;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.progresoTerman {
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    max-width: 80%;
+}
+
+.progresoLabel {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.tituloProgreso {
+    font-weight: 600;
+    font-size: 18px; /* más grande */
+}
+
+#progreso-texto {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.barraExterna {
+    background-color: #e0edf1;
+    height: 16px; /* más alta */
+    border-radius: 8px;
+    width: 100%;
+    overflow: hidden;
+    margin-top: -12px;
+}
+
+.barraInterna {
+    height: 100%;
+    width: 0%;
+    background-color: #76a9c3;
+    border-radius: 8px;
+    transition: width 0.3s ease;
+}
+
+.temporizadorTerman {
+    background-color: #e0edf1;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 16px; /* más grande */
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+#instrucciones-serie {
+    background-color: #E4EFF1;
+    padding: 30px 50px;
+    border-radius: 20px;
+}
+
+#instrucciones-serie p {
+    font-size: large;
+    color: #222; /* si quieres darle un tono suave y profesional */
+}
+
+/* -- PREGUNTAS --*/
+
+.botones-preguntas {
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+#preguntas-serie p {
+    font-size: 20px; 
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+#preguntas-serie label {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Serie genérica: */
+#preguntas-serie input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #457ba1;
+    cursor: pointer;
+}
+
+/* Serie 4: */
+
+#preguntas-serie input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #457ba1;
+    cursor: pointer;
+}
+
+/* Serie 5: */
+
+#respuestaTexto {
+    width: 180px;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+
+/* Serie 10: */
+#serie10-input {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+#serie10-input input[type="text"] {
+    width: 120px;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+#serie10-input .separador {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #444;
+}
+
+#error-seleccion {
+    color: red; 
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-color--primary{
+    background: var(--primary);
+    color: var(--font-primary);
+}
+
+.btn-color--secondary{
+    background: var(--secondary);
+    color: var(--font-secondary);
+}
+
+.btn-color--third{
+    background: var(--third);
+    color: var(--font-primary);
+}
+
+.btn-color--third:hover{
+    background: var(--third-hover);
+    color: var(--font-primary);
+}
+
+.btn-color--secondary:hover{
+    background: var(--secondary-hover);
+    color: var(--font-secondary);
+}
+
+.btn-color--primary:hover{
+    background: var(--primary-hover);
+    color: var(--font-primary);
+}

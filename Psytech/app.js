@@ -30,6 +30,8 @@ app.use(
         scriptSrc: [
           "'self'",
           "https://cdn.jsdelivr.net",
+          "https://code.jquery.com",
+          "https://unpkg.com",
           "'unsafe-inline'",
           "'unsafe-hashes'"
         ],
@@ -37,6 +39,7 @@ app.use(
         styleSrc: [
           "'self'",
           "https://cdn.jsdelivr.net",
+          "https://fonts.googleapis.com",
           "https://fonts.googleapis.com",
           "'unsafe-inline'"
         ],
@@ -66,6 +69,7 @@ app.set('views', 'views');
 
 // Middleware para procesar datos del formulario
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // Middleware para procesar JSON
 app.use(express.json());
@@ -73,11 +77,21 @@ app.use(express.json());
 const multer = require('multer');
 
 const fileStorage = multer.diskStorage({
+
     destination: (request, file, callback) => {
+      console.log('Subiendo archivo con fieldname:', file.fieldname);
+      if (file.fieldname == 'excelAspirantes') {
+        callback(null, 'public/excel');
+      } else {
         callback(null, 'public/expedientes');
+      }
     },
     filename: (request, file, callback) => {
-        callback(null,request.session.idAspirante + new Date().getMilliseconds()  + file.originalname);
+      if (file.fieldname == 'excelAspirantes') {
+        callback(null, 'excelAspirantes' + new Date().getMilliseconds()  + file.originalname);
+      } else {
+        callback(null, request.session.idAspirante + new Date().getMilliseconds()  + file.originalname);
+      }
     },
 });
 
@@ -87,7 +101,8 @@ const upload = multer({ storage: fileStorage });
 
 app.use(upload.fields([
     { name: 'cv', maxCount: 1 },
-    { name: 'kardex', maxCount: 1 }
+    { name: 'kardex', maxCount: 1 },
+    { name: 'excelAspirantes' }
 ]));
 
 // Importar rutas

@@ -25,6 +25,54 @@
     flex-direction: row;
 }
 
+.btn-info{
+    background: #C2EBF3;
+    color: #294969;
+    border-color: #C2EBF3;
+}
+
+.btn-info:hover{
+    background: #C2EBF3;
+    color: #294969;
+    border-color: #C2EBF3;
+}
+
+.btn:first-child:active{
+    background: #C2EBF3;
+    color: #294969;
+    border-color: #294969;
+}
+
+.btn-outline-info{
+    color: #294969;
+    border-color: #193858;
+}
+
+.btn-outline-info:hover{
+    background: #C2EBF3;
+    color: #294969;
+    border-color: #C2EBF3;
+}
+
+.btn-danger{
+    background: #C30101;
+    color: #fff;
+}
+
+.btn-danger:hover{
+    background: #C30101;
+    color: #fff;
+}
+
+.btn-outline-danger{
+    color: #C30101;
+}
+
+.btn-outline-danger:hover{
+    background: #C30101;
+    color: #fff;
+}
+
 .btn-color--primary{
     background: var(--primary);
     color: var(--font-primary);

@@ -31,6 +31,16 @@ module.exports = class Psicologo {
                         ORDER BY usuarios.nombreUsuario, usuarios.apellidoPaterno`);
   }
 
+  static fetchOne(idUsuario) {
+    return db.execute(
+      `SELECT *
+       FROM usuarios
+       WHERE idUsuario = ? AND idRol = 2`,
+      [idUsuario]
+    );
+  }
+  
+
   savePsicologo() {
     const usuario = this.usuario || null;
     const estatusUsuario = this.estatusUsuario || 1;
@@ -57,6 +67,39 @@ module.exports = class Psicologo {
         numeroTelefono,
         idRol
       ]
+    );
+  }
+
+  static correoExiste(correo) {
+      return db.execute('SELECT COUNT(*) as total FROM usuarios WHERE correo = ?', [correo])
+          .then(([rows]) => {
+              return rows[0].total > 0;
+          });
+  }
+
+  // EDITAR USUARIO
+  // Actualizar un usuario que ya existe (sin modificar el rol)
+  static update(idUsuario, usuario, estatusUsuario, nombreUsuario, apellidoPaterno, apellidoMaterno, correo, lada, numeroTelefono) {
+    return db.execute(
+      `UPDATE usuarios 
+      SET usuario = ?, 
+          estatusUsuario = ?, 
+          nombreUsuario = ?, 
+          apellidoPaterno = ?, 
+          apellidoMaterno = ?, 
+          correo = ?, 
+          lada = ?, 
+          numeroTelefono = ?
+      WHERE idUsuario = ?`,
+      [usuario, estatusUsuario, nombreUsuario, apellidoPaterno, apellidoMaterno, correo, lada, numeroTelefono, idUsuario]
+    );
+  }
+
+  // ACTUALIZAR ESTATUS DE USUARIO
+  static updateEstatus(idUsuario, estatusUsuario) {
+    return db.execute(
+      'UPDATE usuarios SET estatusUsuario = ? WHERE idUsuario = ?',
+      [estatusUsuario, idUsuario]
     );
   }
 }

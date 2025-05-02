@@ -1,0 +1,484 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- CSS link -->
+  <link rel="stylesheet" href="/css/aspirantes/pruebaOtis.css">
+  <title>Prueba</title>
+</head>
+<body>
+  <div class="container mt-4">
+    <div class="preguntasCaja">
+
+      <!-- Cabecera con título, progreso y cronómetro -->
+      <div class="cabeceraTest">
+        <h2 class="tituloTest text-center"><%= prueba.nombre %></h2>
+        <div class="headerOtis">
+          <div class="progresoOtis">
+            <label class="tituloProgreso">Progreso</label>
+            <span id="textoProgreso">0%</span>
+            <div class="barraExterna">
+              <div class="barraInterna" id="barraProgreso"></div>
+            </div>
+          </div>
+          <div class="temporizadorOtis">
+            <span class="iconoReloj">⏱</span>
+            <span class="tiempoRestante" id="cronometro">2:00:00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contenedor dinámico de preguntas -->
+      <div id="container">
+        <% if (prueba.idPrueba === 1 && pregunta) { %> <!-- Kostick -->
+          <div class="areaTexto">
+            <h5>Pregunta <%= pregunta.numeroPreguntaKostick %></h5>
+            <hr>
+          </div>
+          <input type="hidden" name="preguntaK" id="preguntaK" value="<%= pregunta.idPreguntaKostick %>" />
+          <div class="pregtext">
+            <span>Selecciona la frase con la que más te identifiques</span>
+          </div>
+          <div class="optionList">
+            <% opciones.forEach(opcion => { %>
+              <div class="option" id="option-<%= opcion.idOpcionKostick %>">
+                <input type="radio" name="answer" value="<%= opcion.idOpcionKostick %>" required />
+                <span><%= opcion.descripcionOpcionKostick %></span>
+              </div>
+            <% }) %>
+          </div>
+          <hr>
+          <input type="hidden" id="idAspirante" name="idAspirante" value="<%= idAspirante %>" />
+          <input type="hidden" id="idGrupo" name="idGrupo" value="<%= idGrupo %>" />
+          <footer>
+            <div class="text-end mt-4">
+              <button class="sigbtn btn btn-color--secondary" onclick="nextQuestion(event)">Siguiente</button>
+            </div>
+          </footer>
+        <% } else if (prueba.idPrueba === 2 && pregunta) { %> <!-- 16PF -->
+          <div class="areaTexto">
+            <h5>Pregunta <%= pregunta.numeroPregunta16PF %></h5>
+            <hr>
+          </div>
+          <input type="hidden" name="pregunta16" id="pregunta16" value="<%= pregunta.idPregunta16PF %>" />
+          <div class="pregtext">
+            <span><%= pregunta.pregunta16PF %></span>
+          </div>
+          <div class="optionList">
+            <% opciones.forEach(opcion => { %>
+              <div class="option" id="option-<%= opcion.idOpcion16PF %>">
+                <input type="radio" name="answer" value="<%= opcion.idOpcion16PF %>" required />
+                <span><%= opcion.descripcionOpcion16PF %></span>
+              </div>
+            <% }) %>
+          </div>
+          <hr>
+          <input type="hidden" id="idAspirante1" name="idAspirante1" value="<%= idAspirante %>" />
+          <input type="hidden" id="idGrupo1" name="idGrupo1" value="<%= idGrupo %>" />
+          <footer>
+            <div class="text-end mt-4">
+              <button class="sigbtn btn btn-color--secondary" onclick="nextQuestion1(event)">Siguiente</button>
+            </div>
+          </footer>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const startTime = Date.now();
+
+    // Función para pasar a la siguiente pregunta KOSTICK
+    function nextQuestion(event) {
+      event.preventDefault();
+
+      const endTime = Date.now();
+      const timeTaken = endTime - startTime;
+      let tiempo = (timeTaken / 1000).toFixed(2);
+
+      let respuestaSeleccionada;
+      let idOpcionKostick;
+
+      respuestaSeleccionada = document.querySelector(
+        'input[name="answer"]:checked'
+      );
+
+      if (respuestaSeleccionada) {
+        idOpcionKostick = respuestaSeleccionada.value;
+      } else if (!respuestaSeleccionada) {
+        alert("Por favor selecciona una opción antes de continuar");
+        return;
+      }
+      let idPregunta = document.getElementById("preguntaK");
+      let idGrupoActual = document.getElementById("idGrupo");
+      let idAspiranteActual = document.getElementById("idAspirante");
+      let idPreguntaKostick = idPregunta.value;
+      let idGrupo = idGrupoActual.value;
+      let idAspirante = idAspiranteActual.value;
+
+      const data = {
+        idOpcionKostick,
+        idGrupo,
+        idAspirante,
+        idPreguntaKostick,
+        tiempo,
+      };
+
+      fetch(`/aspirante/siguientePregunta`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          let htmlAct
+
+          let divPregunta = ` <div class="areaTexto">
+                                <h5>Pregunta ${data.pregunta.numeroPreguntaKostick}</h5>
+                                <hr>
+                              </div>
+                              <input
+                              type="hidden"
+                              name="preguntaK"
+                              id="preguntaK"
+                              value="${data.pregunta.idPreguntaKostick}" />
+                              <div class="pregtext">
+                                <span>Selecciona la frase con la que más te identifiques</span>
+                              </div>`;
+          let opciones = '';
+          if(data.opciones && Array.isArray(data.opciones)){
+            data.opciones.forEach((opcion) => {
+              opciones+= `<div class="option" id="option-${opcion.idOpcionKostick}">
+                            <input
+                            type="radio"
+                            name="answer"
+                            value="${opcion.idOpcionKostick}"
+                            required />
+                            <span>${opcion.descripcionOpcionKostick}</span>
+                          </div>`;
+            })
+          }
+
+          let hiddenInputs = `<input
+                                type="hidden"
+                                id="idAspirante"
+                                name="idAspirante"
+                                value="<%= idAspirante%>" />
+                              <input type="hidden" id="idGrupo" name="idGrupo" value="<%= idGrupo%>" />`;
+
+          let siguienteBtn;
+          if(data.pregunta.numeroPreguntaKostick === 90){
+            siguienteBtn = `<div>
+                                <button class="sigbtn btn btn-color--secondary" id="guardarPregunta" onclick="entregar(event)">Finalizar</button>
+                              </div>`;
+          } else {
+            siguienteBtn = `<div>
+                                <button class="sigbtn btn btn-color--secondary" id="guardarPregunta" onclick="nextQuestion(event)">Siguiente</button>
+                              </div>`;
+          }
+          
+          const container = document.getElementById("container");
+          htmlAct = divPregunta + opciones + '<hr>' + hiddenInputs + siguienteBtn;
+          container.innerHTML = htmlAct;
+          pregContador(data.pregunta.numeroPreguntaKostick, 90);
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
+    }
+
+    // Función para entregar prueba Kostick
+    function entregar(event) {
+      event.preventDefault();
+
+      const endTime = Date.now();
+      const timeTaken = endTime - startTime;
+      let tiempo = (timeTaken / 1000).toFixed(2);
+
+      let respuestaSeleccionada;
+      let idOpcionKostick;
+
+      respuestaSeleccionada = document.querySelector(
+        'input[name="answer"]:checked'
+      );
+
+      if (respuestaSeleccionada) {
+        idOpcionKostick = respuestaSeleccionada.value;
+      } else if (!respuestaSeleccionada) {
+        alert("Por favor selecciona una opción antes de continuar");
+        return;
+      }
+      let idPregunta = document.getElementById("preguntaK");
+      let idGrupoActual = document.getElementById("idGrupo");
+      let idAspiranteActual = document.getElementById("idAspirante");
+      let idPreguntaKostick = idPregunta.value;
+      let idGrupo = idGrupoActual.value;
+      let idAspirante = idAspiranteActual.value;
+
+      const data = {
+        idOpcionKostick,
+        idGrupo,
+        idAspirante,
+        idPreguntaKostick,
+        tiempo,
+      };
+      fetch(`/aspirante/pruebaCompletada`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          alert(data.message); 
+          window.location.href = "/aspirante/pruebaCompletada/<%= prueba.idPrueba %>";
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
+    }
+    //
+    //
+    //
+    //
+    //
+    //
+
+    // Función para pasar a la siguiente pregunta 16PF
+    function nextQuestion1(event) {
+      event.preventDefault();
+
+      const endTime = Date.now();
+      const timeTaken = endTime - startTime;
+      let tiempo = (timeTaken / 1000).toFixed(2);
+
+      let respuestaSeleccionada1;
+      let idOpcion16PF;
+
+      respuestaSeleccionada1 = document.querySelector(
+        'input[name="answer"]:checked'
+      );
+
+      if (respuestaSeleccionada1) {
+        idOpcion16PF = respuestaSeleccionada1.value;
+      } else if (!respuestaSeleccionada1) {
+        alert("Por favor selecciona una opción antes de continuar");
+        return;
+      }
+      let idPregunta1 = document.getElementById("pregunta16");
+      let idGrupoActual1 = document.getElementById("idGrupo1");
+      let idAspiranteActual1 = document.getElementById("idAspirante1");
+      let idPregunta16PF = idPregunta1.value;
+      let idGrupo = idGrupoActual1.value;
+      let idAspirante = idAspiranteActual1.value;
+
+      const data = {
+        idOpcion16PF,
+        idGrupo,
+        idAspirante,
+        idPregunta16PF,
+        tiempo,
+      };
+
+      fetch(`/aspirante/siguientePregunta1`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          let htmlAct
+
+          let divPregunta = ` <div class="areaTexto">
+                                <h5>Pregunta ${data.pregunta.numeroPregunta16PF}</h5>
+                                <hr>
+                              </div>
+                              <input
+                              type="hidden"
+                              name="pregunta16"
+                              id="pregunta16"
+                              value="${data.pregunta.idPregunta16PF}" />
+                              <div class="pregtext">
+                                <span>${data.pregunta.pregunta16PF}</span>
+                              </div>`;
+          let opciones = '';
+          if(data.opciones && Array.isArray(data.opciones)){
+            data.opciones.forEach((opcion) => {
+              opciones+= `<div class="option" id="option-${opcion.idOpcion16PF}">
+                            <input
+                            type="radio"
+                            name="answer"
+                            value="${opcion.idOpcion16PF}"
+                            required />
+                            <span>${opcion.descripcionOpcion16PF}</span>
+                          </div>`;
+            })
+          }
+
+          let hiddenInputs = `<input
+                                type="hidden"
+                                id="idAspirante1"
+                                name="idAspirante1"
+                                value="<%= idAspirante%>" />
+                              <input type="hidden" id="idGrupo1" name="idGrupo1" value="<%= idGrupo%>" />`;
+
+          let siguienteBtn;
+          if(data.pregunta.numeroPregunta16PF === 185){
+            siguienteBtn = `<div>
+                                <button class="sigbtn btn btn-color--secondary" id="guardarPregunta" onclick="entregar1(event)">Finalizar</button>
+                              </div>`;
+          } else {
+            siguienteBtn = `<div>
+                                <button class="sigbtn btn btn-color--secondary" id="guardarPregunta" onclick="nextQuestion1(event)">Siguiente</button>
+                              </div>`;
+          }
+          
+          const container = document.getElementById("container");
+          htmlAct = divPregunta + opciones + '<hr>' + hiddenInputs + siguienteBtn;
+          container.innerHTML = htmlAct;
+          pregContador(data.pregunta.numeroPregunta16PF, 185);
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
+    }
+
+
+    // Función para entregar prueba 16PF
+    function entregar1(event) {
+      event.preventDefault();
+
+      const endTime = Date.now();
+      const timeTaken = endTime - startTime;
+      let tiempo = (timeTaken / 1000).toFixed(2);
+
+      let respuestaSeleccionada;
+      let idOpcion16PF;
+
+      respuestaSeleccionada = document.querySelector(
+        'input[name="answer"]:checked'
+      );
+
+      if (respuestaSeleccionada) {
+        idOpcion16PF = respuestaSeleccionada.value;
+      } else if (!respuestaSeleccionada) {
+        alert("Por favor selecciona una opción antes de continuar");
+        return;
+      }
+      let idPregunta1 = document.getElementById("pregunta16");
+      let idGrupo1Actual = document.getElementById("idGrupo1");
+      let idAspirante1Actual = document.getElementById("idAspirante1");
+      let idPregunta16PF = idPregunta1.value;
+      let idGrupo = idGrupo1Actual.value;
+      let idAspirante = idAspirante1Actual.value;
+
+      const data = {
+        idOpcion16PF,
+        idGrupo,
+        idAspirante,
+        idPregunta16PF,
+        tiempo,
+      };
+      fetch(`/aspirante/pruebaCompletada1`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          alert(data.message);
+          window.location.href = "/aspirante/pruebaCompletada/<%= prueba.idPrueba %>";
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
+    }
+  </script>
+
+  <script>
+    let totalSegundos = <%= prueba.duracion %>; // Duración en segundos
+    const nombrePrueba = "<%= prueba.nombre %>"; // 'Kostick' o '16PF'
+
+    let cuentaRegresiva = setInterval(function () {
+      let horas = Math.floor(totalSegundos / 3600);
+      let minutos = Math.floor((totalSegundos % 3600) / 60);
+      let segundos = totalSegundos % 60;
+
+      let formatoTiempo = `${horas}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
+      document.getElementById("cronometro").innerHTML = formatoTiempo;
+
+      totalSegundos--;
+
+      if (totalSegundos < 0) {
+        clearInterval(cuentaRegresiva);
+        document.getElementById("cronometro").innerHTML = "TIME UP";
+
+        // Lógica para enviar respuestas según el tipo de prueba
+        if (nombrePrueba === "KOSTICK") {
+          entregar(); // Prueba Kostick
+        } else if (nombrePrueba === "PRUEBA DE 16PF") {
+          entregar1(); // Prueba 16PF
+        } else {
+          console.warn("No se reconoce el tipo de prueba para entregar automáticamente.");
+        }
+
+        // Redireccionar después de un breve tiempo
+        setTimeout(() => {
+          window.location.href = "/prueba-completada";
+        }, 2000);
+      }
+    }, 1000);
+  </script>
+  <script>
+    // Tener un contador de en qué pregunta vas (progreso)
+    function pregContador(index, total) {
+    const barra = document.getElementById("barraProgreso");
+    const texto = document.getElementById("textoProgreso");
+
+    if (!barra || !texto) {
+        console.error("No se encontró el elemento de progreso.");
+        return;
+    }
+
+    let porcentaje = Math.floor((index / total) * 100);
+    barra.style.width = porcentaje + "%";
+    texto.textContent = `${porcentaje}% completado`;
+    }
+
+  </script>
+
+</body>
+</html>
+
+  
+  

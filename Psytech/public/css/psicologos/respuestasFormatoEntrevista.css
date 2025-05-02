@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+:root{
+    --secondary: #294969;
+    --third: #C1C1C1;
+    --font-primary: #000;
+    --font-secondary: #fff;
+    --secondary-hover: #193858;
+    --third-hover:#B1B1B1;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Lato", sans-serif;
+    box-sizing: border-box;
+}
+
+.main{
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    transition: all 0.35s ease-in-out;
+    display: flex;
+    flex-direction: row;
+}
+
+.text-center{
+    font-size: 2.25rem;
+    font-weight: 500;
+}
+
+.titulo-seccion{
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--secondary);
+}
+
+.pregunta-titulo{
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--secondary);
+}
+
+.pregunta-respuesta{
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+    
+}
+
+.fixed-bottom-buttons {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    z-index: 1000;
+}
+
+.btn-color--secondary{
+    background: var(--secondary);
+    color: var(--font-secondary);
+}
+
+.btn-color--third{
+    background: var(--third);
+    color: var(--font-primary);
+}
+
+.btn-color--third:hover{
+    background: var(--third-hover);
+    color: var(--font-primary);
+}
+
+.btn-color--secondary:hover{
+    background: var(--secondary-hover);
+    color: var(--font-secondary);
+}

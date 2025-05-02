@@ -15,6 +15,14 @@ module.exports = class Aspirante {
         this.idPais = infoAspirante.idPais,
         this.idEstado = infoAspirante.idEstado
     }
+
+    static fetchOne(idAspirante){
+        return db.execute(`SELECT * 
+                            FROM aspirantes 
+                            WHERE idAspirante = ?`
+                            , [idAspirante])
+    }
+
     save(idGrupo){
         return db.execute(`
             CALL registraraspiranteengrupo 
@@ -87,6 +95,51 @@ module.exports = class Aspirante {
                 AND vpa.nombreGrupo = grupos.nombreGrupo
                 AND idGrupo = ?
             `,[idAspirante, idGrupo]);
+    }
+
+    static getFormatoEntrevista(idAspirante, idGrupo){
+        return db.execute(
+            `SELECT PFE.idPreguntaFormatoEntrevista, PFE.nombrePreguntaFormatoEntrevista, PFE.tipoPregunta, PFE.seccion, APFE.respuestaAspirante 
+            FROM gruposaspirantes GA 
+            JOIN aspirantespreguntasformatoentrevista APFE ON GA.idAspirante = APFE.idAspirante 
+            JOIN preguntasformatoentrevista PFE ON PFE.idPreguntaFormatoEntrevista = APFE.idPreguntaFormatoEntrevista 
+            WHERE GA.idAspirante = ?
+            AND GA.idGrupo = ? `, [idAspirante, idGrupo]);
+    }
+
+    static modificarAspirante(idAspirante, institucionProcedencia, idPais, idEstado){
+        return db.execute(`
+                            UPDATE aspirantes
+                            SET institucionProcedencia = ?,
+                            idPais = ?,
+                            idEstado = ?
+                            WHERE idAspirante = ?
+            `, [institucionProcedencia, idPais, idEstado, idAspirante])
+    }
+
+    static fetchCorreos(){
+        return db.execute(`
+                            SELECT correo
+                            FROM aspirantes, usuarios
+                            WHERE aspirantes.idUsuario = usuarios.idUsuario
+            `)
+    }
+
+    static fetchGrupo(idAspirante){
+        return db.execute(`
+                            SELECT idGrupo
+                            FROM gruposaspirantes
+                            WHERE idAspirante = ?
+            `, [idAspirante]);
+    }
+
+    static getGenero(idAspirante){
+        return db.execute(`
+                            SELECT idGenero
+                            FROM datospersonales
+                            WHERE idAspirante = ?
+                            AND idPrueba = 2;
+            `, [idAspirante]);
     }
 
 }

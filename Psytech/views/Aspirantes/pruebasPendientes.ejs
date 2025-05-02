@@ -47,10 +47,18 @@
                                         const estatus = estatusPrueba[pruebaPendiente.nombreEstatus] || 'prueba-default'; 
 
                                         let rutaPrueba = '';
-                                        if (pruebaPendiente.nombre === 'Colores de Luscher') 
-                                            rutaPrueba = '/aspirante/instrucciones-colores';
-                                        if (pruebaPendiente.nombre === 'OTIS') 
-                                            rutaPrueba = '/aspirante/instrucciones-otis';
+                                        if (prueba.nombre === 'Colores de Luscher') rutaPrueba = '/aspirante/instrucciones-colores';
+                                        if (prueba.nombre === 'OTIS') rutaPrueba = '/aspirante/instrucciones-otis';
+                                        if (prueba.nombre === 'TERMAN') rutaPrueba = '/aspirante/prueba-terman';
+                                        if (prueba.nombre === 'HARTMAN') rutaPrueba = '/aspirante/instrucciones-hartman';
+                                        if (prueba.nombre === 'KOSTICK') {
+                                            console.log(prueba);
+                                            rutaPrueba = '/aspirante/instruccionesPrueba/KOSTICK';
+                                        }
+                                        if (prueba.nombre === 'PRUEBA DE 16PF') {
+                                            console.log(prueba);
+                                            rutaPrueba = '/aspirante/instruccionesPrueba/PRUEBA DE 16PF';
+                                        }
                                     %>
                                     <% if (estatusPrueba[pruebaPendiente.nombreEstatus]) { %>
                                         <span class="card-estatus <%= estatus %>">
@@ -70,8 +78,8 @@
                                     <div class="d-flex justify-content-between">
                                         <a href="<%= rutaPrueba %>" class="btn btn-color--secondary">Realizar prueba</a>
                                         <span>
-                                            <%= pruebaPendiente.tiempo %> 
-                                            <% if (pruebaPendiente.tiempo != null) { %>
+                                            <%= pruebaPendiente.duracion %> 
+                                            <% if (pruebaPendiente.duracion != null) { %>
                                                 min
                                             <% } %>
                                         </span>  
@@ -79,8 +87,8 @@
                                 <% } else { %>
                                     <div class="d-flex justify-content-between">
                                         <span>
-                                            <%= pruebaPendiente.tiempo %> 
-                                            <% if (pruebaPendiente.tiempo != null) { %>
+                                            <%= pruebaPendiente.duracion %> 
+                                            <% if (pruebaPendiente.duracion != null) { %>
                                                 min
                                             <% } %>
                                         </span>

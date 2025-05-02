@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+:root {
+    --secondary: #294969;
+    --third: #C1C1C1;
+    --font-primary: #000;
+    --font-secondary: #fff;
+    --secondary-hover: #193858;
+    --third-hover: #B1B1B1;
+    --movilidad-header: #728575;
+    --movilidad-text: #000;
+    --card-bg: #ffffff;
+    --heading-color: #294969;
+    --border-radius: 12px;
+    --box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Lato", sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    background: white !important;
+    font-size: 11pt !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact !important; 
+    print-color-adjust: exact !important; /* Imprime los colores exactos en (Chrome, Firefox, Edge, Safari) */
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+}
+
+/* Cosas a ocultar */
+nav,
+button,
+.btn,
+.boton-imprimir,
+.boton-container,
+.boton-regresar-abajo,
+.button-cerrar-sesion,
+.fixed-button,
+.floating-button,
+#botonImprimir,
+[class*="navside"],
+body > .main > *:not(.container),
+body > .main > div:first-child {
+    display: none !important;
+}
+
+.main {
+    width: 100% !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: auto !important;
+    overflow: visible !important;
+}
+
+.container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+}
+
+/* Estilos de titulos */
+h2, h4, h5 {
+    color: var(--heading-color) !important;
+}
+
+/* TITULOS DE LAS SECCIONES */
+.titulo-seccion {
+    color: var(--secondary) !important;      
+    font-size: 18pt !important;
+    margin-top: 30px !important;
+    -webkit-print-color-adjust: exact !important;  
+    print-color-adjust: exact !important;
+    width: 90% !important;
+}
+
+.text-center h2 {
+    font-size: 2.2rem !important;
+    margin-bottom: 10px !important;
+    font-weight: 700 !important;
+}
+
+.chart-card {
+    break-inside: avoid;                     
+    page-break-inside: avoid;
+    box-shadow: none !important;             
+    border: 1px solid #ddd !important;       
+    background-color: white !important;
+    height: 450px !important;  
+    min-height: 450px !important;
+    width: 90% !important;
+    margin-bottom: 30px !important; 
+    position: relative !important;
+    padding-bottom: 40px !important; 
+}
+
+.contenedor-secciones{
+    break-inside: avoid-page;               
+    page-break-inside: avoid;              
+    margin: 25px 0 !important;
+    width: 90% !important;
+}
+
+.titulo-seccion{
+    border-left: 5px solid var(--secondary) !important;
+    padding-left: 1rem !important;
+    margin-top: 2.5rem !important; 
+    margin-bottom: 1.5rem !important;
+    font-weight: 600 !important;
+    background-color: #f8f9fa !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    border-radius: 0 8px 8px 0 !important;
+    font-size: 1.25rem !important;
+    color: var(--secondary) !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
+}
+
+/* Botones */
+.btn-color--secondary {
+    padding: 8px 28px !important;
+    border-radius: 8px !important;
+    font-size: 1rem !important;
+    text-align: center !important;
+    background: var(--secondary) !important;
+    color: var(--font-secondary) !important;
+    font-weight: 500 !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-color--third {
+    padding: 8px 28px !important;
+    border-radius: 8px !important;
+    font-size: 1rem !important;
+    text-align: center !important;
+    background: var(--third) !important;
+    color: var(--font-primary) !important;
+    font-weight: 500 !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-color--secondary:hover {
+    background: var(--secondary-hover) !important;
+    color: var(--font-secondary) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.15) !important;
+}
+
+.btn-color--third:hover {
+    background: var(--third-hover) !important;
+    color: var(--font-primary) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.15) !important;
+}
+
+.text-center .btn {
+    padding: 10px 32px !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+}
+
+.boton-container {
+    width: 100% !important;
+    text-align: center !important; 
+    margin-top: 30px !important;
+    margin-bottom: 30px !important;
+    padding-left: 15px !important;
+}
