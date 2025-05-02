@@ -1611,7 +1611,7 @@ exports.get_interpretaciones16PF = (request, response, next) => {
         const [colores] = await InfoPruebas.getColores();
         
         // Renderizar la vista con los datos
-        res.render('psicologos/infoPruebaColores', {  
+        res.render('Psicologos/infoPruebaColores', {  
             pageTitle: infoPrueba.length > 0 ? infoPrueba[0].nombrePrueba : 'Prueba de Colores',
             infoPrueba: infoPrueba.length > 0 ? infoPrueba[0] : null,
             colores: colores
