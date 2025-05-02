@@ -269,7 +269,7 @@
             const personMainShape = () =>
                 new go.Shape({
                     figure: 'RoundedRectangle',
-                    desiredSize: new go.Size(320, 140),
+                    desiredSize: new go.Size(320, 168),
                     portId: '',
                     parameter1: CORNER_ROUNDNESS
                 })
@@ -288,7 +288,7 @@
                         .add($(go.TextBlock, { margin: 4 })
                             .bind("text", nameProperty)),
                     alignmentFocus: go.Spot.Center,
-                    alignment: new go.Spot(0.5, 0.30)
+                    alignment: new go.Spot(0.5, 0.28)
                 })
                     .bind('text', data => `Nombre: ${(data[nameProperty])}`);
             
@@ -299,7 +299,7 @@
                     textAlign: 'center',
                     verticalAlignment: go.Spot.Bottom,
                     alignmentFocus: go.Spot.Bottom,
-                    alignment: new go.Spot(0.5, 0.50)
+                    alignment: new go.Spot(0.5, 0.46)
                 })
                     .bind('text', data => `Edad: ${data.age}`);
 
@@ -310,7 +310,7 @@
                     textAlign: 'center',
                     verticalAlignment: go.Spot.Bottom,
                     alignmentFocus: go.Spot.Bottom,
-                    alignment: new go.Spot(0.5, 0.64)
+                    alignment: new go.Spot(0.5, 0.58)
                 })
                     .bind('text', data => `Estado civil: ${maritalStatusToText(data.maritalStatus)}`);
 
@@ -324,6 +324,18 @@
                     alignment: new go.Spot(0.5, 1, 0, -20)
                 })
                     .bind('text', 'rol');
+            
+            const personLifeTextBlock = () => 
+                new go.TextBlock({
+                    stroke: theme.colors.personText,
+                    font: theme.fonts.nameFont,
+                    textAlign: 'center',
+                    verticalAlignment: go.Spot.Bottom,
+                    alignmentFocus: go.Spot.Bottom,
+                    alignment: new go.Spot(0.5, 0.72)
+                })
+                    .bind('text', data => `Estado de vida: ${(data[lifeStatusProperty])}`);
+
 
             diagram.nodeTemplate = $(go.Node, "Spot", {
                 selectionAdorned: false,
@@ -342,6 +354,7 @@
                         personRoleTextBlock(),
                         personAgeTextBlock(),
                         personMaritalStTextBlock(),
+                        personLifeTextBlock(),
                         personNameTextBlock()
                     ),
                     personImage(),
