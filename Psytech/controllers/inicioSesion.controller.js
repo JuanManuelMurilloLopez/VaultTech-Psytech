@@ -1,15 +1,9 @@
 const Usuario = require('../models/usuario.model');
 const { OTP } = require('../models/otp.model');
 const crypto = require('crypto');
-const { MailerSend, EmailParams, Sender, Recipient } = require("mailersend");
+const { Resend } = require('resend');
 
-
-// Configuración de MailerSend
-// const mailerSend = new MailerSend({
-//     apiKey: process.env.MAILER_SEND_API_KEY,
-// });
-  
-// const sentFrom = new Sender("test-86org8eedm1gew13.mlsender.net", "Psytech");
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 exports.getLogin = (request, response, next) => {
     response.render('login');
@@ -45,16 +39,13 @@ exports.getPost = async (request, response) => {
 
         request.session.usuario = usuario;
         
-        // Enviar correo con MailerSend
-        // const destinatario = new Recipient(usuarioId.correo, usuario);
-
-        // const emailParams = new EmailParams()
-        // .setFrom(sentFrom)
-        // .setTo([destinatario])
-        // .setSubject("Tu código OTP para ingresar")
-        // .setHtml(`<h2>¡Hola ${usuario}!</h2><p>Tu código OTP es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos. Unicamente se puede usar una sola vez.</p>`);
-
-        // await mailerSend.email.send(emailParams);
+        // Enviar correo con Resend
+        await resend.emails.send({
+            from: 'psytech@pruebas.psicodx.com',
+            to: [usuarioId.correo],
+            subject: 'Tu código OTP para ingresar',
+            html: `<h2>¡Hola ${usuario}!</h2><p>Tu código OTP es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos. Unicamente se puede usar una sola vez.</p>`
+        });
         
         console.log('codigoOTP:', codigoOTP);
         response.redirect('/otp');
