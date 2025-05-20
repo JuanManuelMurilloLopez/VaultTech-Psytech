@@ -27,7 +27,7 @@ class Usuario {
 
 class OTP {
   constructor(idOTP, idUsuario, codigo, validez, usado) {
-    this.idOTP = idOTP;
+    this.idOTP = idOTP; //uuid()
     this.idUsuario = idUsuario;
     this.codigo = codigo;
     this.validez = validez;

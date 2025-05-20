@@ -2,10 +2,15 @@
 
 :root{
     --secondary: #294969;
+    --third: #C1C1C1;
     --font-primary: #000;
     --font-secondary: #fff;
     --secondary-hover: #193858;
+    --third-hover:#B1B1B1;
+    --movilidad-header: #728575;
+    --movilidad-text: #000;
 }
+
 
 *{
     box-sizing: border-box;
@@ -51,6 +56,18 @@
 .btn-color--secondary:hover{
     background: var(--secondary-hover);
     color: var(--font-secondary);
+}
+
+.btn-color--third{
+    padding: 5px 30px;
+    border-radius: 20px;
+    background: var(--third);
+    color: var(--font-primary);
+}
+
+.btn-color--third:hover{
+    background: var(--third-hover);
+    color: var(--font-primary);
 }
 
 .centrado {

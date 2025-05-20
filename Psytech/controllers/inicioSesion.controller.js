@@ -107,7 +107,44 @@ exports.verificarOTP = async (request, response) => {
       console.error('Error al verificar OTP:', error);
       response.send('<script>alert("Error al verificar OTP"); window.location.href = "/otp";</script>');
     }
-  };
+};
+
+exports.reenviarOtp = async (request, response) => {
+    const usuario = request.session.usuario;
+
+    if (!usuario) {
+        return response.redirect('/login');
+    }
+
+    try {
+        const usuarioData = await Usuario.fetchOne(usuario);
+        const usuarioId = usuarioData[0];
+
+        if (!usuarioId || usuarioId.estatusUsuario !== 1) {
+            return response.send('<script>alert("Usuario no válido o inactivo"); window.location.href = "/login";</script>');
+        }
+
+        const codigoOTP = crypto.randomInt(100000, 999999);
+        const validez = new Date(Date.now() + 5 * 60000);
+
+        await OTP.crearOTP(usuarioId.idUsuario, codigoOTP, validez);
+
+        await resend.emails.send({
+            from: 'psytech@pruebas.psicodx.com',
+            to: [usuarioId.correo],
+            subject: 'Tu nuevo código OTP',
+            html: `<h2>¡Hola ${usuario}!</h2><p>Tu nuevo código OTP es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos.</p>`
+        });
+
+        console.log('Nuevo OTP reenviado:', codigoOTP);
+        return response.send('<script>alert("Nuevo código enviado a tu correo."); window.location.href = "/otp";</script>');
+
+    } catch (error) {
+        console.error('Error al reenviar OTP:', error);
+        return response.send('<script>alert("Error al reenviar el código OTP"); window.location.href = "/otp";</script>');
+    }
+};
+
 
 exports.getLogout = ((request, response) => {
     request.session.destroy((err) => {

@@ -2999,6 +2999,8 @@ ALTER TABLE `opcionesterman`
 ALTER TABLE `otp`
   ADD CONSTRAINT `otp_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `usuarios` (`idUsuario`);
 
+ALTER TABLE OTP MODIFY idOTP INT AUTO_INCREMENT PRIMARY KEY;
+
 --
 -- Filtros para la tabla `preguntas16pf`
 --
