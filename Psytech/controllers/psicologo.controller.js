@@ -731,6 +731,10 @@ exports.getPruebaColores = (request, response, next) => {
     response.send('Prueba Colores');
 };
 
+exports.getPruebaHartman = (request, response, next) => {
+    response.render('Psicologos/infoPruebaHartman');
+};
+
 // Controlador para manejar la obtención del cuadernillo de respuestas OTIS.
 exports.getCuadernilloOtis = (request, response, next) => {
     // Obtiene los datos personales del aspirante

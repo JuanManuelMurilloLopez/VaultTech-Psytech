@@ -71,6 +71,9 @@ router.get('/prueba-otis', controller.getPruebaOtis);
 // Vista con la información de la prueba Colores
 router.get('/prueba-colores', controller.getPruebaColores);
 
+// Vista con la información de la prueba Hartman
+router.get('/prueba-hartman', controller.getPruebaHartman);
+
 // Cuadernillo de respuestas de la prueba OTIS por aspirante
 router.get('/cuadernillo-otis/:idGrupo/:idAspirante/:idInstitucion', controller.getCuadernilloOtis);
 
