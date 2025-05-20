@@ -35,8 +35,14 @@ const Pregunta16PF = require('../models/preguntas16pf.model.js');
 
 const xlsx = require('xlsx');
 const fs = require('fs');
+const path = require('path');
 const Usuario = require('../models/usuario.model.js');
 const { error } = require('console');
+
+const { Resend } = require('resend');
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+const correoHtmlPath = path.join(__dirname, '..', 'util', 'correoRegistro.html');
 
 //Rutas del portal de los Psicologos
 exports.getListaGrupos = (request, response, next) => {
@@ -521,7 +527,6 @@ exports.getRegistrarAspirantes = (request, response, next) => {
         Estado.fetchAll()
         .then(([rows, fieldData]) => {
             const estados = rows;
-            
             Aspirante.fetchCorreos()
             .then(([rows, fieldData]) => {
                 const correosRegistrados = rows;
@@ -560,7 +565,25 @@ exports.postRegistrarAspirantes = (request, response, next) => {
                 }
                 Promise.all(promesas)
                 .then(([rows, fieldData]) => {
-                    exports.getInformacionGrupo(request, response, next);
+
+                    fs.readFile(correoHtmlPath, 'utf8', (error, htmlContent) => {
+                        if(error){
+                            console.log(error);
+                            return;
+                        }
+                        resend.emails.send({
+                        from: 'psytech@pruebas.psicodx.com',
+                        to: [request.body.correo],
+                        subject: 'Bienvenido, accede a tus pruebas psicométricas y psicológicas de admisión al posgrado',
+                        html: htmlContent
+                        })
+                        .then(() => {
+                            exports.getInformacionGrupo(request, response, next);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                    })
                 })
                 .catch((error) => {
                     console.log(error);
