@@ -34,6 +34,8 @@
                         <h2 class="prueba-title"><%= prueba.nombre %></h2>
                         <p class="prueba-description"><%= prueba.descripcion %></p>
                         <a href="<%= 
+                        prueba.idPrueba === 1 ? '/psicologo/prueba-kostick' :
+                        prueba.idPrueba = 2 ? '/psicologo/prueba-16pf' :
                         prueba.idPrueba === 3 ? '/psicologo/prueba-hartman' :
                         prueba.idPrueba === 5 ? '/psicologo/prueba-otis' : 
                         prueba.idPrueba === 6 ? '/psicologo/prueba-colores' : 

@@ -65,6 +65,12 @@ router.get('/informacion-familiares/:idGrupo/:idAspirante/:idInstitucion', contr
 // Vista con todas las pruebas
 router.get('/catalogo-pruebas', controller.getCatalogoPruebas);
 
+// Vista con información de la prueba Kostick
+router.get('/prueba-kostick', controller.getPruebaKostick);
+
+//Vista con la información de la prueba 16PF
+router.get('/prueba-16pf', controller.getPrueba16pf);
+
 // Vista con información de la prueba Otis
 router.get('/prueba-otis', controller.getPruebaOtis);
 
