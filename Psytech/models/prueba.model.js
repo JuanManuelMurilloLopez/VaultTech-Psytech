@@ -167,7 +167,14 @@ module.exports = class Prueba{
 
     static getPreguntas16PF(){}
 
-    static getPreguntasHartman(){}
+    static async getPreguntasHartman() {
+        const [rows] = await db.execute(`
+            SELECT fasePregunta, numeroPregunta, preguntaHartman
+            FROM preguntashartman
+            ORDER BY fasePregunta ASC, numeroPregunta ASC
+        `);
+        return rows;
+    }
 
     static getPreguntaKostick(numeroPreguntaKostick){
         return db.execute(`

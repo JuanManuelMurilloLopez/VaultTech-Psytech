@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba HARTMAN</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="/css/psicologos/infoPruebaHartman.css">
+    <!-- CSS navside -->
+    <link rel="stylesheet" href="/css/includeCss/_navsidePsicologo.css">
+    <!-- CSS para cerrar sesión -->
+    <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
+</head>
+<body>
+
+    <div class="main">
+        <!-- Navside -->
+        <%- include('../includes/_navsidePsicologo.ejs') %>
+
+        <div class="container">
+            <!-- Boton de cerrar sesión -->
+            <%- include('../includes/_buttonCerrarSesion.ejs') %>
+
+            <h1 class="text-center"> Prueba HARTMAN </h1>
+            <hr>
+
+            <h5 class="titulo-seccion">Información Test Hartman</h5>
+            <hr>
+
+            <!-- Lista de preguntas -->
+           <div class="respuestas-container row">
+                <!-- Fase 1 -->
+                <div class="col-md-6">
+                    <h5 class="text-center mb-3">Fase 1 - Frases</h5>
+                    <% if (fase1 && fase1.length > 0) { %>
+                        <% for (const pregunta of fase1) { %>
+                            <div class="pregunta-row mb-3 p-3 border rounded bg-light">
+                                <strong><%= pregunta.numeroPregunta %>.</strong> <%= pregunta.preguntaHartman %>
+                            </div>
+                        <% } %>
+                    <% } else { %>
+                        <p>No hay preguntas para la Fase 1.</p>
+                    <% } %>
+                </div>
+
+                <!-- Fase 2 -->
+                <div class="col-md-6">
+                    <h5 class="text-center mb-3">Fase 2 - Citas</h5>
+                    <% if (fase2 && fase2.length > 0) { %>
+                        <% for (const pregunta of fase2) { %>
+                            <div class="pregunta-row mb-3 p-3 border rounded bg-light">
+                                <strong><%= pregunta.numeroPregunta %>.</strong> <%= pregunta.preguntaHartman %>
+                            </div>
+                        <% } %>
+                    <% } else { %>
+                        <p>No hay preguntas para la Fase 2.</p>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- Botón regresar -->
+            <div class="boton-container text-center mt-4">
+                <a class="btn btn-color--third boton-regresar-abajo"
+                href="/psicologo/catalogo-pruebas"
+                >Regresar</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Script del navside -->
+    <script src="/js/_navside.js"></script>
+</body>
+</html>
