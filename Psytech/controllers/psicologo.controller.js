@@ -495,6 +495,27 @@ exports.postImportarAspirantes = (request, response, next) => {
                 .then(([pruebas]) => {
                     const vincularPruebas = pruebas.map(prueba => nuevoAspirante.vincularPrueba(idAspirante, request.params.idGrupo, prueba));
                     return Promise.all(vincularPruebas);
+                }).then(() => {
+                    return new Promise ((resolve, reject) => {
+                        fs.readFile(correoHtmlPath, 'utf8', (error, htmlContent) => {
+                            if(error){
+                                console.log(error);
+                                return resolve();
+                            }
+
+                            resend.emails.send({
+                            from: 'psytech@pruebas.psicodx.com',
+                            to: [aspirante.correo],
+                            subject: 'Bienvenido, accede a tus pruebas psicométricas y psicológicas de admisión al posgrado',
+                            html: htmlContent
+                            })
+                            .then(() => resolve())
+                            .catch((error) => {
+                                console.log(error);
+                                resolve();
+                            });
+                        })
+                    })
                 });
             });
         });
