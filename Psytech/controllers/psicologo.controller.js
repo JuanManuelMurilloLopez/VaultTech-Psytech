@@ -797,7 +797,24 @@ exports.getPruebaKostick = (request, response, next)  => {
 }
 
 exports.getPrueba16pf = (request, response, next) => {
-
+    Pregunta16PF.getInfo()
+    .then(([rows, fieldData]) => {
+        const opciones = rows;
+        const informacionPreguntas = {};
+        opciones.forEach(pregunta => {
+            const numPregunta = pregunta.numeroPregunta16PF;
+            if(!informacionPreguntas[numPregunta]){
+                informacionPreguntas[numPregunta] = [];
+            }
+            informacionPreguntas[numPregunta].push(pregunta);
+        })
+        response.render('Psicologos/infoPrueba16pf', {
+            informacionPreguntas: informacionPreguntas || [],
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 }
 
 exports.getPruebaHartman = async (req, res, next) => {
