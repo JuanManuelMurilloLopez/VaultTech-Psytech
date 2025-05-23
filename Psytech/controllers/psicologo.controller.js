@@ -1837,4 +1837,128 @@ exports.getCuadernillo16PF = (request, response, next) => {
         console.log(error);
     });
 }
+
+exports.postReiniciarOtis = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 5;
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteDatosPersonales(idAspirante, idGrupo, idPrueba)
+    .then(() => {
+        Prueba.deleteRespuestasOtis(idAspirante, idGrupo)
+        .then(() => {
+            Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+            .then(() => {
+                // Redirigir a la misma página
+                exports.getAspirante(request, response, next);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+exports.postReiniciarColores = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 6;
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteDatosPersonales(idAspirante, idGrupo, idPrueba)
+    .then(() => {
+        Prueba.deleteRespuestasColores(idAspirante, idGrupo)
+        .then(() => {
+            Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+            .then(() => {
+                // Redirigir a la misma página
+                exports.getAspirante(request, response, next);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+exports.postReiniciar16pf = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 2;
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteDatosPersonales(idAspirante, idGrupo, idPrueba)
+    .then(() => {
+        Prueba.resetParametros16PF(idAspirante, idGrupo)
+        .then(() => {
+            Prueba.deleteRespuestas16PF(idAspirante, idGrupo)
+            .then(() => {
+                Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+                .then(() => {
+                    // Redirigir a la misma página
+                    exports.getAspirante(request, response, next);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+exports.postReiniciarKostick = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 1;
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteDatosPersonales(idAspirante, idGrupo, idPrueba)
+    .then(() => {
+        Prueba.resetResultadosKostick(idAspirante, idGrupo)
+        .then(() => {
+            Prueba.deleteRespuestasKostick(idAspirante, idGrupo)
+            .then(() => {
+                Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+                .then(() => {
+                    // Redirigir a la misma página
+                    exports.getAspirante(request, response, next);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
   

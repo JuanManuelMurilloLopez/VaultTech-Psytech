@@ -111,5 +111,11 @@ router.get('/analisis-terman/:idAspirante/:idGrupo/serie/:idSerie', controller.g
 router.get('/analisis-terman/:idGrupo/:idAspirante/:idInstitucion', controller.getAnalisisTerman);
 router.get('/analisis-terman/:idAspirante/:idGrupo/Test%20de%20Aptitud%20Mental%20TERMAN', controller.getAnalisisTerman);
 
+//Rutas para reiniciar pruebas
+router.post('/aspirantes/reiniciar-otis/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarOtis);
+router.post('/aspirantes/reiniciar-colores/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarColores);
+router.post('/aspirantes/reiniciar-16pf/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciar16pf);
+router.post('/aspirantes/reiniciar-kostick/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarKostick);
+
 
 module.exports = router;

@@ -386,4 +386,105 @@ module.exports = class Prueba{
             `, [estatus, idAspirante, idGrupo, idPrueba]);
     }
 
+    static deleteDatosPersonales(idAspirante,  idGrupo, idPrueba){
+        return db.execute(`
+                            DELETE
+                            FROM datospersonales
+                            WHERE idAspirante = ?
+                            AND idGrupo = ?
+                            AND idPrueba = ?
+            `, [idAspirante, idGrupo, idPrueba]);
+    }
+
+    static deleteRespuestasOtis(idAspirante, idGrupo){
+        return db.execute(`
+                    DELETE 
+                    FROM respuestasotisaspirante
+                    WHERE idAspirante = ?
+                    AND idGrupo = ?
+            `, [idAspirante, idGrupo]);
+    }
+
+    static deleteRespuestasColores(idAspirante, idGrupo){
+        return db.execute(`
+                    DELETE FROM seleccionescolores
+                    WHERE idAspirante = ?
+                    AND idGrupo = ?
+            `, [idAspirante, idGrupo])
+    }
+
+    static resetParametros16PF(idAspirante, idGrupo){
+        return db.execute(`
+                    UPDATE parametros16pf
+                    SET A = 0,
+                        B = 0,
+                        C = 0,
+                        E = 0,
+                        F = 0,
+                        G = 0,
+                        H = 0,
+                        I = 0,
+                        L = 0,
+                        M = 0,
+                        N = 0,
+                        O = 0,
+                        Q1 = 0,
+                        Q2 = 0,
+                        Q3 = 0,
+                        Q4 = 0,
+                        IM = 0
+                    WHERE idAspirante = ?
+                    AND idGrupo = ?
+            `, [idAspirante, idGrupo]);
+    }
+
+    static deleteRespuestas16PF(idAspirante, idGrupo){
+        return db.execute(`
+                    DELETE
+                    FROM responde16pf
+                    WHERE idAspirante = ?
+                    AND idGrupo = ?
+            `, [idAspirante, idGrupo]);
+    }
+
+    static resetResultadosKostick(idAspirante, idGrupo){
+        return db.execute(`
+                    UPDATE resultadoskostick
+                    SET G = 0,
+                        L = 0,
+                        I = 0,
+                        T = 0,
+                        V = 0,
+                        S = 0,
+                        R = 0,
+                        D = 0,
+                        C  = 0,
+                        E = 0,
+                        W = 0,
+                        F = 0,
+                        K = 0,
+                        Z = 0,
+                        O = 0,
+                        B = 0,
+                        X = 0,
+                        P = 0,
+                        A = 0,
+                        N = 0
+                    WHERE idAspirante = ?
+                    AND idGrupo = ?
+            `, [idAspirante, idGrupo]);
+    }
+
+    static deleteRespuestasKostick(idAspirante, idGrupo){
+        return db.execute(`
+                    DELETE
+                    FROM respondekostick
+                    WHERE idAspirante = ?
+                    AND idGrupo = ?
+            `, [idAspirante, idGrupo]);
+    }
+
+    static deleteRespuestasTerman(idAspirante, idGrupo){}
+
+    static deleteRespuestasHartman(idAspirante, idGrupo){}
 }

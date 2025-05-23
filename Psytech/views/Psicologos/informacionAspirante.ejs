@@ -142,6 +142,14 @@
                                             if (prueba.nombre === 'HARTMAN') rutaPrueba = '/psicologo/analisis-hartman';
                                             if(prueba.nombre === 'PRUEBA DE 16PF') rutaPrueba = '/psicologo/cuadernillo-16PF';
                                             if(prueba.nombre === 'KOSTICK') rutaPrueba = '/psicologo/cuadernillo-KOSTICK';
+
+                                            let rutaReiniciar = '';
+                                            if (prueba.nombre === 'Colores de Luscher') rutaReiniciar = '/psicologo/aspirantes/reiniciar-colores';
+                                            if (prueba.nombre === 'OTIS') rutaReiniciar = '/psicologo/aspirantes/reiniciar-otis';
+                                            if (prueba.nombre === 'TERMAN') rutaReiniciar = '';
+                                            if (prueba.nombre === 'HARTMAN') rutaReiniciar = '';
+                                            if(prueba.nombre === 'PRUEBA DE 16PF') rutaReiniciar = '/psicologo/aspirantes/reiniciar-16pf';
+                                            if(prueba.nombre === 'KOSTICK') rutaReiniciar = '/psicologo/aspirantes/reiniciar-kostick';
                                         %>
                                         <% if (estatusPrueba[prueba.nombreEstatus]) { %>
                                             <span class="card-estatus <%= estatus %>">
@@ -158,9 +166,14 @@
                                     <% if (prueba.nombreEstatus === 'Completada') { %>
                                         <div class="d-flex justify-content-between">
                                             <!-- CAMBIO CODIGO: href ruta -->
-                                            <% console.log("ID grupo: ", idGrupo) %>
                                             <a href="<%= rutaPrueba %>/<%= idGrupo %>/<%= aspirante %>/<%= idInstitucion %>" class="btn btn-color--secondary">Ver resultados</a>
                                         </div> 
+                                    <% } else if(prueba.nombreEstatus === 'En progreso') {%>
+                                        <div class="d-flex justify-content-between">
+                                            <form action="<%= rutaReiniciar %>/<%= aspirante %>/<%= idGrupo %>/<%= idInstitucion %>" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas reiniciar esta prueba?')">
+                                                <button type="submit" class="btn btn-danger">Reiniciar Prueba</button>
+                                            </form>
+                                        </div>
                                     <% } else {%>
                                         <div class="d-flex justify-content-between">
                                         </div>
