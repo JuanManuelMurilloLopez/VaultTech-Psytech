@@ -111,5 +111,12 @@ router.get('/analisis-terman/:idAspirante/:idGrupo/serie/:idSerie', controller.g
 router.get('/analisis-terman/:idGrupo/:idAspirante/:idInstitucion', controller.getAnalisisTerman);
 router.get('/analisis-terman/:idAspirante/:idGrupo/Test%20de%20Aptitud%20Mental%20TERMAN', controller.getAnalisisTerman);
 
+router.get('/psicologos-registrados', controller.getPsicologosRegistrados);
+
+router.get('/registrar-psicologo', controller.getRegistrarPsicologos);
+router.post('/registrar-psicologo', controller.postRegistrarPsicologos);
+
+router.get('/editar-psicologo/:idUsuario', controller.getEditarPsicologo);
+router.post('/editar-psicologo/:idUsuario', controller.postEditarPsicologo);
 
 module.exports = router;

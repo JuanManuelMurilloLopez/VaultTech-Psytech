@@ -13,6 +13,7 @@ const interpretaciones = require('../util/interpretacionColores.js');
 const InfoPruebas = require('../models/infoPruebas.model');
 const FormatoEntrevista = require('../models/formatoDeEntrevista.model.js');
 const Familiar = require('../models/formularioFamiliares.model.js');
+const Psicologo = require('../models/psicologo.model');
 
 // Modelos terman
 const respuestasTermanModel = require('../models/respuestasTerman.model.js');
@@ -45,6 +46,165 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const correoHtmlPath = path.join(__dirname, '..', 'util', 'correoRegistro.html');
 
 //Rutas del portal de los Psicologos
+
+// Registrar y editar psicologos
+exports.getPsicologosRegistrados = (request, response, next) => {
+    Psicologo.fetchAll()
+    .then(([rows, fieldData]) => {
+        const listaPsicologos = rows;
+        response.render('Psicologos/listaPsicologos',{
+            listaPsicologos: listaPsicologos || [],
+        });
+    })
+    .catch((error) => {
+        console.log('Error al obtener psicologos:', error);
+    });
+};
+
+exports.getRegistrarPsicologos = (request, response, next) => {
+    Psicologo.fetchAll()
+    .then(([rows, fieldData]) => {
+        const psicologos = rows;
+        response.render('Psicologos/registrarPsicologo', {
+            psicologos: psicologos || [],
+        });
+    })
+    .catch((error) => {
+        console.log('Error al obtener psicologos:', error);
+    });
+};
+
+exports.postRegistrarPsicologos = (request, response, next) => {
+    const { correo, nombrePsicologo, apellidoPaterno, apellidoMaterno, lada, numero } = request.body;
+
+    Psicologo.correoExiste(correo)
+    .then((existe) => {
+
+        if (existe) {
+            return response.render('Psicologos/registrarPsicologo', {
+                error: 'El correo ya está registrado.'
+            });
+        }
+
+        const psicologo = new Psicologo(
+            correo, // usuario
+            1,
+            nombrePsicologo,
+            apellidoPaterno,
+            apellidoMaterno,
+            correo, // correo electrónico
+            lada,
+            numero,
+            1
+        );
+
+        console.log('Guardando psicólogo:', psicologo);
+
+        return psicologo.savePsicologo()
+            .then(() => {
+                exports.getPsicologosRegistrados(request, response, next);
+            });
+    })
+    .catch((error) => {
+        console.log('Error al guardar psicólogo:', error);
+    });
+};
+
+exports.getEditarPsicologo = (request, response, next) => {
+    const idUsuario = request.params.idUsuario;
+
+    Psicologo.fetchOne(idUsuario)
+    .then(([rows]) => {
+        if (rows.length === 0) {
+            return response.redirect('/psicologo/psicologos-registrados');
+        }
+
+        const psicologo = rows[0];
+
+        response.render('Psicologos/editarPsicologo', {
+            psicologo: psicologo,
+            idUsuario: psicologo.idUsuario,
+            error: '',
+        });
+    })
+    .catch(error => {
+        console.log('Error al obtener psicólogo:', error);
+    });
+};
+
+exports.postEditarPsicologo = (request, response, next) => {
+    const idUsuario = request.params.idUsuario;
+    const {
+        usuario,
+        estatusUsuario,
+        nombreUsuario,
+        apellidoPaterno,
+        apellidoMaterno,
+        correo,
+        lada,
+        numeroTelefono
+    } = request.body;
+
+    let estatus;
+
+    Psicologo.fetchOne(idUsuario)
+    .then(([rows]) => {
+        if (rows.length === 0) {
+            console.log('Usuario no encontrado');
+        }
+
+        const usuarioActual = rows[0];
+        
+        estatus = (estatusUsuario === undefined || estatusUsuario === null)
+            ? usuarioActual.estatusUsuario
+            : (estatusUsuario === 'true' ? 1 : 0);
+
+        const valores = {
+            usuario: usuario || null,
+            nombreUsuario: nombreUsuario || null,
+            apellidoPaterno: apellidoPaterno || null,
+            apellidoMaterno: apellidoMaterno || null,
+            correo: correo || null,
+            lada: lada || null,
+            numeroTelefono: numeroTelefono || null,
+        };
+
+        return Psicologo.update(
+            idUsuario,
+            valores.usuario,
+            estatus,
+            valores.nombreUsuario,
+            valores.apellidoPaterno,
+            valores.apellidoMaterno,
+            valores.correo,
+            valores.lada,
+            valores.numeroTelefono
+        );
+    })
+    .then(() => {
+        response.redirect('/psicologo/psicologos-registrados');
+    })
+    .catch(error => {
+        console.log('Error al actualizar psicólogo:', error);
+    });
+};
+
+exports.postActualizarEstatusPsicologo = (request, response, next) => {
+    const idUsuario = request.params.idUsuario;
+    const { estatusUsuario } = request.body;
+
+    const nuevoEstatus = estatusUsuario === 'true';
+
+    Psicologo.updateEstatus(idUsuario, nuevoEstatus)
+        .then(() => {
+            response.redirect('/psicologo/psicologos-registrados');
+        })
+        .catch(error => {
+            console.log('Error al actualizar estatus del psicólogo:', error);
+        });
+};
+
+// Lista de grupos
 exports.getListaGrupos = (request, response, next) => {
     Grupo.fetchAll()
     .then(([rows, fieldData]) => {
@@ -56,6 +216,7 @@ exports.getListaGrupos = (request, response, next) => {
     });
 };
 
+// Instituciones
 exports.getCatalogoInstituciones = (request, response, next) => {
     Institucion.fetchAll()
     .then(([rows, fieldData]) => {
@@ -113,9 +274,7 @@ exports.postRegistrarInstitucion = (request, response, next) => {
     });
 };
 
-
 exports.getEditarInstitucion = (request, response, next) => {
-
     Institucion.fetchOne(request.params.idInstitucion)
     .then(([rows, fieldData]) => {
         const institucion = rows;
@@ -151,6 +310,7 @@ exports.postEditarInstitucion = (request, response, next) => {
     });
 }
 
+// Grupos
 exports.getGrupos = (request, response, next) => {
     Institucion.fetchOne(request.params.idInstitucion)
     .then(([informacionInstitucion, arregloGrupos]) => {
@@ -187,7 +347,7 @@ exports.getRegistrarGrupo = (req, res, next) => {
 };
 
 // Post
-  exports.postRegistrarGrupo = (req, res, next) => {
+exports.postRegistrarGrupo = (req, res, next) => {
     const {
         nombreGrupo,
         carrera,
@@ -225,7 +385,7 @@ exports.getRegistrarGrupo = (req, res, next) => {
             idNivelAcademico,
             fechaLimite
         );
-  
+
         return grupo.saveGrupoYPruebas(pruebasSeleccionadas);
         })
         .then(() => {
@@ -276,8 +436,6 @@ exports.buscarAspirantes = (request, response, next) => {
             console.error(error);
         });
 };
-
-
 
 exports.getEditarGrupo = (request, response, next) => {
     const idGrupo = request.params.idGrupo;
@@ -347,7 +505,6 @@ exports.postEditarGrupo = (request, response, next) => {
         fechaLimite,
         estatusGrupo
     } = request.body;
-    
     
     // Cambiar estatusGrupo a 1 (activo) o 0 (inactivo) para guardarlo en la base de datos
     // Si no se manda un nuevo valor, usar el mismo estatus que ya tenía
@@ -420,7 +577,6 @@ exports.postActualizarEstatusGrupo = (request, response, next) => {
             response.status(500).send('Error al actualizar el estado del grupo');
         });
 };
-
 
 exports.getAspirante = (request, response, next) => {
     Aspirante.getInformacionAspirante(request.params.idAspirante)
@@ -540,7 +696,6 @@ exports.postImportarAspirantes = (request, response, next) => {
     })
 }
 
-
 exports.getRegistrarAspirantes = (request, response, next) => {
     Pais.fetchAll()
     .then(([rows, fieldData]) => {
@@ -623,7 +778,6 @@ exports.postRegistrarAspirantes = (request, response, next) => {
 };
 
 exports.getEditarAspirantes = (request, response, next) => {
-
     Aspirante.fetchOne(request.params.idAspirante)
     .then(([rows, fieldData]) => {
         const aspirante = rows[0];
@@ -666,7 +820,6 @@ exports.getEditarAspirantes = (request, response, next) => {
 };
 
 exports.postEditarAspirantes = (request, response, next) => {
-
     Aspirante.modificarAspirante(
                                 request.params.idAspirante, 
                                 request.body.institucionProcedencia, 
@@ -690,7 +843,6 @@ exports.postEditarAspirantes = (request, response, next) => {
 };
 
 // Controlador para menejar las respuestas de un aspirante por formato de entrevista
-
 exports.getRespuestasFormatoEntrevista = (request, response, next) => {
     FormatoEntrevista.getRespuestasFormatoAspirante(request.params.idGrupo, request.params.idAspirante)
     .then(([rows, fieldData]) => {
@@ -1368,21 +1520,21 @@ exports.getRespuestasOtis = (request, response, next) => {
 };
 
 const consultaResultados = require('../models/consultaResultados.model.js');
- const {
-     buscarValor, // Importa la función
-     DIM,
-     DIF,
-     dimGeneral,
-     dimPorcentaje,
-     INT,
-     DI,
-     DIS,
-     VQ,
-     Equilibrio_BQR,
-     Equilibrio_BQA,
-     Equilibrio_CQ1,
-     Equilibrio_CQ2
- } = require('../public/js/aspirantes/encuentraValor.js');
+    const {
+        buscarValor, // Importa la función
+        DIM,
+        DIF,
+        dimGeneral,
+        dimPorcentaje,
+        INT,
+        DI,
+        DIS,
+        VQ,
+        Equilibrio_BQR,
+        Equilibrio_BQA,
+        Equilibrio_CQ1,
+        Equilibrio_CQ2
+    } = require('../public/js/aspirantes/encuentraValor.js');
 
 exports.getAnalisisHartman = async (request, response, next) => {
     const { idGrupo, idAspirante, idInstitucion } = request.params;
@@ -1440,19 +1592,19 @@ exports.getAnalisisHartman = async (request, response, next) => {
             }
         };
 
-         response.render('Psicologos/analisisHartman.ejs', {
+        response.render('Psicologos/analisisHartman.ejs', {
             datos: analisisProcesado,
             analisisHartman: rows,
             idGrupo,
             idAspirante,
             idInstitucion
-         });
- 
+        });
 
-     } catch (error) {
-         console.error("Error al obtener o procesar los datos de Hartman:", error);
-         response.status(500).send("Error al procesar el análisis de Hartman");
-     }
+
+    } catch (error) {
+        console.error("Error al obtener o procesar los datos de Hartman:", error);
+        response.status(500).send("Error al procesar el análisis de Hartman");
+    }
 };
 // Consulta informacion prueba Otis
 exports.getPruebaOtis = async (req, res, next) => {
@@ -1505,7 +1657,6 @@ exports.getPruebaOtis = async (req, res, next) => {
 };
 
 // Análisis Terman
-
 exports.getRespuestasSerie = async (req, res) => {
     const { idAspirante, idGrupo, idSerie } = req.params;
 
@@ -1527,8 +1678,6 @@ exports.getRespuestasSerie = async (req, res) => {
         return res.status(500).json({ success: false, message: "Error interno del servidor." });
     }
 };
-
-
 
 function obtenerTotalPorSerie(numeroSerie) {
     const totales = {
@@ -1630,7 +1779,7 @@ exports.get_respuestasA = (request, response, next) => {
     const idAspirante = request.params.idAspirante;
     const idPrueba = request.params.idprueba;
 
-  
+
     Aspirante.getInformacionAspirante(idAspirante).then(([datosAspirante, fieldData]) => {
       Aspirante.fetchGrupo(idAspirante).then(([rows, fieldData]) => {
         Grupo.fetchOne(request.params.idGrupo).then(([grupoRows, fieldData]) => {
@@ -1837,4 +1986,3 @@ exports.getCuadernillo16PF = (request, response, next) => {
         console.log(error);
     });
 }
-  

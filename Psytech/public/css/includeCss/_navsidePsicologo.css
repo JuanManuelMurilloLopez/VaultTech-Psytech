@@ -181,11 +181,11 @@ a.sidebar-link:hover{
     position: relative;
 }
 
-.icon-group, .icon-inst, .icon-exam{
+.icon-group, .icon-inst, .icon-exam, .icon-psic{
     width: 44px;
 }
 
-.text-group, .text-inst, .text-exam{
+.text-group, .text-inst, .text-exam, .text-psic{
     font-size: 1.25rem;
     color: var(--font-primary);
 }
