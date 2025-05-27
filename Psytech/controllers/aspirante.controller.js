@@ -11,6 +11,10 @@ const Aspirante = require('../models/aspirante.model');
 const Terman = require('../models/terman.model');
 const respuestasTerman = require('../models/respuestasTerman.model');
 
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
+const Usuario = require('../models/usuario.model');
+
 // Middlewares de apoyo
 const calificarSerieTerman = require("../middleware/calificarTerman.js");
 
@@ -24,6 +28,45 @@ const Prueba = require('../models/prueba.model');
 const RespondeKostick = require('../models/respondeKostick.model.js');
 const Responde16PF = require('../models/responde16pf.model.js');
 const ResultadosKostick = require('../models/resultadosKostick.model.js');
+
+//Soporte
+exports.postSoporte = async (req, res) => {
+  try {
+    const usuario = req.session.usuario;
+    const mensaje = req.body.mensaje;
+
+    if (!usuario || !mensaje) {
+      return res.send('<script>alert("Sesión expirada o mensaje vacío."); window.location.href = "/aspirante/mis-pruebas";</script>');
+    }
+
+    const [filas] = await Usuario.getDatosParaSoporte(usuario);
+    const datos = filas[0];
+
+    const cuerpoCorreo = `
+      <h2>Consulta de soporte</h2>
+      <p><strong>Nombre:</strong> ${datos.nombreUsuario} ${datos.apellidoPaterno} ${datos.apellidoMaterno}</p>
+      <p><strong>Correo:</strong> ${datos.correo}</p>
+      <p><strong>Grupo:</strong> ${datos.nombreGrupo}</p>
+      <hr>
+      <p><strong>Mensaje:</strong></p>
+      <p>${mensaje.replace(/\n/g, '<br>')}</p>
+    `;
+
+    await resend.emails.send({
+      from: 'psytech@pruebas.psicodx.com',
+      to: ['diysdance@gmail.com'],
+      subject: `Soporte de ${datos.nombreUsuario}`,
+      html: cuerpoCorreo
+    });
+
+    res.send('<script>alert("Mensaje enviado correctamente."); window.location.href = "/aspirante/mis-pruebas";</script>');
+
+  } catch (error) {
+    console.error('Error al enviar soporte:', error);
+    res.send('<script>alert("Ocurrió un error al enviar el mensaje."); window.location.href = "/aspirante/mis-pruebas";</script>');
+  }
+};
+
 
 //Rutas del portal de los Aspirantes
 exports.getPruebas = (request, response) => {
