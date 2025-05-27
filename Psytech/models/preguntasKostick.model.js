@@ -25,6 +25,15 @@ module.exports = class PreguntaKostick {
     );
   }
 
+  static getInfo(){
+    return db.execute(`
+                      SELECT pk.numeroPreguntaKostick, ok.opcionKostick, 
+                             ok.descripcionOpcionKostick
+                      FROM preguntaskostick as pk, opcioneskostick as ok
+                      WHERE pk.idPreguntaKostick = ok.idPreguntaKostick;
+      `);
+  }
+
   /*static fetchOne(idPreguntaKostick) {
     return db.execute(
       "SELECT * FROM preguntasKostick WHERE idPreguntaKostick = ?",

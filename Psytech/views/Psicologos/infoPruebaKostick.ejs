@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información Kostick</title>
+    <!-- Bootstrap CSS -->
+    <link href=
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+    <!-- Link css -->
+    <link rel="stylesheet" href="/css/psicologos/cuadernilloRespuestasOtis.css">
+    <!-- CSS navside -->
+    <link rel="stylesheet" href="/css/includeCss/_navsidePsicologo.css">
+    <!-- CSS cerrar sesión -->
+    <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
+</head>
+<body>
+    <div class="main">
+
+        <!-- Navside -->
+        <%- include('../includes/_navsidePsicologo.ejs') %>
+
+        <div class="container">
+
+            <!-- Boton de cerrar sesión -->
+            <%- include('../includes/_buttonCerrarSesion.ejs') %>
+
+            <h1 class="text-center">PRUEBA KOSTICK</h1> <br>
+
+            <h4 class="titulo-seccion">Información de la Prueba</h4>
+            <hr> <br>
+            <div>
+                <p>
+                    El Inventario de Percepción y Preferencias (PAPI_Kostick)
+                    es una prueba psicológica diseñada para evaluar estilos de 
+                    comportamiento en el trabajo, con base en la autoimagen 
+                    consciente de la persona. Está compuesta por 90 pares de frases,
+                    y se debe elegir una opción con la que más se identifique el evaluado.
+
+                    
+                </p>
+                <h5> Estructura de la prueba </h5>
+                <div>
+                    <strong>Necesidades o Preferencias</strong>
+                    <ul>
+                        <li>Necesidad de logro (A)</li>
+                        <li>Controlar a otros (P)</li>
+                        <li>Ser tomado en cuenta (X)</li>
+                        <li>Pertenecer a grupos (B)</li>
+                        <li>Afinidad y afecto (O)</li>
+                        <li>Necesidad de cambio (Z)</li>
+                        <li>Agresividad (K)</li>
+                        <li>Proveer autoridad (F)</li>
+                        <li>Peglas y supervisión (W)</li>
+                        <li>Terminar personalmente la tarea (N)</li>
+                    </ul>
+                    <strong>Roles</strong>
+                    <ul>
+                        <li>Tenacidad en el trabajo (G)</li>
+                        <li>Liderazgo(L)</li>
+                        <li>Impulsividad (I)</li>
+                        <li>Activo (T)</li>
+                        <li>Vigoroso (V)</li>
+                        <li>Sociable (S)</li>
+                        <li>Teórico (R)</li>
+                        <li>Organizado (C)</li>
+                        <li>Introvertido (E)</li>
+                        <li>Trabajo individual con detalles (D)</li>
+                    </ul>
+                </div>
+                <h5>Interpretación de resultados</h5>
+                <p>
+                    Los puntajes se analizan especialmente cuando son extremos (0,1 o 8,9)
+                    , ya que revelan patrones conductuales relevantes.
+                    Estos resultados ayudan a identificar aspectos del evaluado como:
+                    <ul>
+                        <li>Liderazgo: L, P, I</li>
+                        <li>Modo de vida: V, T</li>
+                        <li>Naturaleza social: O, B, S, X</li>
+                        <li>Adaptación al trabajo: C, D, R</li>
+                        <li>Naturaleza emocional: Z, E, K</li>
+                        <li>Subordinación: F, W</li>
+                        <li>Grado de energía: N, G, A</li>
+                    </ul>
+                </p>
+            </div>
+            <br><br>
+            
+            <h4 class="titulo-seccion">Instrucciones</h4>
+            <hr><br>
+            <div>
+                <p>
+                    Hay 90 pares de frases, usted debe escoger de cada 
+                    par aquella frase que sea más afín con su forma de 
+                    ser o de pensar. A veces tendrá la impresión de que 
+                    ninguna refleja esa afinidad o, al contrario, que 
+                    ambas lo hacen; en todo caso, usted debe optar por 
+                    alguna de las dos. Esta prueba debería tomarle 
+                    aproximadamente de 20 a 30 minutos, y aunque no es 
+                    cronometrada, contará con 2 horas para contestarla.
+                </p>
+            </div>
+            <br><br>
+
+            <h4 class="titulo-seccion">Preguntas</h4>
+            <hr> <br>
+            <div class="mb-3">
+                <% Object.keys(informacionPreguntas).forEach(numero => { %>
+                <div class="pregunta">
+                    <h5>Pregunta <%= numero %></h5>
+                    <% informacionPreguntas[numero].forEach(opcion => { %>
+                    <div class="opcion">
+                        <strong>Opción <%= opcion.opcionKostick.toUpperCase() %>:</strong>
+                        <p><%= opcion.descripcionOpcionKostick %></p>
+                    </div>
+                    <% }) %>
+                </div>
+                <br><br>
+                <% }) %>
+            </div>
+            
+
+        </div>
+    </div>
+</body>
+</html>

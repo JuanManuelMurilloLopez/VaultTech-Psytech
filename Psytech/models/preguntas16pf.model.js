@@ -24,4 +24,14 @@ module.exports = class Pregunta16PF {
       idPregunta16PF,
     ]);
   }
+
+  static getInfo(){
+    return db.execute(`
+                      SELECT p16.numeroPregunta16PF, p16.pregunta16PF, 
+                             o16.opcion16PF, o16.descripcionOpcion16PF
+                      FROM preguntas16pf as p16, opciones16pf as o16
+                      WHERE p16.idPregunta16PF = o16.idPregunta16PF;
+      `);
+  }
+
 };
