@@ -48,13 +48,13 @@ exports.postSoporte = async (req, res) => {
       <p><strong>Correo:</strong> ${datos.correo}</p>
       <p><strong>Grupo:</strong> ${datos.nombreGrupo}</p>
       <hr>
-      <p><strong>Mensaje:</strong></p>
+      <p><strong>Consulta:</strong></p>
       <p>${mensaje.replace(/\n/g, '<br>')}</p>
     `;
 
     await resend.emails.send({
       from: 'psytech@pruebas.psicodx.com',
-      to: ['diysdance@gmail.com'],
+      to: ['psicodx.03@gmail.com'],
       subject: `Soporte de ${datos.nombreUsuario}`,
       html: cuerpoCorreo
     });
