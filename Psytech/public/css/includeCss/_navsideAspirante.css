@@ -198,3 +198,83 @@ a.sidebar-link:hover{
     font-size: 1.25rem;
     color: var(--font-primary);
 }
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 2rem 0;
+}
+
+.sidebar-item.mt-4.text-center {
+    margin-top: auto !important;
+    padding-bottom: 1rem;
+}
+
+#sidebar .btn-outline-secondary {
+    border: 2px solid var(--secondary);
+    color: var(--secondary);
+    background-color: transparent;
+    border-radius: 30px;
+    font-weight: 600;
+    text-align: center;
+    padding: 0.5rem 1rem;
+    line-height: 1.5;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#sidebar .btn-outline-secondary:hover {
+    background-color: var(--secondary-hover);
+    color: var(--font-secondary);
+}
+
+
+.modal-header {
+    background-color: var(--primary);
+    color: var(--font-secondary);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom: none;
+}
+
+.modal-footer {
+    border-top: none;
+    padding: 1rem 1.5rem;
+    justify-content: space-between;
+}
+
+.modal-content {
+    border-radius: 20px;
+    border: 2px solid var(--primary);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+#mensajeSoporte {
+    resize: vertical;
+    border-radius: 10px;
+    border: 1px solid var(--third);
+}
+
+.modal-content .btn-primary {
+    background-color: var(--secondary);
+    border: 2px solid var(--secondary);
+    font-weight: bold;
+}
+
+.modal-content .btn-primary:hover {
+    background-color: var(--secondary-hover);
+    border-color: var(--secondary-hover);
+}
+
+.modal-content .btn-secondary {
+    background-color: transparent;
+    border: 2px solid var(--third);
+    color: var(--font-primary);
+    font-weight: bold;
+}
+
+.modal-content .btn-secondary:hover {
+    background-color: var(--third-hover);
+}
+
