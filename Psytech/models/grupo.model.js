@@ -68,14 +68,31 @@ module.exports = class Grupo {
 
   static getAspirantes(idGrupo){
     return db.execute(`
-        SELECT usuarios.nombreUsuario, usuarios.apellidoPaterno, 
-        usuarios.apellidoMaterno, usuarios.estatusUsuario,
-        aspirantes.idAspirante
-        FROM usuarios, aspirantes, gruposaspirantes
-        WHERE aspirantes.idUsuario = usuarios.idUsuario
-        AND aspirantes.idAspirante = gruposaspirantes.idAspirante
-        AND gruposaspirantes.idGrupo = ?
-        ORDER BY usuarios.nombreUsuario, usuarios.estatusUsuario;
+                        SELECT  usuarios.nombreUsuario, 
+                                usuarios.apellidoPaterno, 
+                                usuarios.apellidoMaterno, 
+                                usuarios.estatusUsuario,
+                                aspirantes.idAspirante, aspirantes.cv,
+                                aspirantes.kardex, 
+                                COUNT(idPrueba) as pruebasAsignadas,
+                                SUM(
+                                    CASE 
+                                        WHEN estatusprueba.nombreEstatus = 'Completada' 
+                                        THEN 1 
+                                        ELSE 0 
+                                    END) as pruebasCompletadas
+                                FROM usuarios, aspirantes, gruposaspirantes, 
+                                aspirantesgrupospruebas as agp, estatusprueba
+                                WHERE aspirantes.idUsuario = usuarios.idUsuario
+                                AND aspirantes.idAspirante = gruposaspirantes.idAspirante
+                                AND agp.idAspirante = aspirantes.idAspirante
+                                AND agp.idEstatus = estatusprueba.idEstatus
+                                AND gruposaspirantes.idGrupo = ?
+                                GROUP BY agp.idAspirante
+                                ORDER BY
+                                  usuarios.estatusUsuario DESC,
+                                  pruebasCompletadas DESC,
+                                  usuarios.nombreUsuario ASC;
       `, [idGrupo])
   }
 
