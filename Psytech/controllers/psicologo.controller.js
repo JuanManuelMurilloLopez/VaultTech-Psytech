@@ -245,7 +245,19 @@ exports.getInformacionGrupo = (request, response, next) => {
         const grupo = rows[0];
         Grupo.getAspirantes(request.params.idGrupo)
         .then(([rows, fieldData]) => {
-            const aspirantes = rows;
+            const aspirantes = rows.map(aspirante => {
+                let documentosCargados = 0;
+                if(aspirante.cv){
+                    documentosCargados++;
+                }
+                if(aspirante.kardex){
+                    documentosCargados++;
+                }
+                return {
+                    ...aspirante,
+                    documentosCargados: documentosCargados
+                };
+            })
             response.render('Psicologos/informacionGrupo.ejs', {
                 grupo: grupo || null,
                 aspirantes: aspirantes || [],
