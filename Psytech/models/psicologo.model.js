@@ -27,15 +27,15 @@ module.exports = class Psicologo {
                           roles.nombreRol
                         FROM usuarios
                         JOIN roles ON usuarios.idRol = roles.idRol
-                        WHERE usuarios.idRol = 2
+                        WHERE usuarios.idRol = 1
                         ORDER BY usuarios.nombreUsuario, usuarios.apellidoPaterno`);
   }
 
   static fetchOne(idUsuario) {
     return db.execute(
       `SELECT *
-       FROM usuarios
-       WHERE idUsuario = ? AND idRol = 2`,
+        FROM usuarios
+        WHERE idUsuario = ? AND idRol = 1`,
       [idUsuario]
     );
   }
@@ -50,12 +50,12 @@ module.exports = class Psicologo {
     const correo = this.correo || null;
     const lada = this.lada || null;
     const numeroTelefono = this.numeroTelefono || null;
-    const idRol = this.idRol || 2; 
+    const idRol = this.idRol || 1; 
 
     return db.execute(
       `INSERT INTO usuarios
-       (idUsuario, usuario, estatusUsuario, nombreUsuario, apellidoPaterno, apellidoMaterno, correo, lada, numeroTelefono, idRol)
-       VALUES (uuid(), ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        (idUsuario, usuario, estatusUsuario, nombreUsuario, apellidoPaterno, apellidoMaterno, correo, lada, numeroTelefono, idRol)
+        VALUES (uuid(), ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         usuario,
         estatusUsuario,
