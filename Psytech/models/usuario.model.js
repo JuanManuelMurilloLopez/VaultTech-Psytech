@@ -50,7 +50,8 @@ class Usuario {
     return db.execute(`
                         UPDATE usuarios u
                         JOIN aspirantes a on u.idUsuario = a.idUsuario
-                        SET u.nombreUsuario = ?,
+                        SET u.usuario = ?,
+                        u.nombreUsuario = ?,
                         u.apellidoPaterno = ?,
                         u.apellidoMaterno = ?,
                         u.correo = ?,
@@ -58,7 +59,7 @@ class Usuario {
                         u.numeroTelefono = ?,
                         u.estatusUsuario = ?
                         WHERE a.idAspirante = ?
-      `, [nombreUsuario, apellidoPaterno, apellidoMaterno, 
+      `, [correo, nombreUsuario, apellidoPaterno, apellidoMaterno, 
           correo, lada, numeroTelefono, estatusUsuario, idAspirante]);
   }
 
