@@ -258,12 +258,52 @@ exports.postInstruccionesOtis = async (req, res) => {
 
 
 // Mostrar instrucciones colores
-exports.getInstruccionesColores = (request, response, next) => {
-    response.render('Aspirantes/instruccionesColores');
+exports.getInstruccionesColores =  async (req, res) => {
+    try {
+        const idAspirante = req.session.idAspirante;
+        const idPrueba = 6;
+
+        if (!req.session.idGrupo) {
+            const [rows] = await PruebaColores.getGrupoPrueba(idAspirante, idPrueba);
+            if (rows.length === 0) {
+                return res.status(400).send('No se encontró grupo para este aspirante y prueba.');
+            }
+            req.session.idGrupo = rows[0].idGrupo;
+        }
+
+        const idGrupo = req.session.idGrupo;
+
+        res.render('Aspirantes/instruccionesColores', {
+            idAspirante,
+            idGrupo,
+            idPrueba
+        });
+
+    } catch (error) {
+        console.error("Error al cargar instrucciones Colores:", error);
+    }
 };
 
-exports.postInstruccionesColores = (req, res) => {
-    res.redirect('/aspirante/datos-personales-colores');
+exports.postInstruccionesColores = async (req, res) => {
+    const { idAspirante, idGrupo, idPrueba } = req.body;
+
+    try {
+        const [rows] = await PruebaColores.verificarExistencia(idAspirante, idGrupo, idPrueba);
+
+        if (rows.length === 0) {
+            await db.execute(
+                `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
+                 VALUES (?, ?, ?, 3)`,
+                [idAspirante, idGrupo, idPrueba]
+            );
+        } else {
+            await PruebaColores.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, 3);
+        }
+
+        res.redirect('/aspirante/datos-personales-colores');
+    } catch (error) {
+        console.error('Error al iniciar la prueba Colores:', error);
+    }
 };
 
 // Mostrar instrucciones Hartman
