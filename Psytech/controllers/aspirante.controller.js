@@ -208,13 +208,54 @@ exports.postFormularioFamiliares = (request, response, next) => {
 
 };
 
-exports.getIntruccionesOtis = (request, response, next) => {
-    response.render('Aspirantes/instruccionesOtis');
+exports.getIntruccionesOtis = async (req, res) => {
+    try {
+        const idAspirante = req.session.idAspirante;
+        const idPrueba = 5;
+
+        if (!req.session.idGrupo) {
+            const [rows] = await PruebaOtis.getGrupoPrueba(idAspirante, idPrueba);
+            if (rows.length === 0) {
+                return res.status(400).send('No se encontró grupo para este aspirante y prueba.');
+            }
+            req.session.idGrupo = rows[0].idGrupo;
+        }
+
+        const idGrupo = req.session.idGrupo;
+
+        res.render('Aspirantes/instruccionesOtis', {
+            idAspirante,
+            idGrupo,
+            idPrueba
+        });
+
+    } catch (error) {
+        console.error("Error al cargar instrucciones OTIS:", error);
+    }
 };
 
-exports.postInstruccionesOtis = (req, res) => {
-    res.redirect('/aspirante/datos-personales-otis');
+exports.postInstruccionesOtis = async (req, res) => {
+    const { idAspirante, idGrupo, idPrueba } = req.body;
+
+    try {
+        const [rows] = await PruebaOtis.verificarExistencia(idAspirante, idGrupo, idPrueba);
+
+        if (rows.length === 0) {
+            await db.execute(
+                `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
+                 VALUES (?, ?, ?, 3)`,
+                [idAspirante, idGrupo, idPrueba]
+            );
+        } else {
+            await PruebaOtis.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, 3);
+        }
+
+        res.redirect('/aspirante/datos-personales-otis');
+    } catch (error) {
+        console.error('Error al iniciar la prueba OTIS:', error);
+    }
 };
+
 
 // Mostrar instrucciones colores
 exports.getInstruccionesColores = (request, response, next) => {

@@ -399,7 +399,7 @@ module.exports = class Prueba{
     static deleteRespuestasOtis(idAspirante, idGrupo){
         return db.execute(`
                     DELETE 
-                    FROM respuestasotisaspirante
+                    FROM respuestaotisaspirante
                     WHERE idAspirante = ?
                     AND idGrupo = ?
             `, [idAspirante, idGrupo]);
