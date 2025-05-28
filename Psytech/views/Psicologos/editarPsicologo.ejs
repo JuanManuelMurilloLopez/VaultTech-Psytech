@@ -7,9 +7,9 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- CSS link -->
-    <link rel="stylesheet" href="/css/coordinadores/editarPsicologo.css">
+    <link rel="stylesheet" href="/css/psicologos/editarPsicologo.css">
     <!-- CSS navside -->
-    <link rel="stylesheet" href="/css/includeCss/_navsideCoordinador.css">
+    <link rel="stylesheet" href="/css/includeCss/_navsidePsicologo.css">
     <!-- CSS cerrar sesión -->
     <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 </head>
@@ -18,7 +18,7 @@
     <div class="main">
 
         <!-- Navside -->
-        <%- include('../includes/_navsideCoordinador.ejs') %>
+        <%- include('../includes/_navsidePsicologo.ejs') %>
 
         <div class="container">
 
@@ -34,7 +34,7 @@
                     <%= error %>
                 </div>
             <% } %>
-            <form action="/coordinador/editar-psicologo/<%= psicologo.idUsuario %>" method="POST" onsubmit="return validarFormulario()">
+            <form action="/psicologo/editar-psicologo/<%= psicologo.idUsuario %>" method="POST" onsubmit="return validarFormulario()">
                 <!--Input nombre-->
                 <div class="form-floating mb-3">
                     <input class="form-control" type="text" name="nombreUsuario" id="nombreUsuario" placeholder="Nombre" value="<%= psicologo.nombreUsuario %>" required>
@@ -83,7 +83,7 @@
             
                 <div class="d-flex justify-content-between mt-5 mb-4">
                     <a class="btn btn-color--third" 
-                    href="/coordinador/psicologos-registrados"
+                    href="/psicologo/psicologos-registrados"
                     >Regresar</a>
                     <button type="submit" class="btn btn-color--secondary" onclick="return confirmarGuardado()">Guardar</button>
                     <script>
@@ -103,43 +103,43 @@
 
     <script>
         // Cada que se edita el correo, también se actualiza el valor del campo usuario
-       document.getElementById('correo').addEventListener('input', function (e) {
-           document.getElementById('usuario').value = e.target.value;
-       });
-       
+        document.getElementById('correo').addEventListener('input', function (e) {
+            document.getElementById('usuario').value = e.target.value;
+        });
+    
        // Script toggle de estatus
-       document.addEventListener('DOMContentLoaded', function() {
-           const estatusActivoBtn = document.getElementById('estatusActivoBtn');
-           const estatusInactivoBtn = document.getElementById('estatusInactivoBtn');
-           const estatusInput = document.getElementById('estatusUsuario');
-           
+        document.addEventListener('DOMContentLoaded', function() {
+            const estatusActivoBtn = document.getElementById('estatusActivoBtn');
+            const estatusInactivoBtn = document.getElementById('estatusInactivoBtn');
+            const estatusInput = document.getElementById('estatusUsuario');
+        
            // Funcion para actualizar el estatus
-           function cambiarEstatus(activo) {
-               if (activo) {
-                   estatusActivoBtn.classList.remove('btn-outline-info');
-                   estatusActivoBtn.classList.add('btn-info');
-                   estatusInactivoBtn.classList.remove('btn-danger');
-                   estatusInactivoBtn.classList.add('btn-outline-danger');
-               } else {
-                   estatusActivoBtn.classList.remove('btn-info');
-                   estatusActivoBtn.classList.add('btn-outline-info');
-                   estatusInactivoBtn.classList.remove('btn-outline-danger');
-                   estatusInactivoBtn.classList.add('btn-danger');
-               }
+            function cambiarEstatus(activo) {
+                if (activo) {
+                    estatusActivoBtn.classList.remove('btn-outline-info');
+                    estatusActivoBtn.classList.add('btn-info');
+                    estatusInactivoBtn.classList.remove('btn-danger');
+                    estatusInactivoBtn.classList.add('btn-outline-danger');
+                } else {
+                    estatusActivoBtn.classList.remove('btn-info');
+                    estatusActivoBtn.classList.add('btn-outline-info');
+                    estatusInactivoBtn.classList.remove('btn-outline-danger');
+                    estatusInactivoBtn.classList.add('btn-danger');
+                }
                estatusInput.value = activo.toString(); // Convertir a string
-           }
-           
+            }
+        
            // Eventos botones de estatus
-           estatusActivoBtn.addEventListener('click', function() {
-               cambiarEstatus(true);
-           });
-           
-           estatusInactivoBtn.addEventListener('click', function() {
-               cambiarEstatus(false);
-           });
-       });
-   </script>
-   <script>
+            estatusActivoBtn.addEventListener('click', function() {
+                cambiarEstatus(true);
+            });
+        
+            estatusInactivoBtn.addEventListener('click', function() {
+                cambiarEstatus(false);
+            });
+        });
+    </script>
+    <script>
     function validarFormulario() {
         const ladaInput = document.getElementById('lada');
         if (!ladaInput.value.startsWith('+')) {

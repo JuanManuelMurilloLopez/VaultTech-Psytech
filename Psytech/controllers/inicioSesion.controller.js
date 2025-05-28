@@ -76,10 +76,10 @@ exports.verificarOTP = async (request, response) => {
             return response.send('<script>alert("OTP incorrecto o vencido"); window.location.href = "/otp";</script>');
         }
 
-      await OTP.usarOTP(otpData.idOTP);
-      
-      request.session.user = usuarioData[0].idUsuario;
-      request.session.rol = usuarioData[0].idRol;
+        await OTP.usarOTP(otpData.idOTP);
+        
+        request.session.user = usuarioData[0].idUsuario;
+        request.session.rol = usuarioData[0].idRol;
 
         switch (usuarioData[0].idRol) {  
             case 3:
@@ -96,16 +96,14 @@ exports.verificarOTP = async (request, response) => {
                 })
                 break;
             case 1:
-                return response.redirect('/coordinador/psicologos-registrados');
-            case 2:
                 return response.redirect('/psicologo/lista-grupos');
             default:
                 return response.status(400).send("Rol no reconocido");
         }
 
     } catch (error) {
-      console.error('Error al verificar OTP:', error);
-      response.send('<script>alert("Error al verificar OTP"); window.location.href = "/otp";</script>');
+        console.error('Error al verificar OTP:', error);
+        response.send('<script>alert("Error al verificar OTP"); window.location.href = "/otp";</script>');
     }
 };
 

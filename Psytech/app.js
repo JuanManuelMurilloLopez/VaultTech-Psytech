@@ -109,8 +109,8 @@ app.use(upload.fields([
 const rutasInicioSesion = require('./routes/inicioSesion.routes');
 app.use('/', rutasInicioSesion);
 
-const rutasCoordinador = require('./routes/coordinador.routes');
-app.use('/coordinador', rutasCoordinador);
+// const rutasCoordinador = require('./routes/coordinador.routes');
+// app.use('/coordinador', rutasCoordinador);
 
 const rutasAspirante = require('./routes/aspirante.routes');
 app.use('/aspirante', rutasAspirante);
