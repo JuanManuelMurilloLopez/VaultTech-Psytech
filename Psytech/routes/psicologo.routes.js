@@ -117,5 +117,12 @@ router.post('/aspirantes/reiniciar-colores/:idAspirante/:idGrupo/:idInstitucion'
 router.post('/aspirantes/reiniciar-16pf/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciar16pf);
 router.post('/aspirantes/reiniciar-kostick/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarKostick);
 
+router.get('/psicologos-registrados', controller.getPsicologosRegistrados);
+
+router.get('/registrar-psicologo', controller.getRegistrarPsicologos);
+router.post('/registrar-psicologo', controller.postRegistrarPsicologos);
+
+router.get('/editar-psicologo/:idUsuario', controller.getEditarPsicologo);
+router.post('/editar-psicologo/:idUsuario', controller.postEditarPsicologo);
 
 module.exports = router;

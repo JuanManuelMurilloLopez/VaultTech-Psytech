@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar Coordinador</title>
+    <title>Registrar Psicólogo</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- CSS link -->
-    <link rel="stylesheet" href="/css/coordinadores/registrarCoordinador.css">
+    <link rel="stylesheet" href="/css/psicologos/registrarPsicologo.css">
     <!-- CSS navside -->
-    <link rel="stylesheet" href="/css/includeCss/_navsideCoordinador.css">
+    <link rel="stylesheet" href="/css/includeCss/_navsidePsicologo.css">
     <!-- CSS cerrar sesión -->
     <link rel="stylesheet" href="/css/includeCss/_buttonCerrarSesion.css">
 </head>
@@ -17,7 +17,7 @@
     <div class="main">
 
         <!-- Navside -->
-        <%- include('../includes/_navsideCoordinador.ejs') %>      
+        <%- include('../includes/_navsidePsicologo.ejs') %>  
 
         <div class="container">
 
@@ -25,48 +25,48 @@
             <%- include('../includes/_buttonCerrarSesion.ejs') %>
 
             <div>
-                <h1 class="text-container">REGISTRAR COORDINADOR</h1>
+                <h1 class="text-container">REGISTRAR PSICÓLOGO</h1>
             </div>
             <% if (typeof error !== 'undefined') { %>
                 <div class="alert alert-danger"><%= error %></div>
-            <% } %>            
-            <form action="/coordinador/registrar-coordinador" method="POST" onsubmit="return validarFormulario()">
-                <!--Input nombre-->
-                <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="nombreCoordinador" id="nombreCoordinador" placeholder="Nombre" required>
-                    <label class="form-label" for="nombreCoordinador">Nombre</label>
-                </div>
-                <!--Input Apellido Paterno-->
-                <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="apellidoPaterno" id="apellidoPaterno" placeholder="Apellido Paterno" required>
-                    <label class="form-label" for="apellidoPaterno">Apellido Paterno</label>
-                </div>
-                <!--Input Apellido Materno-->
-                <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="apellidoMaterno" id="apellidoMaterno" placeholder="Apellido Materno">
-                    <label class="form-label" for="apellidoMaterno">Apellido Materno</label>
-                </div>
-                <!--Input Correo-->
-                <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="correo" id="correo" placeholder="Correo electrónico" required>
-                    <label class="form-label" for="correo">Correo electrónico</label>
-                </div>
-                <!--Input Lada-->
-                <div class="mb-3">
-                    <label class="form-label" for="lada">Lada telefónica</label>
-                    <div class="input-group">
-                        <span class="input-group-text">+</span>
-                        <input class="form-control" type="text" name="lada" id="lada" required>
+            <% } %>   
+            <form action="/psicologo/registrar-psicologo" method="POST" onsubmit="return validarFormulario()">
+                    <!--Input nombre-->
+                    <div class="form-floating mb-3">
+                        <input class="form-control" type="text" name="nombrePsicologo" id="nombrePsicologo" placeholder="Nombre" required>
+                        <label class="form-label" for="nombrePsicologo">Nombre</label>
                     </div>
-                </div>                    
-                <!--Input Número-->
-                <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="numero" id="numero" placeholder="Número de teléfono" required>
-                    <label class="form-label" for="numero">Número de teléfono</label>
-                </div>
+                    <!--Input Apellido Paterno-->
+                    <div class="form-floating mb-3">
+                        <input class="form-control" type="text" name="apellidoPaterno" id="apellidoPaterno" placeholder="Apellido Paterno" required>
+                        <label class="form-label" for="apellidoPaterno">Apellido Paterno</label>
+                    </div>
+                    <!--Input Apellido Materno-->
+                    <div class="form-floating mb-3">
+                        <input class="form-control" type="text" name="apellidoMaterno" id="apellidoMaterno" placeholder="Apellido Materno">
+                        <label class="form-label" for="apellidoMaterno">Apellido Materno</label>
+                    </div>
+                    <!--Input Correo-->
+                    <div class="form-floating mb-3">
+                        <input class="form-control" type="text" name="correo" id="correo" placeholder="Correo electrónico" required>
+                        <label class="form-label" for="correo">Correo electrónico</label>
+                    </div>
+                    <!--Input Lada-->
+                    <div class="mb-3">
+                        <label class="form-label" for="lada">Lada telefónica</label>
+                        <div class="input-group">
+                            <span class="input-group-text">+</span>
+                            <input class="form-control" type="text" name="lada" id="lada" required>
+                        </div>
+                    </div>                    
+                    <!--Input Número-->
+                    <div class="form-floating mb-3">
+                        <input class="form-control" type="text" name="numero" id="numero" placeholder="Número de teléfono" required>
+                        <label class="form-label" for="numero">Número de teléfono</label>
+                    </div>
                 <div>
                     <a class="btn btn-color--third btn-sm" 
-                    href="/coordinador/coordinadores-registrados"
+                    href="/psicologo/psicologos-registrados"
                     >Regresar</a>
                     <button type="submit" class="btn btn-color--secondary btn-sm" onclick="return confirmarGuardado()">Guardar</button>
                     <script>
@@ -106,14 +106,13 @@
                     return true; 
                 }
             </script>
-                
         </div>
     </div>
-
+    
     <!-- JS de Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Incluir el script del navside -->
     <script src="/js/_navside.js"></script>
-    
+
 </body>
 </html>

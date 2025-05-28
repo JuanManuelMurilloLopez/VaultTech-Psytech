@@ -71,6 +71,8 @@
                         <th scope="col">Apellido Paterno</th>
                         <th scope="col">Apellido Materno</th>
                         <th scope="col">Estatus</th>
+                        <th scope="col">Documentos</th>
+                        <th scope="col">Pruebas</th>
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
@@ -90,6 +92,8 @@
                                     </span>
                                 <% } %>
                             </td>
+                            <td> <%= aspirante.documentosCargados %> / 2 </td>
+                            <td><%= aspirante.pruebasCompletadas %> / <%= aspirante.pruebasAsignadas %> </td>
                             <td><a href="/psicologo/aspirantes/<%= aspirante.idAspirante %>/<%= grupo.idGrupo %>/<%= idInstitucion %>">Ver Aspirante</a></td>
                         </tr>
                     <% } %>
@@ -126,15 +130,18 @@
 
                 data.forEach(aspirante => {
                     tabla.innerHTML += `
+                        
                         <tr>
                             <td>${aspirante.nombreUsuario}</td>
                             <td>${aspirante.apellidoPaterno}</td>
-                            <td>${aspirante.apellidoMaterno || ''}</td>
+                            <td>${aspirante.apellidoMaterno}</td>
                             <td>
                                 <span class="${aspirante.estatusUsuario === 1 ? 'activo' : 'inactivo'}">
                                     ${aspirante.estatusUsuario === 1 ? 'Activo' : 'Inactivo'}
                                 </span>
                             </td>
+                            <td> ${aspirante.documentosCargados} / 2 </td>
+                            <td>${aspirante.pruebasCompletadas} / ${aspirante.pruebasAsignadas} </td>
                             <td><a href="/psicologo/aspirantes/${aspirante.idAspirante}/<%= grupo.idGrupo %>/<%= idInstitucion %>">Ver Aspirante</a></td>
                         </tr>
                     `;

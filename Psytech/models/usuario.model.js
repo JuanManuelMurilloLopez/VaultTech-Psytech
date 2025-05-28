@@ -62,6 +62,16 @@ class Usuario {
           correo, lada, numeroTelefono, estatusUsuario, idAspirante]);
   }
 
+  static getDatosParaSoporte(usuario) {
+    return db.execute(`
+      SELECT u.nombreUsuario, u.apellidoPaterno, u.apellidoMaterno, u.correo, g.nombreGrupo
+      FROM usuarios u
+      JOIN aspirantes a ON u.idUsuario = a.idUsuario
+      JOIN gruposaspirantes ga ON a.idAspirante = ga.idAspirante
+      JOIN grupos g ON ga.idGrupo = g.idGrupo
+      WHERE u.usuario = ?
+    `, [usuario]);
+  }
 }
 
 
