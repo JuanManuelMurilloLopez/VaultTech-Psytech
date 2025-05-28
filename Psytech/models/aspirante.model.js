@@ -120,8 +120,7 @@ module.exports = class Aspirante {
     static fetchCorreos(){
         return db.execute(`
                             SELECT correo
-                            FROM aspirantes, usuarios
-                            WHERE aspirantes.idUsuario = usuarios.idUsuario
+                            FROM usuarios
             `)
     }
 
