@@ -31,4 +31,21 @@ module.exports = class FormatoEntrevista{
             WHERE GA.idAspirante = ?
             AND GA.idGrupo = ? `, [idAspirante, idGrupo]);
     }
+
+    static deleteFormato(idAspirante){
+        return db.execute(`
+                            DELETE
+                            FROM aspirantespreguntasformatoentrevista
+                            WHERE idAspirante = ?
+            `, [idAspirante])
+    }
+
+    static deleteFamiliares(idAspirante){
+        return db.execute(`
+                            DELETE
+                            FROM familiares
+                            WHERE idAspirante = ?
+            `, [idAspirante]);
+    }
+
 }

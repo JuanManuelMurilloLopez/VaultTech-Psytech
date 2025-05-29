@@ -117,6 +117,8 @@ router.post('/aspirantes/reiniciar-colores/:idAspirante/:idGrupo/:idInstitucion'
 router.post('/aspirantes/reiniciar-16pf/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciar16pf);
 router.post('/aspirantes/reiniciar-kostick/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarKostick);
 
+router.post('/aspirantes/formato-entrevista/reiniciar/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarFormato);
+
 router.get('/psicologos-registrados', controller.getPsicologosRegistrados);
 
 router.get('/registrar-psicologo', controller.getRegistrarPsicologos);

@@ -2122,4 +2122,21 @@ exports.postReiniciarKostick = (request, response, next) => {
         console.log(error);
     });
 }
+
+exports.postReiniciarFormato = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    FormatoEntrevista.deleteFormato(idAspirante)
+    .then(() => {
+        FormatoEntrevista.deleteFamiliares(idAspirante)
+        .then(() => {
+            exports.getAspirante(request, response, next);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
   
