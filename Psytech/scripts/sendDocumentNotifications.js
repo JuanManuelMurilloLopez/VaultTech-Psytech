@@ -110,13 +110,15 @@ class DocumentNotificationService {
     <head>
         <meta charset="UTF-8">
         <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background-color: #2c3e50; color: white; padding: 20px; text-align: center; }
-            .content { padding: 20px; background-color: #f8f9fa; }
-            .footer { padding: 15px; text-align: center; font-size: 12px; color: #666; }
-            .btn { display: inline-block; padding: 12px 24px; background-color: #3498db; color: white; text-decoration: none; border-radius: 5px; margin: 10px 0; }
-            .alert { background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin: 15px 0; }
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background-color: #2c3e50; color: white; padding: 20px; text-align: center; }
+          .content { padding: 20px; background-color: #f8f9fa; }
+          .footer { padding: 15px; text-align: center; font-size: 12px; color: #666; }
+          .btn { display: inline-block; padding: 12px 24px; background-color: #294969; color: white !important; text-decoration: none; border-radius: 5px; margin: 10px 0; }
+          .alert { background-color: #C1C1C1; border: 1px solid #B1B1B1; padding: 15px; border-radius: 5px; margin: 15px 0; color: #333; }
+          h2, p, li, strong { color: #333; }
+          .alert strong { color: #333; }
         </style>
     </head>
     <body>
@@ -131,7 +133,7 @@ class DocumentNotificationService {
                 <p>Te escribimos para recordarte que aún tienes documentos pendientes de subir al sistema PsyTech.</p>
                 
                 <div class="alert">
-                    <strong>📋 Documentos faltantes:</strong> ${listaDocumentos}
+                    <strong>Documentos faltantes:</strong> ${listaDocumentos}
                 </div>
                 
                 <p><strong>Información de tu grupo:</strong></p>
