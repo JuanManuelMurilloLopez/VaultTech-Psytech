@@ -110,7 +110,7 @@ app.use(upload.fields([
 // CRON JOB PARA NOTIFICACIONES AUTOMATICAS
 const notificationService = new DocumentNotificationService();
 
-cron.schedule('0 9 * * 1', async () => {
+cron.schedule('0 7 * * *', async () => {
     console.log('Ejecutando cron job de notificaciones de documentos...');
     try {
         const result = await notificationService.sendBulkNotifications();
@@ -123,7 +123,7 @@ cron.schedule('0 9 * * 1', async () => {
     timezone: "America/Mexico_City"
 });
 
-console.log('Cron job de notificaciones configurado: Lunes 9:00 AM');
+console.log('Cron job de notificaciones configurado: Jueves 9:25 AM');
 
 
 // Importar rutas

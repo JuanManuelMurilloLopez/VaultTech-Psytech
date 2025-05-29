@@ -2030,7 +2030,7 @@ exports.postSolicitarDocumentos = async (request, response, next) => {
             };
         }
         
-        response.redirect(`/psicologo/aspirante/${idInstitucion}/${idGrupo}/${idAspirante}`);
+        response.redirect(`/psicologo/aspirantes/${idAspirante}/${idGrupo}/${idInstitucion}`);
         
     } catch (error) {
         console.error('Error al solicitar documentos:', error);
@@ -2038,7 +2038,7 @@ exports.postSolicitarDocumentos = async (request, response, next) => {
             tipo: 'error',
             texto: 'Error interno del servidor.'
         };
-        response.redirect(`/psicologo/aspirante/${idInstitucion}/${idGrupo}/${idAspirante}`);
+        response.redirect(`/psicologo/aspirantes/${idAspirante}/${idGrupo}/${idInstitucion}`);
     }
 
 };
