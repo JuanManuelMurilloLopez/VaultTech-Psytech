@@ -53,7 +53,7 @@ exports.postSoporte = async (req, res) => {
     `;
 
     await resend.emails.send({
-      from: 'psytech@pruebas.psicodx.com',
+      from: 'psytech@soporte.psicodx.com',
       to: ['psicodx.03@gmail.com'],
       subject: `Soporte de ${datos.nombreUsuario}`,
       html: cuerpoCorreo

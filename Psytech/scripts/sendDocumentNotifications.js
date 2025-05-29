@@ -131,7 +131,7 @@ class DocumentNotificationService {
                 <p>Te escribimos para recordarte que aún tienes documentos pendientes de subir al sistema PsyTech.</p>
                 
                 <div class="alert">
-                    <strong>📋 Documentos faltantes:</strong> ${listaDocumentos}
+                    <strong>Documentos faltantes:</strong> ${listaDocumentos}
                 </div>
                 
                 <p><strong>Información de tu grupo:</strong></p>
