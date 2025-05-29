@@ -168,3 +168,64 @@
     background: #0e2945;;
     color: var(--font-secondary);
 }
+
+/* Estilos para notificaciones de documentos */
+/* Estilos para notificaciones de documentos */
+.notification-section {
+    background: #f8f9fa;
+    border: 1px solid var(--third);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    font-family: "Lato", sans-serif;
+}
+
+.notification-section.missing-docs {
+    background: #ffebee;
+    border-color: #C30101;
+}
+
+.notification-section.complete-docs {
+    background: #C7F3C2;
+    border-color: #024400;
+}
+
+.btn-solicitar-docs {
+    background: var(--secondary);
+    border: none;
+    color: var(--font-secondary);
+    padding: 8px 32px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    font-family: "Lato", sans-serif;
+    margin-top: 10px;
+}
+
+.btn-solicitar-docs:hover {
+    background: var(--secondary-hover);
+    color: var(--font-secondary);
+}
+
+.btn-solicitar-docs:disabled {
+    opacity: 0.6;
+    background: var(--third);
+    color: var(--font-primary);
+}
+
+.alert-custom {
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-family: "Lato", sans-serif;
+}
+
+.notification-section h6 {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.notification-section p {
+    font-weight: 400;
+    margin-bottom: 8px;
+}

@@ -45,6 +45,8 @@ const { Resend } = require('resend');
 const resend = new Resend(process.env.RESEND_API_KEY);
 const correoHtmlPath = path.join(__dirname, '..', 'util', 'correoRegistro.html');
 
+const DocumentNotificationService = require('../scripts/sendDocumentNotifications.js');
+
 //Rutas del portal de los Psicologos
 
 // Registrar y editar psicologos
@@ -600,6 +602,12 @@ exports.getAspirante = (request, response, next) => {
             Aspirante.getFormatoEntrevista(request.params.idAspirante, request.params.idGrupo)
             .then(([rows, fieldData]) => {
                 const formatoEntrevista = rows;
+
+                
+                // NUEVAS LIANES PARA NOTIFICACIONES
+                const mensaje = request.session.mensaje;
+                delete request.session.mensaje;
+
                 response.render('Psicologos/informacionAspirante', {
                     informacionAspirante: informacionAspirante || [],
                     idGrupo: request.params.idGrupo || null,
@@ -607,6 +615,7 @@ exports.getAspirante = (request, response, next) => {
                     formatoEntrevista: formatoEntrevista || [],
                     aspirante: request.params.idAspirante || null,
                     idInstitucion: request.params.idInstitucion || null,
+                    mensaje: mensaje // ← COMENTAR ESTA LÍNEA TAMBIÉN
                 })
             })
             .catch((error) => {
@@ -1997,4 +2006,39 @@ exports.getCuadernillo16PF = (request, response, next) => {
     .catch((error) => {
         console.log(error);
     });
+
 }
+
+
+// MODIFICACION PARA NOTIFICACIONES
+exports.postSolicitarDocumentos = async (request, response, next) => {
+    const { idAspirante, idGrupo, idInstitucion } = request.params;
+    
+    try {
+        const notificationService = new DocumentNotificationService();
+        const result = await notificationService.sendIndividualNotification(idAspirante, idGrupo);
+        
+        if (result.success) {
+            request.session.mensaje = {
+                tipo: 'success',
+                texto: 'Notificación de documentos enviada exitosamente al aspirante.'
+            };
+        } else {
+            request.session.mensaje = {
+                tipo: 'error',
+                texto: result.message || 'Error al enviar la notificación.'
+            };
+        }
+        
+        response.redirect(`/psicologo/aspirante/${idInstitucion}/${idGrupo}/${idAspirante}`);
+        
+    } catch (error) {
+        console.error('Error al solicitar documentos:', error);
+        request.session.mensaje = {
+            tipo: 'error',
+            texto: 'Error interno del servidor.'
+        };
+        response.redirect(`/psicologo/aspirante/${idInstitucion}/${idGrupo}/${idAspirante}`);
+    }
+
+};

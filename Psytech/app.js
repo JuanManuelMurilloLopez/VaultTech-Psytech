@@ -7,6 +7,8 @@ const helmet = require("helmet");
 const compression = require("compression");
 const https = require("https");
 const fs = require("fs");
+const cron = require('node-cron');
+const DocumentNotificationService = require('./scripts/sendDocumentNotifications');
 
 dotenv.config();
 
@@ -104,6 +106,25 @@ app.use(upload.fields([
     { name: 'kardex', maxCount: 1 },
     { name: 'excelAspirantes' }
 ]));
+
+// CRON JOB PARA NOTIFICACIONES AUTOMATICAS
+const notificationService = new DocumentNotificationService();
+
+cron.schedule('0 9 * * 1', async () => {
+    console.log('Ejecutando cron job de notificaciones de documentos...');
+    try {
+        const result = await notificationService.sendBulkNotifications();
+        console.log(`Notificaciones enviadas: ${result.sent} exitosas, ${result.failed} fallidas`);
+    } catch (error) {
+        console.error('Error en cron job de notificaciones:', error);
+    }
+}, {
+    scheduled: true,
+    timezone: "America/Mexico_City"
+});
+
+console.log('Cron job de notificaciones configurado: Lunes 9:00 AM');
+
 
 // Importar rutas
 const rutasInicioSesion = require('./routes/inicioSesion.routes');

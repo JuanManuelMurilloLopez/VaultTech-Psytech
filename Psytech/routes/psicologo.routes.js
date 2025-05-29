@@ -119,4 +119,9 @@ router.post('/registrar-psicologo', controller.postRegistrarPsicologos);
 router.get('/editar-psicologo/:idUsuario', controller.getEditarPsicologo);
 router.post('/editar-psicologo/:idUsuario', controller.postEditarPsicologo);
 
+// MODIFICACIONES PARA NOTIFICACIONES (Ruta para solicitar documentos individualmente)
+router.post('/solicitar-documentos/:idInstitucion/:idGrupo/:idAspirante', 
+    controller.postSolicitarDocumentos
+);
+
 module.exports = router;

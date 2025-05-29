@@ -99,6 +99,46 @@
                         <span class="document-status">Este aspirante no ha subido su Kardex</span>
                     <% } %>
                 </div>
+
+                <!-- Sección para solicitar documentos  (checar q documentos faltan) -->
+                <% 
+                    const documentosFaltantes = [];
+                    if (!informacionAspirante.cv) documentosFaltantes.push('CV');
+                    if (!informacionAspirante.kardex) documentosFaltantes.push('Kardex');
+                    const hayDocumentosFaltantes = documentosFaltantes.length > 0;
+                %>
+
+                <div class="notification-section <%= hayDocumentosFaltantes ? 'missing-docs' : 'complete-docs' %>">
+                    <% if (hayDocumentosFaltantes) { %>
+                        <h6>Documentos faltantes detectados</h6>
+                        <p class="mb-2">
+                            Este aspirante no ha subido: <strong><%= documentosFaltantes.join(' y ') %></strong>
+                        </p>
+                        <p class="mb-3" style="font-size: 14px; color: #666;">
+                            Puedes enviar una notificación automática por correo electrónico para recordarle que suba los documentos faltantes.
+                        </p>
+                        
+                        <button type="button" 
+                                class="btn btn-solicitar-docs" 
+                                onclick="solicitarDocumentos()"
+                                id="btnSolicitarDocs">
+                            Enviar Recordatorio por Email
+                        </button>
+                        
+                        <!-- Formulario oculto para enviar la solicitud -->
+                        <form id="formSolicitarDocs" 
+                              action="/psicologo/solicitar-documentos/<%= idInstitucion %>/<%= idGrupo %>/<%= aspirante %>" 
+                              method="POST" 
+                              style="display: none;">
+                        </form>
+                    <% } else { %>
+                        <h6>Documentación completa</h6>
+                        <p class="mb-0">
+                            Todos los documentos requeridos han sido subidos correctamente.
+                        </p>
+                    <% } %>
+                </div>
+
             </div><br>
 
             <div>
@@ -181,4 +221,40 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Incluir el script del navside -->
     <script src="/js/_navside.js"></script>
+
+    <!-- Script para manejar el boton de solicitar documentos -->
+    <script>
+        function solicitarDocumentos() {
+            const btn = document.getElementById('btnSolicitarDocs');
+            const form = document.getElementById('formSolicitarDocs');
+            
+            // Mostrar confirmacion con informacion especifica
+            const confirmMessage = `¿Estás seguro de que quieres enviar un recordatorio por email a este aspirante?
+
+            Se enviará un correo a: <%= informacionAspirante.correo %>
+            Documentos faltantes: <%= typeof documentosFaltantes !== 'undefined' ? documentosFaltantes.join(' y ') : 'N/A' %>
+
+            El aspirante recibirá un recordatorio con instrucciones para subir los documentos.`;
+            
+            if (confirm(confirmMessage)) {
+                // Deshabilitar boton y mostrar loading
+                btn.disabled = true;
+                btn.innerHTML = 'Enviando correo...';
+                
+                // Enviar formulario
+                form.submit();
+            }
+        }
+        
+        // Auto-hide alerts despues de 5 segundos
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert-dismissible');
+            alerts.forEach(function(alert) {
+                setTimeout(function() {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }, 5000);
+            });
+        });
+    </script>
 </body>
