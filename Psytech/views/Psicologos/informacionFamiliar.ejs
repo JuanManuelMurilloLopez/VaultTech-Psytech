@@ -12,6 +12,7 @@
     rel="stylesheet">
     <!-- Link css -->
     <link rel="stylesheet" href="/css/psicologos/informacionFamiliar.css">
+    <link rel="stylesheet" href="/css/psicologos/informacionFamiliar.print.css">
     <!-- CSS navside -->
     <link rel="stylesheet" href="/css/includeCss/_navsidePsicologo.css">
     <!-- CSS cerrar sesión -->
@@ -41,10 +42,6 @@
                             class="btn btn-color--third">Regresar</a>
                         </div>
     
-                        <div class="col-md-6 text-end">
-                            <a href="#" 
-                            class="btn btn-color--secondary">Imprimir</a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -423,6 +420,87 @@
             }
         });
 
+    </script>
+
+    <!-- Script imprimir -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fixedButtons = document.querySelector('.fixed-bottom-buttons .row');
+            
+            if (fixedButtons) {
+                const printCol = document.createElement('div');
+                printCol.className = 'col-md-6 text-end';
+                
+                const printButton = document.createElement('button');
+                printButton.type = 'button';
+                printButton.className = 'btn btn-color--secondary';
+                printButton.innerHTML = 'Imprimir';
+                
+                printButton.addEventListener('click', function() {
+                    try {
+                        const diagram = go.Diagram.fromDiv("myDiagramDiv");
+                        
+                        if (diagram) {
+                            const originalScale = diagram.scale;
+                            diagram.startTransaction("prepare print");
+                            diagram.zoomToFit();
+                            
+                            if (diagram.scale > 0.8) {
+                                diagram.scale = 0.8;
+                            }
+                            if (diagram.scale < 0.5) {
+                                diagram.scale = 0.6;
+                            }
+                            
+                            diagram.commitTransaction("prepare print");
+                            
+                            const container = document.getElementById('myDiagramDiv');
+                            const originalHeight = container.style.height;
+                            container.style.height = 'auto';
+                            container.style.minHeight = '600px';
+                            
+                            setTimeout(() => {
+                                window.print();
+                                setTimeout(() => {
+                                    diagram.startTransaction("restore");
+                                    diagram.scale = originalScale;
+                                    container.style.height = originalHeight;
+                                    diagram.commitTransaction("restore");
+                                }, 1000);
+                            }, 500);
+                            
+                        } else {
+                            window.print();
+                        }
+                        
+                    } catch (error) {
+                        window.print();
+                    }
+                });
+                
+                printCol.appendChild(printButton);
+                fixedButtons.appendChild(printCol);
+                
+            } else {
+                const container = document.querySelector('.container');
+                if (container) {
+                    const buttonContainer = document.createElement('div');
+                    buttonContainer.style.cssText = 'text-align: right; margin: 20px 0;';
+                    
+                    const printButton = document.createElement('button');
+                    printButton.type = 'button';
+                    printButton.className = 'btn btn-color--secondary';
+                    printButton.innerHTML = 'Imprimir';
+                    
+                    printButton.addEventListener('click', function() {
+                        window.print();
+                    });
+                    
+                    buttonContainer.appendChild(printButton);
+                    container.appendChild(buttonContainer);
+                }
+            }
+        });
     </script>
 
 </div>

@@ -120,8 +120,7 @@ module.exports = class Aspirante {
     static fetchCorreos(){
         return db.execute(`
                             SELECT correo
-                            FROM aspirantes, usuarios
-                            WHERE aspirantes.idUsuario = usuarios.idUsuario
+                            FROM usuarios
             `)
     }
 
@@ -140,6 +139,28 @@ module.exports = class Aspirante {
                             WHERE idAspirante = ?
                             AND idPrueba = 2;
             `, [idAspirante]);
+    }
+
+
+    // MODIFICACION PARA NOTIFICACIONES
+    static async checkDocumentStatus(idAspirante) {
+        const [rows] = await db.execute(`
+            SELECT cv, kardex
+            FROM aspirantes
+            WHERE idAspirante = ?
+        `, [idAspirante]);
+        
+        if (rows.length === 0) return null;
+        
+        const aspirante = rows[0];
+        return {
+            hasCV: aspirante.cv !== null,
+            hasKardex: aspirante.kardex !== null,
+            missingDocuments: [
+                !aspirante.cv ? 'CV' : null,
+                !aspirante.kardex ? 'Kardex' : null
+            ].filter(Boolean)
+        };
     }
 
 }

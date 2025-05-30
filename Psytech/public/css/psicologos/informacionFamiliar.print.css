@@ -1,0 +1,285 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+:root{
+    --primary: #95B6BC;
+    --secondary: #294969;
+    --third: #C1C1C1;
+    --font-primary: #000;
+    --font-secondary: #fff;
+    --primary-hover: #7BA1A8;
+    --secondary-hover: #193858;
+    --third-hover:#B1B1B1;
+}
+
+/* Estilos generales */
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Lato", sans-serif;
+    box-sizing: border-box;
+}
+
+.main{
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    transition: all 0.35s ease-in-out;
+    display: flex;
+    flex-direction: row;
+}
+
+.family-container{
+    background-color: white; 
+    border: solid 1px var(--primary); 
+    border-radius: 20px;
+    width: 100%; 
+    height: 500px;
+}
+
+/* Botones */
+.btn-color--primary{
+    background: var(--primary);
+    color: var(--font-primary);
+}
+
+.btn-color--secondary{
+    background: var(--secondary);
+    color: var(--font-secondary);
+    transition: all 0.3s ease;
+}
+
+.btn-color--third{
+    background: var(--third);
+    color: var(--font-primary);
+}
+
+.btn-color--third:hover{
+    background: var(--third-hover);
+    color: var(--font-primary);
+}
+
+.btn-color--secondary:hover{
+    background: var(--secondary-hover);
+    color: var(--font-secondary);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.btn-color--primary:hover{
+    background: var(--primary-hover);
+    color: var(--font-primary);
+}
+
+
+.print-only {
+    display: none;
+}
+
+
+@media print {
+    /* Pagina configuracion */
+    @page {
+        size: A4 portrait;  
+        margin: 15mm;    
+    }
+    
+    /* Estilos documento generales */
+    body {
+        background: white !important;
+        font-size: 11pt !important;
+        color: black !important;
+        font-family: "Lato", sans-serif !important;
+        -webkit-print-color-adjust: exact !important; 
+        print-color-adjust: exact !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+    
+    /* Cosas a ocultar */
+    nav,
+    button,
+    .btn,
+    .boton-imprimir,
+    .boton-container,
+    .boton-regresar-abajo,
+    .button-cerrar-sesion,
+    .fixed-button,
+    .floating-button,
+    .fixed-bottom-buttons,
+    .navside,
+    .btn-cerrar-sesion,
+    .navbar,
+    .sidebar,
+    .no-print,
+    #botonImprimir,
+    [class*="navside"],
+    body > .main > *:not(.container),
+    body > .main > div:first-child {
+        display: none !important;
+    }
+
+    /* Ajustes contenedor principal */
+    .main {
+        width: 100% !important;
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        min-height: auto !important;
+        overflow: visible !important;
+    }
+
+    .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+    }
+    
+    /* Titulo */
+    h3.text-center {
+        margin-top: 0 !important;
+        margin-bottom: 25px !important;
+        font-size: 22pt !important;
+        font-weight: bold !important;
+        color: var(--secondary) !important;
+        text-align: center !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        page-break-after: avoid !important;
+    }
+    
+    /* Contenedor diagrama tamano dinamico */
+    .family-container {
+        background: white !important;
+        border: 2px solid var(--secondary) !important;
+        border-radius: 15px !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 650px !important;
+        max-height: 900px !important;
+        padding: 25px !important;
+        margin: 0 auto !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+    }
+
+    /* Area diagrama */
+    #myDiagramDiv {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 600px !important;
+        max-height: 850px !important;
+        background: white !important;
+        border: none !important;
+        padding: 15px !important;
+        overflow: visible !important;
+        page-break-inside: avoid !important;
+        flex: 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .family-container svg {
+        width: 100% !important;
+        height: auto !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        margin: auto !important;
+    }
+
+    .family-container svg text {
+        fill: #000 !important;
+        font-family: "Lato", sans-serif !important;
+        font-size: 9pt !important;
+        font-weight: 500 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .family-container svg rect,
+    .family-container svg circle,
+    .family-container svg ellipse {
+        stroke: #000 !important;
+        stroke-width: 1.2px !important;
+        fill: white !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .family-container svg path,
+    .family-container svg line {
+        stroke: #000 !important;
+        stroke-width: 1.5px !important;
+        fill: none !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Ajuste automatico */
+    .family-container canvas,
+    .family-container svg {
+        max-width: 100% !important;
+        max-height: 100% !important;
+        width: auto !important;
+        height: auto !important;
+        object-fit: contain !important;
+        margin: auto !important;
+    }
+
+    /* Superficie GoJS */
+    .go-surface {
+        overflow: visible !important;
+        width: 100% !important;
+        height: auto !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+
+    .print-only {
+        display: block !important;
+    }
+
+
+    * {
+        background-image: none !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+        transition: none !important;
+        animation: none !important;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        break-after: avoid !important;
+        page-break-after: avoid !important;
+    }
+
+    .family-container {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+
+    .family-container {
+        image-rendering: -webkit-optimize-contrast !important;
+        image-rendering: crisp-edges !important;
+    }
+
+
+    .family-container,
+    #myDiagramDiv {
+        overflow: visible !important;
+        clip: auto !important;
+    }
+}
