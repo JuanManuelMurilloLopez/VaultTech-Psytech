@@ -1,0 +1,210 @@
+@media print {
+    /* Configuracion de pagina */
+    @page {
+        size: A4;
+        margin: 1.5cm;
+        orphans: 3;
+        widows: 3;
+    }
+
+    @page :first {
+        margin: 1.5cm;
+    }
+
+    @page :blank {
+        margin: 0;
+    }
+
+    /* ELEMENTOS A OCULTAR */
+    nav,
+    button,
+    .btn,
+    .boton-imprimir,
+    .boton-container,
+    .boton-regresar-abajo,
+    .button-cerrar-sesion,
+    .fixed-button,
+    .floating-button,
+    .fixed-bottom-buttons,
+    .navside,
+    .btn-cerrar-sesion,
+    .navbar,
+    .sidebar,
+    .no-print,
+    #botonImprimir,
+    [class*="navside"],
+    body > .main > *:not(.container),
+    body > .main > div:first-child {
+        display: none !important;
+    }
+
+    * {
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        outline: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    html {
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body {
+        width: 100% !important;
+        height: auto !important;
+        background: white !important;
+        font-family: "Lato", Arial, sans-serif !important;
+        font-size: 12pt !important;
+        line-height: 1.4 !important;
+        color: #000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        page-break-before: avoid !important;
+    }
+
+    body::before,
+    body::after,
+    .main::before,
+    .main::after,
+    .container::before,
+    .container::after {
+        display: none !important;
+        content: none !important;
+    }
+
+    /* Contenedor principal */
+    .main {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        page-break-before: avoid !important;
+    }
+
+    .container {
+        width: 100% !important;
+        max-width: none !important;
+        page-break-before: avoid !important;
+    }
+
+    .container > *:first-child,
+    .main > .container > *:first-child {
+        page-break-before: avoid !important;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    /* TÍTULO PRINCIPAL */
+    .text-center, h1 {
+        font-size: 18pt !important;
+        font-weight: 600 !important;
+        text-align: center !important;
+        margin-bottom: 15pt !important;
+        page-break-after: avoid !important;
+    }
+
+    /* SECCIONES PRINCIPALES */
+    .titulo-seccion, h5.titulo-seccion {
+        font-size: 14pt !important;
+        font-weight: 600 !important;
+        margin-top: 12pt !important;
+        margin-bottom: 8pt !important;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+    /* Primera sección */
+    .titulo-seccion:first-of-type,
+    h5.titulo-seccion:first-of-type {
+        margin-top: 0 !important;
+    }
+
+    /* FORZAR NUEVA PAGINA PARA LAS SECCIONES - 2da y 3ra */
+    .titulo-seccion:nth-of-type(2),
+    .titulo-seccion:nth-of-type(3) {
+        page-break-before: always !important;
+        margin-top: 0 !important;
+    }
+
+    /* Primera seccion */
+    .titulo-seccion:first-of-type,
+    h5.titulo-seccion:first-of-type,
+    .text-center:first-of-type,
+    h1:first-of-type {
+        page-break-before: avoid !important;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    /* PREGUNTAS */
+    .pregunta-titulo, h5.pregunta-titulo {
+        font-size: 12pt !important;
+        font-weight: 500 !important;
+        margin-top: 10pt !important;
+        margin-bottom: 5pt !important;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+    /* RESPUESTAS */
+    .pregunta-respuesta, p.pregunta-respuesta {
+        font-size: 11pt !important;
+        font-weight: 400 !important;
+        line-height: 1.4 !important;
+        margin-bottom: 8pt !important;
+        text-align: justify !important;
+        page-break-before: avoid !important;
+        orphans: 2 !important;
+        widows: 2 !important;
+    }
+
+    /* CONTENEDORES DE PREGUNTAS */
+    .mb-3 {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-bottom: 10pt !important;
+    }
+
+    /* LINEAS HORIZONTALES */
+    hr {
+        border-top: 1pt solid #ccc !important;
+        margin: 8pt 0 !important;
+        page-break-before: avoid !important;
+        page-break-after: avoid !important;
+    }
+
+    .titulo-seccion + hr,
+    .titulo-seccion + hr + .mb-3:first-of-type,
+    .pregunta-titulo + .pregunta-respuesta {
+        page-break-before: avoid !important;
+    }
+
+    br {
+        display: none !important;
+    }
+
+    .container-fluid {
+        width: 100% !important;
+        padding: 0 !important;
+    }
+
+    * {
+        box-shadow: none !important;
+        text-shadow: none !important;
+        border-radius: 0 !important;
+    }
+
+    p {
+        text-align: justify !important;
+        hyphens: auto !important;
+        word-wrap: break-word !important;
+    }
+
+    .pregunta-respuesta {
+        overflow: visible !important;
+        white-space: normal !important;
+    }
+}
