@@ -39,6 +39,9 @@
             <a href="/aspirante/mis-pruebas" class="btn btn-secondary">Regresar</a>
 
             <form action="/aspirante/instrucciones-hartman" method="POST">
+                <input type="hidden" name="idGrupo" value="<%= idGrupo %>">
+                <input type="hidden" name="idPrueba" value="<%= idPrueba %>">
+                <input type="hidden" name="idAspirante" value="<%= idAspirante %>">
                 <button type="submit" class="btn btn-color--secondary">Iniciar Prueba</button>
             </form>
         </div>

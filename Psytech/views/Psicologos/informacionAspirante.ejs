@@ -150,6 +150,9 @@
                     <% if (formatoEntrevista.length > 0) { %>
                         <a href="/psicologo/respuestas-formato-entrevista/<%= idGrupo %>/<%= aspirante %>/<%= idInstitucion %>"
                             class="btn btn-color--secondary">Ver</a>
+                        <form action="/psicologo/aspirantes/formato-entrevista/reiniciar/<%= aspirante %>/<%= idGrupo %>/<%= idInstitucion %>" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas reiniciar el formato?')">
+                            <button type="submit" class="btn btn-danger">Reiniciar Formato</button>
+                        </form>
                     <% } else { %>
                         <span class="document-status">Este aspirante no ha respondido el formato de entrevista</span>
                     <% } %>
@@ -178,10 +181,18 @@
                                             let rutaPrueba = '';
                                             if (prueba.nombre === 'Colores de Luscher') rutaPrueba = '/psicologo/cuadernillo-colores';
                                             if (prueba.nombre === 'OTIS') rutaPrueba = '/psicologo/cuadernillo-otis';
-                                            if (prueba.nombre === 'TERMAN') rutaPrueba = '/psicologo/analisis-terman';
+                                            if (prueba.nombre === 'TERMAN') rutaPrueba = '/psicologo/cuadernillo-terman';
                                             if (prueba.nombre === 'HARTMAN') rutaPrueba = '/psicologo/analisis-hartman';
                                             if(prueba.nombre === 'PRUEBA DE 16PF') rutaPrueba = '/psicologo/cuadernillo-16PF';
                                             if(prueba.nombre === 'KOSTICK') rutaPrueba = '/psicologo/cuadernillo-KOSTICK';
+
+                                            let rutaReiniciar = '';
+                                            if (prueba.nombre === 'Colores de Luscher') rutaReiniciar = '/psicologo/aspirantes/reiniciar-colores';
+                                            if (prueba.nombre === 'OTIS') rutaReiniciar = '/psicologo/aspirantes/reiniciar-otis';
+                                            if (prueba.nombre === 'TERMAN') rutaReiniciar = '/psicologo/aspirantes/reiniciar-terman';
+                                            if (prueba.nombre === 'HARTMAN') rutaReiniciar = '/psicologo/aspirantes/reiniciar-hartman';
+                                            if(prueba.nombre === 'PRUEBA DE 16PF') rutaReiniciar = '/psicologo/aspirantes/reiniciar-16pf';
+                                            if(prueba.nombre === 'KOSTICK') rutaReiniciar = '/psicologo/aspirantes/reiniciar-kostick';
                                         %>
                                         <% if (estatusPrueba[prueba.nombreEstatus]) { %>
                                             <span class="card-estatus <%= estatus %>">
@@ -198,9 +209,14 @@
                                     <% if (prueba.nombreEstatus === 'Completada') { %>
                                         <div class="d-flex justify-content-between">
                                             <!-- CAMBIO CODIGO: href ruta -->
-                                            <% console.log("ID grupo: ", idGrupo) %>
                                             <a href="<%= rutaPrueba %>/<%= idGrupo %>/<%= aspirante %>/<%= idInstitucion %>" class="btn btn-color--secondary">Ver resultados</a>
                                         </div> 
+                                    <% } else if(prueba.nombreEstatus === 'En progreso') {%>
+                                        <div class="d-flex justify-content-between">
+                                            <form action="<%= rutaReiniciar %>/<%= aspirante %>/<%= idGrupo %>/<%= idInstitucion %>" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas reiniciar esta prueba?')">
+                                                <button type="submit" class="btn btn-danger">Reiniciar Prueba</button>
+                                            </form>
+                                        </div>
                                     <% } else {%>
                                         <div class="d-flex justify-content-between">
                                         </div>

@@ -21,9 +21,11 @@ const calificacionesTerman = require('../models/calificacionesTerman.model.js');
 const calificacionTerman = new calificacionesTerman();
 const resultadosSeriesTerman = require('../models/resultadosSeriesTerman.model.js');
 const resultadoSerieTerman = new resultadosSeriesTerman();
+const CuadernilloTerman = require('../models/cuadernilloTerman.model.js');
 
 // Middleware de apoyo para calificar Terman
 const calificarSerieTerman = require("../middleware/calificarTerman.js");
+
 const ResultadosKostick = require('../models/resultadosKostick.model.js');
 const Resultados16PF = require('../models/resultados16PF.model.js');
 const InterpretacionKostick = require('../models/interpretacionKostick.js');
@@ -99,8 +101,6 @@ exports.postRegistrarPsicologos = (request, response, next) => {
             numero,
             1
         );
-
-        console.log('Guardando psicólogo:', psicologo);
 
         return psicologo.savePsicologo()
             .then(() => {
@@ -1692,7 +1692,6 @@ exports.getRespuestasSerie = async (req, res) => {
             respuestas = await respuestasTermanModel.fetchRespuestasOpciones(idAspirante, idGrupo, idSerie);
         }
 
-        console.log(respuestas);
         return res.json({ success: true, respuestas });
     } catch (error) {
         console.error("Error trayendo respuestas de Terman:", error);
@@ -1768,8 +1767,6 @@ exports.getAnalisisTerman = async (request, response, next) => {
             porcentaje: reglaDeTres(serie.puntuacion, obtenerTotalPorSerie(serie.idSerieTerman))
         }));
         
-        console.log(resultados);
-
         const resumen = {
             nombreCompleto: `${aspiranteData.nombreUsuario} ${aspiranteData.apellidoPaterno} ${aspiranteData.apellidoMaterno}`,
             puntosTotales: calificacion[0].puntosTotales,
@@ -1777,7 +1774,7 @@ exports.getAnalisisTerman = async (request, response, next) => {
             coeficienteIntelectual: calificacion[0].coeficienteIntelectual
         };
         
-        console.log(resumen);
+        // console.log(resumen);
 
         // 4. Renderizar
         return response.render('Psicologos/analisisTerman', {
@@ -2006,9 +2003,278 @@ exports.getCuadernillo16PF = (request, response, next) => {
     .catch((error) => {
         console.log(error);
     });
-
 }
 
+//Cuadernillo Terman
+exports.getCuadernilloTerman = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+
+    Aspirante.getInformacionAspirante(idAspirante)
+    .then(([rows, fieldData]) => {
+        const aspiranteData = rows[0];
+        //Obtener el timpo total que tomo el aspirante para responder la prueba
+        CuadernilloTerman.getTiempoTotal(request.params.idGrupo, request.params.idAspirante)
+        .then(([rows, fielData]) => {
+            const tiempoTotal = rows[0].Tiempo;
+            // Obtiene las preguntas, series, opciones y la respuesta del aspirante
+            CuadernilloTerman.getRespuestasTermanAspirante(request.params.idGrupo, request.params.idAspirante)
+            .then(([rows, fielData]) => {
+                const seriesAgrupadas = {};
+
+                rows.forEach(row => {
+                    //Si la serie no existe aun, se crea
+                    if(!seriesAgrupadas[row.idSerieTerman]){
+                        seriesAgrupadas[row.idSerieTerman] = {
+                            idSerieTerman: row.idSerieTerman,
+                            nombreSeccion: row.nombreSeccion,
+                            preguntas: {}
+                        };
+                    }
+
+                    const serie = seriesAgrupadas[row.idSerieTerman];
+
+                    //Si la pregunta no existe aun, se crea
+                    if (!serie.preguntas[row.idPreguntaTerman]) {
+                        serie.preguntas[row.idPreguntaTerman] = {
+                            idPreguntaTerman: row.idPreguntaTerman,
+                            numeroPregunta: row.numeroPregunta,
+                            preguntaTerman: row.preguntaTerman,
+                            opciones: [],
+                            esCorrecta: false,
+                            tiempoRespuesta: 0,
+                            contestada: null
+                        };
+                    }
+
+                    const pregunta = serie.preguntas[row.idPreguntaTerman];
+
+                    // Vamos añadiendo las opciones de la pregunta correspondiente
+                    pregunta.opciones.push({
+                        idOpcionTerman: row.idOpcionTerman,
+                        opcionTerman: row.opcionTerman,
+                        descripcionTerman: row.descripcionTerman,
+                        esCorrecta: row.esCorrecta === 1,
+                        seleccionada: row.opcionSeleccionada === 1
+                    });
+
+                    if (row.opcionSeleccionada === 1) {
+                        pregunta.tiempoRespuesta = row.tiempoRespuesta;
+                        pregunta.contestada = true;
+                        pregunta.esCorrecta = row.esCorrecta === 1;
+                    }
+
+                    if (!pregunta.contestada) {
+                        pregunta.esCorrecta = null;
+                    }
+                })
+
+                const respuestasAgrupadasPorSerie = Object.values(seriesAgrupadas).map(serie => ({
+                    ...serie,
+                    preguntas: Object.values(serie.preguntas)
+                }))
+
+                response.render('Psicologos/cuadernilloTerman.ejs', {
+                    aspiranteData: aspiranteData || [],
+                    tiempoTotal: tiempoTotal || 0,
+                    respuestasPorSerie: respuestasAgrupadasPorSerie,
+                    aspirante: request.params.idAspirante || null,
+                    grupo: request.params.idGrupo || null,
+                    idInstitucion: request.params.idInstitucion || null,
+                });
+            })
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+}
+exports.postReiniciarOtis = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 5;
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteDatosPersonales(idAspirante, idGrupo, idPrueba)
+    .then(() => {
+        Prueba.deleteRespuestasOtis(idAspirante, idGrupo)
+        .then(() => {
+            Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+            .then(() => {
+                // Redirigir a la misma página
+                exports.getAspirante(request, response, next);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+exports.postReiniciarColores = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 6;
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteDatosPersonales(idAspirante, idGrupo, idPrueba)
+    .then(() => {
+        Prueba.deleteRespuestasColores(idAspirante, idGrupo)
+        .then(() => {
+            Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+            .then(() => {
+                // Redirigir a la misma página
+                exports.getAspirante(request, response, next);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+exports.postReiniciar16pf = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 2;
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteDatosPersonales(idAspirante, idGrupo, idPrueba)
+    .then(() => {
+        Prueba.resetParametros16PF(idAspirante, idGrupo)
+        .then(() => {
+            Prueba.deleteRespuestas16PF(idAspirante, idGrupo)
+            .then(() => {
+                Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+                .then(() => {
+                    // Redirigir a la misma página
+                    exports.getAspirante(request, response, next);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+exports.postReiniciarKostick = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 1;
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteDatosPersonales(idAspirante, idGrupo, idPrueba)
+    .then(() => {
+        Prueba.resetResultadosKostick(idAspirante, idGrupo)
+        .then(() => {
+            Prueba.deleteRespuestasKostick(idAspirante, idGrupo)
+            .then(() => {
+                Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+                .then(() => {
+                    // Redirigir a la misma página
+                    exports.getAspirante(request, response, next);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+exports.postReiniciarTerman = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 4;
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteRespuestasTerman(idAspirante, idGrupo)
+    .then(() => {
+        Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+        .then(() => {
+            // Redirigir a la misma página
+            exports.getAspirante(request, response, next);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+exports.postReiniciarHartman = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 3; 
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteRespuestasHartman(idAspirante, idGrupo)
+        .then(() => {
+            return Prueba.deleteResultadosHartman(idAspirante, idGrupo);
+        })
+        .then(() => {
+            return Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente);
+        })
+        .then(() => {
+            exports.getAspirante(request, response, next);
+        })
+        .catch((error) => {
+            console.error("Error al reiniciar Hartman:", error);
+            response.status(500).send("Error al reiniciar la prueba.");
+        });
+};
+
+exports.postReiniciarFormato = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    FormatoEntrevista.deleteFormato(idAspirante)
+    .then(() => {
+        FormatoEntrevista.deleteFamiliares(idAspirante)
+        .then(() => {
+            exports.getAspirante(request, response, next);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
 
 // MODIFICACION PARA NOTIFICACIONES
 exports.postSolicitarDocumentos = async (request, response, next) => {
