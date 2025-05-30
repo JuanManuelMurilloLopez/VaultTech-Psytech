@@ -18,7 +18,6 @@ const Usuario = require('../models/usuario.model');
 // Middlewares de apoyo
 const calificarSerieTerman = require("../middleware/calificarTerman.js");
 
-
 //hartman requires
 const PruebaHartman = require('../models/prueba.model');
 const hartman = require('../models/hartman.model');
@@ -788,6 +787,9 @@ exports.getInfoSerie = (req, res, next) => {
             instruccion = info[0].instruccion;
             duracion = info[0].duracion;
 
+            return Prueba.updateEstatusPruebaPendiente(req.session.idAspirante, req.session.idGrupo, idPrueba, 'En progreso');
+        })
+        .then(() => {
             return Terman.fetchPreguntaSerieById(idSerie);
         })
         .then(preguntasRows => {
@@ -827,12 +829,6 @@ exports.postRespuestaTerman = async (req, res, next) => {
         const idGrupo = req.session.idGrupo;
         const idPrueba = 4;
 
-        console.log("📥 req.params.idPreguntaTerman:", req.params.idPreguntaTerman);
-        console.log("📥 req.body:", req.body);
-        console.log("📥 req.session:", req.session.idAspirante);
-        console.log("📥 req.session:", req.session.idGrupo);
-
-
         const respuestas = new respuestasTerman(idAspirante, idGrupo, idPrueba, [
             { idPregunta: idPreguntaTerman, opcion: respuesta, tiempo }
         ]);
@@ -845,18 +841,14 @@ exports.postRespuestaTerman = async (req, res, next) => {
             idPrueba
         );
     
-        if (rows.length === 0) {
+        if (idPreguntaTerman === 173 && rows.length === 0) {
             await db.execute(
                 `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
                 VALUES (?, ?, ?, 2)`,
                 [idAspirante, idGrupo, idPrueba]
             );
         } else {
-            await Terman.updateEstatusPrueba(
-                idAspirante,
-                idGrupo,
-                idPrueba
-            );
+            await Prueba.updateEstatusPruebaPendiente(req.session.idAspirante, req.session.idGrupo, idPrueba, 'En progreso');
         }
 
         res.status(200).json({ ok: true, message: "Respuestas guardadas" });
@@ -1045,7 +1037,7 @@ exports.get_instrucciones = (request, response, next) => {
     Prueba.getGrupoPrueba(request.session.idAspirante, 1)
     .then(([rows, fieldData]) => {
         request.session.idGrupo = rows[0].idGrupo;
-        Prueba.updateEstatusPruebaK16(request.session.idAspirante, request.session.idGrupo, 1, 'En progreso')
+        Prueba.updateEstatusPruebaPendiente(request.session.idAspirante, request.session.idGrupo, 1, 'En progreso')
         .then(() => {
             response.render('Aspirantes/datosPersonalesKostick');
         })
@@ -1082,7 +1074,7 @@ exports.get_instrucciones = (request, response, next) => {
     Prueba.getGrupoPrueba(request.session.idAspirante, 2)
     .then(([rows, fieldData]) => {
         request.session.idGrupo = rows[0].idGrupo;
-        Prueba.updateEstatusPruebaK16(request.session.idAspirante, request.session.idGrupo, 2, 'En progreso')
+        Prueba.updateEstatusPruebaPendiente(request.session.idAspirante, request.session.idGrupo, 2, 'En progreso')
         .then(() => {
             Genero.fetchAll()
             .then(([rows, fieldData]) => {
@@ -1303,7 +1295,7 @@ exports.get_instrucciones = (request, response, next) => {
         return response.status(500).json({ message: "Error saving response." });
       });
   
-    Prueba.updateEstatusPruebaK16(request.session.idAspirante, request.session.idGrupo, 1, 'Completada')
+    Prueba.updateEstatusPruebaPendiente(request.session.idAspirante, request.session.idGrupo, 1, 'Completada')
     .then(() => {
 
     })
@@ -1346,7 +1338,7 @@ exports.get_instrucciones = (request, response, next) => {
         return response.status(500).json({ message: "Error saving response." });
       });
 
-      Prueba.updateEstatusPruebaK16(request.session.idAspirante, request.session.idGrupo, 2, 'Completada')
+      Prueba.updateEstatusPruebaPendiente(request.session.idAspirante, request.session.idGrupo, 2, 'Completada')
       .then(() => {
   
       })

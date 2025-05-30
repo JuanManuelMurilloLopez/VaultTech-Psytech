@@ -374,7 +374,7 @@ module.exports = class Prueba{
         `, [idAspirante]);
     }
 
-    static updateEstatusPruebaK16(idAspirante, idGrupo, idPrueba, estatus){
+    static updateEstatusPruebaPendiente(idAspirante, idGrupo, idPrueba, estatus){
         return db.execute(`
                             UPDATE aspirantesgrupospruebas
                             SET idEstatus = (SELECT idEstatus
