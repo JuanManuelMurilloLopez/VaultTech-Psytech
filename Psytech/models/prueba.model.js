@@ -484,7 +484,14 @@ module.exports = class Prueba{
             `, [idAspirante, idGrupo]);
     }
 
-    static deleteRespuestasTerman(idAspirante, idGrupo){}
+    static deleteRespuestasTerman(idAspirante, idGrupo){
+        return db.execute(`
+                    DELETE
+                    FROM respuestastermanaspirante
+                    WHERE idAspirante = ?
+                    AND idGrupo = ?
+            `, [idAspirante, idGrupo]);
+    }
 
     static deleteRespuestasHartman(idAspirante, idGrupo){}
 }

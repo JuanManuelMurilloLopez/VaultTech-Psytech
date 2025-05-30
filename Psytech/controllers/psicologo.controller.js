@@ -2123,6 +2123,28 @@ exports.postReiniciarKostick = (request, response, next) => {
     });
 }
 
+exports.postReiniciarTerman = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 4;
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteRespuestasTerman(idAspirante, idGrupo)
+    .then(() => {
+        Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+        .then(() => {
+            // Redirigir a la misma página
+            exports.getAspirante(request, response, next);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
 exports.postReiniciarFormato = (request, response, next) => {
     const idAspirante = request.params.idAspirante;
     FormatoEntrevista.deleteFormato(idAspirante)
@@ -2139,4 +2161,3 @@ exports.postReiniciarFormato = (request, response, next) => {
         console.log(error);
     });
 }
-  

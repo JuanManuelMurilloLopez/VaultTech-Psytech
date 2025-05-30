@@ -116,6 +116,7 @@ router.post('/aspirantes/reiniciar-otis/:idAspirante/:idGrupo/:idInstitucion', c
 router.post('/aspirantes/reiniciar-colores/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarColores);
 router.post('/aspirantes/reiniciar-16pf/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciar16pf);
 router.post('/aspirantes/reiniciar-kostick/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarKostick);
+router.post('/aspirantes/reiniciar-terman/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarTerman);
 
 router.post('/aspirantes/formato-entrevista/reiniciar/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarFormato);
 
