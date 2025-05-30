@@ -2145,6 +2145,28 @@ exports.postReiniciarTerman = (request, response, next) => {
     });
 }
 
+exports.postReiniciarHartman = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 3; 
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteRespuestasHartman(idAspirante, idGrupo)
+        .then(() => {
+            return Prueba.deleteResultadosHartman(idAspirante, idGrupo);
+        })
+        .then(() => {
+            return Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente);
+        })
+        .then(() => {
+            exports.getAspirante(request, response, next);
+        })
+        .catch((error) => {
+            console.error("Error al reiniciar Hartman:", error);
+            response.status(500).send("Error al reiniciar la prueba.");
+        });
+};
+
 exports.postReiniciarFormato = (request, response, next) => {
     const idAspirante = request.params.idAspirante;
     FormatoEntrevista.deleteFormato(idAspirante)

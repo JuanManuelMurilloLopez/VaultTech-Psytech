@@ -349,12 +349,52 @@ exports.postInstruccionesColores = async (req, res) => {
 };
 
 // Mostrar instrucciones Hartman
-exports.getInstruccionesHartman = (request, response, next) => {
-    response.render('Aspirantes/instruccionesHartman');
+exports.getInstruccionesHartman = async (req, res) => {
+    try {
+        const idAspirante = req.session.idAspirante;
+        const idPrueba = 3;
+
+        if (!req.session.idGrupo) {
+            const [rows] = await PruebaHartman.getGrupoPrueba(idAspirante, idPrueba);
+            if (rows.length === 0) {
+                return res.status(400).send('No se encontró grupo para este aspirante y prueba.');
+            }
+            req.session.idGrupo = rows[0].idGrupo;
+        }
+
+        const idGrupo = req.session.idGrupo;
+
+        res.render('Aspirantes/instruccionesHartman', {
+            idAspirante,
+            idGrupo,
+            idPrueba
+        });
+
+    } catch (error) {
+        console.error("Error al cargar instrucciones Hartman:", error);
+    }
 };
 
-exports.postInstruccionesHartman = (req, res) => {
-    res.redirect('/aspirante/prueba-hartman/fase1');
+exports.postInstruccionesHartman = async (req, res) => {
+    const { idAspirante, idGrupo, idPrueba } = req.body;
+
+    try {
+        const [rows] = await PruebaHartman.verificarExistencia(idAspirante, idGrupo, idPrueba);
+
+        if (rows.length === 0) {
+            await db.execute(
+                `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
+                 VALUES (?, ?, ?, 3)`,
+                [idAspirante, idGrupo, idPrueba]
+            );
+        } else {
+            await PruebaHartman.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, 3);
+        }
+
+        res.redirect('/aspirante/prueba-hartman/fase1');
+    } catch (error) {
+        console.error('Error al iniciar la prueba Hartman:', error);
+    }
 };
 
 // Formulario datos personales

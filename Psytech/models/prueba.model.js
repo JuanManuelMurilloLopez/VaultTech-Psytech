@@ -413,6 +413,22 @@ module.exports = class Prueba{
             `, [idAspirante, idGrupo])
     }
 
+    static deleteRespuestasHartman(idAspirante, idGrupo) {
+        return db.execute(`
+            DELETE FROM respuestashartman
+            WHERE idAspirante = ?
+            AND idGrupo = ?
+        `, [idAspirante, idGrupo]);
+    }
+
+    static deleteResultadosHartman(idAspirante, idGrupo) {
+        return db.execute(`
+            DELETE FROM resultadoshartman
+            WHERE idAspirante = ?
+            AND idGrupo = ?
+        `, [idAspirante, idGrupo]);
+    }
+
     static resetParametros16PF(idAspirante, idGrupo){
         return db.execute(`
                     UPDATE parametros16pf
@@ -492,6 +508,4 @@ module.exports = class Prueba{
                     AND idGrupo = ?
             `, [idAspirante, idGrupo]);
     }
-
-    static deleteRespuestasHartman(idAspirante, idGrupo){}
 }
