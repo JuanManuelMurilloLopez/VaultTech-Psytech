@@ -112,6 +112,16 @@ router.get('/analisis-terman/:idGrupo/:idAspirante/:idInstitucion', controller.g
 router.get('/analisis-terman/:idAspirante/:idGrupo/Test%20de%20Aptitud%20Mental%20TERMAN', controller.getAnalisisTerman);
 router.get('/cuadernillo-terman/:idGrupo/:idAspirante/:idInstitucion', controller.getCuadernilloTerman);
 
+//Rutas para reiniciar pruebas
+router.post('/aspirantes/reiniciar-otis/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarOtis);
+router.post('/aspirantes/reiniciar-colores/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarColores);
+router.post('/aspirantes/reiniciar-hartman/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarHartman);
+router.post('/aspirantes/reiniciar-16pf/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciar16pf);
+router.post('/aspirantes/reiniciar-kostick/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarKostick);
+router.post('/aspirantes/reiniciar-terman/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarTerman);
+
+router.post('/aspirantes/formato-entrevista/reiniciar/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarFormato);
+
 router.get('/psicologos-registrados', controller.getPsicologosRegistrados);
 
 router.get('/registrar-psicologo', controller.getRegistrarPsicologos);
@@ -119,5 +129,10 @@ router.post('/registrar-psicologo', controller.postRegistrarPsicologos);
 
 router.get('/editar-psicologo/:idUsuario', controller.getEditarPsicologo);
 router.post('/editar-psicologo/:idUsuario', controller.postEditarPsicologo);
+
+// MODIFICACIONES PARA NOTIFICACIONES (Ruta para solicitar documentos individualmente)
+router.post('/solicitar-documentos/:idInstitucion/:idGrupo/:idAspirante', 
+    controller.postSolicitarDocumentos
+);
 
 module.exports = router;

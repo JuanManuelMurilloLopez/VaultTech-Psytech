@@ -47,6 +47,8 @@ const { Resend } = require('resend');
 const resend = new Resend(process.env.RESEND_API_KEY);
 const correoHtmlPath = path.join(__dirname, '..', 'util', 'correoRegistro.html');
 
+const DocumentNotificationService = require('../scripts/sendDocumentNotifications.js');
+
 //Rutas del portal de los Psicologos
 
 // Registrar y editar psicologos
@@ -600,6 +602,12 @@ exports.getAspirante = (request, response, next) => {
             Aspirante.getFormatoEntrevista(request.params.idAspirante, request.params.idGrupo)
             .then(([rows, fieldData]) => {
                 const formatoEntrevista = rows;
+
+                
+                // NUEVAS LIANES PARA NOTIFICACIONES
+                const mensaje = request.session.mensaje;
+                delete request.session.mensaje;
+
                 response.render('Psicologos/informacionAspirante', {
                     informacionAspirante: informacionAspirante || [],
                     idGrupo: request.params.idGrupo || null,
@@ -607,6 +615,7 @@ exports.getAspirante = (request, response, next) => {
                     formatoEntrevista: formatoEntrevista || [],
                     aspirante: request.params.idAspirante || null,
                     idInstitucion: request.params.idInstitucion || null,
+                    mensaje: mensaje // ← COMENTAR ESTA LÍNEA TAMBIÉN
                 })
             })
             .catch((error) => {
@@ -2082,3 +2091,220 @@ exports.getCuadernilloTerman = (request, response, next) => {
         console.log(error);
     })
 }
+exports.postReiniciarOtis = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 5;
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteDatosPersonales(idAspirante, idGrupo, idPrueba)
+    .then(() => {
+        Prueba.deleteRespuestasOtis(idAspirante, idGrupo)
+        .then(() => {
+            Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+            .then(() => {
+                // Redirigir a la misma página
+                exports.getAspirante(request, response, next);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+exports.postReiniciarColores = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 6;
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteDatosPersonales(idAspirante, idGrupo, idPrueba)
+    .then(() => {
+        Prueba.deleteRespuestasColores(idAspirante, idGrupo)
+        .then(() => {
+            Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+            .then(() => {
+                // Redirigir a la misma página
+                exports.getAspirante(request, response, next);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+exports.postReiniciar16pf = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 2;
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteDatosPersonales(idAspirante, idGrupo, idPrueba)
+    .then(() => {
+        Prueba.resetParametros16PF(idAspirante, idGrupo)
+        .then(() => {
+            Prueba.deleteRespuestas16PF(idAspirante, idGrupo)
+            .then(() => {
+                Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+                .then(() => {
+                    // Redirigir a la misma página
+                    exports.getAspirante(request, response, next);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+exports.postReiniciarKostick = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 1;
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteDatosPersonales(idAspirante, idGrupo, idPrueba)
+    .then(() => {
+        Prueba.resetResultadosKostick(idAspirante, idGrupo)
+        .then(() => {
+            Prueba.deleteRespuestasKostick(idAspirante, idGrupo)
+            .then(() => {
+                Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+                .then(() => {
+                    // Redirigir a la misma página
+                    exports.getAspirante(request, response, next);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+exports.postReiniciarTerman = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 4;
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteRespuestasTerman(idAspirante, idGrupo)
+    .then(() => {
+        Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+        .then(() => {
+            // Redirigir a la misma página
+            exports.getAspirante(request, response, next);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+exports.postReiniciarHartman = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    const idGrupo = request.params.idGrupo;
+    const idPrueba = 3; 
+    const estatusPruebaPendiente = 2;
+
+    Prueba.deleteRespuestasHartman(idAspirante, idGrupo)
+        .then(() => {
+            return Prueba.deleteResultadosHartman(idAspirante, idGrupo);
+        })
+        .then(() => {
+            return Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente);
+        })
+        .then(() => {
+            exports.getAspirante(request, response, next);
+        })
+        .catch((error) => {
+            console.error("Error al reiniciar Hartman:", error);
+            response.status(500).send("Error al reiniciar la prueba.");
+        });
+};
+
+exports.postReiniciarFormato = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+    FormatoEntrevista.deleteFormato(idAspirante)
+    .then(() => {
+        FormatoEntrevista.deleteFamiliares(idAspirante)
+        .then(() => {
+            exports.getAspirante(request, response, next);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+// MODIFICACION PARA NOTIFICACIONES
+exports.postSolicitarDocumentos = async (request, response, next) => {
+    const { idAspirante, idGrupo, idInstitucion } = request.params;
+    
+    try {
+        const notificationService = new DocumentNotificationService();
+        const result = await notificationService.sendIndividualNotification(idAspirante, idGrupo);
+        
+        if (result.success) {
+            request.session.mensaje = {
+                tipo: 'success',
+                texto: 'Notificación de documentos enviada exitosamente al aspirante.'
+            };
+        } else {
+            request.session.mensaje = {
+                tipo: 'error',
+                texto: result.message || 'Error al enviar la notificación.'
+            };
+        }
+        
+        response.redirect(`/psicologo/aspirantes/${idAspirante}/${idGrupo}/${idInstitucion}`);
+        
+    } catch (error) {
+        console.error('Error al solicitar documentos:', error);
+        request.session.mensaje = {
+            tipo: 'error',
+            texto: 'Error interno del servidor.'
+        };
+        response.redirect(`/psicologo/aspirantes/${idAspirante}/${idGrupo}/${idInstitucion}`);
+    }
+
+};
