@@ -21,9 +21,11 @@ const calificacionesTerman = require('../models/calificacionesTerman.model.js');
 const calificacionTerman = new calificacionesTerman();
 const resultadosSeriesTerman = require('../models/resultadosSeriesTerman.model.js');
 const resultadoSerieTerman = new resultadosSeriesTerman();
+const CuadernilloTerman = require('../models/cuadernilloTerman.model.js');
 
 // Middleware de apoyo para calificar Terman
 const calificarSerieTerman = require("../middleware/calificarTerman.js");
+
 const ResultadosKostick = require('../models/resultadosKostick.model.js');
 const Resultados16PF = require('../models/resultados16PF.model.js');
 const InterpretacionKostick = require('../models/interpretacionKostick.js');
@@ -1997,4 +1999,99 @@ exports.getCuadernillo16PF = (request, response, next) => {
     .catch((error) => {
         console.log(error);
     });
+}
+
+//Cuadernillo Terman
+exports.getCuadernilloTerman = (request, response, next) => {
+    const idAspirante = request.params.idAspirante;
+
+    Aspirante.getInformacionAspirante(idAspirante)
+    .then(([rows, fieldData]) => {
+        const aspiranteData = rows[0];
+        console.log('Nombre completo: ', aspiranteData.nombreUsuario, aspiranteData.apellidoPaterno, aspiranteData.apellidoMaterno);
+        //Obtener el timpo total que tomo el aspirante para responder la prueba
+        CuadernilloTerman.getTiempoTotal(request.params.idGrupo, request.params.idAspirante)
+        .then(([rows, fielData]) => {
+            const tiempoTotal = rows[0].Tiempo;
+            console.log('Tiempo total: ', tiempoTotal);
+            // Obtiene las preguntas, series, opciones y la respuesta del aspirante
+            CuadernilloTerman.getRespuestasTermanAspirante(request.params.idGrupo, request.params.idAspirante)
+            .then(([rows, fielData]) => {
+                const seriesAgrupadas = {};
+
+                rows.forEach(row => {
+                    //Si la serie no existe aun, se crea
+                    if(!seriesAgrupadas[row.idSerieTerman]){
+                        seriesAgrupadas[row.idSerieTerman] = {
+                            idSerieTerman: row.idSerieTerman,
+                            nombreSeccion: row.nombreSeccion,
+                            preguntas: {}
+                        };
+                    }
+
+                    const serie = seriesAgrupadas[row.idSerieTerman];
+                    // console.log('series: ', serie);
+
+                    //Si la pregunta no existe aun, se crea
+                    if (!serie.preguntas[row.idPreguntaTerman]) {
+                        serie.preguntas[row.idPreguntaTerman] = {
+                            idPreguntaTerman: row.idPreguntaTerman,
+                            numeroPregunta: row.numeroPregunta,
+                            preguntaTerman: row.preguntaTerman,
+                            opciones: [],
+                            esCorrecta: false,
+                            tiempoRespuesta: 0,
+                            contestada: null
+                        };
+                    }
+
+                    const pregunta = serie.preguntas[row.idPreguntaTerman];
+                    // console.log('pregunta: ', pregunta)
+
+                    // Vamos añadiendo las opciones de la pregunta correspondiente
+                    pregunta.opciones.push({
+                        idOpcionTerman: row.idOpcionTerman,
+                        opcionTerman: row.opcionTerman,
+                        descripcionTerman: row.descripcionTerman,
+                        esCorrecta: row.esCorrecta === 1,
+                        seleccionada: row.opcionSeleccionada === 1
+                    });
+
+                    // console.log('opciones: ',pregunta.opciones)
+
+                    if (row.opcionSeleccionada === 1) {
+                        pregunta.tiempoRespuesta = row.tiempoRespuesta;
+                        pregunta.contestada = true;
+                        pregunta.esCorrecta = row.esCorrecta === 1;
+                    }
+
+                    if (!pregunta.contestada) {
+                        pregunta.esCorrecta = null;
+                    }
+                })
+
+                const respuestasAgrupadasPorSerie = Object.values(seriesAgrupadas).map(serie => ({
+                    ...serie,
+                    preguntas: Object.values(serie.preguntas)
+                }))
+
+                // console.log('Respuestas: ', respuestasAgrupadasPorSerie);
+
+                response.render('Psicologos/cuadernilloTerman.ejs', {
+                    aspiranteData: aspiranteData || [],
+                    tiempoTotal: tiempoTotal || 0,
+                    respuestasPorSerie: respuestasAgrupadasPorSerie,
+                    aspirante: request.params.idAspirante || null,
+                    grupo: request.params.idGrupo || null,
+                    idInstitucion: request.params.idInstitucion || null,
+                });
+            })
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    })
+    .catch((error) => {
+        console.log(error);
+    })
 }
