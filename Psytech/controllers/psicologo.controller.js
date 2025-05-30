@@ -100,8 +100,6 @@ exports.postRegistrarPsicologos = (request, response, next) => {
             1
         );
 
-        console.log('Guardando psicólogo:', psicologo);
-
         return psicologo.savePsicologo()
             .then(() => {
                 exports.getPsicologosRegistrados(request, response, next);
@@ -1685,7 +1683,6 @@ exports.getRespuestasSerie = async (req, res) => {
             respuestas = await respuestasTermanModel.fetchRespuestasOpciones(idAspirante, idGrupo, idSerie);
         }
 
-        console.log(respuestas);
         return res.json({ success: true, respuestas });
     } catch (error) {
         console.error("Error trayendo respuestas de Terman:", error);
@@ -1761,8 +1758,6 @@ exports.getAnalisisTerman = async (request, response, next) => {
             porcentaje: reglaDeTres(serie.puntuacion, obtenerTotalPorSerie(serie.idSerieTerman))
         }));
         
-        console.log(resultados);
-
         const resumen = {
             nombreCompleto: `${aspiranteData.nombreUsuario} ${aspiranteData.apellidoPaterno} ${aspiranteData.apellidoMaterno}`,
             puntosTotales: calificacion[0].puntosTotales,
@@ -1770,7 +1765,7 @@ exports.getAnalisisTerman = async (request, response, next) => {
             coeficienteIntelectual: calificacion[0].coeficienteIntelectual
         };
         
-        console.log(resumen);
+        // console.log(resumen);
 
         // 4. Renderizar
         return response.render('Psicologos/analisisTerman', {
@@ -2008,12 +2003,10 @@ exports.getCuadernilloTerman = (request, response, next) => {
     Aspirante.getInformacionAspirante(idAspirante)
     .then(([rows, fieldData]) => {
         const aspiranteData = rows[0];
-        console.log('Nombre completo: ', aspiranteData.nombreUsuario, aspiranteData.apellidoPaterno, aspiranteData.apellidoMaterno);
         //Obtener el timpo total que tomo el aspirante para responder la prueba
         CuadernilloTerman.getTiempoTotal(request.params.idGrupo, request.params.idAspirante)
         .then(([rows, fielData]) => {
             const tiempoTotal = rows[0].Tiempo;
-            console.log('Tiempo total: ', tiempoTotal);
             // Obtiene las preguntas, series, opciones y la respuesta del aspirante
             CuadernilloTerman.getRespuestasTermanAspirante(request.params.idGrupo, request.params.idAspirante)
             .then(([rows, fielData]) => {
@@ -2030,7 +2023,6 @@ exports.getCuadernilloTerman = (request, response, next) => {
                     }
 
                     const serie = seriesAgrupadas[row.idSerieTerman];
-                    // console.log('series: ', serie);
 
                     //Si la pregunta no existe aun, se crea
                     if (!serie.preguntas[row.idPreguntaTerman]) {
@@ -2046,7 +2038,6 @@ exports.getCuadernilloTerman = (request, response, next) => {
                     }
 
                     const pregunta = serie.preguntas[row.idPreguntaTerman];
-                    // console.log('pregunta: ', pregunta)
 
                     // Vamos añadiendo las opciones de la pregunta correspondiente
                     pregunta.opciones.push({
@@ -2056,8 +2047,6 @@ exports.getCuadernilloTerman = (request, response, next) => {
                         esCorrecta: row.esCorrecta === 1,
                         seleccionada: row.opcionSeleccionada === 1
                     });
-
-                    // console.log('opciones: ',pregunta.opciones)
 
                     if (row.opcionSeleccionada === 1) {
                         pregunta.tiempoRespuesta = row.tiempoRespuesta;
@@ -2074,8 +2063,6 @@ exports.getCuadernilloTerman = (request, response, next) => {
                     ...serie,
                     preguntas: Object.values(serie.preguntas)
                 }))
-
-                // console.log('Respuestas: ', respuestasAgrupadasPorSerie);
 
                 response.render('Psicologos/cuadernilloTerman.ejs', {
                     aspiranteData: aspiranteData || [],
