@@ -772,10 +772,13 @@ exports.getInfoSerie = (req, res, next) => {
             if (rows.length > 0) {
                 req.session.idGrupo = rows[0].idGrupo;
                 req.session.idPrueba = idPrueba;
+
+                return Prueba.updateEstatusPruebaPendiente(req.session.idAspirante, req.session.idGrupo, idPrueba, 'En progreso')
             } else {
                 console.log("No se encontró grupo para este aspirante y prueba");
             }
-
+        })
+        .then(() => {
             return Terman.fetchSerieInfoById(idSerie);
         })
         .then(info => {
@@ -787,9 +790,6 @@ exports.getInfoSerie = (req, res, next) => {
             instruccion = info[0].instruccion;
             duracion = info[0].duracion;
 
-            return Prueba.updateEstatusPruebaPendiente(req.session.idAspirante, req.session.idGrupo, idPrueba, 'En progreso');
-        })
-        .then(() => {
             return Terman.fetchPreguntaSerieById(idSerie);
         })
         .then(preguntasRows => {
