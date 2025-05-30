@@ -76,7 +76,7 @@
                                     const fechaFormato = `${fecha.getDate()}/${fecha.getMonth()+1}/${fecha.getFullYear()}`;
                                 %>
                                 <p class="card-text">Fecha límite: <%= fechaFormato %></p>
-                                <% if (prueba.nombreEstatus === 'Pendiente' || prueba.nombreEstatus === 'En progreso') { %>
+                                <% if (prueba.nombreEstatus === 'Pendiente') { %>
                                     <div class="d-flex justify-content-between">
                                         <!-- CAMBIO CODIGO: href ruta -->
                                         <a href="<%= rutaPrueba %>" class="btn btn-color--secondary">Realizar prueba</a>
