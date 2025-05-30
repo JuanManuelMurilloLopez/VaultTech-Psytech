@@ -110,6 +110,7 @@ router.get("/interpretacion/:idAspirante/:columna/:nivel", controller.get_interp
 router.get('/analisis-terman/:idAspirante/:idGrupo/serie/:idSerie', controller.getRespuestasSerie);
 router.get('/analisis-terman/:idGrupo/:idAspirante/:idInstitucion', controller.getAnalisisTerman);
 router.get('/analisis-terman/:idAspirante/:idGrupo/Test%20de%20Aptitud%20Mental%20TERMAN', controller.getAnalisisTerman);
+router.get('/cuadernillo-terman/:idGrupo/:idAspirante/:idInstitucion', controller.getCuadernilloTerman);
 
 //Rutas para reiniciar pruebas
 router.post('/aspirantes/reiniciar-otis/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarOtis);
