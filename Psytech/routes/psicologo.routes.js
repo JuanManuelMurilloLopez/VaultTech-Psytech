@@ -77,6 +77,9 @@ router.get('/prueba-otis', controller.getPruebaOtis);
 // Vista con la información de la prueba Colores
 router.get('/prueba-colores', controller.getPruebaColores);
 
+// Informacion de la prueba Terman
+router.get('/prueba-terman', controller.getPruebaTerman);
+
 // Vista con la información de la prueba Hartman
 router.get('/prueba-hartman', controller.getPruebaHartman);
 
@@ -123,10 +126,8 @@ router.post('/aspirantes/reiniciar-terman/:idAspirante/:idGrupo/:idInstitucion',
 router.post('/aspirantes/formato-entrevista/reiniciar/:idAspirante/:idGrupo/:idInstitucion', controller.postReiniciarFormato);
 
 router.get('/psicologos-registrados', controller.getPsicologosRegistrados);
-
 router.get('/registrar-psicologo', controller.getRegistrarPsicologos);
 router.post('/registrar-psicologo', controller.postRegistrarPsicologos);
-
 router.get('/editar-psicologo/:idUsuario', controller.getEditarPsicologo);
 router.post('/editar-psicologo/:idUsuario', controller.postEditarPsicologo);
 

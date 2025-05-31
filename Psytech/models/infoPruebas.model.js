@@ -35,4 +35,13 @@ module.exports = class InfoPruebas {
             `SELECT * FROM colores ORDER BY idColor`
         );
     }
+
+    static getInfoTerman(){
+        return db.execute(`SELECT st.idSerieTerman, st.nombreSeccion, st.instruccion, st.duracion, p.idPreguntaTerman,
+        p.numeroPregunta, p.preguntaTerman, o.idOpcionTerman, o.opcionTerman, o.descripcionTerman, o.esCorrecta
+        FROM seriesterman st
+        JOIN preguntasterman p ON st.idSerieTerman = p.idSerieTerman
+        JOIN opcionesterman o ON p.idPreguntaTerman = o.idPreguntaTerman
+        ORDER BY st.idSerieTerman ASC, p.numeroPregunta ASC, o.opcionTerman ASC;`)
+    }
 };

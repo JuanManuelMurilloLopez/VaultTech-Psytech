@@ -1677,6 +1677,58 @@ exports.getPruebaOtis = async (req, res, next) => {
     }
 };
 
+//Informacion prueba Terman
+exports.getPruebaTerman = (request, response, next) => {
+    InfoPruebas.getInfoTerman()
+    .then(([rows, fieldData]) => {
+        const seriesAgrupadas = {};
+
+        rows.forEach(row => {
+            //Si la serie no existe aun, se crea
+            if(!seriesAgrupadas[row.idSerieTerman]){
+                seriesAgrupadas[row.idSerieTerman] = {
+                    idSerieTerman: row.idSerieTerman,
+                    nombreSeccion: row.nombreSeccion,
+                    instruccion: row.instruccion,
+                    duracion: row.duracion,
+                    preguntas: {}
+                };
+            }
+            const serie = seriesAgrupadas[row.idSerieTerman];
+
+            //Si la pregunta no existe aun, se crea
+            if (!serie.preguntas[row.idPreguntaTerman]) {
+                serie.preguntas[row.idPreguntaTerman] = {
+                    idPreguntaTerman: row.idPreguntaTerman,
+                    numeroPregunta: row.numeroPregunta,
+                    preguntaTerman: row.preguntaTerman,
+                    idSerieTerman: row.idSerieTerman,
+                    opciones: [],
+                };
+            }
+            const pregunta = serie.preguntas[row.idPreguntaTerman];
+
+            // Vamos añadiendo las opciones de la pregunta correspondiente
+            pregunta.opciones.push({
+                idOpcionTerman: row.idOpcionTerman,
+                opcionTerman: row.opcionTerman,
+                descripcionTerman: row.descripcionTerman,
+                esCorrecta: row.esCorrecta === 1,
+            });
+        })
+        const preguntasAgrupadasPorSerie = Object.values(seriesAgrupadas).map(serie => ({
+            ...serie,
+            preguntas: Object.values(serie.preguntas)
+        }))
+        response.render('Psicologos/infoPruebaTerman.ejs', {
+            preguntasPorSerie: preguntasAgrupadasPorSerie,
+        });
+
+    }).catch((error) => {
+        console.log(error);
+    })
+}
+
 // Análisis Terman
 exports.getRespuestasSerie = async (req, res) => {
     const { idAspirante, idGrupo, idSerie } = req.params;
@@ -1868,8 +1920,8 @@ exports.get_interpretaciones16PF = (request, response, next) => {
     });
 }
 
-  // Consulta informacion prueba Colores
-    exports.getPruebaColores = async (req, res, next) => {
+// Consulta informacion prueba Colores
+exports.getPruebaColores = async (req, res, next) => {
     try {
         // ID colores
         const idPruebaColores = 6;
@@ -2091,6 +2143,7 @@ exports.getCuadernilloTerman = (request, response, next) => {
         console.log(error);
     })
 }
+
 exports.postReiniciarOtis = (request, response, next) => {
     const idAspirante = request.params.idAspirante;
     const idGrupo = request.params.idGrupo;
