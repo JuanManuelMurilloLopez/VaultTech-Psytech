@@ -11,18 +11,18 @@ class Usuario {
   static fetchOne = async (usuario) => {
     try {
       const [filas] = await db.execute('SELECT * FROM usuarios WHERE idUsuario = ?', [usuario]);
-  
+
       if (filas.length === 0) {
         console.log('Usuario no encontrado en la base de datos.');
         return null;
       }
-  
-      return filas[0].idUsuario; 
+
+      return filas[0].idUsuario;
     } catch (error) {
       console.error('Error en fetchOne:', error);
       throw error;
     }
-  };  
+  };
 }
 
 class OTP {
@@ -46,26 +46,29 @@ class OTP {
       console.error('Error al crear OTP:', error);
       throw error;
     }
-  }  
+  }
 
   static async obtenerOTP(idUsuario) {
     try {
-        if (typeof idUsuario === 'undefined' || idUsuario === null) {
-            throw new Error('ID de usuario no proporcionado');
-        }
-        const [filas] = await db.execute(
-            'SELECT * FROM OTP WHERE idUsuario = ? AND usado = false AND validez > NOW() ORDER BY validez DESC LIMIT 1',
-            [idUsuario]
-        );
-        return filas.length > 0 ? filas[0] : null;
+      if (typeof idUsuario === 'undefined' || idUsuario === null) {
+        throw new Error('ID de usuario no proporcionado');
+      }
+      const [filas] = await db.execute(
+        'SELECT * FROM OTP WHERE idUsuario = ? AND usado = false AND validez > NOW() ORDER BY validez DESC LIMIT 1',
+        [idUsuario]
+      );
+      return filas.length > 0 ? filas[0] : null;
     } catch (error) {
-        console.error('Error al obtener OTP:', error);
-        throw error;
+      console.error('Error al obtener OTP:', error);
+      throw error;
     }
- }
+  }
 
   static async usarOTP(idOTP) {
     try {
+      if (process.env.NODE_ENV === 'develop') {
+        return;
+      }
       await db.execute(
         'UPDATE OTP SET usado = true WHERE idOTP = ?',
         [idOTP]
