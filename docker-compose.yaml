@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:10.4
+    container_name: local-mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: psytech_db
+      MYSQL_USER: psytech_user
+      MYSQL_PASSWORD: psytech_pass
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+  phpmyadmin:
+      image: phpmyadmin/phpmyadmin:latest
+      container_name: local-phpmyadmin
+      ports:
+        - "8080:80" # Access phpMyAdmin via http://localhost:8080
+      environment:
+        PMA_HOST: mariadb # This MUST match the service name of your MariaDB container
+        PMA_PORT: 3306
+        PMA_ARBITRARY: 1 # Allows entering a host on the login screen
+        PMA_USER: root # Optional: pre-fill username for convenience
+        PMA_PASSWORD: rootpassword # Optional: pre-fill password for convenience
+      links:
+        - mariadb:db # Ensures phpMyAdmin can resolve 'db' to the MariaDB service
+      depends_on:
+        - mariadb # Ensures MariaDB starts before phpMyAdmin
+
+volumes:
+  mariadb_data:

@@ -5,8 +5,6 @@ const session = require('express-session');
 const dotenv = require("dotenv");
 const helmet = require("helmet");
 const compression = require("compression");
-const https = require("https");
-const fs = require("fs");
 const cron = require('node-cron');
 const DocumentNotificationService = require('./scripts/sendDocumentNotifications');
 
@@ -58,9 +56,6 @@ app.use(
 );
 
 app.use(compression());
-
-const certificate = fs.readFileSync("../../certs/server.cert");
-const privateKey = fs.readFileSync("../../certs/server.key");
 
 // Servir archivos estaticos desde public
 app.use(express.static(path.join(__dirname, 'public')));
@@ -138,10 +133,6 @@ app.use('/aspirante', rutasAspirante);
 
 const rutasPsicologo = require('./routes/psicologo.routes');
 app.use('/psicologo', rutasPsicologo);
-
-// https.createServer({key: privateKey, cert: certificate, passphrase: process.env.SSL_PASSPHRASE}, app).listen(process.env.PORT || 5050);
-
-//https.createServer({key: privateKey, cert: certificate}, app).listen(process.env.PORT || 5050);
 
 // Iniciar servidor en el puerto 5050
 app.listen(5050, () => {
