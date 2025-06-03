@@ -55,7 +55,8 @@
                                     <%= groupMeeting.titulo %>
                                 </p>
                                 <p><strong>Fecha:</strong>
-                                    <%= groupMeeting.fecha %>
+                                    <%= new Date(groupMeeting.fecha).toLocaleDateString('es-MX', {year: 'numeric' ,
+                                        month: 'long' , day: 'numeric' }) %>
                                 </p>
                                 <p><strong>Hora:</strong>
                                     <%= groupMeeting.horaInicio %> - <%= groupMeeting.horaFin %>
