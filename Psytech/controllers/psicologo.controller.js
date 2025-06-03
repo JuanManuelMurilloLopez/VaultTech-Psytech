@@ -49,89 +49,93 @@ const correoHtmlPath = path.join(__dirname, '..', 'util', 'correoRegistro.html')
 
 const DocumentNotificationService = require('../scripts/sendDocumentNotifications.js');
 
+const Reuniones = require('../models/reuniones.model.js');
+
+const { sendEmail } = require('../util/email');
+
 //Rutas del portal de los Psicologos
 
 // Registrar y editar psicologos
 exports.getPsicologosRegistrados = (request, response, next) => {
     Psicologo.fetchAll()
-    .then(([rows, fieldData]) => {
-        const listaPsicologos = rows;
-        response.render('Psicologos/listaPsicologos',{
-            listaPsicologos: listaPsicologos || [],
+        .then(([rows, fieldData]) => {
+            const listaPsicologos = rows;
+            response.render('Psicologos/listaPsicologos', {
+                listaPsicologos: listaPsicologos || [],
+            });
+        })
+        .catch((error) => {
+            console.log('Error al obtener psicologos:', error);
         });
-    })
-    .catch((error) => {
-        console.log('Error al obtener psicologos:', error);
-    });
 };
 
 exports.getRegistrarPsicologos = (request, response, next) => {
     Psicologo.fetchAll()
-    .then(([rows, fieldData]) => {
-        const psicologos = rows;
-        response.render('Psicologos/registrarPsicologo', {
-            psicologos: psicologos || [],
+        .then(([rows, fieldData]) => {
+            const psicologos = rows;
+            response.render('Psicologos/registrarPsicologo', {
+                psicologos: psicologos || [],
+            });
+        })
+        .catch((error) => {
+            console.log('Error al obtener psicologos:', error);
         });
-    })
-    .catch((error) => {
-        console.log('Error al obtener psicologos:', error);
-    });
 };
 
 exports.postRegistrarPsicologos = (request, response, next) => {
     const { correo, nombrePsicologo, apellidoPaterno, apellidoMaterno, lada, numero } = request.body;
 
     Psicologo.correoExiste(correo)
-    .then((existe) => {
+        .then((existe) => {
 
-        if (existe) {
-            return response.render('Psicologos/registrarPsicologo', {
-                error: 'El correo ya está registrado.'
-            });
-        }
+            if (existe) {
+                return response.render('Psicologos/registrarPsicologo', {
+                    error: 'El correo ya está registrado.'
+                });
+            }
 
-        const psicologo = new Psicologo(
-            correo, // usuario
-            1,
-            nombrePsicologo,
-            apellidoPaterno,
-            apellidoMaterno,
-            correo, // correo electrónico
-            lada,
-            numero,
-            1
-        );
+            const psicologo = new Psicologo(
+                correo, // usuario
+                1,
+                nombrePsicologo,
+                apellidoPaterno,
+                apellidoMaterno,
+                correo, // correo electrónico
+                lada,
+                numero,
+                1
+            );
 
-        return psicologo.savePsicologo()
-            .then(() => {
-                exports.getPsicologosRegistrados(request, response, next);
-            });
-    })
-    .catch((error) => {
-        console.log('Error al guardar psicólogo:', error);
-    });
+            return psicologo.savePsicologo()
+                .then(() => {
+                    exports.getPsicologosRegistrados(request, response, next);
+                });
+        })
+        .catch((error) => {
+            console.log('Error al guardar psicólogo:', error);
+        });
 };
 
 exports.getEditarPsicologo = (request, response, next) => {
     const idUsuario = request.params.idUsuario;
 
     Psicologo.fetchOne(idUsuario)
-    .then(([rows]) => {
-        if (rows.length === 0) {
-            return response.redirect('/psicologo/psicologos-registrados');
-        }
+        .then(([rows]) => {
+            if (rows.length === 0) {
+                return response.redirect('/psicologo/psicologos-registrados');
+            }
 
-        const psicologo = rows[0];
+            const psicologo = rows[0];
 
-        response.render('Psicologos/editarPsicologo', {
-            psicologo: psicologo,
-            idUsuario: psicologo.idUsuario,
-            error: '',
+            response.render('Psicologos/editarPsicologo', {
+                psicologo: psicologo,
+                idUsuario: psicologo.idUsuario,
+                error: '',
+            });
+        })
+        .catch(error => {
+            console.log('Error al obtener psicólogo:', error);
         });
-    })
-    .catch(error => {
-        console.log('Error al obtener psicólogo:', error);
-    });
 };
 
 exports.postEditarPsicologo = (request, response, next) => {
@@ -150,45 +154,45 @@ exports.postEditarPsicologo = (request, response, next) => {
     let estatus;
 
     Psicologo.fetchOne(idUsuario)
-    .then(([rows]) => {
-        if (rows.length === 0) {
-            console.log('Usuario no encontrado');
-        }
+        .then(([rows]) => {
+            if (rows.length === 0) {
+                console.log('Usuario no encontrado');
+            }
 
-        const usuarioActual = rows[0];
-        
-        estatus = (estatusUsuario === undefined || estatusUsuario === null)
-            ? usuarioActual.estatusUsuario
-            : (estatusUsuario === 'true' ? 1 : 0);
+            const usuarioActual = rows[0];
 
-        const valores = {
-            usuario: usuario || null,
-            nombreUsuario: nombreUsuario || null,
-            apellidoPaterno: apellidoPaterno || null,
-            apellidoMaterno: apellidoMaterno || null,
-            correo: correo || null,
-            lada: lada || null,
-            numeroTelefono: numeroTelefono || null,
-        };
+            estatus = (estatusUsuario === undefined || estatusUsuario === null)
+                ? usuarioActual.estatusUsuario
+                : (estatusUsuario === 'true' ? 1 : 0);
 
-        return Psicologo.update(
-            idUsuario,
-            valores.usuario,
-            estatus,
-            valores.nombreUsuario,
-            valores.apellidoPaterno,
-            valores.apellidoMaterno,
-            valores.correo,
-            valores.lada,
-            valores.numeroTelefono
-        );
-    })
-    .then(() => {
-        response.redirect('/psicologo/psicologos-registrados');
-    })
-    .catch(error => {
-        console.log('Error al actualizar psicólogo:', error);
-    });
+            const valores = {
+                usuario: usuario || null,
+                nombreUsuario: nombreUsuario || null,
+                apellidoPaterno: apellidoPaterno || null,
+                apellidoMaterno: apellidoMaterno || null,
+                correo: correo || null,
+                lada: lada || null,
+                numeroTelefono: numeroTelefono || null,
+            };
+
+            return Psicologo.update(
+                idUsuario,
+                valores.usuario,
+                estatus,
+                valores.nombreUsuario,
+                valores.apellidoPaterno,
+                valores.apellidoMaterno,
+                valores.correo,
+                valores.lada,
+                valores.numeroTelefono
+            );
+        })
+        .then(() => {
+            response.redirect('/psicologo/psicologos-registrados');
+        })
+        .catch(error => {
+            console.log('Error al actualizar psicólogo:', error);
+        });
 };
 
 exports.postActualizarEstatusPsicologo = (request, response, next) => {
@@ -209,121 +213,121 @@ exports.postActualizarEstatusPsicologo = (request, response, next) => {
 // Lista de grupos
 exports.getListaGrupos = (request, response, next) => {
     Grupo.fetchAll()
-    .then(([rows, fieldData]) => {
-        const arregloGrupos = rows;
-        response.render('Psicologos/listaGrupos', {arregloGrupos: arregloGrupos || []});
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+        .then(([rows, fieldData]) => {
+            const arregloGrupos = rows;
+            response.render('Psicologos/listaGrupos', { arregloGrupos: arregloGrupos || [] });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 };
 
 // Instituciones
 exports.getCatalogoInstituciones = (request, response, next) => {
     Institucion.fetchAll()
-    .then(([rows, fieldData]) => {
-        const arregloInstituciones = rows;
-        response.render('Psicologos/catalogoInstituciones', {
-            arregloInstituciones: arregloInstituciones || [],
+        .then(([rows, fieldData]) => {
+            const arregloInstituciones = rows;
+            response.render('Psicologos/catalogoInstituciones', {
+                arregloInstituciones: arregloInstituciones || [],
+            });
+        })
+        .catch((error) => {
+            console.log(error);
         });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
 };
 
 exports.getRegistrarInstitucion = (request, response, next) => {
     TipoInstitucion.fetchAll()
-    .then(([rows, fieldData]) => {
-        const tiposInstitucion = rows;
-        response.render('Psicologos/registrarInstitucion', {
-            tiposInstitucion: tiposInstitucion || [],
-            error: ""
+        .then(([rows, fieldData]) => {
+            const tiposInstitucion = rows;
+            response.render('Psicologos/registrarInstitucion', {
+                tiposInstitucion: tiposInstitucion || [],
+                error: ""
+            })
         })
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+        .catch((error) => {
+            console.log(error);
+        });
 };
 
 exports.postRegistrarInstitucion = (request, response, next) => {
     const nombreInput = request.body.nombreInstitucion.trim().toLowerCase();
 
     Institucion.fetchAll()
-    .then(([rows]) => {
-        const institucionExistente = rows.find(institucion => 
-            institucion.nombreInstitucion.trim().toLowerCase() === nombreInput
-        );
+        .then(([rows]) => {
+            const institucionExistente = rows.find(institucion =>
+                institucion.nombreInstitucion.trim().toLowerCase() === nombreInput
+            );
 
-        if (institucionExistente) {
-            return TipoInstitucion.fetchAll()
-            .then(([tipos]) => {
-                response.render('Psicologos/registrarInstitucion', {
-                    tiposInstitucion: tipos || [],
-                    error: "Institución previamente registrada"
+            if (institucionExistente) {
+                return TipoInstitucion.fetchAll()
+                    .then(([tipos]) => {
+                        response.render('Psicologos/registrarInstitucion', {
+                            tiposInstitucion: tipos || [],
+                            error: "Institución previamente registrada"
+                        });
+                    });
+            }
+
+            const institucion = new Institucion(request.body);
+            return institucion.save()
+                .then(() => {
+                    exports.getCatalogoInstituciones(request, response, next);
                 });
-            });
-        }
-
-        const institucion = new Institucion(request.body);
-        return institucion.save()
-        .then(() => {
-            exports.getCatalogoInstituciones(request, response, next);
+        })
+        .catch((error) => {
+            console.log(error);
         });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
 };
 
 exports.getEditarInstitucion = (request, response, next) => {
     Institucion.fetchOne(request.params.idInstitucion)
-    .then(([rows, fieldData]) => {
-        const institucion = rows;
-    TipoInstitucion.fetchAll()
-    .then(([rows, fieldData]) => {
-        const tiposInstitucion = rows;
-        response.render('Psicologos/editarInstitucion', {
-            institucion: institucion || null,
-            tiposInstitucion: tiposInstitucion || [],
-            error: ""
+        .then(([rows, fieldData]) => {
+            const institucion = rows;
+            TipoInstitucion.fetchAll()
+                .then(([rows, fieldData]) => {
+                    const tiposInstitucion = rows;
+                    response.render('Psicologos/editarInstitucion', {
+                        institucion: institucion || null,
+                        tiposInstitucion: tiposInstitucion || [],
+                        error: ""
+                    })
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         })
-    })
-    .catch((error) => {
-        console.log(error);
-    });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+        .catch((error) => {
+            console.log(error);
+        });
 
 };
 
 exports.postEditarInstitucion = (request, response, next) => {
     Institucion.modificarInstitucion(
-        request.params.idInstitucion, request.body.nombreInstitucion, 
+        request.params.idInstitucion, request.body.nombreInstitucion,
         request.body.estatusInstitucion, request.body.idTipoInstitucion
     )
-    .then(() => {
-        response.render('Psicologos/cambiosGuardados.ejs');
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+        .then(() => {
+            response.render('Psicologos/cambiosGuardados.ejs');
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 }
 
 // Grupos
 exports.getGrupos = (request, response, next) => {
     Institucion.fetchOne(request.params.idInstitucion)
-    .then(([informacionInstitucion, arregloGrupos]) => {
-        response.render('Psicologos/gruposInstitucion', {
-            informacionInstitucion: informacionInstitucion || [],
-            arregloGrupos: arregloGrupos || [],
-            idInstitucion: request.params.idInstitucion,
-        });
-    })
-    .catch();
-    
+        .then(([informacionInstitucion, arregloGrupos]) => {
+            response.render('Psicologos/gruposInstitucion', {
+                informacionInstitucion: informacionInstitucion || [],
+                arregloGrupos: arregloGrupos || [],
+                idInstitucion: request.params.idInstitucion,
+            });
+        })
+        .catch();
+
 };
 
 // Registrar Nuevo Grupo
@@ -334,18 +338,19 @@ exports.getRegistrarGrupo = (req, res, next) => {
         Grupo.getNiveles(),
         Grupo.getPruebas()
     ])
-    .then(([instituciones, niveles, pruebas]) => {
-        res.render('Psicologos/registrarGrupo.ejs', {
-        listadoInstituciones: instituciones[0],
-        listadoNiveles: niveles[0],
-        listadoPruebas: pruebas[0],
-        error: '',
-        idInstitucion: req.params.idInstitucion,});
-    })
-    .catch(err => {
-        console.log(err);
-        res.send('Error al cargar formulario');
-    });
+        .then(([instituciones, niveles, pruebas]) => {
+            res.render('Psicologos/registrarGrupo.ejs', {
+                listadoInstituciones: instituciones[0],
+                listadoNiveles: niveles[0],
+                listadoPruebas: pruebas[0],
+                error: '',
+                idInstitucion: req.params.idInstitucion,
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.send('Error al cargar formulario');
+        });
 };
 
 // Post
@@ -361,34 +366,34 @@ exports.postRegistrarGrupo = (req, res, next) => {
     } = req.body;
 
     Grupo.existe(nombreGrupo)
-    .then(([rows]) => {
-        if (rows.length > 0) {
-            return Promise.all([
-                Grupo.getInstituciones(),
-                Grupo.getNiveles(),
-                Grupo.getPruebas()
-            ]).then(([instituciones, niveles, pruebas]) => {
-            return res.render('Psicologos/registrarGrupo', {
-                error: 'El grupo ya está registrado.',
-                listadoInstituciones: instituciones[0],
-                listadoNiveles: niveles[0],
-                listadoPruebas: pruebas[0],
-                idInstitucion: req.params.idInstitucion,
+        .then(([rows]) => {
+            if (rows.length > 0) {
+                return Promise.all([
+                    Grupo.getInstituciones(),
+                    Grupo.getNiveles(),
+                    Grupo.getPruebas()
+                ]).then(([instituciones, niveles, pruebas]) => {
+                    return res.render('Psicologos/registrarGrupo', {
+                        error: 'El grupo ya está registrado.',
+                        listadoInstituciones: instituciones[0],
+                        listadoNiveles: niveles[0],
+                        listadoPruebas: pruebas[0],
+                        idInstitucion: req.params.idInstitucion,
+                    });
                 });
-            });
-        }
+            }
 
-        const grupo = new Grupo(
-            nombreGrupo,
-            carrera,
-            semestre,
-            anio,
-            req.params.idInstitucion,
-            idNivelAcademico,
-            fechaLimite
-        );
+            const grupo = new Grupo(
+                nombreGrupo,
+                carrera,
+                semestre,
+                anio,
+                req.params.idInstitucion,
+                idNivelAcademico,
+                fechaLimite
+            );
 
-        return grupo.saveGrupoYPruebas(pruebasSeleccionadas);
+            return grupo.saveGrupoYPruebas(pruebasSeleccionadas);
         })
         .then(() => {
             exports.getGrupos(req, res, next);
@@ -396,45 +401,42 @@ exports.postRegistrarGrupo = (req, res, next) => {
         .catch(error => {
             console.log('Error al registrar grupo:', error);
             if (!res.headersSent) {
-            res.send('Error al registrar grupo');
+                res.send('Error al registrar grupo');
             }
         });
 };
 
-exports.getInformacionGrupo = (request, response, next) => {
-    Grupo.fetchOne(request.params.idGrupo)
-    .then(([rows, fieldData]) => {
-        const grupo = rows[0];
-        Grupo.getAspirantes(request.params.idGrupo)
-        .then(([rows, fieldData]) => {
-            const aspirantes = rows.map(aspirante => {
-                let documentosCargados = 0;
-                if(aspirante.cv){
-                    documentosCargados++;
-                }
-                if(aspirante.kardex){
-                    documentosCargados++;
-                }
-                return {
-                    ...aspirante,
-                    documentosCargados: documentosCargados
-                };
-            })
-            response.render('Psicologos/informacionGrupo.ejs', {
-                grupo: grupo || null,
-                aspirantes: aspirantes || [],
-                idInstitucion: request.params.idInstitucion || null,
-            })
-        })
-        .catch((error) => {
-            console.log(error);
+exports.getInformacionGrupo = async (request, response, next) => {
+    try {
+        const [grupoRows] = await Grupo.fetchOne(request.params.idGrupo);
+        const grupo = grupoRows[0];
+        const [aspirantesRows] = await Grupo.getAspirantes(request.params.idGrupo);
+        const aspirantes = aspirantesRows.map(aspirante => {
+            let documentosCargados = 0;
+            if (aspirante.cv) documentosCargados++;
+            if (aspirante.kardex) documentosCargados++;
+            return { ...aspirante, documentosCargados };
         });
-    })
-    .catch((error) => {
+        // Fetch group meeting
+        const [meetingRows] = await Reuniones.fetchGroupMeeting(request.params.idGrupo);
+        const groupMeeting = meetingRows[0] || null;
+
+        // Get and clear meeting email status
+        const meetingEmailStatus = request.session.meetingEmailStatus;
+        delete request.session.meetingEmailStatus;
+
+        response.render('Psicologos/informacionGrupo.ejs', {
+            grupo: grupo || null,
+            aspirantes: aspirantes || [],
+            idInstitucion: request.params.idInstitucion || null,
+            groupMeeting, // <-- pass to view
+            meetingEmailStatus // <-- pass to view
+        });
+    } catch (error) {
         console.log(error);
-    });
-    
-}
+        response.status(500).send('Error al cargar la información del grupo');
+    }
+};
 
 exports.buscarAspirantes = (request, response, next) => {
     Grupo.getAspirantes(request.params.idGrupo)
@@ -453,7 +455,7 @@ exports.buscarAspirantes = (request, response, next) => {
 
 exports.getEditarGrupo = (request, response, next) => {
     const idGrupo = request.params.idGrupo;
-    
+
     // Información del grupo a editar
     Promise.all([
         Grupo.fetchOne(idGrupo),
@@ -461,50 +463,50 @@ exports.getEditarGrupo = (request, response, next) => {
         Grupo.getPruebas(),
         Grupo.getPruebasAsignadas(idGrupo)
     ])
-    .then(([grupoData, niveles, pruebas, pruebasAsignadas]) => {
-        const grupo = grupoData[0][0];
-        
-        if (!grupo) {
-            return response.redirect('/psicologo/lista-grupos');
-        }
-        
-        // Sacar informacion del ciclo escolar (semestre y año)
-        let semestre = '';
-        if (grupo.cicloEscolar) {
-            if (grupo.cicloEscolar.includes('Febrero/Julio')) {
-                semestre = 'Febrero/Julio';
-            } else if (grupo.cicloEscolar.includes('Agosto/Diciembre')) {
-                semestre = 'Agosto/Diciembre';
+        .then(([grupoData, niveles, pruebas, pruebasAsignadas]) => {
+            const grupo = grupoData[0][0];
+
+            if (!grupo) {
+                return response.redirect('/psicologo/lista-grupos');
             }
-        }
-        
-        // Obtener lista de pruebas ya asignadas al grupo
-        const pruebasSeleccionadas = pruebasAsignadas[0].map(p => p.idPrueba.toString());
-        const fechaLimite = pruebasAsignadas[0].length > 0 ? pruebasAsignadas[0][0].fechaLimite : null;
-        
-        // Convertir fecha limite a YYYY-MM-DD
-        let fechaLimiteFormateada = null;
-        if (fechaLimite) {
-            const fecha = new Date(fechaLimite);
-            fechaLimiteFormateada = fecha.toISOString().split('T')[0];
-        }
-        
-        response.render('Psicologos/editarGrupo', {
-            grupo: grupo,
-            listadoNiveles: niveles[0],
-            listadoPruebas: pruebas[0],
-            pruebasSeleccionadas: pruebasSeleccionadas,
-            fechaLimite: fechaLimiteFormateada,
-            semestre: semestre,
-            error: '',
-            idGrupo: idGrupo,
-            idInstitucion: request.params.idInstitucion || null,
+
+            // Sacar informacion del ciclo escolar (semestre y año)
+            let semestre = '';
+            if (grupo.cicloEscolar) {
+                if (grupo.cicloEscolar.includes('Febrero/Julio')) {
+                    semestre = 'Febrero/Julio';
+                } else if (grupo.cicloEscolar.includes('Agosto/Diciembre')) {
+                    semestre = 'Agosto/Diciembre';
+                }
+            }
+
+            // Obtener lista de pruebas ya asignadas al grupo
+            const pruebasSeleccionadas = pruebasAsignadas[0].map(p => p.idPrueba.toString());
+            const fechaLimite = pruebasAsignadas[0].length > 0 ? pruebasAsignadas[0][0].fechaLimite : null;
+
+            // Convertir fecha limite a YYYY-MM-DD
+            let fechaLimiteFormateada = null;
+            if (fechaLimite) {
+                const fecha = new Date(fechaLimite);
+                fechaLimiteFormateada = fecha.toISOString().split('T')[0];
+            }
+
+            response.render('Psicologos/editarGrupo', {
+                grupo: grupo,
+                listadoNiveles: niveles[0],
+                listadoPruebas: pruebas[0],
+                pruebasSeleccionadas: pruebasSeleccionadas,
+                fechaLimite: fechaLimiteFormateada,
+                semestre: semestre,
+                error: '',
+                idGrupo: idGrupo,
+                idInstitucion: request.params.idInstitucion || null,
+            });
+        })
+        .catch((error) => {
+            console.log('Error al cargar formulario de editar grupo:', error);
+            response.status(500).send('Error al cargar formulario de editar');
         });
-    })
-    .catch((error) => {
-        console.log('Error al cargar formulario de editar grupo:', error);
-        response.status(500).send('Error al cargar formulario de editar');
-    });
 };
 
 exports.postEditarGrupo = (request, response, next) => {
@@ -519,68 +521,68 @@ exports.postEditarGrupo = (request, response, next) => {
         fechaLimite,
         estatusGrupo
     } = request.body;
-    
+
     // Cambiar estatusGrupo a 1 (activo) o 0 (inactivo) para guardarlo en la base de datos
     // Si no se manda un nuevo valor, usar el mismo estatus que ya tenía
     let estatus;
-    
+
     // Checar el valor actual del grupo
     Grupo.fetchOne(idGrupo)
-    .then(([rows]) => {
-        if (rows.length === 0) {
-            return response.status(404).send('Grupo no encontrado');
-        }
-        
-        const grupoActual = rows[0];
-        
-        // Si no se manda el estatusGrupo desde el formulario dejar el que ya estaba
-        if (estatusGrupo === undefined || estatusGrupo === null) {
-            estatus = grupoActual.estatusGrupo;
-        } else {
-            // Convertir a 1 o 0 segun el valor recibido
-            estatus = estatusGrupo === 'true' ? 1 : 0;
-        }
-        
-        // Ciclo escolar semestre y año
-        const cicloEscolar = `${semestre} ${anio}`;
-        
-        // Actualizar el grupo con el estatus correcto
-        return Grupo.update(
-            idGrupo,
-            nombreGrupo,
-            carrera,
-            cicloEscolar,
-            anio,
-            idNivelAcademico,
-            estatus
-        );
-    })
-    .then(() => {
-        // Actualizar las pruebas asignadas
-        return Grupo.actualizarPruebasAsignadas(idGrupo, pruebasSeleccionadas, fechaLimite);
-    })
-    .then(() => {
-        // Obtener idInstitucion para red a la lista de grupos
-        return Grupo.fetchOne(idGrupo);
-    })
-    .then(([grupo]) => {
-        // Red a la pag de grupos de esa institucion
-        response.redirect(`/psicologo/grupos/${grupo[0].idInstitucion}`);
-    })
-    .catch(error => {
-        console.log('Error al actualizar grupo:', error);
-        response.status(500).send('Error al actualizar el grupo');
-    });
+        .then(([rows]) => {
+            if (rows.length === 0) {
+                return response.status(404).send('Grupo no encontrado');
+            }
+
+            const grupoActual = rows[0];
+
+            // Si no se manda el estatusGrupo desde el formulario dejar el que ya estaba
+            if (estatusGrupo === undefined || estatusGrupo === null) {
+                estatus = grupoActual.estatusGrupo;
+            } else {
+                // Convertir a 1 o 0 segun el valor recibido
+                estatus = estatusGrupo === 'true' ? 1 : 0;
+            }
+
+            // Ciclo escolar semestre y año
+            const cicloEscolar = `${semestre} ${anio}`;
+
+            // Actualizar el grupo con el estatus correcto
+            return Grupo.update(
+                idGrupo,
+                nombreGrupo,
+                carrera,
+                cicloEscolar,
+                anio,
+                idNivelAcademico,
+                estatus
+            );
+        })
+        .then(() => {
+            // Actualizar las pruebas asignadas
+            return Grupo.actualizarPruebasAsignadas(idGrupo, pruebasSeleccionadas, fechaLimite);
+        })
+        .then(() => {
+            // Obtener idInstitucion para red a la lista de grupos
+            return Grupo.fetchOne(idGrupo);
+        })
+        .then(([grupo]) => {
+            // Red a la pag de grupos de esa institucion
+            response.redirect(`/psicologo/grupos/${grupo[0].idInstitucion}`);
+        })
+        .catch(error => {
+            console.log('Error al actualizar grupo:', error);
+            response.status(500).send('Error al actualizar el grupo');
+        });
 };
 
 // Actualizar solo el estatus del grupo
 exports.postActualizarEstatusGrupo = (request, response, next) => {
     const idGrupo = request.params.idGrupo;
     const { estatusGrupo } = request.body;
-    
+
     // Convertir el valor a booleano
     const nuevoEstatus = estatusGrupo === 'true';
-    
+
     Grupo.updateEstatus(idGrupo, nuevoEstatus)
         .then(() => {
             // Redireccionar a la pag de lista de grupos
@@ -594,42 +596,42 @@ exports.postActualizarEstatusGrupo = (request, response, next) => {
 
 exports.getAspirante = (request, response, next) => {
     Aspirante.getInformacionAspirante(request.params.idAspirante)
-    .then(([rows, fieldData]) => {
-        const informacionAspirante = rows[0];
-        Aspirante.getMisPruebas(request.params.idAspirante, request.params.idGrupo)
         .then(([rows, fieldData]) => {
-            const informacionPruebas = rows; 
-            Aspirante.getFormatoEntrevista(request.params.idAspirante, request.params.idGrupo)
-            .then(([rows, fieldData]) => {
-                const formatoEntrevista = rows;
+            const informacionAspirante = rows[0];
+            Aspirante.getMisPruebas(request.params.idAspirante, request.params.idGrupo)
+                .then(([rows, fieldData]) => {
+                    const informacionPruebas = rows;
+                    Aspirante.getFormatoEntrevista(request.params.idAspirante, request.params.idGrupo)
+                        .then(([rows, fieldData]) => {
+                            const formatoEntrevista = rows;
 
-                
-                // NUEVAS LIANES PARA NOTIFICACIONES
-                const mensaje = request.session.mensaje;
-                delete request.session.mensaje;
 
-                response.render('Psicologos/informacionAspirante', {
-                    informacionAspirante: informacionAspirante || [],
-                    idGrupo: request.params.idGrupo || null,
-                    informacionPruebas: informacionPruebas || [],
-                    formatoEntrevista: formatoEntrevista || [],
-                    aspirante: request.params.idAspirante || null,
-                    idInstitucion: request.params.idInstitucion || null,
-                    mensaje: mensaje // ← COMENTAR ESTA LÍNEA TAMBIÉN
+                            // NUEVAS LIANES PARA NOTIFICACIONES
+                            const mensaje = request.session.mensaje;
+                            delete request.session.mensaje;
+
+                            response.render('Psicologos/informacionAspirante', {
+                                informacionAspirante: informacionAspirante || [],
+                                idGrupo: request.params.idGrupo || null,
+                                informacionPruebas: informacionPruebas || [],
+                                formatoEntrevista: formatoEntrevista || [],
+                                aspirante: request.params.idAspirante || null,
+                                idInstitucion: request.params.idInstitucion || null,
+                                mensaje: mensaje // ← COMENTAR ESTA LÍNEA TAMBIÉN
+                            })
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                        })
+
                 })
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-            
+                .catch((error) => {
+                    console.log(error);
+                });
         })
         .catch((error) => {
             console.log(error);
         });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
 };
 
 exports.getImportarAspirantes = (request, response, next) => {
@@ -643,301 +645,301 @@ exports.postImportarAspirantes = (request, response, next) => {
     // Recuperamos el archivo subido por el psicólogo y lo pasamos a JSON
     const archivoExcel = xlsx.readFile(request.files['excelAspirantes'][0].path);
     const hojaExcel = archivoExcel.Sheets[archivoExcel.SheetNames[0]];
-    const JSONAspirantes = xlsx.utils.sheet_to_json(hojaExcel, {defval : ""});
+    const JSONAspirantes = xlsx.utils.sheet_to_json(hojaExcel, { defval: "" });
 
     const promesas = JSONAspirantes.map(aspirante => {
         return Pais.findPais(aspirante.paisOrigen)
-        .then(([rows, fieldData]) => {
-        aspirante.idPais = rows[0].idPais;
-        return Estado.findEstado(aspirante.estadoResidencia);
-        })
-        .then(([rows, fieldData]) => {
-            aspirante.idEstado = rows[0].idEstado;
-            const nuevoAspirante = new Aspirante({
-                nombreUsuario: aspirante.nombre,
-                apellidoPaterno: aspirante.apellidoPaterno,
-                apellidoMaterno: aspirante.apellidoMaterno,
-                institucionProcedencia: aspirante.institucionProcedencia,
-                correo: aspirante.correo,
-                lada: aspirante.ladaTelefonica,
-                numeroTelefono: aspirante.numeroTelefono,
-                idPais: aspirante.idPais,
-                idEstado: aspirante.idEstado
-            });
-            return nuevoAspirante.save(request.params.idGrupo)
-            .then(() => nuevoAspirante.getIdAspirante(request.params.idGrupo))
-            .then(([rows]) => {
-                const idAspirante = rows[0].idAspirante;
-                return Grupo.getInformacionGruposPruebas(request.params.idGrupo)
-                .then(([pruebas]) => {
-                    const vincularPruebas = pruebas.map(prueba => nuevoAspirante.vincularPrueba(idAspirante, request.params.idGrupo, prueba));
-                    return Promise.all(vincularPruebas);
-                }).then(() => {
-                    return new Promise ((resolve, reject) => {
-                        fs.readFile(correoHtmlPath, 'utf8', (error, htmlContent) => {
-                            if(error){
-                                console.log(error);
-                                return resolve();
-                            }
-
-                            resend.emails.send({
-                            from: 'psytech@pruebas.psicodx.com',
-                            to: [aspirante.correo],
-                            subject: 'Bienvenido, accede a tus pruebas psicométricas y psicológicas de admisión al posgrado',
-                            html: htmlContent
-                            })
-                            .then(() => resolve())
-                            .catch((error) => {
-                                console.log(error);
-                                resolve();
-                            });
-                        })
-                    })
+            .then(([rows, fieldData]) => {
+                aspirante.idPais = rows[0].idPais;
+                return Estado.findEstado(aspirante.estadoResidencia);
+            })
+            .then(([rows, fieldData]) => {
+                aspirante.idEstado = rows[0].idEstado;
+                const nuevoAspirante = new Aspirante({
+                    nombreUsuario: aspirante.nombre,
+                    apellidoPaterno: aspirante.apellidoPaterno,
+                    apellidoMaterno: aspirante.apellidoMaterno,
+                    institucionProcedencia: aspirante.institucionProcedencia,
+                    correo: aspirante.correo,
+                    lada: aspirante.ladaTelefonica,
+                    numeroTelefono: aspirante.numeroTelefono,
+                    idPais: aspirante.idPais,
+                    idEstado: aspirante.idEstado
                 });
+                return nuevoAspirante.save(request.params.idGrupo)
+                    .then(() => nuevoAspirante.getIdAspirante(request.params.idGrupo))
+                    .then(([rows]) => {
+                        const idAspirante = rows[0].idAspirante;
+                        return Grupo.getInformacionGruposPruebas(request.params.idGrupo)
+                            .then(([pruebas]) => {
+                                const vincularPruebas = pruebas.map(prueba => nuevoAspirante.vincularPrueba(idAspirante, request.params.idGrupo, prueba));
+                                return Promise.all(vincularPruebas);
+                            }).then(() => {
+                                return new Promise((resolve, reject) => {
+                                    fs.readFile(correoHtmlPath, 'utf8', (error, htmlContent) => {
+                                        if (error) {
+                                            console.log(error);
+                                            return resolve();
+                                        }
+
+                                        resend.emails.send({
+                                            from: 'psytech@pruebas.psicodx.com',
+                                            to: [aspirante.correo],
+                                            subject: 'Bienvenido, accede a tus pruebas psicométricas y psicológicas de admisión al posgrado',
+                                            html: htmlContent
+                                        })
+                                            .then(() => resolve())
+                                            .catch((error) => {
+                                                console.log(error);
+                                                resolve();
+                                            });
+                                    })
+                                })
+                            });
+                    });
             });
-        });
     });
-    
+
     Promise.all(promesas)
-    .then(() => {
-        //Eliminamos el archivo subido
-        fs.unlink(request.files['excelAspirantes'][0].path, (error) => {
-            if (error){
-                console.log(error);
-            }
+        .then(() => {
+            //Eliminamos el archivo subido
+            fs.unlink(request.files['excelAspirantes'][0].path, (error) => {
+                if (error) {
+                    console.log(error);
+                }
+            })
+            //Mostramos la interfaz de aspirantes registrados con éxito
+            response.render('Psicologos/aspirantesRegistrados', {
+                idInstitucion: request.params.idInstitucion,
+                idGrupo: request.params.idGrupo
+            });
         })
-        //Mostramos la interfaz de aspirantes registrados con éxito
-        response.render('Psicologos/aspirantesRegistrados', {
-            idInstitucion: request.params.idInstitucion,
-            idGrupo: request.params.idGrupo
-        });
-    })
-    .catch((error) => {
-        console.log(error);
-    })
+        .catch((error) => {
+            console.log(error);
+        })
 }
 
 exports.getRegistrarAspirantes = (request, response, next) => {
     Pais.fetchAll()
-    .then(([rows, fieldData]) => {
-        const paises = rows;
-        Estado.fetchAll()
         .then(([rows, fieldData]) => {
-            const estados = rows;
-            Aspirante.fetchCorreos()
-            .then(([rows, fieldData]) => {
-                const correosRegistrados = rows;
-                response.render('Psicologos/registrarAspirante', {
-                    paises: paises || [],
-                    estados: estados || [],
-                    idGrupo: request.params.idGrupo,
-                    idInstitucion: request.params.idInstitucion,
-                    correosRegistrados: correosRegistrados,
-                });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+            const paises = rows;
+            Estado.fetchAll()
+                .then(([rows, fieldData]) => {
+                    const estados = rows;
+                    Aspirante.fetchCorreos()
+                        .then(([rows, fieldData]) => {
+                            const correosRegistrados = rows;
+                            response.render('Psicologos/registrarAspirante', {
+                                paises: paises || [],
+                                estados: estados || [],
+                                idGrupo: request.params.idGrupo,
+                                idInstitucion: request.params.idInstitucion,
+                                correosRegistrados: correosRegistrados,
+                            });
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                })
+                .catch((error) => { console.log(error) });
         })
-        .catch((error) => {console.log(error)});
-    })
-    .catch((error) => {console.log(error)});
+        .catch((error) => { console.log(error) });
 
-    
+
 };
 
 exports.postRegistrarAspirantes = (request, response, next) => {
     const aspirante = new Aspirante(request.body);
     aspirante.save(request.params.idGrupo)
-    .then(() => {
-        aspirante.getIdAspirante(request.params.idGrupo)
-        .then(([rows, fieldData]) => {
-            const idAspirante = rows[0].idAspirante;
-            Grupo.getInformacionGruposPruebas(request.params.idGrupo)
-            .then(([rows, fieldData]) => {
-                const pruebas = rows;
-                const promesas = [];
-                for(prueba of pruebas){
-                    promesas.push(aspirante.vincularPrueba(idAspirante, request.params.idGrupo, prueba));
-                }
-                Promise.all(promesas)
+        .then(() => {
+            aspirante.getIdAspirante(request.params.idGrupo)
                 .then(([rows, fieldData]) => {
+                    const idAspirante = rows[0].idAspirante;
+                    Grupo.getInformacionGruposPruebas(request.params.idGrupo)
+                        .then(([rows, fieldData]) => {
+                            const pruebas = rows;
+                            const promesas = [];
+                            for (prueba of pruebas) {
+                                promesas.push(aspirante.vincularPrueba(idAspirante, request.params.idGrupo, prueba));
+                            }
+                            Promise.all(promesas)
+                                .then(([rows, fieldData]) => {
 
-                    fs.readFile(correoHtmlPath, 'utf8', (error, htmlContent) => {
-                        if(error){
-                            console.log(error);
-                            return;
-                        }
-                        resend.emails.send({
-                        from: 'psytech@pruebas.psicodx.com',
-                        to: [request.body.correo],
-                        subject: 'Bienvenido, accede a tus pruebas psicométricas y psicológicas de admisión al posgrado',
-                        html: htmlContent
-                        })
-                        .then(() => {
-                            exports.getInformacionGrupo(request, response, next);
+                                    fs.readFile(correoHtmlPath, 'utf8', (error, htmlContent) => {
+                                        if (error) {
+                                            console.log(error);
+                                            return;
+                                        }
+                                        resend.emails.send({
+                                            from: 'psytech@pruebas.psicodx.com',
+                                            to: [request.body.correo],
+                                            subject: 'Bienvenido, accede a tus pruebas psicométricas y psicológicas de admisión al posgrado',
+                                            html: htmlContent
+                                        })
+                                            .then(() => {
+                                                exports.getInformacionGrupo(request, response, next);
+                                            })
+                                            .catch((error) => {
+                                                console.log(error);
+                                            });
+                                    })
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
                         })
                         .catch((error) => {
                             console.log(error);
-                        });
-                    })
+                        })
                 })
                 .catch((error) => {
                     console.log(error);
-                });
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-        })
-        .catch((error) => {
+                })
+        }).catch((error) => {
             console.log(error);
         })
-    }).catch((error) => {
-        console.log(error);
-    })
 };
 
 exports.getEditarAspirantes = (request, response, next) => {
     Aspirante.fetchOne(request.params.idAspirante)
-    .then(([rows, fieldData]) => {
-        const aspirante = rows[0];
-
-        Usuario.findUsuario(aspirante.idUsuario)
         .then(([rows, fieldData]) => {
-            const usuario = rows[0];
-            Pais.fetchAll()
-            .then(([rows, fieldData]) => {
-                const paises = rows;
-                Estado.fetchAll()
+            const aspirante = rows[0];
+
+            Usuario.findUsuario(aspirante.idUsuario)
                 .then(([rows, fieldData]) => {
-                    const estados = rows;
-                    response.render('Psicologos/editarAspirante',{
-                        aspirante: aspirante || null,
-                        usuario: usuario || null,
-                        paises: paises || [],
-                        estados: estados || [],
-                        idGrupo: request.params.idGrupo,
-                        idInstitucion: request.params.idInstitucion
-                    })
+                    const usuario = rows[0];
+                    Pais.fetchAll()
+                        .then(([rows, fieldData]) => {
+                            const paises = rows;
+                            Estado.fetchAll()
+                                .then(([rows, fieldData]) => {
+                                    const estados = rows;
+                                    response.render('Psicologos/editarAspirante', {
+                                        aspirante: aspirante || null,
+                                        usuario: usuario || null,
+                                        paises: paises || [],
+                                        estados: estados || [],
+                                        idGrupo: request.params.idGrupo,
+                                        idInstitucion: request.params.idInstitucion
+                                    })
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
                 })
                 .catch((error) => {
                     console.log(error);
                 });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+
+
         })
         .catch((error) => {
             console.log(error);
         });
-
-        
-    })
-    .catch((error) => {
-        console.log(error);
-    });
 };
 
 exports.postEditarAspirantes = (request, response, next) => {
     Aspirante.modificarAspirante(
-                                request.params.idAspirante, 
-                                request.body.institucionProcedencia, 
-                                request.body.idPais, request.body.idEstado)
-    .then(() => {
-        Usuario.modificarUsuario(
-                                request.params.idAspirante, 
-                                request.body.nombreUsuario, 
-                                request.body.apellidoPaterno, 
-                                request.body.apellidoMaterno, 
-                                request.body.correo, request.body.lada, 
-                                request.body.numeroTelefono, 
-                                request.body.estatusUsuario)
+        request.params.idAspirante,
+        request.body.institucionProcedencia,
+        request.body.idPais, request.body.idEstado)
         .then(() => {
-            response.render('Psicologos/cambiosGuardados.ejs');
+            Usuario.modificarUsuario(
+                request.params.idAspirante,
+                request.body.nombreUsuario,
+                request.body.apellidoPaterno,
+                request.body.apellidoMaterno,
+                request.body.correo, request.body.lada,
+                request.body.numeroTelefono,
+                request.body.estatusUsuario)
+                .then(() => {
+                    response.render('Psicologos/cambiosGuardados.ejs');
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         })
-        .catch((error) => {
-            console.log(error);
-        });
-    })
 };
 
 // Controlador para menejar las respuestas de un aspirante por formato de entrevista
 exports.getRespuestasFormatoEntrevista = (request, response, next) => {
     FormatoEntrevista.getRespuestasFormatoAspirante(request.params.idGrupo, request.params.idAspirante)
-    .then(([rows, fieldData]) => {
-        const respuestasAspirante = rows;
-        response.render('Psicologos/respuestasFormatoDeEntrevista', {
-            respuestasAspirante: respuestasAspirante || [],
-            aspirante: request.params.idAspirante || null,
-            grupo: request.params.idGrupo || null,
-            idInstitucion: request.params.idInstitucion || null,
-        });
-    })
-    .catch((error) => {
-        console.log(error);
-    })
+        .then(([rows, fieldData]) => {
+            const respuestasAspirante = rows;
+            response.render('Psicologos/respuestasFormatoDeEntrevista', {
+                respuestasAspirante: respuestasAspirante || [],
+                aspirante: request.params.idAspirante || null,
+                grupo: request.params.idGrupo || null,
+                idInstitucion: request.params.idInstitucion || null,
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        })
 };
 
 // Controlador para menejar la informacion familiar de un aspirante
 exports.getInformacionFamiliar = (request, response, next) => {
     Familiar.getFamiliaresAspirante(request.params.idGrupo, request.params.idAspirante)
-    .then(([rows, fieldData]) => {
-        const nodos = rows.map((familiar) => ({
-            key: familiar.idFamiliar,
-            rol: familiar.rolFamiliar,
-            name: familiar.nombreFamiliar,
-            age: familiar.edadFamiliar,
-            gender: familiar.idGenero,
-            maritalStatus: familiar.idEstadoCivil,
-            lifeStatus: familiar.estadoDeVida === 1 ? "Vivo" : "Muerto",
-            hijoDePadre: familiar.hijoDePadre,
-            hijoDeMadre: familiar.hijoDeMadre
-        }));
+        .then(([rows, fieldData]) => {
+            const nodos = rows.map((familiar) => ({
+                key: familiar.idFamiliar,
+                rol: familiar.rolFamiliar,
+                name: familiar.nombreFamiliar,
+                age: familiar.edadFamiliar,
+                gender: familiar.idGenero,
+                maritalStatus: familiar.idEstadoCivil,
+                lifeStatus: familiar.estadoDeVida === 1 ? "Vivo" : "Muerto",
+                hijoDePadre: familiar.hijoDePadre,
+                hijoDeMadre: familiar.hijoDeMadre
+            }));
 
-        const links = [];
-        rows.forEach((familiar => {
-            if(familiar.hijoDePadre){
-                links.push({
-                    from: familiar.hijoDePadre, 
-                    to: familiar.idFamiliar
-                })
-            }
-            if (familiar.hijoDeMadre) {
-                links.push({
-                    from: familiar.hijoDeMadre, 
-                    to: familiar.idFamiliar
-                });
-            }
-        }))
+            const links = [];
+            rows.forEach((familiar => {
+                if (familiar.hijoDePadre) {
+                    links.push({
+                        from: familiar.hijoDePadre,
+                        to: familiar.idFamiliar
+                    })
+                }
+                if (familiar.hijoDeMadre) {
+                    links.push({
+                        from: familiar.hijoDeMadre,
+                        to: familiar.idFamiliar
+                    });
+                }
+            }))
 
-        response.render('Psicologos/informacionFamiliar', {
-            informacionFamiliar: {
-                nodos: nodos || [],
-                links: links || []
-            },
-            aspirante: request.params.idAspirante || null,
-            grupo: request.params.idGrupo || null,
-            idInstitucion: request.params.idInstitucion || null,
-        });
-        
-    })
-    .catch((error) => {
-        console.log(error);
-    })
+            response.render('Psicologos/informacionFamiliar', {
+                informacionFamiliar: {
+                    nodos: nodos || [],
+                    links: links || []
+                },
+                aspirante: request.params.idAspirante || null,
+                grupo: request.params.idGrupo || null,
+                idInstitucion: request.params.idInstitucion || null,
+            });
+
+        })
+        .catch((error) => {
+            console.log(error);
+        })
 };
 
 // CATÁLOGO PRUEBAS
 exports.getCatalogoPruebas = (request, response, next) => {
     CatalogoPruebas.fetchAll()
-    .then(([rows, fieldData]) => {
-        const arregloPruebas = rows;
-        response.render('Psicologos/catalogoPruebas', {arregloPruebas: arregloPruebas || []});
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+        .then(([rows, fieldData]) => {
+            const arregloPruebas = rows;
+            response.render('Psicologos/catalogoPruebas', { arregloPruebas: arregloPruebas || [] });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 }
 
 exports.getPruebaOtis = (request, response, next) => {
@@ -948,46 +950,46 @@ exports.getPruebaColores = (request, response, next) => {
     response.send('Prueba Colores');
 };
 
-exports.getPruebaKostick = (request, response, next)  => {
+exports.getPruebaKostick = (request, response, next) => {
     PreguntaKostick.getInfo()
-    .then(([rows, fieldData]) => {
-        const opciones = rows;
-        const informacionPreguntas = {};
-        opciones.forEach(pregunta => {
-            const numPregunta = pregunta.numeroPreguntaKostick;
-            if(!informacionPreguntas[numPregunta]){
-                informacionPreguntas[numPregunta] = [];
-            }
-            informacionPreguntas[numPregunta].push(pregunta);
+        .then(([rows, fieldData]) => {
+            const opciones = rows;
+            const informacionPreguntas = {};
+            opciones.forEach(pregunta => {
+                const numPregunta = pregunta.numeroPreguntaKostick;
+                if (!informacionPreguntas[numPregunta]) {
+                    informacionPreguntas[numPregunta] = [];
+                }
+                informacionPreguntas[numPregunta].push(pregunta);
+            })
+            response.render('Psicologos/infoPruebaKostick', {
+                informacionPreguntas: informacionPreguntas || [],
+            });
         })
-        response.render('Psicologos/infoPruebaKostick', {
-            informacionPreguntas: informacionPreguntas || [],
+        .catch((error) => {
+            console.log(error);
         });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
 }
 
 exports.getPrueba16pf = (request, response, next) => {
     Pregunta16PF.getInfo()
-    .then(([rows, fieldData]) => {
-        const opciones = rows;
-        const informacionPreguntas = {};
-        opciones.forEach(pregunta => {
-            const numPregunta = pregunta.numeroPregunta16PF;
-            if(!informacionPreguntas[numPregunta]){
-                informacionPreguntas[numPregunta] = [];
-            }
-            informacionPreguntas[numPregunta].push(pregunta);
+        .then(([rows, fieldData]) => {
+            const opciones = rows;
+            const informacionPreguntas = {};
+            opciones.forEach(pregunta => {
+                const numPregunta = pregunta.numeroPregunta16PF;
+                if (!informacionPreguntas[numPregunta]) {
+                    informacionPreguntas[numPregunta] = [];
+                }
+                informacionPreguntas[numPregunta].push(pregunta);
+            })
+            response.render('Psicologos/infoPrueba16pf', {
+                informacionPreguntas: informacionPreguntas || [],
+            });
         })
-        response.render('Psicologos/infoPrueba16pf', {
-            informacionPreguntas: informacionPreguntas || [],
+        .catch((error) => {
+            console.log(error);
         });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
 }
 
 exports.getPruebaHartman = async (req, res, next) => {
@@ -1011,135 +1013,135 @@ exports.getPruebaHartman = async (req, res, next) => {
 exports.getCuadernilloOtis = (request, response, next) => {
     // Obtiene los datos personales del aspirante
     Prueba.getDatosPersonalesAspiranteOtis(request.params.idGrupo, request.params.idAspirante)
-    .then(([rows, fieldData]) => {
-        const datosPersonales = rows;
-        // Obtiene las respuestas correctas del aspirante
-        Cuadernillo.getRespuestasCorrectas(request.params.idGrupo, request.params.idAspirante)
         .then(([rows, fieldData]) => {
-            const respuestasCorrectas = rows[0].RespuestasCorrectas;
-            // Obtiene el tiempo total que tomo el aspirante para completar la prueba
-            Cuadernillo.getTiempoTotal(request.params.idGrupo, request.params.idAspirante)
-            .then(([rows, fieldData]) => {
-                const tiempoTotal = rows[0].Tiempo;
-                // Obtiene las preguntas, opciones y la respuesta del aspirante
-                Cuadernillo.getRespuestasOtisAspirante(request.params.idGrupo, request.params.idAspirante)
+            const datosPersonales = rows;
+            // Obtiene las respuestas correctas del aspirante
+            Cuadernillo.getRespuestasCorrectas(request.params.idGrupo, request.params.idAspirante)
                 .then(([rows, fieldData]) => {
-                    const preguntasAgrupadas = {};
+                    const respuestasCorrectas = rows[0].RespuestasCorrectas;
+                    // Obtiene el tiempo total que tomo el aspirante para completar la prueba
+                    Cuadernillo.getTiempoTotal(request.params.idGrupo, request.params.idAspirante)
+                        .then(([rows, fieldData]) => {
+                            const tiempoTotal = rows[0].Tiempo;
+                            // Obtiene las preguntas, opciones y la respuesta del aspirante
+                            Cuadernillo.getRespuestasOtisAspirante(request.params.idGrupo, request.params.idAspirante)
+                                .then(([rows, fieldData]) => {
+                                    const preguntasAgrupadas = {};
 
-                    rows.forEach(row => {
-                        // Creamos el objeto de pregunta si este no existe
-                        if (!preguntasAgrupadas[row.idPreguntaOtis]) {
-                            preguntasAgrupadas[row.idPreguntaOtis] = {
-                                idPreguntaOtis: row.idPreguntaOtis,
-                                numeroPregunta: row.numeroPregunta,
-                                preguntaOtis: row.preguntaOtis,
-                                opciones: [],
-                                esCorrecta: false,
-                                tiempoRespuesta: 0,
-                                contestada: null
-                            };
-                        }
-                        // Vamos añadiendo las opciones de la pregunta correspondiente
-                        preguntasAgrupadas[row.idPreguntaOtis].opciones.push({
-                            idOpcionOtis: row.idOpcionOtis,
-                            opcionOtis: row.opcionOtis,
-                            descripcionOpcion: row.descripcionOpcion,
-                            esCorrecta: row.esCorrecta === 1, 
-                            seleccionada: row.opcionSeleccionada === 1
+                                    rows.forEach(row => {
+                                        // Creamos el objeto de pregunta si este no existe
+                                        if (!preguntasAgrupadas[row.idPreguntaOtis]) {
+                                            preguntasAgrupadas[row.idPreguntaOtis] = {
+                                                idPreguntaOtis: row.idPreguntaOtis,
+                                                numeroPregunta: row.numeroPregunta,
+                                                preguntaOtis: row.preguntaOtis,
+                                                opciones: [],
+                                                esCorrecta: false,
+                                                tiempoRespuesta: 0,
+                                                contestada: null
+                                            };
+                                        }
+                                        // Vamos añadiendo las opciones de la pregunta correspondiente
+                                        preguntasAgrupadas[row.idPreguntaOtis].opciones.push({
+                                            idOpcionOtis: row.idOpcionOtis,
+                                            opcionOtis: row.opcionOtis,
+                                            descripcionOpcion: row.descripcionOpcion,
+                                            esCorrecta: row.esCorrecta === 1,
+                                            seleccionada: row.opcionSeleccionada === 1
+                                        });
+
+                                        if (row.opcionSeleccionada === 1) {
+                                            preguntasAgrupadas[row.idPreguntaOtis].tiempoRespuesta = row.tiempoRespuesta;
+                                            preguntasAgrupadas[row.idPreguntaOtis].contestada = true;
+                                            preguntasAgrupadas[row.idPreguntaOtis].esCorrecta = row.esCorrecta === 1;
+
+                                        }
+
+                                        if (!preguntasAgrupadas[row.idPreguntaOtis].contestada) {
+                                            preguntasAgrupadas[row.idPreguntaOtis].esCorrecta = null;
+                                        }
+                                    })
+
+                                    const respuestasAspitanteOtis = Object.values(preguntasAgrupadas);
+
+                                    response.render('Psicologos/cuadernilloRespuestasOtis.ejs', {
+                                        datosPersonales: datosPersonales || [],
+                                        respuestasCorrectas: respuestasCorrectas || 0,
+                                        tiempoTotal: tiempoTotal || 0,
+                                        respuestasAspitanteOtis: respuestasAspitanteOtis || [],
+                                        aspirante: request.params.idAspirante || null,
+                                        grupo: request.params.idGrupo || null,
+                                        idInstitucion: request.params.idInstitucion || null,
+                                    });
+
+                                }).catch((error) => {
+                                    console.log(error);
+                                })
+                        }).catch((error) => {
+                            console.log(error);
                         });
-
-                        if (row.opcionSeleccionada === 1) {
-                            preguntasAgrupadas[row.idPreguntaOtis].tiempoRespuesta = row.tiempoRespuesta;
-                            preguntasAgrupadas[row.idPreguntaOtis].contestada = true;
-                            preguntasAgrupadas[row.idPreguntaOtis].esCorrecta = row.esCorrecta === 1;
-
-                        }
-
-                        if(!preguntasAgrupadas[row.idPreguntaOtis].contestada){
-                            preguntasAgrupadas[row.idPreguntaOtis].esCorrecta = null;
-                        }
-                    })
-
-                    const respuestasAspitanteOtis = Object.values(preguntasAgrupadas);
-                    
-                    response.render('Psicologos/cuadernilloRespuestasOtis.ejs', {
-                        datosPersonales: datosPersonales || [],
-                        respuestasCorrectas: respuestasCorrectas || 0,
-                        tiempoTotal: tiempoTotal || 0,
-                        respuestasAspitanteOtis: respuestasAspitanteOtis || [],
-                        aspirante: request.params.idAspirante || null,
-                        grupo: request.params.idGrupo || null,
-                        idInstitucion: request.params.idInstitucion || null,
-                    });
-
                 }).catch((error) => {
                     console.log(error);
-                })
-            }).catch((error) => {
-                console.log(error);
-            });
+                });
         }).catch((error) => {
             console.log(error);
         });
-    }).catch((error) => {
-        console.log(error);
-    });
 };
 
 exports.getAnalisisOtis = (request, response, next) => {
     Prueba.getRespuestasOtis(request.params.idAspirante, request.params.idGrupo)
-    .then(([rows, fieldData]) => {
-        const informacionAnalisis = rows;
-        Prueba.getPuntajeBrutoOtis(request.params.idAspirante, request.params.idGrupo)
         .then(([rows, fieldData]) => {
-            const puntajeBruto = rows[0].puntajeBruto;
-            response.render('Psicologos/analisisOtis.ejs', {
-                informacionAnalisis: informacionAnalisis || [],
-                puntajeBruto: puntajeBruto || 0,
-                idAspirante: request.params.idAspirante || null,
-                idGrupo: request.params.idGrupo || null,
-                idInstitucion: request.params.idInstitucion || null,
-            })
+            const informacionAnalisis = rows;
+            Prueba.getPuntajeBrutoOtis(request.params.idAspirante, request.params.idGrupo)
+                .then(([rows, fieldData]) => {
+                    const puntajeBruto = rows[0].puntajeBruto;
+                    response.render('Psicologos/analisisOtis.ejs', {
+                        informacionAnalisis: informacionAnalisis || [],
+                        puntajeBruto: puntajeBruto || 0,
+                        idAspirante: request.params.idAspirante || null,
+                        idGrupo: request.params.idGrupo || null,
+                        idInstitucion: request.params.idInstitucion || null,
+                    })
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         })
         .catch((error) => {
             console.log(error);
         });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
 };
 
 // CUADERNILLO COLORES
 exports.getCuadernilloColores = (request, response, next) => {
     // Obtener los datos personales del aspirante
     Prueba.getDatosPersonalesAspiranteColores(request.params.idGrupo, request.params.idAspirante)
-    .then(([rows, fieldData]) => {
-        const datosPersonales = rows;
-        
-        // Obtener todas las selecciones de colores
-        CuadernilloColores.getSeleccionesColores(request.params.idGrupo, request.params.idAspirante)
         .then(([rows, fieldData]) => {
-            // Separar las selecciones por fase
-            const seleccionesFase1 = rows.filter(row => row.fase === 1)
-                                        .sort((a, b) => a.posicion - b.posicion);
-            const seleccionesFase2 = rows.filter(row => row.fase === 2)
-                                        .sort((a, b) => a.posicion - b.posicion);
-            
-            response.render('Psicologos/cuadernilloColores.ejs', {
-                datosPersonales: datosPersonales || [],
-                seleccionesFase1: seleccionesFase1 || [],
-                seleccionesFase2: seleccionesFase2 || [],
-                aspirante: request.params.idAspirante || null,
-                grupo: request.params.idGrupo || null,
-                idInstitucion: request.params.idInstitucion || null,
-            });
+            const datosPersonales = rows;
+
+            // Obtener todas las selecciones de colores
+            CuadernilloColores.getSeleccionesColores(request.params.idGrupo, request.params.idAspirante)
+                .then(([rows, fieldData]) => {
+                    // Separar las selecciones por fase
+                    const seleccionesFase1 = rows.filter(row => row.fase === 1)
+                        .sort((a, b) => a.posicion - b.posicion);
+                    const seleccionesFase2 = rows.filter(row => row.fase === 2)
+                        .sort((a, b) => a.posicion - b.posicion);
+
+                    response.render('Psicologos/cuadernilloColores.ejs', {
+                        datosPersonales: datosPersonales || [],
+                        seleccionesFase1: seleccionesFase1 || [],
+                        seleccionesFase2: seleccionesFase2 || [],
+                        aspirante: request.params.idAspirante || null,
+                        grupo: request.params.idGrupo || null,
+                        idInstitucion: request.params.idInstitucion || null,
+                    });
+                }).catch((error) => {
+                    console.log(error);
+                });
         }).catch((error) => {
             console.log(error);
         });
-    }).catch((error) => {
-        console.log(error);
-    });
 };
 
 function obtenerZona(posicion) {
@@ -1189,7 +1191,7 @@ function obtenerParejasConZona(selecciones) {
         if (!pares.has(clave)) {
             pares.set(clave, []);
         }
-        pares.get(clave).push(zona); 
+        pares.get(clave).push(zona);
     }
     return pares;
 }
@@ -1243,7 +1245,7 @@ function filtrarParejasArtificiales(paresF1, paresF2, parejasNaturalesYDisociada
             p.pareja === clave || p.pareja === claveInversa
         );
     };
-    
+
     const esPosicionValida = (a, b) => {
         const posicionesValidas = [[0, 1], [2, 3], [4, 5], [6, 7]];
         return posicionesValidas.some(pair =>
@@ -1343,13 +1345,13 @@ function obtenerParejasClasificadas(seleccionesFase1, seleccionesFase2) {
         return parejas.map(p => {
             const textoFase1 = obtenerInterpretacion(p.zonas.fase1, p.zonas.fase2, p.pareja);
             const textoFase2 = obtenerInterpretacion(p.zonas.fase2, p.zonas.fase1, p.pareja);
-        
+
             if (!p.zonas.fase1 || !p.zonas.fase2) {
-                return { 
-                    ...p, 
-                    texto: { 
-                        fase1: 'Interpretación no disponible para esta combinación.', 
-                        fase2: 'Interpretación no disponible para esta combinación.' 
+                return {
+                    ...p,
+                    texto: {
+                        fase1: 'Interpretación no disponible para esta combinación.',
+                        fase2: 'Interpretación no disponible para esta combinación.'
                     }
                 };
             }
@@ -1370,12 +1372,12 @@ exports.getAnalisisColores = async (request, response, next) => {
 
         // Obtener selecciones de colores completas
         const [seleccionesColoresRows] = await CuadernilloColores.getSeleccionesColores(idGrupo, idAspirante);
-        
+
         // Separar selecciones por fase
         const seleccionesFase1 = seleccionesColoresRows.filter(row => row.fase === 1)
-        .sort((a, b) => a.posicion - b.posicion);
+            .sort((a, b) => a.posicion - b.posicion);
         const seleccionesFase2 = seleccionesColoresRows.filter(row => row.fase === 2)
-        .sort((a, b) => a.posicion - b.posicion);
+            .sort((a, b) => a.posicion - b.posicion);
 
         // Calcular parejas naturales
         const parejas = obtenerParejasClasificadas(seleccionesFase1, seleccionesFase2);
@@ -1385,7 +1387,7 @@ exports.getAnalisisColores = async (request, response, next) => {
 
         // Calcular movilidad
         const movilidad = calcularMovilidad(seleccionesFase1, seleccionesFase2);
-        
+
         // Interpretar resultado de movilidad
         const interpretacionMovilidad = interpretarMovilidad(movilidad);
 
@@ -1404,59 +1406,59 @@ exports.getAnalisisColores = async (request, response, next) => {
             7: { nombre: 'Negro', significado: 'Satisfacción', tipo: 'No laboral' },
             8: { nombre: 'Gris', significado: 'Participación', tipo: 'No laboral' },
         };
-        
+
         rows.forEach(({ fase, idColor, posicion }) => {
             const info = colores[idColor] || { nombre: 'Desconocido', significado: '', tipo: 'Desconocido' };
-        
+
             let porcentaje;
-        
+
             if (info.tipo === 'No laboral') {
                 porcentaje = 20 + (posicion * 10);
                 if (porcentaje <= 50) porcentaje -= 10;
             } else {
                 porcentaje = 90 - (posicion * 10);
-                if (porcentaje <= 50) porcentaje -= 10; 
+                if (porcentaje <= 50) porcentaje -= 10;
             }
-        
+
             const resultado = {
                 color: info.nombre,
                 significado: info.significado,
                 tipo: info.tipo,
                 porcentaje
             };
-        
+
             if (fase === 1) {
                 resultadosFase1.push(resultado);
             } else if (fase === 2) {
                 resultadosFase2.push(resultado);
             }
-        });               
+        });
 
         function agregarInterpretaciones(parejas) {
             return parejas.map(p => {
                 const textoFase1 = obtenerInterpretacion(p.zonas.fase1, p.zonas.fase2, p.pareja);
                 const textoFase2 = obtenerInterpretacion(p.zonas.fase2, p.zonas.fase1, p.pareja);
-        
+
                 if (p.zonas.fase1 === 'N/A' || p.zonas.fase2 === 'N/A') {
-                    return { 
-                        ...p, 
-                        texto: { 
-                            fase1: 'Interpretación no disponible para esta combinación.', 
-                            fase2: 'Interpretación no disponible para esta combinación.' 
+                    return {
+                        ...p,
+                        texto: {
+                            fase1: 'Interpretación no disponible para esta combinación.',
+                            fase2: 'Interpretación no disponible para esta combinación.'
                         }
                     };
                 }
-        
+
                 return { ...p, texto: { fase1: textoFase1, fase2: textoFase2 } };
             });
-        }   
+        }
 
         const parejasNormalizadas = parejas.map(p => {
-            const numeros = p.pareja.match(/\d+/g); 
+            const numeros = p.pareja.match(/\d+/g);
             if (!numeros || numeros.length !== 2) {
-                return p; 
+                return p;
             }
-        
+
             return {
                 ...p,
                 pareja: `${numeros[0]}-${numeros[1]}`
@@ -1474,7 +1476,7 @@ exports.getAnalisisColores = async (request, response, next) => {
             movilidad,
             interpretacionMovilidad,
             parejas: parejasConInterpretaciones,
-            idGrupo, 
+            idGrupo,
             idAspirante,
             idInstitucion,
             // nombre aspirante analisis
@@ -1489,28 +1491,28 @@ exports.getAnalisisColores = async (request, response, next) => {
 function calcularMovilidad(seleccionesFase1, seleccionesFase2) {
     let positivosTotales = 0;
     let negativosTotales = 0;
-    
+
     const posicionesFase1 = {};
     seleccionesFase1.forEach(seleccion => {
         posicionesFase1[seleccion.idColor] = seleccion.posicion;
     });
-    
+
     // Comparar con las posiciones en la fase 2
     seleccionesFase2.forEach(seleccion => {
         const posicionFase1 = posicionesFase1[seleccion.idColor];
         const posicionFase2 = seleccion.posicion;
         const desplazamiento = posicionFase1 - posicionFase2;
-        
+
         // Positivo = mover a la derecha 
         if (desplazamiento < 0) {
             positivosTotales += Math.abs(desplazamiento);
-        } 
+        }
         // Negativo = mover a la izquierda 
         else if (desplazamiento > 0) {
             negativosTotales += desplazamiento;
         }
     });
-    
+
     return {
         positivos: positivosTotales,
         negativos: negativosTotales
@@ -1522,7 +1524,7 @@ function interpretarMovilidad(movilidad) {
     const totalPositivos = movilidad.positivos;
     const totalNegativos = movilidad.negativos;
     const valorAbsoluto = Math.max(totalPositivos, totalNegativos);
-    
+
     if (totalPositivos === 0 && totalNegativos === 0) {
         return "RIGIDEZ (TERCO)";
     } else if (valorAbsoluto <= 1) {
@@ -1532,7 +1534,7 @@ function interpretarMovilidad(movilidad) {
     } else if (valorAbsoluto <= 3) {
         return "PERSONA DISPUESTA A DIALOGAR (MUCHO MENOR GRADO)";
     } else {
-        return "PERSONA INESTABLE"; 
+        return "PERSONA INESTABLE";
     }
 }
 
@@ -1541,21 +1543,21 @@ exports.getRespuestasOtis = (request, response, next) => {
 };
 
 const consultaResultados = require('../models/consultaResultados.model.js');
-    const {
-        buscarValor, // Importa la función
-        DIM,
-        DIF,
-        dimGeneral,
-        dimPorcentaje,
-        INT,
-        DI,
-        DIS,
-        VQ,
-        Equilibrio_BQR,
-        Equilibrio_BQA,
-        Equilibrio_CQ1,
-        Equilibrio_CQ2
-    } = require('../public/js/aspirantes/encuentraValor.js');
+const {
+    buscarValor, // Importa la función
+    DIM,
+    DIF,
+    dimGeneral,
+    dimPorcentaje,
+    INT,
+    DI,
+    DIS,
+    VQ,
+    Equilibrio_BQR,
+    Equilibrio_BQA,
+    Equilibrio_CQ1,
+    Equilibrio_CQ2
+} = require('../public/js/aspirantes/encuentraValor.js');
 
 exports.getAnalisisHartman = async (request, response, next) => {
     const { idGrupo, idAspirante, idInstitucion } = request.params;
@@ -1567,7 +1569,7 @@ exports.getAnalisisHartman = async (request, response, next) => {
             return response.status(404).send("No se encontraron resultados de Hartman.");
         }
 
-         // Procesa los datos del analisis de hartman para poder graficarlos
+        // Procesa los datos del analisis de hartman para poder graficarlos
         const analisisProcesado = {
             MundoInterno: {
                 DimI: rows[0].citaDimI != null ? buscarValor(rows[0].citaDimI, DIM) : 0,
@@ -1607,7 +1609,7 @@ exports.getAnalisisHartman = async (request, response, next) => {
                 Bqr1: rows[0].BQr1 != null ? buscarValor(rows[0].BQr1, Equilibrio_BQR) : 0,
                 Bqr2: rows[0].BQr2 != null ? buscarValor(rows[0].BQr2, Equilibrio_BQR) : 0,
                 Bqa1: rows[0].BQa1 != null ? buscarValor(rows[0].BQa1, Equilibrio_BQA) : 0,
-                Bqa2: rows[0].BQa2 != null ? buscarValor(rows[0].BQa2,DIM) : 0, 
+                Bqa2: rows[0].BQa2 != null ? buscarValor(rows[0].BQa2, DIM) : 0,
                 Cq1: rows[0].CQ1 != null ? buscarValor(rows[0].CQ1, Equilibrio_CQ1) : 0,
                 Cq2: rows[0].CQ2 != null ? buscarValor(rows[0].CQ2, Equilibrio_CQ2) : 0,
             }
@@ -1632,10 +1634,10 @@ exports.getPruebaOtis = async (req, res, next) => {
     try {
         // Obtener todas las preguntas de OTIS
         const [preguntasDB] = await InfoPruebas.getPreguntasOtis();
-        
+
         // Obtener todas las opciones
         const [opcionesDB] = await InfoPruebas.getOpcionesOtis();
-        
+
         // Estructurar las preguntas con sus opciones y respuestas correctas
         const preguntasConRespuestas = preguntasDB.map(pregunta => {
             // Filtrar opciones
@@ -1680,53 +1682,53 @@ exports.getPruebaOtis = async (req, res, next) => {
 //Informacion prueba Terman
 exports.getPruebaTerman = (request, response, next) => {
     InfoPruebas.getInfoTerman()
-    .then(([rows, fieldData]) => {
-        const seriesAgrupadas = {};
+        .then(([rows, fieldData]) => {
+            const seriesAgrupadas = {};
 
-        rows.forEach(row => {
-            //Si la serie no existe aun, se crea
-            if(!seriesAgrupadas[row.idSerieTerman]){
-                seriesAgrupadas[row.idSerieTerman] = {
-                    idSerieTerman: row.idSerieTerman,
-                    nombreSeccion: row.nombreSeccion,
-                    instruccion: row.instruccion,
-                    duracion: row.duracion,
-                    preguntas: {}
-                };
-            }
-            const serie = seriesAgrupadas[row.idSerieTerman];
+            rows.forEach(row => {
+                //Si la serie no existe aun, se crea
+                if (!seriesAgrupadas[row.idSerieTerman]) {
+                    seriesAgrupadas[row.idSerieTerman] = {
+                        idSerieTerman: row.idSerieTerman,
+                        nombreSeccion: row.nombreSeccion,
+                        instruccion: row.instruccion,
+                        duracion: row.duracion,
+                        preguntas: {}
+                    };
+                }
+                const serie = seriesAgrupadas[row.idSerieTerman];
 
-            //Si la pregunta no existe aun, se crea
-            if (!serie.preguntas[row.idPreguntaTerman]) {
-                serie.preguntas[row.idPreguntaTerman] = {
-                    idPreguntaTerman: row.idPreguntaTerman,
-                    numeroPregunta: row.numeroPregunta,
-                    preguntaTerman: row.preguntaTerman,
-                    idSerieTerman: row.idSerieTerman,
-                    opciones: [],
-                };
-            }
-            const pregunta = serie.preguntas[row.idPreguntaTerman];
+                //Si la pregunta no existe aun, se crea
+                if (!serie.preguntas[row.idPreguntaTerman]) {
+                    serie.preguntas[row.idPreguntaTerman] = {
+                        idPreguntaTerman: row.idPreguntaTerman,
+                        numeroPregunta: row.numeroPregunta,
+                        preguntaTerman: row.preguntaTerman,
+                        idSerieTerman: row.idSerieTerman,
+                        opciones: [],
+                    };
+                }
+                const pregunta = serie.preguntas[row.idPreguntaTerman];
 
-            // Vamos añadiendo las opciones de la pregunta correspondiente
-            pregunta.opciones.push({
-                idOpcionTerman: row.idOpcionTerman,
-                opcionTerman: row.opcionTerman,
-                descripcionTerman: row.descripcionTerman,
-                esCorrecta: row.esCorrecta === 1,
+                // Vamos añadiendo las opciones de la pregunta correspondiente
+                pregunta.opciones.push({
+                    idOpcionTerman: row.idOpcionTerman,
+                    opcionTerman: row.opcionTerman,
+                    descripcionTerman: row.descripcionTerman,
+                    esCorrecta: row.esCorrecta === 1,
+                });
+            })
+            const preguntasAgrupadasPorSerie = Object.values(seriesAgrupadas).map(serie => ({
+                ...serie,
+                preguntas: Object.values(serie.preguntas)
+            }))
+            response.render('Psicologos/infoPruebaTerman.ejs', {
+                preguntasPorSerie: preguntasAgrupadasPorSerie,
             });
-        })
-        const preguntasAgrupadasPorSerie = Object.values(seriesAgrupadas).map(serie => ({
-            ...serie,
-            preguntas: Object.values(serie.preguntas)
-        }))
-        response.render('Psicologos/infoPruebaTerman.ejs', {
-            preguntasPorSerie: preguntasAgrupadasPorSerie,
-        });
 
-    }).catch((error) => {
-        console.log(error);
-    })
+        }).catch((error) => {
+            console.log(error);
+        })
 }
 
 // Análisis Terman
@@ -1778,7 +1780,7 @@ exports.getAnalisisTerman = async (request, response, next) => {
             console.log('No existe análisis previo. Calificando...');
 
             // Calificar series
-            const series = [1,2,3,4,5,6,7,8,9,10];
+            const series = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
             for (const idSerie of series) {
                 const respuestasAspirante = await respuestasTermanModel.fetchRespuestasSerieById(idAspirante, idGrupo, idSerie);
                 if (idSerie >= 1 && idSerie <= 9) {
@@ -1818,14 +1820,14 @@ exports.getAnalisisTerman = async (request, response, next) => {
             rango: serie.rango,
             porcentaje: reglaDeTres(serie.puntuacion, obtenerTotalPorSerie(serie.idSerieTerman))
         }));
-        
+
         const resumen = {
             nombreCompleto: `${aspiranteData.nombreUsuario} ${aspiranteData.apellidoPaterno} ${aspiranteData.apellidoMaterno}`,
             puntosTotales: calificacion[0].puntosTotales,
             rango: calificacion[0].rango,
             coeficienteIntelectual: calificacion[0].coeficienteIntelectual
         };
-        
+
         // console.log(resumen);
 
         // 4. Renderizar
@@ -1837,7 +1839,7 @@ exports.getAnalisisTerman = async (request, response, next) => {
             idGrupo,
             idInstitucion: request.params.idInstitucion || null,
         });
-        
+
 
     } catch (error) {
         console.error('Error en get_analisisTerman:', error);
@@ -1851,57 +1853,57 @@ exports.get_respuestasA = (request, response, next) => {
 
 
     Aspirante.getInformacionAspirante(idAspirante).then(([datosAspirante, fieldData]) => {
-      Aspirante.fetchGrupo(idAspirante).then(([rows, fieldData]) => {
-        Grupo.fetchOne(request.params.idGrupo).then(([grupoRows, fieldData]) => {
-          if (idPrueba == 1) {
-            ResultadosKostick.fetchAll(request.params.idGrupo, request.params.idAspirante).then(
-              ([resultados, fieldData]) => {
-                InterpretacionKostick.fetchAll()
-                .then((interpretacionesKostick) => {
-                    response.render("Psicologos/consultaRespuestasAspirante", {
-                        prueba: "El inventario de Percepción Kostick",
-                        grupo: grupoRows[0],
-                        valores: resultados[0],
-                        datos: datosAspirante[0],
-                        interpretaciones: interpretacionesKostick[0],
-                        idAspirante: request.params.idAspirante || null,
-                        idGenero: rows[0],
-                        idAspirante: request.params.idAspirante,
-                        idGrupo: request.params.idGrupo,
-                        idInstitucion: request.params.idInstitucion,
-                    });
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
-              }
-            );
-          } else if (idPrueba == 2) {
-            Resultados16PF.fetchAll(request.params.idGrupo, idAspirante).then(
-              ([resultados, fieldData]) => {
-                Aspirante.getGenero(request.params.idAspirante)
-                .then(([rows, fieldData]) => {
-                    response.render("Psicologos/consultaRespuestasAspirante", {
-                        prueba: "Personalidad 16 Factores (16 PF)",
-                        grupo: grupoRows[0],
-                        valores: resultados[0],
-                        datos: datosAspirante[0],
-                        interpretaciones: null,
-                        idAspirante: request.params.idAspirante || null,
-                        idGenero: rows[0].idGenero || null,
-                        idAspirante: request.params.idAspirante,
-                        idGrupo: request.params.idGrupo,
-                        idInstitucion: request.params.idInstitucion,
-                      });
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-              }
-            );
-          }
+        Aspirante.fetchGrupo(idAspirante).then(([rows, fieldData]) => {
+            Grupo.fetchOne(request.params.idGrupo).then(([grupoRows, fieldData]) => {
+                if (idPrueba == 1) {
+                    ResultadosKostick.fetchAll(request.params.idGrupo, request.params.idAspirante).then(
+                        ([resultados, fieldData]) => {
+                            InterpretacionKostick.fetchAll()
+                                .then((interpretacionesKostick) => {
+                                    response.render("Psicologos/consultaRespuestasAspirante", {
+                                        prueba: "El inventario de Percepción Kostick",
+                                        grupo: grupoRows[0],
+                                        valores: resultados[0],
+                                        datos: datosAspirante[0],
+                                        interpretaciones: interpretacionesKostick[0],
+                                        idAspirante: request.params.idAspirante || null,
+                                        idGenero: rows[0],
+                                        idAspirante: request.params.idAspirante,
+                                        idGrupo: request.params.idGrupo,
+                                        idInstitucion: request.params.idInstitucion,
+                                    });
+                                })
+                                .catch((error) => {
+                                    console.log(error)
+                                })
+                        }
+                    );
+                } else if (idPrueba == 2) {
+                    Resultados16PF.fetchAll(request.params.idGrupo, idAspirante).then(
+                        ([resultados, fieldData]) => {
+                            Aspirante.getGenero(request.params.idAspirante)
+                                .then(([rows, fieldData]) => {
+                                    response.render("Psicologos/consultaRespuestasAspirante", {
+                                        prueba: "Personalidad 16 Factores (16 PF)",
+                                        grupo: grupoRows[0],
+                                        valores: resultados[0],
+                                        datos: datosAspirante[0],
+                                        interpretaciones: null,
+                                        idAspirante: request.params.idAspirante || null,
+                                        idGenero: rows[0].idGenero || null,
+                                        idAspirante: request.params.idAspirante,
+                                        idGrupo: request.params.idGrupo,
+                                        idInstitucion: request.params.idInstitucion,
+                                    });
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        }
+                    );
+                }
+            });
         });
-      });
     });
 };
 
@@ -1909,15 +1911,15 @@ exports.get_interpretaciones16PF = (request, response, next) => {
     let columna = request.params.columna;
     let nivel = request.params.nivel;
     Interpretaciones16PF.interpretacion(columna, nivel)
-    .then(([rows]) => {
-        if(rows.length > 0){
-            inter = rows[0].resp;
-            response.status(200).json({ inter });
-        }
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+        .then(([rows]) => {
+            if (rows.length > 0) {
+                inter = rows[0].resp;
+                response.status(200).json({ inter });
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 }
 
 // Consulta informacion prueba Colores
@@ -1925,15 +1927,15 @@ exports.getPruebaColores = async (req, res, next) => {
     try {
         // ID colores
         const idPruebaColores = 6;
-        
+
         // Obtener info general de la prueba
         const [infoPrueba] = await InfoPruebas.getInfoPrueba(idPruebaColores);
-        
+
         // Obtener colores de la base de datos
         const [colores] = await InfoPruebas.getColores();
-        
+
         // Renderizar la vista con los datos
-        res.render('Psicologos/infoPruebaColores', {  
+        res.render('Psicologos/infoPruebaColores', {
             pageTitle: infoPrueba.length > 0 ? infoPrueba[0].nombrePrueba : 'Prueba de Colores',
             infoPrueba: infoPrueba.length > 0 ? infoPrueba[0] : null,
             colores: colores
@@ -1949,56 +1951,56 @@ exports.getCuadernilloKostick = (request, response, next) => {
     const idAspirante = request.params.idAspirante;
     const idGrupo = request.params.idGrupo;
     Aspirante.fetchOne(idAspirante)
-    .then(([rows, fieldData]) => {
-        const datosAspirante = rows[0];
-        Grupo.fetchOne(idGrupo)
         .then(([rows, fieldData]) => {
-            const grupo = rows[0];
-            PreguntaKostick.fetchAll()
-            .then(([rows, fieldData]) => {
-                const preguntasKostick = rows;
-                RespondeKostick.fetchRespuestasAspirante(idGrupo, idAspirante)
+            const datosAspirante = rows[0];
+            Grupo.fetchOne(idGrupo)
                 .then(([rows, fieldData]) => {
-                    const resultados = rows;
-                    const opciones = resultados.map(r => r.opcionKostick);
-                    const descripcionOpciones = resultados.map(r => r.descripcionOpcionKostick);
-                    Prueba.getDatosPersonalesAspiranteKostick(idGrupo, idAspirante)
-                    .then(([rows, fieldData]) => {
-                        const datosPersonales = rows;
-                        response.render('Psicologos/cuadernilloKostick', {
-                            prueba: "El inventario de Percepción Kostick",
-                            grupo: grupo || null,
-                            valores: resultados[0][0],
-                            datos: datosPersonales || null,
-                            aspirante: datosAspirante || null,
-                            preguntas: preguntasKostick || [],
-                            opciones: opciones || [],
-                            descripcion: descripcionOpciones || [],
-                            idAspirante: request.params.idAspirante,
-                            idInstitucion: request.params.idInstitucion,
-                            idGrupo: request.params.idGrupo,
+                    const grupo = rows[0];
+                    PreguntaKostick.fetchAll()
+                        .then(([rows, fieldData]) => {
+                            const preguntasKostick = rows;
+                            RespondeKostick.fetchRespuestasAspirante(idGrupo, idAspirante)
+                                .then(([rows, fieldData]) => {
+                                    const resultados = rows;
+                                    const opciones = resultados.map(r => r.opcionKostick);
+                                    const descripcionOpciones = resultados.map(r => r.descripcionOpcionKostick);
+                                    Prueba.getDatosPersonalesAspiranteKostick(idGrupo, idAspirante)
+                                        .then(([rows, fieldData]) => {
+                                            const datosPersonales = rows;
+                                            response.render('Psicologos/cuadernilloKostick', {
+                                                prueba: "El inventario de Percepción Kostick",
+                                                grupo: grupo || null,
+                                                valores: resultados[0][0],
+                                                datos: datosPersonales || null,
+                                                aspirante: datosAspirante || null,
+                                                preguntas: preguntasKostick || [],
+                                                opciones: opciones || [],
+                                                descripcion: descripcionOpciones || [],
+                                                idAspirante: request.params.idAspirante,
+                                                idInstitucion: request.params.idInstitucion,
+                                                idGrupo: request.params.idGrupo,
+                                            })
+                                        })
+                                        .catch((error) => {
+                                            console.log(error);
+                                        });
+
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
                         })
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-                    
+                        .catch((error) => {
+                            console.log(error);
+                        });
                 })
                 .catch((error) => {
                     console.log(error);
                 });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
         })
         .catch((error) => {
             console.log(error);
         });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
 }
 
 // Cuadernillo 16PF
@@ -2006,55 +2008,55 @@ exports.getCuadernillo16PF = (request, response, next) => {
     const idAspirante = request.params.idAspirante;
     const idGrupo = request.params.idGrupo;
     Aspirante.fetchOne(idAspirante)
-    .then(([rows, fieldData]) => {
-        const datosAspirante = rows[0];
-        Grupo.fetchOne(idGrupo)
         .then(([rows, fieldData]) => {
-            const grupo = rows[0];
-            Pregunta16PF.fetchAll()
-            .then(([rows, fieldData]) => {
-                const preguntas16PF = rows;
-                Responde16PF.fetchRespuestasAspirante(idGrupo, idAspirante)
+            const datosAspirante = rows[0];
+            Grupo.fetchOne(idGrupo)
                 .then(([rows, fieldData]) => {
-                    const resultados = rows;
-                    const opciones = resultados.map(r => r.opcion16PF);
-                    const descripcionOpciones = resultados.map(r => r.descripcionOpcion16PF);
-                    Prueba.getDatosPersonalesAspiranteKostick(idGrupo, idAspirante)
-                    .then(([rows, fieldData]) => {
-                        const datosPersonales = rows;
-                        response.render('Psicologos/cuadernillo16PF', {
-                            prueba: "Personalidad 16 Factores (16 PF)",
-                            grupo: grupo || null,
-                            valores: resultados[0][0],
-                            datos: datosPersonales || null,
-                            aspirante: datosAspirante || null,
-                            preguntas: preguntas16PF || [],
-                            opciones: opciones || [],
-                            descripcion: descripcionOpciones || [],
-                            idAspirante: request.params.idAspirante,
-                            idInstitucion: request.params.idInstitucion,
-                            idGrupo: request.params.idGrupo,
+                    const grupo = rows[0];
+                    Pregunta16PF.fetchAll()
+                        .then(([rows, fieldData]) => {
+                            const preguntas16PF = rows;
+                            Responde16PF.fetchRespuestasAspirante(idGrupo, idAspirante)
+                                .then(([rows, fieldData]) => {
+                                    const resultados = rows;
+                                    const opciones = resultados.map(r => r.opcion16PF);
+                                    const descripcionOpciones = resultados.map(r => r.descripcionOpcion16PF);
+                                    Prueba.getDatosPersonalesAspiranteKostick(idGrupo, idAspirante)
+                                        .then(([rows, fieldData]) => {
+                                            const datosPersonales = rows;
+                                            response.render('Psicologos/cuadernillo16PF', {
+                                                prueba: "Personalidad 16 Factores (16 PF)",
+                                                grupo: grupo || null,
+                                                valores: resultados[0][0],
+                                                datos: datosPersonales || null,
+                                                aspirante: datosAspirante || null,
+                                                preguntas: preguntas16PF || [],
+                                                opciones: opciones || [],
+                                                descripcion: descripcionOpciones || [],
+                                                idAspirante: request.params.idAspirante,
+                                                idInstitucion: request.params.idInstitucion,
+                                                idGrupo: request.params.idGrupo,
+                                            })
+                                        })
+                                        .catch((error) => {
+                                            console.log(error);
+                                        });
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
                         })
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
+                        .catch((error) => {
+                            console.log(error);
+                        });
                 })
                 .catch((error) => {
                     console.log(error);
                 });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
         })
         .catch((error) => {
             console.log(error);
         });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
 }
 
 //Cuadernillo Terman
@@ -2062,86 +2064,86 @@ exports.getCuadernilloTerman = (request, response, next) => {
     const idAspirante = request.params.idAspirante;
 
     Aspirante.getInformacionAspirante(idAspirante)
-    .then(([rows, fieldData]) => {
-        const aspiranteData = rows[0];
-        //Obtener el timpo total que tomo el aspirante para responder la prueba
-        CuadernilloTerman.getTiempoTotal(request.params.idGrupo, request.params.idAspirante)
-        .then(([rows, fielData]) => {
-            const tiempoTotal = rows[0].Tiempo;
-            // Obtiene las preguntas, series, opciones y la respuesta del aspirante
-            CuadernilloTerman.getRespuestasTermanAspirante(request.params.idGrupo, request.params.idAspirante)
-            .then(([rows, fielData]) => {
-                const seriesAgrupadas = {};
+        .then(([rows, fieldData]) => {
+            const aspiranteData = rows[0];
+            //Obtener el timpo total que tomo el aspirante para responder la prueba
+            CuadernilloTerman.getTiempoTotal(request.params.idGrupo, request.params.idAspirante)
+                .then(([rows, fielData]) => {
+                    const tiempoTotal = rows[0].Tiempo;
+                    // Obtiene las preguntas, series, opciones y la respuesta del aspirante
+                    CuadernilloTerman.getRespuestasTermanAspirante(request.params.idGrupo, request.params.idAspirante)
+                        .then(([rows, fielData]) => {
+                            const seriesAgrupadas = {};
 
-                rows.forEach(row => {
-                    //Si la serie no existe aun, se crea
-                    if(!seriesAgrupadas[row.idSerieTerman]){
-                        seriesAgrupadas[row.idSerieTerman] = {
-                            idSerieTerman: row.idSerieTerman,
-                            nombreSeccion: row.nombreSeccion,
-                            preguntas: {}
-                        };
-                    }
+                            rows.forEach(row => {
+                                //Si la serie no existe aun, se crea
+                                if (!seriesAgrupadas[row.idSerieTerman]) {
+                                    seriesAgrupadas[row.idSerieTerman] = {
+                                        idSerieTerman: row.idSerieTerman,
+                                        nombreSeccion: row.nombreSeccion,
+                                        preguntas: {}
+                                    };
+                                }
 
-                    const serie = seriesAgrupadas[row.idSerieTerman];
+                                const serie = seriesAgrupadas[row.idSerieTerman];
 
-                    //Si la pregunta no existe aun, se crea
-                    if (!serie.preguntas[row.idPreguntaTerman]) {
-                        serie.preguntas[row.idPreguntaTerman] = {
-                            idPreguntaTerman: row.idPreguntaTerman,
-                            numeroPregunta: row.numeroPregunta,
-                            preguntaTerman: row.preguntaTerman,
-                            opciones: [],
-                            esCorrecta: false,
-                            tiempoRespuesta: 0,
-                            contestada: null
-                        };
-                    }
+                                //Si la pregunta no existe aun, se crea
+                                if (!serie.preguntas[row.idPreguntaTerman]) {
+                                    serie.preguntas[row.idPreguntaTerman] = {
+                                        idPreguntaTerman: row.idPreguntaTerman,
+                                        numeroPregunta: row.numeroPregunta,
+                                        preguntaTerman: row.preguntaTerman,
+                                        opciones: [],
+                                        esCorrecta: false,
+                                        tiempoRespuesta: 0,
+                                        contestada: null
+                                    };
+                                }
 
-                    const pregunta = serie.preguntas[row.idPreguntaTerman];
+                                const pregunta = serie.preguntas[row.idPreguntaTerman];
 
-                    // Vamos añadiendo las opciones de la pregunta correspondiente
-                    pregunta.opciones.push({
-                        idOpcionTerman: row.idOpcionTerman,
-                        opcionTerman: row.opcionTerman,
-                        descripcionTerman: row.descripcionTerman,
-                        esCorrecta: row.esCorrecta === 1,
-                        seleccionada: row.opcionSeleccionada === 1
-                    });
+                                // Vamos añadiendo las opciones de la pregunta correspondiente
+                                pregunta.opciones.push({
+                                    idOpcionTerman: row.idOpcionTerman,
+                                    opcionTerman: row.opcionTerman,
+                                    descripcionTerman: row.descripcionTerman,
+                                    esCorrecta: row.esCorrecta === 1,
+                                    seleccionada: row.opcionSeleccionada === 1
+                                });
 
-                    if (row.opcionSeleccionada === 1) {
-                        pregunta.tiempoRespuesta = row.tiempoRespuesta;
-                        pregunta.contestada = true;
-                        pregunta.esCorrecta = row.esCorrecta === 1;
-                    }
+                                if (row.opcionSeleccionada === 1) {
+                                    pregunta.tiempoRespuesta = row.tiempoRespuesta;
+                                    pregunta.contestada = true;
+                                    pregunta.esCorrecta = row.esCorrecta === 1;
+                                }
 
-                    if (!pregunta.contestada) {
-                        pregunta.esCorrecta = null;
-                    }
+                                if (!pregunta.contestada) {
+                                    pregunta.esCorrecta = null;
+                                }
+                            })
+
+                            const respuestasAgrupadasPorSerie = Object.values(seriesAgrupadas).map(serie => ({
+                                ...serie,
+                                preguntas: Object.values(serie.preguntas)
+                            }))
+
+                            response.render('Psicologos/cuadernilloTerman.ejs', {
+                                aspiranteData: aspiranteData || [],
+                                tiempoTotal: tiempoTotal || 0,
+                                respuestasPorSerie: respuestasAgrupadasPorSerie,
+                                aspirante: request.params.idAspirante || null,
+                                grupo: request.params.idGrupo || null,
+                                idInstitucion: request.params.idInstitucion || null,
+                            });
+                        })
                 })
-
-                const respuestasAgrupadasPorSerie = Object.values(seriesAgrupadas).map(serie => ({
-                    ...serie,
-                    preguntas: Object.values(serie.preguntas)
-                }))
-
-                response.render('Psicologos/cuadernilloTerman.ejs', {
-                    aspiranteData: aspiranteData || [],
-                    tiempoTotal: tiempoTotal || 0,
-                    respuestasPorSerie: respuestasAgrupadasPorSerie,
-                    aspirante: request.params.idAspirante || null,
-                    grupo: request.params.idGrupo || null,
-                    idInstitucion: request.params.idInstitucion || null,
-                });
-            })
+                .catch((error) => {
+                    console.log(error);
+                })
         })
         .catch((error) => {
             console.log(error);
         })
-    })
-    .catch((error) => {
-        console.log(error);
-    })
 }
 
 exports.postReiniciarOtis = (request, response, next) => {
@@ -2151,25 +2153,25 @@ exports.postReiniciarOtis = (request, response, next) => {
     const estatusPruebaPendiente = 2;
 
     Prueba.deleteDatosPersonales(idAspirante, idGrupo, idPrueba)
-    .then(() => {
-        Prueba.deleteRespuestasOtis(idAspirante, idGrupo)
         .then(() => {
-            Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
-            .then(() => {
-                // Redirigir a la misma página
-                exports.getAspirante(request, response, next);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+            Prueba.deleteRespuestasOtis(idAspirante, idGrupo)
+                .then(() => {
+                    Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+                        .then(() => {
+                            // Redirigir a la misma página
+                            exports.getAspirante(request, response, next);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         })
         .catch((error) => {
             console.log(error);
         });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
 }
 
 exports.postReiniciarColores = (request, response, next) => {
@@ -2179,25 +2181,25 @@ exports.postReiniciarColores = (request, response, next) => {
     const estatusPruebaPendiente = 2;
 
     Prueba.deleteDatosPersonales(idAspirante, idGrupo, idPrueba)
-    .then(() => {
-        Prueba.deleteRespuestasColores(idAspirante, idGrupo)
         .then(() => {
-            Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
-            .then(() => {
-                // Redirigir a la misma página
-                exports.getAspirante(request, response, next);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+            Prueba.deleteRespuestasColores(idAspirante, idGrupo)
+                .then(() => {
+                    Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+                        .then(() => {
+                            // Redirigir a la misma página
+                            exports.getAspirante(request, response, next);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         })
         .catch((error) => {
             console.log(error);
         });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
 }
 
 exports.postReiniciar16pf = (request, response, next) => {
@@ -2207,31 +2209,31 @@ exports.postReiniciar16pf = (request, response, next) => {
     const estatusPruebaPendiente = 2;
 
     Prueba.deleteDatosPersonales(idAspirante, idGrupo, idPrueba)
-    .then(() => {
-        Prueba.resetParametros16PF(idAspirante, idGrupo)
         .then(() => {
-            Prueba.deleteRespuestas16PF(idAspirante, idGrupo)
-            .then(() => {
-                Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+            Prueba.resetParametros16PF(idAspirante, idGrupo)
                 .then(() => {
-                    // Redirigir a la misma página
-                    exports.getAspirante(request, response, next);
+                    Prueba.deleteRespuestas16PF(idAspirante, idGrupo)
+                        .then(() => {
+                            Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+                                .then(() => {
+                                    // Redirigir a la misma página
+                                    exports.getAspirante(request, response, next);
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
                 })
                 .catch((error) => {
                     console.log(error);
                 });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
         })
         .catch((error) => {
             console.log(error);
         });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
 }
 
 exports.postReiniciarKostick = (request, response, next) => {
@@ -2241,31 +2243,31 @@ exports.postReiniciarKostick = (request, response, next) => {
     const estatusPruebaPendiente = 2;
 
     Prueba.deleteDatosPersonales(idAspirante, idGrupo, idPrueba)
-    .then(() => {
-        Prueba.resetResultadosKostick(idAspirante, idGrupo)
         .then(() => {
-            Prueba.deleteRespuestasKostick(idAspirante, idGrupo)
-            .then(() => {
-                Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+            Prueba.resetResultadosKostick(idAspirante, idGrupo)
                 .then(() => {
-                    // Redirigir a la misma página
-                    exports.getAspirante(request, response, next);
+                    Prueba.deleteRespuestasKostick(idAspirante, idGrupo)
+                        .then(() => {
+                            Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+                                .then(() => {
+                                    // Redirigir a la misma página
+                                    exports.getAspirante(request, response, next);
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
                 })
                 .catch((error) => {
                     console.log(error);
                 });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
         })
         .catch((error) => {
             console.log(error);
         });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
 }
 
 exports.postReiniciarTerman = (request, response, next) => {
@@ -2275,25 +2277,25 @@ exports.postReiniciarTerman = (request, response, next) => {
     const estatusPruebaPendiente = 2;
 
     Prueba.deleteRespuestasTerman(idAspirante, idGrupo)
-    .then(() => {
-        Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
         .then(() => {
-            // Redirigir a la misma página
-            exports.getAspirante(request, response, next);
+            Prueba.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, estatusPruebaPendiente)
+                .then(() => {
+                    // Redirigir a la misma página
+                    exports.getAspirante(request, response, next);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         })
         .catch((error) => {
             console.log(error);
         });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
 }
 
 exports.postReiniciarHartman = (request, response, next) => {
     const idAspirante = request.params.idAspirante;
     const idGrupo = request.params.idGrupo;
-    const idPrueba = 3; 
+    const idPrueba = 3;
     const estatusPruebaPendiente = 2;
 
     Prueba.deleteRespuestasHartman(idAspirante, idGrupo)
@@ -2315,28 +2317,28 @@ exports.postReiniciarHartman = (request, response, next) => {
 exports.postReiniciarFormato = (request, response, next) => {
     const idAspirante = request.params.idAspirante;
     FormatoEntrevista.deleteFormato(idAspirante)
-    .then(() => {
-        FormatoEntrevista.deleteFamiliares(idAspirante)
         .then(() => {
-            exports.getAspirante(request, response, next);
+            FormatoEntrevista.deleteFamiliares(idAspirante)
+                .then(() => {
+                    exports.getAspirante(request, response, next);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         })
         .catch((error) => {
             console.log(error);
         });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
 }
 
 // MODIFICACION PARA NOTIFICACIONES
 exports.postSolicitarDocumentos = async (request, response, next) => {
     const { idAspirante, idGrupo, idInstitucion } = request.params;
-    
+
     try {
         const notificationService = new DocumentNotificationService();
         const result = await notificationService.sendIndividualNotification(idAspirante, idGrupo);
-        
+
         if (result.success) {
             request.session.mensaje = {
                 tipo: 'success',
@@ -2348,9 +2350,9 @@ exports.postSolicitarDocumentos = async (request, response, next) => {
                 texto: result.message || 'Error al enviar la notificación.'
             };
         }
-        
+
         response.redirect(`/psicologo/aspirantes/${idAspirante}/${idGrupo}/${idInstitucion}`);
-        
+
     } catch (error) {
         console.error('Error al solicitar documentos:', error);
         request.session.mensaje = {
@@ -2360,4 +2362,113 @@ exports.postSolicitarDocumentos = async (request, response, next) => {
         response.redirect(`/psicologo/aspirantes/${idAspirante}/${idGrupo}/${idInstitucion}`);
     }
 
+};
+
+// POST create group meeting
+exports.createGroupMeeting = async (req, res) => {
+    try {
+        const { titulo, fecha, horaInicio, horaFin, link } = req.body;
+        const idGrupo = req.params.idGrupo;
+        const creadaPor = req.session.user; // or req.session.usuario
+        await Reuniones.create({
+            tipo: 'group',
+            idGrupo,
+            titulo,
+            fecha,
+            horaInicio,
+            horaFin,
+            link,
+            creadaPor
+        });
+        // Send email to all aspirantes in group
+        const [aspirantesRows] = await Grupo.getAspirantes(idGrupo);
+        const emails = aspirantesRows.map(a => a.correo).filter(Boolean);
+        const emailPromises = [];
+        let emailStatus = null;
+        if (emails.length > 0) {
+            const subject = `Nueva reunión de grupo: ${titulo}`;
+            const text = `Se ha programado una nueva reunión para tu grupo.\nTítulo: ${titulo}\nFecha: ${fecha}\nHora: ${horaInicio} - ${horaFin}\nEnlace: ${link}`;
+            const html = `<p>Se ha programado una nueva reunión para tu grupo.</p><ul><li><strong>Título:</strong> ${titulo}</li><li><strong>Fecha:</strong> ${fecha}</li><li><strong>Hora:</strong> ${horaInicio} - ${horaFin}</li><li><strong>Enlace:</strong> <a href=\"${link}\">${link}</a></li></ul>`;
+            emailPromises.push(sendEmail(emails, subject, text, html));
+        }
+        try {
+            await Promise.all(emailPromises);
+            emailStatus = { type: 'success', message: 'Se enviaron correos a todos los aspirantes del grupo.' };
+        } catch (e) {
+            emailStatus = { type: 'error', message: 'Error al enviar correos a los aspirantes del grupo.' };
+        }
+        req.session.meetingEmailStatus = emailStatus;
+        res.redirect(`/psicologo/informacion-grupos/${idGrupo}/${req.params.idInstitucion}`);
+    } catch (err) {
+        req.session.meetingEmailStatus = { type: 'error', message: 'Error al crear la reunión.' };
+        res.status(500).send('Error al crear la reunión');
+    }
+};
+
+// POST update group meeting
+exports.updateGroupMeeting = async (req, res) => {
+    const idGrupo = req.params.idGrupo;
+    try {
+        const { titulo, fecha, horaInicio, horaFin, link } = req.body;
+        await Reuniones.update(req.params.idReunion, { titulo, fecha, horaInicio, horaFin, link });
+        // Send email to all aspirantes in group
+        const [aspirantesRows] = await Grupo.getAspirantes(idGrupo);
+        const emails = aspirantesRows.map(a => a.correo).filter(Boolean);
+        const emailPromises = [];
+        let emailStatus = null;
+        if (emails.length > 0) {
+            const subject = `Reunión de grupo actualizada: ${titulo}`;
+            const text = `La reunión de tu grupo ha sido actualizada.\nTítulo: ${titulo}\nFecha: ${fecha}\nHora: ${horaInicio} - ${horaFin}\nEnlace: ${link}`;
+            const html = `<p>La reunión de tu grupo ha sido actualizada.</p><ul><li><strong>Título:</strong> ${titulo}</li><li><strong>Fecha:</strong> ${fecha}</li><li><strong>Hora:</strong> ${horaInicio} - ${horaFin}</li><li><strong>Enlace:</strong> <a href=\"${link}\">${link}</a></li></ul>`;
+            emailPromises.push(sendEmail(emails, subject, text, html));
+        }
+        try {
+            await Promise.all(emailPromises);
+            emailStatus = { type: 'success', message: 'Se enviaron correos a todos los aspirantes del grupo.' };
+        } catch (e) {
+            emailStatus = { type: 'error', message: 'Error al enviar correos a los aspirantes del grupo.' };
+        }
+        req.session.meetingEmailStatus = emailStatus;
+        res.render('Psicologos/informacionGrupo.ejs')
+        res.redirect(`/psicologo/informacion-grupos/${idGrupo}/${req.params.idInstitucion}`);
+    } catch (err) {
+        console.log(err);
+        req.session.meetingEmailStatus = { type: 'error', message: 'Error al actualizar la reunión.' };
+        res.redirect(`/psicologo/informacion-grupos/${idGrupo}/${req.params.idInstitucion}`);
+    }
+};
+
+// DELETE group meeting
+exports.deleteGroupMeeting = async (req, res) => {
+    try {
+        // Get meeting info before deleting for email content
+        const idReunion = req.params.idReunion;
+        const idGrupo = req.params.idGrupo;
+        const [meetingRows] = await Reuniones.fetchById(idReunion);
+        const meeting = meetingRows[0];
+        await Reuniones.delete(idReunion);
+        // Send email to all aspirantes in group
+        const [aspirantesRows] = await Grupo.getAspirantes(idGrupo);
+        const emails = aspirantesRows.map(a => a.correo).filter(Boolean);
+        const emailPromises = [];
+        let emailStatus = null;
+        if (emails.length > 0 && meeting) {
+            const subject = `Reunión de grupo cancelada: ${meeting.titulo}`;
+            const text = `La reunión de tu grupo ha sido cancelada.\nTítulo: ${meeting.titulo}\nFecha: ${meeting.fecha}\nHora: ${meeting.horaInicio} - ${meeting.horaFin}\nEnlace: ${meeting.link}`;
+            const html = `<p>La reunión de tu grupo ha sido <strong>cancelada</strong>.</p><ul><li><strong>Título:</strong> ${meeting.titulo}</li><li><strong>Fecha:</strong> ${meeting.fecha}</li><li><strong>Hora:</strong> ${meeting.horaInicio} - ${meeting.horaFin}</li><li><strong>Enlace:</strong> <a href=\"${meeting.link}\">${meeting.link}</a></li></ul>`;
+            emailPromises.push(sendEmail(emails, subject, text, html));
+        }
+        try {
+            await Promise.all(emailPromises);
+            emailStatus = { type: 'success', message: 'Se enviaron correos a todos los aspirantes del grupo.' };
+        } catch (e) {
+            emailStatus = { type: 'error', message: 'Error al enviar correos a los aspirantes del grupo.' };
+        }
+        req.session.meetingEmailStatus = emailStatus;
+        res.redirect(`/psicologo/informacion-grupos/${idGrupo}/${req.params.idInstitucion}`);
+    } catch (err) {
+        console.log(err);
+        req.session.meetingEmailStatus = { type: 'error', message: 'Error al eliminar la reunión.' };
+        res.redirect(`/psicologo/informacion-grupos/${idGrupo}/${req.params.idInstitucion}`);
+    }
 };

@@ -1738,3 +1738,27 @@ SET character_set_client = @saved_cs_client;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2025-06-02 15:35:53
+
+
+CREATE TABLE `reuniones` (
+    idReunion VARCHAR(36) PRIMARY KEY, -- UUID
+    tipo ENUM('group', '1on1') NOT NULL,
+    idGrupo VARCHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    idAspirante VARCHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,      -- Only for 1on1
+    idPsicologo VARCHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,      -- Only for 1on1
+    titulo VARCHAR(255) NOT NULL,
+    fecha DATE NOT NULL,
+    horaInicio TIME NOT NULL,
+    horaFin TIME NOT NULL,
+    link VARCHAR(512) NOT NULL,
+    creadaPor VARCHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,            -- User who created the meeting
+    creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -- Foreign keys
+    CONSTRAINT fk_reuniones_grupo FOREIGN KEY (idGrupo) REFERENCES grupos(idGrupo),
+    CONSTRAINT fk_reuniones_aspirante FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante),
+    CONSTRAINT fk_reuniones_psicologo FOREIGN KEY (idPsicologo) REFERENCES usuarios(idUsuario),
+    CONSTRAINT fk_reuniones_creadapor FOREIGN KEY (creadaPor) REFERENCES usuarios(idUsuario),
+    -- Constraints for uniqueness
+    CONSTRAINT unique_group_meeting UNIQUE (idGrupo, tipo),
+    CONSTRAINT unique_1on1_meeting UNIQUE (idGrupo, idAspirante, tipo)
+);
