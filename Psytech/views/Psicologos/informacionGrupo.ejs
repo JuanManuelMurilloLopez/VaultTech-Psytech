@@ -27,186 +27,219 @@
                 <!-- Boton de cerrar sesión -->
                 <%- include('../includes/_buttonCerrarSesion.ejs') %>
 
-                    <h2 class="text-center">
-                        <%= grupo.nombreGrupo %>
-                    </h2>
-                    <h4>Información del grupo</h4>
-                    <p>Carrera: <%= grupo.carrera %>
-                    </p>
-                    <p>Año de Generación: <%= grupo.anioGeneracion %>
-                    </p>
-                    <p>Ciclo Escolar: <%= grupo.cicloEscolar %>
-                    </p>
-                    <p>Nivel Académico: <%= grupo.nombreNivelAcademico %>
-                    </p>
-                    <p>Número de Aspirantes: <%= aspirantes.length %>
-                    </p>
-
-                    <h1 class="text-center">ASPIRANTES</h1><br><br>
-
-                    <!-- Group Meeting Management -->
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h5>Reunión de Grupo</h5>
-                        </div>
-                        <div class="card-body">
-                            <% if (groupMeeting) { %>
-                                <p><strong>Título:</strong>
-                                    <%= groupMeeting.titulo %>
-                                </p>
-                                <p><strong>Fecha:</strong>
-                                    <%= new Date(groupMeeting.fecha).toLocaleDateString('es-MX', {year: 'numeric' ,
-                                        month: 'long' , day: 'numeric' }) %>
-                                </p>
-                                <p><strong>Hora:</strong>
-                                    <%= groupMeeting.horaInicio %> - <%= groupMeeting.horaFin %>
-                                </p>
-                                <p><strong>Enlace:</strong> <a href="<%= groupMeeting.link %>" target="_blank">
-                                        <%= groupMeeting.link %>
-                                    </a></p>
-                                <form
-                                    action="/psicologo/grupos/<%= grupo.idGrupo %>/meeting/<%= groupMeeting.idReunion %>?_method=DELETE"
-                                    method="POST" style="display:inline;">
-                                    <button type="submit" class="btn btn-danger">Eliminar</button>
-                                </form>
-                                <button class="btn btn-secondary" data-bs-toggle="modal"
-                                    data-bs-target="#editMeetingModal">Editar</button>
-                                <!-- Edit Modal (reuse the form below, prefilled) -->
-                                <% } else { %>
-                                    <button class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#createMeetingModal">Programar reunión</button>
-                                    <% } %>
-                        </div>
-                    </div>
-
-                    <!-- Create/Edit Meeting Modal -->
-                    <div class="modal fade" id="<%= groupMeeting ? 'editMeetingModal' : 'createMeetingModal' %>"
-                        tabindex="-1" aria-labelledby="meetingModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <form
-                                action="/psicologo/grupos/<%= grupo.idGrupo %>/meeting<%= groupMeeting ? '/' + groupMeeting.idReunion : '' %>"
-                                method="POST">
+                    <!-- Email Notification Modal -->
+                    <% if (typeof meetingEmailStatus !=='undefined' && meetingEmailStatus) { %>
+                        <div class="modal fade" id="meetingEmailStatusModal" tabindex="-1"
+                            aria-labelledby="meetingEmailStatusLabel" aria-hidden="true">
+                            <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="meetingModalLabel">
-                                            <%= groupMeeting ? 'Editar' : 'Programar' %> Reunión de Grupo
+                                    <div
+                                        class="modal-header <%= meetingEmailStatus.type === 'success' ? 'bg-success text-white' : 'bg-danger text-white' %>">
+                                        <h5 class="modal-title" id="meetingEmailStatusLabel">
+                                            <%= meetingEmailStatus.type==='success' ? 'Notificación enviada'
+                                                : 'Error al enviar notificación' %>
                                         </h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Cerrar"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label for="titulo" class="form-label">Título</label>
-                                            <input type="text" class="form-control" id="titulo" name="titulo"
-                                                value="<%= groupMeeting ? groupMeeting.titulo : '' %>" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="fecha" class="form-label">Fecha</label>
-                                            <input type="date" class="form-control" id="fecha" name="fecha"
-                                                value="<%= groupMeeting ? groupMeeting.fecha : '' %>" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="horaInicio" class="form-label">Hora de inicio</label>
-                                            <input type="time" class="form-control" id="horaInicio" name="horaInicio"
-                                                value="<%= groupMeeting ? groupMeeting.horaInicio : '' %>" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="horaFin" class="form-label">Hora de fin</label>
-                                            <input type="time" class="form-control" id="horaFin" name="horaFin"
-                                                value="<%= groupMeeting ? groupMeeting.horaFin : '' %>" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="link" class="form-label">Enlace de videollamada</label>
-                                            <input type="url" class="form-control" id="link" name="link"
-                                                value="<%= groupMeeting ? groupMeeting.link : '' %>" required>
-                                        </div>
+                                        <%= meetingEmailStatus.message %>
                                     </div>
                                     <div class="modal-footer">
-                                        <% if (groupMeeting) { %>
-                                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                                            <% } else { %>
-                                                <button type="submit" class="btn btn-success">Crear reunión</button>
-                                                <% } %>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cerrar</button>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Campo Buscar -->
-                    <div class="d-flex mb-5">
-                        <div class="buscar">
-                            <div class="barra">
-                                <input type="text" id="buscar" name="buscar" placeholder="Buscar">
-                                <img src="/images/search.svg" alt="buscar">
                             </div>
                         </div>
+                        <% } %>
 
-                        <a href="/psicologo/registrar-aspirantes/<%= grupo.idGrupo %>/<%= idInstitucion %>"
-                            class="registrar-aspirante">
-                            Registrar Aspirante
-                        </a>
+                            <h2 class="text-center">
+                                <%= grupo.nombreGrupo %>
+                            </h2>
+                            <h4>Información del grupo</h4>
+                            <p>Carrera: <%= grupo.carrera %>
+                            </p>
+                            <p>Año de Generación: <%= grupo.anioGeneracion %>
+                            </p>
+                            <p>Ciclo Escolar: <%= grupo.cicloEscolar %>
+                            </p>
+                            <p>Nivel Académico: <%= grupo.nombreNivelAcademico %>
+                            </p>
+                            <p>Número de Aspirantes: <%= aspirantes.length %>
+                            </p>
 
-                        <a href="/psicologo/importar-aspirantes/<%= idInstitucion %>/<%= grupo.idGrupo %>"
-                            class="importar-aspirante">
-                            Importar Aspirantes
-                        </a>
-                    </div>
+                            <h1 class="text-center">ASPIRANTES</h1><br><br>
 
-                    <br>
+                            <!-- Group Meeting Management -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5>Reunión de Grupo</h5>
+                                </div>
+                                <div class="card-body">
+                                    <% if (groupMeeting) { %>
+                                        <p><strong>Título:</strong>
+                                            <%= groupMeeting.titulo %>
+                                        </p>
+                                        <p><strong>Fecha:</strong>
+                                            <%= new Date(groupMeeting.fecha).toLocaleDateString('es-MX',
+                                                {year: 'numeric' , month: 'long' , day: 'numeric' }) %>
+                                        </p>
+                                        <p><strong>Hora:</strong>
+                                            <%= groupMeeting.horaInicio %> - <%= groupMeeting.horaFin %>
+                                        </p>
+                                        <p><strong>Enlace:</strong> <a href="<%= groupMeeting.link %>" target="_blank">
+                                                <%= groupMeeting.link %>
+                                            </a></p>
+                                        <form
+                                            action="/psicologo/grupos/<%= grupo.idGrupo %>/meeting/<%= groupMeeting.idReunion %>/delete"
+                                            method="POST" style="display:inline;">
+                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                        </form>
+                                        <button class="btn btn-secondary" data-bs-toggle="modal"
+                                            data-bs-target="#editMeetingModal">Editar</button>
+                                        <!-- Edit Modal (reuse the form below, prefilled) -->
+                                        <% } else { %>
+                                            <button class="btn btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#createMeetingModal">Programar reunión</button>
+                                            <% } %>
+                                </div>
+                            </div>
 
-                    <!-- Tabla Aspirantes-->
+                            <!-- Create/Edit Meeting Modal -->
+                            <div class="modal fade" id="<%= groupMeeting ? 'editMeetingModal' : 'createMeetingModal' %>"
+                                tabindex="-1" aria-labelledby="meetingModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <form
+                                        action="/psicologo/grupos/<%= grupo.idGrupo %>/meeting<%= groupMeeting ? '/' + groupMeeting.idReunion : '' %>"
+                                        method="POST">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="meetingModalLabel">
+                                                    <%= groupMeeting ? 'Editar' : 'Programar' %> Reunión de Grupo
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Cerrar"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label for="titulo" class="form-label">Título</label>
+                                                    <input type="text" class="form-control" id="titulo" name="titulo"
+                                                        value="<%= groupMeeting ? groupMeeting.titulo : '' %>" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="fecha" class="form-label">Fecha</label>
+                                                    <input type="date" class="form-control" id="fecha" name="fecha"
+                                                        value="<%= groupMeeting ? groupMeeting.fecha : '' %>" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="horaInicio" class="form-label">Hora de inicio</label>
+                                                    <input type="time" class="form-control" id="horaInicio"
+                                                        name="horaInicio"
+                                                        value="<%= groupMeeting ? groupMeeting.horaInicio : '' %>"
+                                                        required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="horaFin" class="form-label">Hora de fin</label>
+                                                    <input type="time" class="form-control" id="horaFin" name="horaFin"
+                                                        value="<%= groupMeeting ? groupMeeting.horaFin : '' %>"
+                                                        required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="link" class="form-label">Enlace de videollamada</label>
+                                                    <input type="url" class="form-control" id="link" name="link"
+                                                        value="<%= groupMeeting ? groupMeeting.link : '' %>" required>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <% if (groupMeeting) { %>
+                                                    <button type="submit" class="btn btn-primary">Guardar
+                                                        cambios</button>
+                                                    <% } else { %>
+                                                        <button type="submit" class="btn btn-success">Crear
+                                                            reunión</button>
+                                                        <% } %>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
 
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Apellido Paterno</th>
-                                <th scope="col">Apellido Materno</th>
-                                <th scope="col">Estatus</th>
-                                <th scope="col">Documentos</th>
-                                <th scope="col">Pruebas</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-group-divider">
-                            <% for(aspirante of aspirantes) { %>
-                                <tr>
-                                    <td>
-                                        <%= aspirante.nombreUsuario %>
-                                    </td>
-                                    <td>
-                                        <%= aspirante.apellidoPaterno %>
-                                    </td>
-                                    <td>
-                                        <%= aspirante.apellidoMaterno %>
-                                    </td>
-                                    <td>
-                                        <% if(aspirante.estatusUsuario==1){ %>
-                                            <span class="activo">
-                                                <%= "Activo" %>
-                                            </span>
-                                            <%} else { %>
-                                                <span class="inactivo">
-                                                    <%= "Inactivo" %>
-                                                </span>
-                                                <% } %>
-                                    </td>
-                                    <td>
-                                        <%= aspirante.documentosCargados %> / 2
-                                    </td>
-                                    <td>
-                                        <%= aspirante.pruebasCompletadas %> / <%= aspirante.pruebasAsignadas %>
-                                    </td>
-                                    <td><a
-                                            href="/psicologo/aspirantes/<%= aspirante.idAspirante %>/<%= grupo.idGrupo %>/<%= idInstitucion %>">Ver
-                                            Aspirante</a></td>
-                                </tr>
-                                <% } %>
-                        </tbody>
-                    </table>
-                    <br>
+                            <!-- Campo Buscar -->
+                            <div class="d-flex mb-5">
+                                <div class="buscar">
+                                    <div class="barra">
+                                        <input type="text" id="buscar" name="buscar" placeholder="Buscar">
+                                        <img src="/images/search.svg" alt="buscar">
+                                    </div>
+                                </div>
 
-                    <a class="btn btn-color--third mb-5" href="/psicologo/grupos/<%= idInstitucion %>">Regresar</a>
+                                <a href="/psicologo/registrar-aspirantes/<%= grupo.idGrupo %>/<%= idInstitucion %>"
+                                    class="registrar-aspirante">
+                                    Registrar Aspirante
+                                </a>
+
+                                <a href="/psicologo/importar-aspirantes/<%= idInstitucion %>/<%= grupo.idGrupo %>"
+                                    class="importar-aspirante">
+                                    Importar Aspirantes
+                                </a>
+                            </div>
+
+                            <br>
+
+                            <!-- Tabla Aspirantes-->
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Apellido Paterno</th>
+                                        <th scope="col">Apellido Materno</th>
+                                        <th scope="col">Estatus</th>
+                                        <th scope="col">Documentos</th>
+                                        <th scope="col">Pruebas</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    <% for(aspirante of aspirantes) { %>
+                                        <tr>
+                                            <td>
+                                                <%= aspirante.nombreUsuario %>
+                                            </td>
+                                            <td>
+                                                <%= aspirante.apellidoPaterno %>
+                                            </td>
+                                            <td>
+                                                <%= aspirante.apellidoMaterno %>
+                                            </td>
+                                            <td>
+                                                <% if(aspirante.estatusUsuario==1){ %>
+                                                    <span class="activo">
+                                                        <%= "Activo" %>
+                                                    </span>
+                                                    <%} else { %>
+                                                        <span class="inactivo">
+                                                            <%= "Inactivo" %>
+                                                        </span>
+                                                        <% } %>
+                                            </td>
+                                            <td>
+                                                <%= aspirante.documentosCargados %> / 2
+                                            </td>
+                                            <td>
+                                                <%= aspirante.pruebasCompletadas %> / <%= aspirante.pruebasAsignadas %>
+                                            </td>
+                                            <td><a
+                                                    href="/psicologo/aspirantes/<%= aspirante.idAspirante %>/<%= grupo.idGrupo %>/<%= idInstitucion %>">Ver
+                                                    Aspirante</a></td>
+                                        </tr>
+                                        <% } %>
+                                </tbody>
+                            </table>
+                            <br>
+
+                            <a class="btn btn-color--third mb-5"
+                                href="/psicologo/grupos/<%= idInstitucion %>">Regresar</a>
             </div>
 
             <!-- Bootstrap JS -->
@@ -214,25 +247,34 @@
             <!-- Incluir el script del navside -->
             <script src="/js/_navside.js"></script>
 
-            <script>
-                const inputBuscar = document.getElementById('buscar');
-                const tabla = document.querySelector('tbody');
+            <% if (typeof meetingEmailStatus !=='undefined' && meetingEmailStatus) { %>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var modal = new bootstrap.Modal(document.getElementById('meetingEmailStatusModal'));
+                        modal.show();
+                    });
+                </script>
+                <% } %>
 
-                inputBuscar.addEventListener('keyup', () => {
-                    const valor = inputBuscar.value.trim();
+                    <script>
+                        const inputBuscar = document.getElementById('buscar');
+                        const tabla = document.querySelector('tbody');
 
-                    fetch(`/psicologo/buscar-aspirantes/<%= grupo.idGrupo %>/${encodeURIComponent(valor)}`)
-                        .then((response) => response.json())
-                        .then(data => {
-                            tabla.innerHTML = '';
+                        inputBuscar.addEventListener('keyup', () => {
+                            const valor = inputBuscar.value.trim();
 
-                            if (data.length === 0) {
-                                tabla.innerHTML = `<tr><td colspan="5">No se encontraron aspirantes</td></tr>`;
-                                return;
-                            }
+                            fetch(`/psicologo/buscar-aspirantes/<%= grupo.idGrupo %>/${encodeURIComponent(valor)}`)
+                                .then((response) => response.json())
+                                .then(data => {
+                                    tabla.innerHTML = '';
 
-                            data.forEach(aspirante => {
-                                tabla.innerHTML += `
+                                    if (data.length === 0) {
+                                        tabla.innerHTML = `<tr><td colspan="5">No se encontraron aspirantes</td></tr>`;
+                                        return;
+                                    }
+
+                                    data.forEach(aspirante => {
+                                        tabla.innerHTML += `
                         
                         <tr>
                             <td>${aspirante.nombreUsuario}</td>
@@ -248,12 +290,12 @@
                             <td><a href="/psicologo/aspirantes/${aspirante.idAspirante}/<%= grupo.idGrupo %>/<%= idInstitucion %>">Ver Aspirante</a></td>
                         </tr>
                     `;
-                            });
-                        })
-                        .catch((error) => {
-                            console.error('Error al buscar aspirantes:', error);
+                                    });
+                                })
+                                .catch((error) => {
+                                    console.error('Error al buscar aspirantes:', error);
+                                });
                         });
-                });
-            </script>
+                    </script>
 
 </body>

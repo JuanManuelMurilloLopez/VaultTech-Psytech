@@ -51,6 +51,8 @@ const DocumentNotificationService = require('../scripts/sendDocumentNotification
 
 const Reuniones = require('../models/reuniones.model.js');
 
+const { sendEmail } = require('../util/email');
+
 //Rutas del portal de los Psicologos
 
 // Registrar y editar psicologos
@@ -419,11 +421,16 @@ exports.getInformacionGrupo = async (request, response, next) => {
         const [meetingRows] = await Reuniones.fetchGroupMeeting(request.params.idGrupo);
         const groupMeeting = meetingRows[0] || null;
 
+        // Get and clear meeting email status
+        const meetingEmailStatus = request.session.meetingEmailStatus;
+        delete request.session.meetingEmailStatus;
+
         response.render('Psicologos/informacionGrupo.ejs', {
             grupo: grupo || null,
             aspirantes: aspirantes || [],
             idInstitucion: request.params.idInstitucion || null,
-            groupMeeting // <-- pass to view
+            groupMeeting, // <-- pass to view
+            meetingEmailStatus // <-- pass to view
         });
     } catch (error) {
         console.log(error);
@@ -2373,30 +2380,95 @@ exports.createGroupMeeting = async (req, res) => {
             link,
             creadaPor
         });
-        // TODO: Send email to all aspirantes in group
+        // Send email to all aspirantes in group
+        const [aspirantesRows] = await Grupo.getAspirantes(idGrupo);
+        const emails = aspirantesRows.map(a => a.correo).filter(Boolean);
+        const emailPromises = [];
+        let emailStatus = null;
+        if (emails.length > 0) {
+            const subject = `Nueva reunión de grupo: ${titulo}`;
+            const text = `Se ha programado una nueva reunión para tu grupo.\nTítulo: ${titulo}\nFecha: ${fecha}\nHora: ${horaInicio} - ${horaFin}\nEnlace: ${link}`;
+            const html = `<p>Se ha programado una nueva reunión para tu grupo.</p><ul><li><strong>Título:</strong> ${titulo}</li><li><strong>Fecha:</strong> ${fecha}</li><li><strong>Hora:</strong> ${horaInicio} - ${horaFin}</li><li><strong>Enlace:</strong> <a href=\"${link}\">${link}</a></li></ul>`;
+            emailPromises.push(sendEmail(emails, subject, text, html));
+        }
+        try {
+            await Promise.all(emailPromises);
+            emailStatus = { type: 'success', message: 'Se enviaron correos a todos los aspirantes del grupo.' };
+        } catch (e) {
+            emailStatus = { type: 'error', message: 'Error al enviar correos a los aspirantes del grupo.' };
+        }
+        req.session.meetingEmailStatus = emailStatus;
         res.redirect(`/psicologo/informacion-grupos/${idGrupo}/${req.params.idInstitucion}`);
     } catch (err) {
+        req.session.meetingEmailStatus = { type: 'error', message: 'Error al crear la reunión.' };
         res.status(500).send('Error al crear la reunión');
     }
 };
 
 // POST update group meeting
 exports.updateGroupMeeting = async (req, res) => {
+    const idGrupo = req.params.idGrupo;
     try {
         const { titulo, fecha, horaInicio, horaFin, link } = req.body;
         await Reuniones.update(req.params.idReunion, { titulo, fecha, horaInicio, horaFin, link });
-        res.redirect(`/psicologo/informacion-grupos/${req.params.idGrupo}/${req.params.idInstitucion}`);
+        // Send email to all aspirantes in group
+        const [aspirantesRows] = await Grupo.getAspirantes(idGrupo);
+        const emails = aspirantesRows.map(a => a.correo).filter(Boolean);
+        const emailPromises = [];
+        let emailStatus = null;
+        if (emails.length > 0) {
+            const subject = `Reunión de grupo actualizada: ${titulo}`;
+            const text = `La reunión de tu grupo ha sido actualizada.\nTítulo: ${titulo}\nFecha: ${fecha}\nHora: ${horaInicio} - ${horaFin}\nEnlace: ${link}`;
+            const html = `<p>La reunión de tu grupo ha sido actualizada.</p><ul><li><strong>Título:</strong> ${titulo}</li><li><strong>Fecha:</strong> ${fecha}</li><li><strong>Hora:</strong> ${horaInicio} - ${horaFin}</li><li><strong>Enlace:</strong> <a href=\"${link}\">${link}</a></li></ul>`;
+            emailPromises.push(sendEmail(emails, subject, text, html));
+        }
+        try {
+            await Promise.all(emailPromises);
+            emailStatus = { type: 'success', message: 'Se enviaron correos a todos los aspirantes del grupo.' };
+        } catch (e) {
+            emailStatus = { type: 'error', message: 'Error al enviar correos a los aspirantes del grupo.' };
+        }
+        req.session.meetingEmailStatus = emailStatus;
+        res.render('Psicologos/informacionGrupo.ejs')
+        res.redirect(`/psicologo/informacion-grupos/${idGrupo}/${req.params.idInstitucion}`);
     } catch (err) {
-        res.status(500).send('Error al actualizar la reunión');
+        console.log(err);
+        req.session.meetingEmailStatus = { type: 'error', message: 'Error al actualizar la reunión.' };
+        res.redirect(`/psicologo/informacion-grupos/${idGrupo}/${req.params.idInstitucion}`);
     }
 };
 
 // DELETE group meeting
 exports.deleteGroupMeeting = async (req, res) => {
     try {
-        await Reuniones.delete(req.params.idReunion);
-        res.redirect(`/psicologo/informacion-grupos/${req.params.idGrupo}/${req.params.idInstitucion}`);
+        // Get meeting info before deleting for email content
+        const idReunion = req.params.idReunion;
+        const idGrupo = req.params.idGrupo;
+        const [meetingRows] = await Reuniones.fetchById(idReunion);
+        const meeting = meetingRows[0];
+        await Reuniones.delete(idReunion);
+        // Send email to all aspirantes in group
+        const [aspirantesRows] = await Grupo.getAspirantes(idGrupo);
+        const emails = aspirantesRows.map(a => a.correo).filter(Boolean);
+        const emailPromises = [];
+        let emailStatus = null;
+        if (emails.length > 0 && meeting) {
+            const subject = `Reunión de grupo cancelada: ${meeting.titulo}`;
+            const text = `La reunión de tu grupo ha sido cancelada.\nTítulo: ${meeting.titulo}\nFecha: ${meeting.fecha}\nHora: ${meeting.horaInicio} - ${meeting.horaFin}\nEnlace: ${meeting.link}`;
+            const html = `<p>La reunión de tu grupo ha sido <strong>cancelada</strong>.</p><ul><li><strong>Título:</strong> ${meeting.titulo}</li><li><strong>Fecha:</strong> ${meeting.fecha}</li><li><strong>Hora:</strong> ${meeting.horaInicio} - ${meeting.horaFin}</li><li><strong>Enlace:</strong> <a href=\"${meeting.link}\">${meeting.link}</a></li></ul>`;
+            emailPromises.push(sendEmail(emails, subject, text, html));
+        }
+        try {
+            await Promise.all(emailPromises);
+            emailStatus = { type: 'success', message: 'Se enviaron correos a todos los aspirantes del grupo.' };
+        } catch (e) {
+            emailStatus = { type: 'error', message: 'Error al enviar correos a los aspirantes del grupo.' };
+        }
+        req.session.meetingEmailStatus = emailStatus;
+        res.redirect(`/psicologo/informacion-grupos/${idGrupo}/${req.params.idInstitucion}`);
     } catch (err) {
-        res.status(500).send('Error al eliminar la reunión');
+        console.log(err);
+        req.session.meetingEmailStatus = { type: 'error', message: 'Error al eliminar la reunión.' };
+        res.redirect(`/psicologo/informacion-grupos/${idGrupo}/${req.params.idInstitucion}`);
     }
 };

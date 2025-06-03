@@ -138,6 +138,6 @@ router.post('/solicitar-documentos/:idInstitucion/:idGrupo/:idAspirante',
 
 router.post('/grupos/:idGrupo/meeting', controller.createGroupMeeting);
 router.post('/grupos/:idGrupo/meeting/:idReunion', controller.updateGroupMeeting);
-router.delete('/grupos/:idGrupo/meeting/:idReunion', controller.deleteGroupMeeting);
+router.post('/grupos/:idGrupo/meeting/:idReunion/delete', controller.deleteGroupMeeting);
 
 module.exports = router;
