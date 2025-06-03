@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,94 +23,107 @@
         <!-- Navside -->
         <%- include('../includes/_navsideAspirante.ejs') %>
 
-        <div class="container">
+            <div class="container">
 
-            <!-- Boton de cerrar sesión -->
-            <%- include('../includes/_buttonCerrarSesion.ejs') %>
+                <!-- Boton de cerrar sesión -->
+                <%- include('../includes/_buttonCerrarSesion.ejs') %>
 
-            <h1 class="text-center">MIS PRUEBAS</h1>
-            <hr>
-    
-            <div class="row g-4 mt-4">
-
-                <% for(prueba of pruebas) { %>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="card-header">
-                                    <h5 class="card-title w-50"><%= prueba.nombre %></h5>
-                                    <% 
-                                        const estatusPrueba = {
-                                            'Completada': 'prueba-completada',
-                                            'Pendiente': 'prueba-pendiente',
-                                            'Vencida': 'prueba-vencida',
-                                            'En progreso': 'prueba-progreso'
-                                        };
-                                        const estatus = estatusPrueba[prueba.nombreEstatus] || 'prueba-default'; 
-
-                                        // <!-- CAMBIO CODIGO: Asignar la ruta segUn el nombre de la prueba -->
-                                        let rutaPrueba = '';
-                                        if (prueba.nombre === 'Colores de Luscher') rutaPrueba = '/aspirante/instrucciones-colores';
-                                        if (prueba.nombre === 'OTIS') rutaPrueba = '/aspirante/instrucciones-otis';
-                                        if (prueba.nombre === 'TERMAN') rutaPrueba = '/aspirante/prueba-terman';
-                                        if (prueba.nombre === 'HARTMAN') rutaPrueba = '/aspirante/instrucciones-hartman';
-                                        if (prueba.nombre === 'KOSTICK') {
-                                            console.log(prueba);
-                                            rutaPrueba = '/aspirante/instruccionesPrueba/KOSTICK';
-                                        }
-                                        if (prueba.nombre === 'PRUEBA DE 16PF') {
-                                            console.log(prueba);
-                                            rutaPrueba = '/aspirante/instruccionesPrueba/PRUEBA DE 16PF';
-                                        }
-
-                                    %>
-                                    <% if (estatusPrueba[prueba.nombreEstatus]) { %>
-                                        <span class="card-estatus <%= estatus %>">
-                                            <%= prueba.nombreEstatus %>
-                                        </span>
-                                    <% } %>
-                                </div>
-                                <p class="card-text card-grupo">Grupo: <%= prueba.nombreGrupo %></p>
-                                <p class="card-text"><%= prueba.descripcion %></p>
-                                <% 
-                                    const fecha = new Date(prueba.fechaLimite);
-                                    const fechaFormato = `${fecha.getDate()}/${fecha.getMonth()+1}/${fecha.getFullYear()}`;
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h6 class="text-center">Bienvenido, <%= aspirante.nombreUsuario %>
+                            </h6>
+                            <% let missingDocs=[]; if (!aspirante.cv) missingDocs.push('CV'); if (!aspirante.kardex)
+                                missingDocs.push('Kardex'); const fechaLimiteDate=new Date(fechaLimite); const hoy=new
+                                Date(); const diasRestantes=Math.ceil((fechaLimiteDate - hoy) / (1000 * 60 * 60 * 24));
                                 %>
-                                <p class="card-text">Fecha límite: <%= fechaFormato %></p>
-                                <% if (prueba.nombreEstatus === 'Pendiente') { %>
-                                    <div class="d-flex justify-content-between">
-                                        <!-- CAMBIO CODIGO: href ruta -->
-                                        <a href="<%= rutaPrueba %>" class="btn btn-color--secondary">Realizar prueba</a>
-                                        <% 
-                                            const duracionMin = Math.round(prueba.duracion / 60); 
-                                            const mostrarDuracion = duracionMin > 0;
-                                        %>
-                                        <% if (mostrarDuracion) { %>
-                                            <span>Duración: <%= duracionMin %> min</span>
-                                        <% } %>
+                                <% if (missingDocs.length> 0 || pruebasPendientes> 0) { %>
+                                    <div class="alert alert-warning text-center fs-6" role="alert">
+                                        <p>
+                                            <% if (missingDocs.length> 0) { %>Documentos pendientes: <%=
+                                                    missingDocs.join(', ') %>.<br> <a href="/aspirante/cargar-expedientes" class="mt-2">Subir documentos</a> <br> <% } %>
+                                            <% if (pruebasPendientes> 0) { %>Tienes <%= pruebasPendientes %> pruebas pendientes.<br> <% } %>
+                                            Tienes <%= diasRestantes %> días restantes para completar este requisito (fecha límite: <%= fechaLimiteDate.getDate() %>/<%= fechaLimiteDate.getMonth()+1 %>/<%= fechaLimiteDate.getFullYear() %>).
 
+                                            <br>
+                                        </p>
                                     </div>
-                                <% } else {%>
-                                    <div class="d-flex justify-content-between">
-                                        <% 
-                                            const duracionMin = Math.round(prueba.duracion / 60); 
-                                            const mostrarDuracion = duracionMin > 0;
-                                        %>
-                                        <% if (mostrarDuracion) { %>
-                                            <span>Duración: <%= duracionMin %> min</span>
-                                        <% } %>
-
-                                    </div>
-                                <% } %>
-
-                            </div>
+                            <% } %>
+                            <hr>
                         </div>
                     </div>
-                <% } %>
 
-            </div> 
-        </div> 
-    
+                    <h2 class="text-center">MIS PRUEBAS</h2>
+                    <hr>
+
+                    <div class="row g-4 mt-4">
+
+                        <% for(prueba of pruebas) { %>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h5 class="card-title w-50">
+                                                <%= prueba.nombre %>
+                                            </h5>
+                                            <% const estatusPrueba={ ' Completada' : 'prueba-completada' , 'Pendiente'
+                                                    : 'prueba-pendiente' , 'Vencida' : 'prueba-vencida' , 'En progreso'
+                                                    : 'prueba-progreso' }; const
+                                                    estatus=estatusPrueba[prueba.nombreEstatus] || 'prueba-default' ;
+                                                    let rutaPrueba='' ; if (prueba.nombre==='Colores de Luscher' )
+                                                    rutaPrueba='/aspirante/instrucciones-colores' ; if
+                                                    (prueba.nombre==='OTIS' ) rutaPrueba='/aspirante/instrucciones-otis'
+                                                    ; if (prueba.nombre==='TERMAN' )
+                                                    rutaPrueba='/aspirante/prueba-terman' ; if
+                                                    (prueba.nombre==='HARTMAN' )
+                                                    rutaPrueba='/aspirante/instrucciones-hartman' ; if
+                                                    (prueba.nombre==='KOSTICK' ) { console.log(prueba);
+                                                    rutaPrueba='/aspirante/instruccionesPrueba/KOSTICK' ; } if
+                                                    (prueba.nombre==='PRUEBA DE 16PF' ) { console.log(prueba);
+                                                    rutaPrueba='/aspirante/instruccionesPrueba/PRUEBA DE 16PF' ; } %>
+                                                    <% if (estatusPrueba[prueba.nombreEstatus]) { %>
+                                                        <span class="card-estatus <%= estatus %>">
+                                                            <%= prueba.nombreEstatus %>
+                                                        </span>
+                                                        <% } %>
+                                    </div>
+                                    <p class="card-text card-grupo">Grupo: <%= prueba.nombreGrupo %>
+                                    </p>
+                                    <p class="card-text">
+                                        <%= prueba.descripcion %>
+                                    </p>
+                                    <% if (prueba.nombreEstatus==='Pendiente' ) { %>
+                                        <div class="d-flex justify-content-between">
+                                            <!-- CAMBIO CODIGO: href ruta -->
+                                            <a href="<%= rutaPrueba %>" class="btn btn-color--secondary">Realizar
+                                                prueba</a>
+                                            <% const duracionMin=Math.round(prueba.duracion / 60); const
+                                                mostrarDuracion=duracionMin> 0;
+                                                %>
+                                                <% if (mostrarDuracion) { %>
+                                                    <span>Duración: <%= duracionMin %> min</span>
+                                                    <% } %>
+
+                                        </div>
+                                        <% } else {%>
+                                            <div class="d-flex justify-content-between">
+                                                <% const duracionMin=Math.round(prueba.duracion / 60); const
+                                                    mostrarDuracion=duracionMin> 0;
+                                                    %>
+                                                    <% if (mostrarDuracion) { %>
+                                                        <span>Duración: <%= duracionMin %> min</span>
+                                                        <% } %>
+
+                                            </div>
+                                            <% } %>
+
+                        </div>
+                    </div>
+            </div>
+            <% } %>
+
+    </div>
+    </div>
+
     </div>
 
     <!-- Bootstrap JS -->
@@ -118,4 +132,5 @@
     <script src="/js/_navside.js"></script>
 
 </body>
+
 </html>
