@@ -24,8 +24,8 @@ router.post('/editar-institucion/:idInstitucion', controller.postEditarInstituci
 router.get('/grupos', controller.getGrupos);
 
 //LILI REGISTRAR GRUPO
-router.get('/registrar-grupo/:idInstitucion', controller.getRegistrarGrupo); 
-router.post('/registrar-grupo/:idInstitucion', controller.postRegistrarGrupo); 
+router.get('/registrar-grupo/:idInstitucion', controller.getRegistrarGrupo);
+router.post('/registrar-grupo/:idInstitucion', controller.postRegistrarGrupo);
 
 // Vista con los grupos de cierta institución
 router.get('/grupos/:idInstitucion', controller.getGrupos);
@@ -132,8 +132,12 @@ router.get('/editar-psicologo/:idUsuario', controller.getEditarPsicologo);
 router.post('/editar-psicologo/:idUsuario', controller.postEditarPsicologo);
 
 // MODIFICACIONES PARA NOTIFICACIONES (Ruta para solicitar documentos individualmente)
-router.post('/solicitar-documentos/:idInstitucion/:idGrupo/:idAspirante', 
+router.post('/solicitar-documentos/:idInstitucion/:idGrupo/:idAspirante',
     controller.postSolicitarDocumentos
 );
+
+router.post('/grupos/:idGrupo/meeting', controller.createGroupMeeting);
+router.post('/grupos/:idGrupo/meeting/:idReunion', controller.updateGroupMeeting);
+router.delete('/grupos/:idGrupo/meeting/:idReunion', controller.deleteGroupMeeting);
 
 module.exports = router;
