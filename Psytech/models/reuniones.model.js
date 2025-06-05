@@ -49,13 +49,36 @@ class Reuniones {
 
     /**
      * Fetch all 1on1 meetings for a group
+     * @param {string} idGrupo
+     * @returns {Promise}
      */
     static async fetchAll1on1ByGroup(idGrupo) {
         return db.execute(`SELECT * FROM reuniones WHERE idGrupo = ? AND tipo = '1on1'`, [idGrupo]);
     }
 
     /**
+     * Fetch all 1on1 meetings for a specific aspirante (across all groups)
+     * @param {string} idAspirante
+     * @returns {Promise}
+     */
+    static async fetchAll1on1ByAspirante(idAspirante) {
+        return db.execute(`SELECT * FROM reuniones WHERE idAspirante = ? AND tipo = '1on1'`, [idAspirante]);
+    }
+
+    /**
+     * Fetch all 1on1 meetings for a specific psicologo (across all groups)
+     * @param {string} idPsicologo
+     * @returns {Promise}
+     */
+    static async fetchAll1on1ByPsicologo(idPsicologo) {
+        return db.execute(`SELECT * FROM reuniones WHERE idPsicologo = ? AND tipo = '1on1'`, [idPsicologo]);
+    }
+
+    /**
      * Fetch a 1on1 meeting for an aspirante+group
+     * @param {string} idGrupo
+     * @param {string} idAspirante
+     * @returns {Promise}
      */
     static async fetch1on1ByAspirante(idGrupo, idAspirante) {
         return db.execute(`SELECT * FROM reuniones WHERE idGrupo = ? AND idAspirante = ? AND tipo = '1on1'`, [idGrupo, idAspirante]);
