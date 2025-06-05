@@ -2386,7 +2386,7 @@ exports.createGroupMeeting = async (req, res) => {
         const emailPromises = [];
         let emailStatus = null;
         if (emails.length > 0) {
-            const subject = `Entrevista grupal programada - Proceso de admisión al posgrado`;
+            const subject = `Aplicación grupal de prueba psicométrica - Proceso de admisión al posgrado`;
             const html = generarCorreoEntrevistaGrupal(fecha, horaInicio, horaFin, link);
             emailPromises.push(sendEmail(emails, subject, text, html));
         }
@@ -2416,7 +2416,7 @@ exports.updateGroupMeeting = async (req, res) => {
         const emailPromises = [];
         let emailStatus = null;
         if (emails.length > 0) {
-            const subject = `Reunión de grupo actualizada: ${titulo}`;
+            const subject = `Aplicación grupal de prueba psicométrica actualizada`;
             const html = generarCorreoEntrevistaGrupalModificada(fecha, horaInicio, horaFin, link);
             emailPromises.push(sendEmail(emails, subject, undefined, html));
         }
@@ -2451,7 +2451,7 @@ exports.deleteGroupMeeting = async (req, res) => {
         const emailPromises = [];
         let emailStatus = null;
         if (emails.length > 0 && meeting) {
-            const subject = `Reunión de grupo cancelada: ${meeting.titulo}`;
+            const subject = `Aplicación grupal de prueba psicométrica cancelada`;
             const html = generarCorreoEntrevistaGrupalCancelada(meeting.fecha, meeting.horaInicio, meeting.horaFin, meeting.link);
             emailPromises.push(sendEmail(emails, subject, undefined, html));
         }
