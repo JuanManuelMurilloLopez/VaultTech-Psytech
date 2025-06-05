@@ -194,6 +194,16 @@ a.sidebar-link:hover{
     width: 44px;
 }
 
+.icon-support{
+    width: 52px;
+}
+
+.text-support{
+    font-size: 1.30rem;
+    font-weight: 500;
+    color: var(--font-primary);
+}
+
 .text-docs{
     font-size: 1.25rem;
     color: var(--font-primary);

@@ -5,7 +5,6 @@ const Institucion = require('../models/institucion.model');
 const Grupo = require('../models/grupo.model');
 const TipoInstitucion = require('../models/tipoInstitucion.model');
 const Prueba = require('../models/prueba.model');
-const { request, response } = require('express');
 const Cuadernillo = require('../models/cuadernilloOtis.model');
 const CatalogoPruebas = require('../models/catalogoPruebas.model');
 const CuadernilloColores = require('../models/cuadernilloColores.model');
@@ -14,6 +13,7 @@ const InfoPruebas = require('../models/infoPruebas.model');
 const FormatoEntrevista = require('../models/formatoDeEntrevista.model.js');
 const Familiar = require('../models/formularioFamiliares.model.js');
 const Psicologo = require('../models/psicologo.model');
+const { generarCorreoEntrevistaGrupal, generarCorreoEntrevistaGrupalModificada, generarCorreoEntrevistaGrupalCancelada } = require('../util/correoEntrevistaGrupal');
 
 // Modelos terman
 const respuestasTermanModel = require('../models/respuestasTerman.model.js');
@@ -2387,9 +2387,8 @@ exports.createGroupMeeting = async (req, res) => {
         const emailPromises = [];
         let emailStatus = null;
         if (emails.length > 0) {
-            const subject = `Nueva reunión de grupo: ${titulo}`;
-            const text = `Se ha programado una nueva reunión para tu grupo.\nTítulo: ${titulo}\nFecha: ${fecha}\nHora: ${horaInicio} - ${horaFin}\nEnlace: ${link}`;
-            const html = `<p>Se ha programado una nueva reunión para tu grupo.</p><ul><li><strong>Título:</strong> ${titulo}</li><li><strong>Fecha:</strong> ${fecha}</li><li><strong>Hora:</strong> ${horaInicio} - ${horaFin}</li><li><strong>Enlace:</strong> <a href=\"${link}\">${link}</a></li></ul>`;
+            const subject = `Aplicación grupal de prueba psicométrica - Proceso de admisión al posgrado`;
+            const html = generarCorreoEntrevistaGrupal(fecha, horaInicio, horaFin, link);
             emailPromises.push(sendEmail(emails, subject, text, html));
         }
         try {
@@ -2418,10 +2417,9 @@ exports.updateGroupMeeting = async (req, res) => {
         const emailPromises = [];
         let emailStatus = null;
         if (emails.length > 0) {
-            const subject = `Reunión de grupo actualizada: ${titulo}`;
-            const text = `La reunión de tu grupo ha sido actualizada.\nTítulo: ${titulo}\nFecha: ${fecha}\nHora: ${horaInicio} - ${horaFin}\nEnlace: ${link}`;
-            const html = `<p>La reunión de tu grupo ha sido actualizada.</p><ul><li><strong>Título:</strong> ${titulo}</li><li><strong>Fecha:</strong> ${fecha}</li><li><strong>Hora:</strong> ${horaInicio} - ${horaFin}</li><li><strong>Enlace:</strong> <a href=\"${link}\">${link}</a></li></ul>`;
-            emailPromises.push(sendEmail(emails, subject, text, html));
+            const subject = `Aplicación grupal de prueba psicométrica actualizada`;
+            const html = generarCorreoEntrevistaGrupalModificada(fecha, horaInicio, horaFin, link);
+            emailPromises.push(sendEmail(emails, subject, undefined, html));
         }
         try {
             await Promise.all(emailPromises);
@@ -2454,10 +2452,9 @@ exports.deleteGroupMeeting = async (req, res) => {
         const emailPromises = [];
         let emailStatus = null;
         if (emails.length > 0 && meeting) {
-            const subject = `Reunión de grupo cancelada: ${meeting.titulo}`;
-            const text = `La reunión de tu grupo ha sido cancelada.\nTítulo: ${meeting.titulo}\nFecha: ${meeting.fecha}\nHora: ${meeting.horaInicio} - ${meeting.horaFin}\nEnlace: ${meeting.link}`;
-            const html = `<p>La reunión de tu grupo ha sido <strong>cancelada</strong>.</p><ul><li><strong>Título:</strong> ${meeting.titulo}</li><li><strong>Fecha:</strong> ${meeting.fecha}</li><li><strong>Hora:</strong> ${meeting.horaInicio} - ${meeting.horaFin}</li><li><strong>Enlace:</strong> <a href=\"${meeting.link}\">${meeting.link}</a></li></ul>`;
-            emailPromises.push(sendEmail(emails, subject, text, html));
+            const subject = `Aplicación grupal de prueba psicométrica cancelada`;
+            const html = generarCorreoEntrevistaGrupalCancelada(meeting.fecha, meeting.horaInicio, meeting.horaFin, meeting.link);
+            emailPromises.push(sendEmail(emails, subject, undefined, html));
         }
         try {
             await Promise.all(emailPromises);
