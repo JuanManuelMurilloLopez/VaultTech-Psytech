@@ -456,7 +456,7 @@ exports.buscarAspirantes = (request, response, next) => {
 exports.getEditarGrupo = (request, response, next) => {
     const idGrupo = request.params.idGrupo;
 
-    // Información del grupo a editar
+    // Informacion del grupo a editar
     Promise.all([
         Grupo.fetchOne(idGrupo),
         Grupo.getNiveles(),
@@ -522,9 +522,8 @@ exports.postEditarGrupo = (request, response, next) => {
         estatusGrupo
     } = request.body;
 
-    // Cambiar estatusGrupo a 1 (activo) o 0 (inactivo) para guardarlo en la base de datos
-    // Si no se manda un nuevo valor, usar el mismo estatus que ya tenía
     let estatus;
+    let grupoActual;
 
     // Checar el valor actual del grupo
     Grupo.fetchOne(idGrupo)
@@ -533,9 +532,8 @@ exports.postEditarGrupo = (request, response, next) => {
                 return response.status(404).send('Grupo no encontrado');
             }
 
-            const grupoActual = rows[0];
+            grupoActual = rows[0];
 
-            // Si no se manda el estatusGrupo desde el formulario dejar el que ya estaba
             if (estatusGrupo === undefined || estatusGrupo === null) {
                 estatus = grupoActual.estatusGrupo;
             } else {
@@ -558,15 +556,29 @@ exports.postEditarGrupo = (request, response, next) => {
             );
         })
         .then(() => {
+            // Si el grupo se esta desactivando, desactivar todos sus aspirantes
+            if (grupoActual.estatusGrupo === 1 && estatus === 0) {
+                console.log('Desactivando grupo y todos sus aspirantes...');
+                return Grupo.desactivarAspirantesDelGrupo(idGrupo);
+            }
+            // Si el grupo se esta reactivando, reactivar todos sus aspirantes
+            else if (grupoActual.estatusGrupo === 0 && estatus === 1) {
+                console.log('Reactivando grupo y todos sus aspirantes...');
+                return Grupo.reactivarAspirantesDelGrupo(idGrupo);
+            }
+            // Si no hay cambio de estatus, no hacer nada
+            return Promise.resolve();
+        })
+        .then(() => {
             // Actualizar las pruebas asignadas
             return Grupo.actualizarPruebasAsignadas(idGrupo, pruebasSeleccionadas, fechaLimite);
         })
         .then(() => {
-            // Obtener idInstitucion para red a la lista de grupos
+            // Obtener idInstitucion para redirigir a la lista de grupos
             return Grupo.fetchOne(idGrupo);
         })
         .then(([grupo]) => {
-            // Red a la pag de grupos de esa institucion
+            // Redirigir a la pagina de grupos de esa institucion
             response.redirect(`/psicologo/grupos/${grupo[0].idInstitucion}`);
         })
         .catch(error => {
@@ -582,10 +594,34 @@ exports.postActualizarEstatusGrupo = (request, response, next) => {
 
     // Convertir el valor a booleano
     const nuevoEstatus = estatusGrupo === 'true';
+    let estatusAnterior;
 
-    Grupo.updateEstatus(idGrupo, nuevoEstatus)
+    // Primero obtener el estatus actual del grupo
+    Grupo.fetchOne(idGrupo)
+        .then(([rows]) => {
+            if (rows.length === 0) {
+                throw new Error('Grupo no encontrado');
+            }
+            estatusAnterior = rows[0].estatusGrupo;
+            
+            // Actualizar el estatus del grupo
+            return Grupo.updateEstatus(idGrupo, nuevoEstatus);
+        })
         .then(() => {
-            // Redireccionar a la pag de lista de grupos
+            // Si el grupo se esta desactivando, desactivar todos sus aspirantes
+            if (estatusAnterior === 1 && nuevoEstatus === false) {
+                console.log('Desactivando grupo y todos sus aspirantes...');
+                return Grupo.desactivarAspirantesDelGrupo(idGrupo);
+            }
+            // Si el grupo se esta reactivando, reactivar todos sus aspirantes
+            else if (estatusAnterior === 0 && nuevoEstatus === true) {
+                console.log('Reactivando grupo y todos sus aspirantes...');
+                return Grupo.reactivarAspirantesDelGrupo(idGrupo);
+            }
+            return Promise.resolve();
+        })
+        .then(() => {
+            // Redireccionar a la pagina de lista de grupos
             response.redirect('/psicologo/lista-grupos');
         })
         .catch(error => {
@@ -617,7 +653,7 @@ exports.getAspirante = (request, response, next) => {
                                 formatoEntrevista: formatoEntrevista || [],
                                 aspirante: request.params.idAspirante || null,
                                 idInstitucion: request.params.idInstitucion || null,
-                                mensaje: mensaje // ← COMENTAR ESTA LÍNEA TAMBIÉN
+                                mensaje: mensaje 
                             })
                         })
                         .catch((error) => {
