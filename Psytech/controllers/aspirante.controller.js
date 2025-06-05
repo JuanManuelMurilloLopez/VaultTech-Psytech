@@ -491,7 +491,6 @@ exports.getPruebaOtis = (request, response, next) => {
     PruebaOtis.getGrupoPrueba(request.session.idAspirante, idPrueba)
         .then(([rows, fieldData]) => {
             if (rows.length > 0) {
-                console.log(request.session.idGrupo);
                 request.session.idGrupo = rows[0].idGrupo;
                 request.session.idPrueba = idPrueba;
             } else {
@@ -813,8 +812,6 @@ exports.getInfoSerie = (req, res, next) => {
 
     const idPrueba = 4;
     let nombreSeccion, instruccion, preguntas, opciones;
-
-    console.log(req.session.idAspirante)
 
     Terman.getGrupoPrueba(req.session.idAspirante, idPrueba)
         .then(([rows, fieldData]) => {
