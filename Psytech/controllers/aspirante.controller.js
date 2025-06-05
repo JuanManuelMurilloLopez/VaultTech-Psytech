@@ -887,12 +887,17 @@ exports.postRespuestaTerman = async (req, res, next) => {
             idPrueba
         );
 
-        if (idPreguntaTerman === 173 && rows.length === 0) {
-            await db.execute(
-                `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
-                VALUES (?, ?, ?, 2)`,
-                [idAspirante, idGrupo, idPrueba]
-            );
+        // Si es la última pregunta, se actualiza el estatus de la prueba a Completada
+        if (idPreguntaTerman === 173) {
+            if (rows.length === 0) {
+                await db.execute(
+                    `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
+                    VALUES (?, ?, ?, 2)`,
+                    [idAspirante, idGrupo, idPrueba]
+                );
+            } else {
+                await Prueba.updateEstatusPruebaPendiente(req.session.idAspirante, req.session.idGrupo, idPrueba, 'Completada');
+            }
         } else {
             await Prueba.updateEstatusPruebaPendiente(req.session.idAspirante, req.session.idGrupo, idPrueba, 'En progreso');
         }
