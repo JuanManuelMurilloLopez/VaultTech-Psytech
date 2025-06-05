@@ -140,4 +140,8 @@ router.post('/grupos/:idGrupo/meeting', controller.createGroupMeeting);
 router.post('/grupos/:idGrupo/meeting/:idReunion', controller.updateGroupMeeting);
 router.post('/grupos/:idGrupo/meeting/:idReunion/delete', controller.deleteGroupMeeting);
 
+router.post('/aspirantes/eliminar/:idAspirante/:idGrupo/:idInstitucion', controller.postEliminarAspirante);
+router.post('/grupos/eliminar/:idGrupo/:idInstitucion', controller.postEliminarGrupo);
+router.post('/instituciones/eliminar/:idInstitucion', controller.PostEliminarInstitucion);
+
 module.exports = router;

@@ -436,6 +436,7 @@ CREATE TABLE `grupos` (
   `carrera` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `idInstitucion` varchar(36) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `idNivelAcademico` int DEFAULT NULL,
+  `eliminado` BOOL DEFAULT 0,
   PRIMARY KEY (`idGrupo`),
   KEY `idInstitucion` (`idInstitucion`),
   KEY `idNivelAcademico` (`idNivelAcademico`),
@@ -522,6 +523,7 @@ CREATE TABLE `institucion` (
   `nombreInstitucion` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `estatusInstitucion` tinyint(1) DEFAULT NULL,
   `idTipoInstitucion` int DEFAULT NULL,
+  `eliminado` BOOL DEFAULT 0,
   PRIMARY KEY (`idInstitucion`),
   KEY `idTipoInstitucion` (`idTipoInstitucion`),
   CONSTRAINT `institucion_ibfk_1` FOREIGN KEY (`idTipoInstitucion`) REFERENCES `tipoinstitucion` (`idTipoInstitucion`)

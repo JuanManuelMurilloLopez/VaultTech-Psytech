@@ -44,10 +44,26 @@
             <div>
                 <div class="d-flex align-items-center">
                     <h4>Datos personales</h4>
-                    <a class="btn btn-danger" href='/psicologo/editar-aspirante/<%= idInstitucion %>/<%= idGrupo %>/<%= informacionAspirante.idAspirante %> '>Editar</a>
+                    <a class="btn btn-secondary" href='/psicologo/editar-aspirante/<%= idInstitucion %>/<%= idGrupo %>/<%= informacionAspirante.idAspirante %> '>Editar</a>
+                    <button type="button" class="btn btn-danger" onclick="mostrarModal('<%= aspirante %>', '<%= idGrupo %>', '<%= idInstitucion %>')">ELIMINAR</button>
                 </div>
                 <hr>
             
+                <!-- Modal -->
+                <div id="modalEliminar" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+                    <div style="background:white; padding:20px; max-width:500px; margin:100px auto; border-radius:8px; position:relative;">
+                        <h4>Confirmar eliminación</h4>
+                        <p>Escribe <strong>Eliminar</strong> para confirmar esta acción. Esta acción no se puede deshacer.</p>
+                        <input type="text" id="confirmarTexto" class="form-control" placeholder="Escribe 'Eliminar'" oninput="verificarTextoConfirmacion()" />
+                        <div class="mt-3 d-flex justify-content-end">
+                            <button onclick="cerrarModal()" class="btn btn-secondary me-2">Cancelar</button>
+                            <form id="formEliminar" method="POST">
+                                <button type="submit" class="btn btn-danger" id="btnConfirmarEliminar" disabled>Confirmar eliminación</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
                 <div>
                     <div class="datos-personales">
                         <h6 class="datos-titulo">Institución de prodecencia: </h6>
@@ -273,4 +289,27 @@
             });
         });
     </script>
+
+    <script>
+        let rutaForm = "";
+
+        function mostrarModal(aspirante, idGrupo, idInstitucion) {
+            rutaForm = `/psicologo/aspirantes/eliminar/${aspirante}/${idGrupo}/${idInstitucion}`;
+            document.getElementById("formEliminar").action = rutaForm;
+            document.getElementById("confirmarTexto").value = "";
+            document.getElementById("btnConfirmarEliminar").disabled = true;
+            document.getElementById("modalEliminar").style.display = "block";
+        }
+
+        function cerrarModal() {
+            document.getElementById("modalEliminar").style.display = "none";
+        }
+
+        function verificarTextoConfirmacion() {
+            const texto = document.getElementById("confirmarTexto").value.trim();
+            document.getElementById("btnConfirmarEliminar").disabled = (texto !== "Eliminar");
+        }
+    </script>
+
+
 </body>

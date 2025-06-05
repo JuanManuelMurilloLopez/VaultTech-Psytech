@@ -22,6 +22,7 @@ module.exports = class Grupo {
                       grupos.idInstitucion = institucion.idInstitucion
                       LEFT JOIN gruposaspirantes ON 
                       grupos.idGrupo = gruposaspirantes.idGrupo
+                      WHERE grupos.eliminado = 0
                       GROUP BY 
                           grupos.idGrupo, 
                           institucion.nombreInstitucion, 
@@ -45,6 +46,7 @@ module.exports = class Grupo {
                       LEFT JOIN gruposaspirantes ON 
                       grupos.idGrupo = gruposaspirantes.idGrupo
                       WHERE institucion.idInstitucion = ?
+                      AND grupos.eliminado = 0
                       GROUP BY 
                           grupos.idGrupo, 
                           institucion.nombreInstitucion, 
@@ -62,6 +64,7 @@ module.exports = class Grupo {
         SELECT *, nombreNivelAcademico
         FROM grupos, nivelacademico
         WHERE grupos.idNivelAcademico = nivelacademico.idNivelAcademico
+        AND grupos.eliminado = 0
         AND grupos.idGrupo = ?
       `, [idGrupo])
     }
@@ -285,4 +288,13 @@ module.exports = class Grupo {
             [estatusGrupo, idGrupo]
         );
     }
+
+    static eliminarGrupo(idGrupo){
+        return db.execute(`
+                            UPDATE grupos
+                            SET eliminado = 1
+                            WHERE idGrupo = ?
+            `, [idGrupo]);
+    }
+
 }
