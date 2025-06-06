@@ -127,12 +127,14 @@ exports.reenviarOtp = async (request, response) => {
 
         await OTP.crearOTP(usuarioId.idUsuario, codigoOTP, validez);
 
-        await resend.emails.send({
-            from: 'psytech@pruebas.psicodx.com',
-            to: [usuarioId.correo],
-            subject: 'Tu nuevo código OTP',
-            html: `<h2>¡Hola ${usuario}!</h2><p>Tu nuevo código OTP es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos.</p>`
-        });
+        if (process.env.NODE_ENV !== 'develop') {
+            await resend.emails.send({
+                from: 'psytech@pruebas.psicodx.com',
+                to: [usuarioId.correo],
+                subject: 'Tu nuevo código OTP',
+                html: `<h2>¡Hola ${usuario}!</h2><p>Tu nuevo código OTP es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos.</p>`
+            });
+        }
 
         console.log('Nuevo OTP reenviado:', codigoOTP);
         return response.send('<script>alert("Nuevo código enviado a tu correo."); window.location.href = "/otp";</script>');

@@ -230,6 +230,14 @@ module.exports = class Grupo {
                         )
                     );
                 }
+                if (pruebasEliminadas.length > 0) {
+                    promisesGruposPruebas.push(
+                        db.execute('DELETE FROM aspirantesgrupospruebas WHERE idGrupo = ? AND idPrueba IN (?)', [idGrupo, pruebasEliminadas])
+                    );
+                }
+                promisesGruposPruebas.push(
+                    db.execute('UPDATE aspirantesgrupospruebas SET fechaLimite = ? WHERE idGrupo = ?', [fechaLimite, idGrupo])
+                );
 
                 return Promise.all(promisesGruposPruebas);
             }).then(() => {
