@@ -80,7 +80,7 @@
                                     incorrecta
                                 <% } %> ">
                                     <h5><%= respuesta.numeroPregunta %> .- 
-                                        <%= respuesta. preguntaTerman %> - 
+                                        <%= respuesta.preguntaTerman %> - 
                                         <% if (respuesta.esCorrecta === null) { %>
                                             NO CONTESTADA
                                         <% } else if (respuesta.esCorrecta) { %>
@@ -112,7 +112,13 @@
                                             <img class="incorrecta" src="/images/uncheck.svg" alt="respuesta incorrecta">
                                         <% } %>
                                     </div>
-                                    <p><%= opcion.descripcionTerman %></p>
+                                    <p>
+                                        <% if (serie.idSerieTerman == 10) { %>
+                                            <%= respuesta.respuestaAbierta %>
+                                        <% } else { %>
+                                            <%= opcion.descripcionTerman %>
+                                        <% } %>
+                                    </p>
                                 </div>
                             <% } %>
                         </div><br>

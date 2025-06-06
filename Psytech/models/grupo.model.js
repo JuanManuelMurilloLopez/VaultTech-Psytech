@@ -296,5 +296,27 @@ module.exports = class Grupo {
                             WHERE idGrupo = ?
             `, [idGrupo]);
     }
+    // Metodo para desactivar todos los aspirantes de un grupo
+    static desactivarAspirantesDelGrupo(idGrupo) {
+        return db.execute(
+            `UPDATE usuarios u 
+            JOIN aspirantes a ON u.idUsuario = a.idUsuario
+            JOIN gruposaspirantes ga ON a.idAspirante = ga.idAspirante 
+            SET u.estatusUsuario = 0 
+            WHERE ga.idGrupo = ? AND u.idRol = 3`,
+            [idGrupo]
+        );
+    }
 
+    // Metodo para reactivar todos los aspirantes de un grupo
+    static reactivarAspirantesDelGrupo(idGrupo) {
+        return db.execute(
+            `UPDATE usuarios u 
+            JOIN aspirantes a ON u.idUsuario = a.idUsuario
+            JOIN gruposaspirantes ga ON a.idAspirante = ga.idAspirante 
+            SET u.estatusUsuario = 1 
+            WHERE ga.idGrupo = ? AND u.idRol = 3`,
+            [idGrupo]
+        );
+    }
 }

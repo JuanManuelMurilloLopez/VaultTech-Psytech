@@ -457,7 +457,7 @@ exports.buscarAspirantes = (request, response, next) => {
 exports.getEditarGrupo = (request, response, next) => {
     const idGrupo = request.params.idGrupo;
 
-    // Información del grupo a editar
+    // Informacion del grupo a editar
     Promise.all([
         Grupo.fetchOne(idGrupo),
         Grupo.getNiveles(),
@@ -523,9 +523,8 @@ exports.postEditarGrupo = (request, response, next) => {
         estatusGrupo
     } = request.body;
 
-    // Cambiar estatusGrupo a 1 (activo) o 0 (inactivo) para guardarlo en la base de datos
-    // Si no se manda un nuevo valor, usar el mismo estatus que ya tenía
     let estatus;
+    let grupoActual;
 
     // Checar el valor actual del grupo
     Grupo.fetchOne(idGrupo)
@@ -534,9 +533,8 @@ exports.postEditarGrupo = (request, response, next) => {
                 return response.status(404).send('Grupo no encontrado');
             }
 
-            const grupoActual = rows[0];
+            grupoActual = rows[0];
 
-            // Si no se manda el estatusGrupo desde el formulario dejar el que ya estaba
             if (estatusGrupo === undefined || estatusGrupo === null) {
                 estatus = grupoActual.estatusGrupo;
             } else {
@@ -559,15 +557,29 @@ exports.postEditarGrupo = (request, response, next) => {
             );
         })
         .then(() => {
+            // Si el grupo se esta desactivando, desactivar todos sus aspirantes
+            if (grupoActual.estatusGrupo === 1 && estatus === 0) {
+                console.log('Desactivando grupo y todos sus aspirantes...');
+                return Grupo.desactivarAspirantesDelGrupo(idGrupo);
+            }
+            // Si el grupo se esta reactivando, reactivar todos sus aspirantes
+            else if (grupoActual.estatusGrupo === 0 && estatus === 1) {
+                console.log('Reactivando grupo y todos sus aspirantes...');
+                return Grupo.reactivarAspirantesDelGrupo(idGrupo);
+            }
+            // Si no hay cambio de estatus, no hacer nada
+            return Promise.resolve();
+        })
+        .then(() => {
             // Actualizar las pruebas asignadas
             return Grupo.actualizarPruebasAsignadas(idGrupo, pruebasSeleccionadas, fechaLimite);
         })
         .then(() => {
-            // Obtener idInstitucion para red a la lista de grupos
+            // Obtener idInstitucion para redirigir a la lista de grupos
             return Grupo.fetchOne(idGrupo);
         })
         .then(([grupo]) => {
-            // Red a la pag de grupos de esa institucion
+            // Redirigir a la pagina de grupos de esa institucion
             response.redirect(`/psicologo/grupos/${grupo[0].idInstitucion}`);
         })
         .catch(error => {
@@ -583,10 +595,34 @@ exports.postActualizarEstatusGrupo = (request, response, next) => {
 
     // Convertir el valor a booleano
     const nuevoEstatus = estatusGrupo === 'true';
+    let estatusAnterior;
 
-    Grupo.updateEstatus(idGrupo, nuevoEstatus)
+    // Primero obtener el estatus actual del grupo
+    Grupo.fetchOne(idGrupo)
+        .then(([rows]) => {
+            if (rows.length === 0) {
+                throw new Error('Grupo no encontrado');
+            }
+            estatusAnterior = rows[0].estatusGrupo;
+
+            // Actualizar el estatus del grupo
+            return Grupo.updateEstatus(idGrupo, nuevoEstatus);
+        })
         .then(() => {
-            // Redireccionar a la pag de lista de grupos
+            // Si el grupo se esta desactivando, desactivar todos sus aspirantes
+            if (estatusAnterior === 1 && nuevoEstatus === false) {
+                console.log('Desactivando grupo y todos sus aspirantes...');
+                return Grupo.desactivarAspirantesDelGrupo(idGrupo);
+            }
+            // Si el grupo se esta reactivando, reactivar todos sus aspirantes
+            else if (estatusAnterior === 0 && nuevoEstatus === true) {
+                console.log('Reactivando grupo y todos sus aspirantes...');
+                return Grupo.reactivarAspirantesDelGrupo(idGrupo);
+            }
+            return Promise.resolve();
+        })
+        .then(() => {
+            // Redireccionar a la pagina de lista de grupos
             response.redirect('/psicologo/lista-grupos');
         })
         .catch(error => {
@@ -618,7 +654,7 @@ exports.getAspirante = (request, response, next) => {
                                 formatoEntrevista: formatoEntrevista || [],
                                 aspirante: request.params.idAspirante || null,
                                 idInstitucion: request.params.idInstitucion || null,
-                                mensaje: mensaje // ← COMENTAR ESTA LÍNEA TAMBIÉN
+                                mensaje: mensaje
                             })
                         })
                         .catch((error) => {
@@ -2061,8 +2097,9 @@ exports.getCuadernillo16PF = (request, response, next) => {
 }
 
 //Cuadernillo Terman
-exports.getCuadernilloTerman = (request, response, next) => {
+exports.getCuadernilloTerman = async (request, response, next) => {
     const idAspirante = request.params.idAspirante;
+    const [preguntasOpcionesTerman] = await CuadernilloTerman.getPreguntasOpcionesTerman();
 
     Aspirante.getInformacionAspirante(idAspirante)
         .then(([rows, fieldData]) => {
@@ -2072,28 +2109,41 @@ exports.getCuadernilloTerman = (request, response, next) => {
                 .then(([rows, fielData]) => {
                     const tiempoTotal = rows[0].Tiempo;
                     // Obtiene las preguntas, series, opciones y la respuesta del aspirante
-                    CuadernilloTerman.getRespuestasTermanAspirante(request.params.idGrupo, request.params.idAspirante)
+                    CuadernilloTerman.getRespuestasTermanAspirante2(request.params.idGrupo, request.params.idAspirante)
                         .then(([rows, fielData]) => {
                             const seriesAgrupadas = {};
+                            const respuestasAspirante = rows.reduce((acc, row) => {
+                                // Serie 4 tiene 2 respuestas por pregunta, por lo que se debe de manejar de forma diferente
+                                if (!acc[row.idPreguntaTerman] && row.idSerieTerman !== 4) {
+                                    acc[row.idPreguntaTerman] = row;
+                                } else if (row.idSerieTerman === 4) {
+                                    if (!acc[row.idPreguntaTerman]) {
+                                        acc[row.idPreguntaTerman] = [row];
+                                    } else {
+                                        acc[row.idPreguntaTerman].push(row);
+                                    }
+                                }
+                                return acc;
+                            }, {});
 
-                            rows.forEach(row => {
+                            preguntasOpcionesTerman.forEach(preguntaOpcion => {
                                 //Si la serie no existe aun, se crea
-                                if (!seriesAgrupadas[row.idSerieTerman]) {
-                                    seriesAgrupadas[row.idSerieTerman] = {
-                                        idSerieTerman: row.idSerieTerman,
-                                        nombreSeccion: row.nombreSeccion,
+                                if (!seriesAgrupadas[preguntaOpcion.idSerieTerman]) {
+                                    seriesAgrupadas[preguntaOpcion.idSerieTerman] = {
+                                        idSerieTerman: preguntaOpcion.idSerieTerman,
+                                        nombreSeccion: preguntaOpcion.nombreSeccion,
                                         preguntas: {}
                                     };
                                 }
 
-                                const serie = seriesAgrupadas[row.idSerieTerman];
+                                const serie = seriesAgrupadas[preguntaOpcion.idSerieTerman];
 
                                 //Si la pregunta no existe aun, se crea
-                                if (!serie.preguntas[row.idPreguntaTerman]) {
-                                    serie.preguntas[row.idPreguntaTerman] = {
-                                        idPreguntaTerman: row.idPreguntaTerman,
-                                        numeroPregunta: row.numeroPregunta,
-                                        preguntaTerman: row.preguntaTerman,
+                                if (!serie.preguntas[preguntaOpcion.idPreguntaTerman]) {
+                                    serie.preguntas[preguntaOpcion.idPreguntaTerman] = {
+                                        idPreguntaTerman: preguntaOpcion.idPreguntaTerman,
+                                        numeroPregunta: preguntaOpcion.numeroPregunta,
+                                        preguntaTerman: preguntaOpcion.preguntaTerman,
                                         opciones: [],
                                         esCorrecta: false,
                                         tiempoRespuesta: 0,
@@ -2101,21 +2151,49 @@ exports.getCuadernilloTerman = (request, response, next) => {
                                     };
                                 }
 
-                                const pregunta = serie.preguntas[row.idPreguntaTerman];
+                                const pregunta = serie.preguntas[preguntaOpcion.idPreguntaTerman];
+                                const respuestaAspirante = respuestasAspirante[preguntaOpcion.idPreguntaTerman];
 
                                 // Vamos añadiendo las opciones de la pregunta correspondiente
                                 pregunta.opciones.push({
-                                    idOpcionTerman: row.idOpcionTerman,
-                                    opcionTerman: row.opcionTerman,
-                                    descripcionTerman: row.descripcionTerman,
-                                    esCorrecta: row.esCorrecta === 1,
-                                    seleccionada: row.opcionSeleccionada === 1
+                                    idOpcionTerman: preguntaOpcion.idOpcionTerman,
+                                    opcionTerman: preguntaOpcion.opcionTerman,
+                                    descripcionTerman: preguntaOpcion.descripcionTerman,
+                                    esCorrecta: preguntaOpcion.esCorrecta === 1,
+                                    seleccionada: preguntaOpcion.idSerieTerman === 4
+                                        ? respuestaAspirante.some(r => r.idOpcionTerman === preguntaOpcion.idOpcionTerman)
+                                        : preguntaOpcion.idSerieTerman === 10
+                                            ? respuestaAspirante !== ''
+                                            : respuestaAspirante.idOpcionTerman === preguntaOpcion.idOpcionTerman
                                 });
 
-                                if (row.opcionSeleccionada === 1) {
-                                    pregunta.tiempoRespuesta = row.tiempoRespuesta;
+                                if (preguntaOpcion.idSerieTerman === 4) {
+                                    if (respuestaAspirante.every(r => pregunta.opciones.find(o => o.idOpcionTerman === r.idOpcionTerman)?.esCorrecta)) {
+                                        pregunta.tiempoRespuesta = respuestaAspirante[0].tiempoRespuesta;
+                                        pregunta.contestada = true;
+                                        pregunta.esCorrecta = true;
+                                    } else {
+                                        pregunta.contestada = true;
+                                        pregunta.esCorrecta = false;
+                                    }
+                                } else if (preguntaOpcion.idSerieTerman === 10) {
+                                    pregunta.contestada = respuestaAspirante.respuestaAbierta !== '';
+                                    pregunta.esCorrecta = respuestaAspirante.respuestaAbierta === preguntaOpcion.descripcionTerman;
+                                    pregunta.tiempoRespuesta = respuestaAspirante.tiempoRespuesta;
+                                } else if (respuestaAspirante.idOpcionTerman === preguntaOpcion.idOpcionTerman) {
+                                    pregunta.tiempoRespuesta = respuestaAspirante.tiempoRespuesta;
                                     pregunta.contestada = true;
-                                    pregunta.esCorrecta = row.esCorrecta === 1;
+                                    pregunta.esCorrecta = preguntaOpcion.esCorrecta === 1;
+                                }
+                                if (preguntaOpcion.idSerieTerman == 4) {
+                                    pregunta.contestada = respuestaAspirante.length > 0;
+                                } else if (preguntaOpcion.idSerieTerman == 5) {
+                                    pregunta.contestada = respuestaAspirante.respuestaAbierta !== '0';
+                                } else if (preguntaOpcion.idSerieTerman == 10) {
+                                    pregunta.contestada = respuestaAspirante.respuestaAbierta !== '';
+                                    pregunta.respuestaAbierta = respuestaAspirante.respuestaAbierta;
+                                } else {
+                                    pregunta.contestada = respuestaAspirante.idOpcionTerman !== null;
                                 }
 
                                 if (!pregunta.contestada) {

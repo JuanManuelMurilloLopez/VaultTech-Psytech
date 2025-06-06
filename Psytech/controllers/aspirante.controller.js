@@ -53,7 +53,7 @@ exports.postSoporte = async (req, res) => {
 
         await resend.emails.send({
             from: 'psytech@pruebas.psicodx.com',
-            to: ['psicodx.03@gmail.com'],
+            to: ['clau1863@yahoo.com.mx', 'rossmachuca@gmail.com', 'claudia.calvo.tercero@gmail.com'],
             subject: `Soporte de ${datos.nombreUsuario}`,
             html: cuerpoCorreo
         });
@@ -887,12 +887,17 @@ exports.postRespuestaTerman = async (req, res, next) => {
             idPrueba
         );
 
-        if (idPreguntaTerman === 173 && rows.length === 0) {
-            await db.execute(
-                `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
-                VALUES (?, ?, ?, 2)`,
-                [idAspirante, idGrupo, idPrueba]
-            );
+        // Si es la última pregunta, se actualiza el estatus de la prueba a Completada
+        if (idPreguntaTerman === 173) {
+            if (rows.length === 0) {
+                await db.execute(
+                    `INSERT INTO aspirantesgrupospruebas (idAspirante, idGrupo, idPrueba, idEstatus)
+                    VALUES (?, ?, ?, 2)`,
+                    [idAspirante, idGrupo, idPrueba]
+                );
+            } else {
+                await Prueba.updateEstatusPruebaPendiente(req.session.idAspirante, req.session.idGrupo, idPrueba, 'Completada');
+            }
         } else {
             await Prueba.updateEstatusPruebaPendiente(req.session.idAspirante, req.session.idGrupo, idPrueba, 'En progreso');
         }
