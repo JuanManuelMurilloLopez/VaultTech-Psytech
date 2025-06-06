@@ -45,6 +45,15 @@ router.get('/buscar-aspirantes/:idGrupo/:valor', controller.buscarAspirantes);
 // Vista con la información de un aspirante
 router.get('/aspirantes/:idAspirante/:idGrupo/:idInstitucion', controller.getAspirante);
 
+// Crear 1on1 meeting para un aspirante
+router.get('/crear-1on1-meeting/:idGrupo/:idAspirante/:idInstitucion', controller.getCrear1on1Meeting);
+router.post('/crear-1on1-meeting/:idGrupo/:idAspirante/:idInstitucion', controller.postCrear1on1Meeting);
+
+// Editar y eliminar 1on1 meeting para un aspirante
+router.get('/editar-1on1-meeting/:idReunion/:idGrupo/:idAspirante/:idInstitucion', controller.getEditar1on1Meeting);
+router.post('/editar-1on1-meeting/:idReunion/:idGrupo/:idAspirante/:idInstitucion', controller.postEditar1on1Meeting);
+router.post('/eliminar-1on1-meeting/:idReunion/:idGrupo/:idAspirante/:idInstitucion', controller.postEliminar1on1Meeting);
+
 router.get('/importar-aspirantes/:idInstitucion/:idGrupo', controller.getImportarAspirantes);
 router.post('/importar-aspirantes/:idInstitucion/:idGrupo', controller.postImportarAspirantes);
 
