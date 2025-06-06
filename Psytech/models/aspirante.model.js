@@ -163,4 +163,23 @@ module.exports = class Aspirante {
         };
     }
 
+    static eliminarDeGrupo(idAspirante, idGrupo){
+        return db.execute(`
+                            DELETE
+                            FROM gruposaspirantes
+                            WHERE idAspirante = ?
+                            AND idGrupo = ?
+            `, [idAspirante, idGrupo]);
+    }
+
+    static desactivarAspirante(idAspirante){
+        return db.execute(`
+                            UPDATE usuarios
+                            SET estatusUsuario = 0
+                            WHERE idUsuario = (SELECT idUsuario
+                                                FROM aspirantes
+                                                WHERE idAspirante = ?)
+            `, [idAspirante]);
+    }
+
 }

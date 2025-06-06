@@ -11,7 +11,7 @@ module.exports = class Institucion {
 
   save(){
     return db.execute(`INSERT INTO institucion
-       VALUES (uuid(), ?, 1, ?)`, 
+       VALUES (uuid(), ?, 1, ?, 0)`, 
        [this.nombreInstitucion, this.idTipoInstitucion]);
   }
 
@@ -45,10 +45,11 @@ module.exports = class Institucion {
             I.nombreInstitucion, 
             I.estatusInstitucion, 
             TI.nombreTipoInstitucion, 
-            COUNT(G.idGrupo) AS numeroGrupos
+            COUNT(CASE WHEN G.eliminado = 0 THEN 1 ELSE NULL END) AS numeroGrupos
         FROM institucion I
         LEFT JOIN grupos G ON I.idInstitucion = G.idInstitucion
         JOIN tipoinstitucion TI ON I.idTipoInstitucion = TI.idTipoInstitucion
+        WHERE I.eliminado = 0
         GROUP BY 
             I.idInstitucion, 
             I.nombreInstitucion, 
@@ -69,6 +70,14 @@ module.exports = class Institucion {
                 WHERE idInstitucion = ?`
       , [nombreInstitucion, estatusInstitucion, 
         idTipoInstitucion, idInstitucion])
+  }
+
+  static eliminarInstitucion(idInstitucion){
+    return db.execute(`
+                        UPDATE institucion
+                        SET eliminado = 1
+                        WHERE idInstitucion = ?
+      `, [idInstitucion]);
   }
 
 }
