@@ -603,7 +603,7 @@ exports.postActualizarEstatusGrupo = (request, response, next) => {
                 throw new Error('Grupo no encontrado');
             }
             estatusAnterior = rows[0].estatusGrupo;
-            
+
             // Actualizar el estatus del grupo
             return Grupo.updateEstatus(idGrupo, nuevoEstatus);
         })
@@ -653,7 +653,7 @@ exports.getAspirante = (request, response, next) => {
                                 formatoEntrevista: formatoEntrevista || [],
                                 aspirante: request.params.idAspirante || null,
                                 idInstitucion: request.params.idInstitucion || null,
-                                mensaje: mensaje 
+                                mensaje: mensaje
                             })
                         })
                         .catch((error) => {
@@ -2186,8 +2186,11 @@ exports.getCuadernilloTerman = async (request, response, next) => {
                                 }
                                 if (preguntaOpcion.idSerieTerman == 4) {
                                     pregunta.contestada = respuestaAspirante.length > 0;
-                                } else if (preguntaOpcion.idSerieTerman == 5 || preguntaOpcion.idSerieTerman == 10) {
+                                } else if (preguntaOpcion.idSerieTerman == 5) {
+                                    pregunta.contestada = respuestaAspirante.respuestaAbierta !== '0';
+                                } else if (preguntaOpcion.idSerieTerman == 10) {
                                     pregunta.contestada = respuestaAspirante.respuestaAbierta !== '';
+                                    pregunta.respuestaAbierta = respuestaAspirante.respuestaAbierta;
                                 } else {
                                     pregunta.contestada = respuestaAspirante.idOpcionTerman !== null;
                                 }
