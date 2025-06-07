@@ -2,6 +2,15 @@ const db = require('../util/database');
 
 module.exports = class Prueba{
 
+    static TEST_IDS = {
+        OTIS: 5,
+        KOSTICK: 1,
+        HARTMAN: 3,
+        '16PF': 2,
+        TERMAN: 4,
+        COLORS: 6,
+    }
+
     static fetchOneByName(nombrePrueba){
         return db.execute(`
                             SELECT *
