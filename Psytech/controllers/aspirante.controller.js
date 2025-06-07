@@ -24,6 +24,9 @@ const RespondeKostick = require('../models/respondeKostick.model.js');
 const Responde16PF = require('../models/responde16pf.model.js');
 const ResultadosKostick = require('../models/resultadosKostick.model.js');
 
+// Utils
+const { canAspiranteTakeTest } = require('../util/testStatusValidation.js');
+
 //Soporte
 exports.postSoporte = async (req, res) => {
     try {
@@ -267,7 +270,7 @@ exports.getIntruccionesOtis = async (req, res) => {
             }
             req.session.idGrupo = rows[0].idGrupo;
         }
-        if (!canAspiranteTakeTest(idAspirante, req.session.idGrupo, idPrueba)) {
+        if (!await canAspiranteTakeTest(idAspirante, req.session.idGrupo, idPrueba)) {
             return res.redirect('/aspirante/mis-pruebas');
         }
 
@@ -320,7 +323,7 @@ exports.getInstruccionesColores = async (req, res) => {
             }
             req.session.idGrupo = rows[0].idGrupo;
         }
-        if (!canAspiranteTakeTest(idAspirante, req.session.idGrupo, idPrueba)) {
+        if (!await canAspiranteTakeTest(idAspirante, req.session.idGrupo, idPrueba)) {
             return res.redirect('/aspirante/mis-pruebas');
         }
 
@@ -372,7 +375,7 @@ exports.getInstruccionesHartman = async (req, res) => {
             }
             req.session.idGrupo = rows[0].idGrupo;
         }
-        if (!canAspiranteTakeTest(idAspirante, req.session.idGrupo, idPrueba)) {
+        if (!await canAspiranteTakeTest(idAspirante, req.session.idGrupo, idPrueba)) {
             return res.redirect('/aspirante/mis-pruebas');
         }
 
@@ -413,14 +416,11 @@ exports.postInstruccionesHartman = async (req, res) => {
 
 // Formulario datos personales
 exports.getDatosPersonalesOtis = (request, response, next) => {
-    if (!canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS.OTIS)) {
-        return response.redirect('/aspirante/mis-pruebas');
-    }
     response.render('Aspirantes/datosPersonalesOtis');
 };
 
-exports.getDatosPersonalesColores = (request, response, next) => {
-    if (!canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS.COLORS)) {
+exports.getDatosPersonalesColores = async (request, response, next) => {
+    if (!await canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS.COLORS)) {
         return response.redirect('/aspirante/mis-pruebas');
     }
     response.render('Aspirantes/datosPersonalesColores');
@@ -504,9 +504,9 @@ exports.getPruebaOtis = (request, response, next) => {
             if (rows.length > 0) {
                 request.session.idGrupo = rows[0].idGrupo;
                 request.session.idPrueba = idPrueba;
-                if (!canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, idPrueba)) {
+                if (! await canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, idPrueba)) {
                     request.session.mensaje = 'La prueba OTIS no se encuentra disponible.';
-                    response.redirect('/aspirante/mis-pruebas');
+                    return response.redirect('/aspirante/mis-pruebas');
                 }
             }
 
@@ -640,12 +640,12 @@ exports.getPruebaColores = (request, response, next) => {
 
     // Obtener el idGrupo aspirante y prueba
     PruebaColores.getGrupoPrueba(request.session.idAspirante, idPrueba)
-        .then(([rows, fieldData]) => {
+        .then(async ([rows, fieldData]) => {
             if (rows.length > 0) {
                 // Guardar el idGrupo
                 request.session.idGrupo = rows[0].idGrupo;
             }
-            if (!canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, idPrueba)) {
+            if (!await canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, idPrueba)) {
                 request.session.mensaje = 'La prueba Colores no se encuentra disponible.';
                 return response.redirect('/aspirante/mis-pruebas');
             }
@@ -814,8 +814,8 @@ exports.getRespuestasEnviadas = (request, response, next) => {
 
 // Controladores para prueba Terman
 
-exports.getResponderTerman = (req, res, next) => {
-    if (!canAspiranteTakeTest(req.session.idAspirante, req.session.idGrupo, PruebaModel.TEST_IDS.TERMAN)) {
+exports.getResponderTerman = async (req, res, next) => {
+    if (!await canAspiranteTakeTest(req.session.idAspirante, req.session.idGrupo, PruebaModel.TEST_IDS.TERMAN)) {
         return res.redirect('/aspirante/mis-pruebas');
     }
     res.render("Aspirantes/responderTerman", {
@@ -947,9 +947,6 @@ exports.getHartmanFase1 = async (request, response, next) => {
         if (!grupo || grupo.length === 0) {
             return response.status(400).send("No estás asignado a ningún grupo para esta prueba.");
         }
-        if (!canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, idPrueba)) {
-            return response.redirect('/aspirante/mis-pruebas');
-        }
 
         request.session.idGrupo = grupo[0].idGrupo;
 
@@ -1014,9 +1011,6 @@ exports.postHartmanFase1 = (request, response, next) => {
  */
 exports.getHartmanFase2 = async (request, response, next) => {
     try {
-        if (!canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS.HARTMAN)) {
-            return response.redirect('/aspirante/mis-pruebas');
-        }
         tiempoInicio = Date.now();
         const fasePregunta = 2;
         const [rows] = await hartman.fetchFase1(fasePregunta);
@@ -1113,9 +1107,9 @@ exports.get_instrucciones = (request, response, next) => {
 // Datos Personales
 exports.getDatosPersonalesKostick = (request, response, next) => {
     Prueba.getGrupoPrueba(request.session.idAspirante, 1)
-        .then(([rows, fieldData]) => {
+        .then(async ([rows, fieldData]) => {
             request.session.idGrupo = rows[0].idGrupo;
-            if (!canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS.KOSTICK)) {
+            if (!await canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS.KOSTICK)) {
                 return response.redirect('/aspirante/mis-pruebas');
             }
             Prueba.updateEstatusPruebaPendiente(request.session.idAspirante, request.session.idGrupo, 1, 'En progreso')
@@ -1153,9 +1147,9 @@ exports.postDatosPersonalesKostick = (request, response, next) => {
 
 exports.getDatosPersonales16PF = (request, response, next) => {
     Prueba.getGrupoPrueba(request.session.idAspirante, 2)
-        .then(([rows, fieldData]) => {
+        .then(async ([rows, fieldData]) => {
             request.session.idGrupo = rows[0].idGrupo;
-            if (!canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS['16PF'])) {
+            if (!await canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS['16PF'])) {
                 return response.redirect('/aspirante/mis-pruebas');
             }
             Prueba.updateEstatusPruebaPendiente(request.session.idAspirante, request.session.idGrupo, 2, 'En progreso')
@@ -1395,6 +1389,7 @@ exports.pruebaCompletada1 = (request, response, next) => {
     const idAspirante = request.body.idAspirante;
     const idPregunta16PF = request.body.idPregunta16PF;
     const tiempo = request.body.tiempo;
+    const outOfTime = request.body.outOfTime;
 
     const idPrueba = 2;
 
@@ -1402,30 +1397,29 @@ exports.pruebaCompletada1 = (request, response, next) => {
         return response.redirect("/login");
     }
 
-    const newResponde16pf = new Responde16PF(
-        idOpcion16PF,
-        idGrupo,
-        idAspirante,
-        idPregunta16PF,
-        tiempo
-    );
-    newResponde16pf
-        .save()
-        .then((uuid) => {
-            request.session.idPregunta16PF = uuid;
-            return response.status(200).json({
-                message: "Prueba completada exitosamente",
+    if (!outOfTime) {
+        const newResponde16pf = new Responde16PF(
+            idOpcion16PF,
+            idGrupo,
+            idAspirante,
+            idPregunta16PF,
+            tiempo
+        );
+        newResponde16pf
+            .save()
+            .then((uuid) => {
+                request.session.idPregunta16PF = uuid;
+                return response.status(200).json({
+                    message: "Prueba completada exitosamente",
+                });
+            })
+            .catch((error) => {
+                console.error("Error saving response:", error);
+                return response.status(500).json({ message: "Error saving response." });
             });
-        })
-        .catch((error) => {
-            console.error("Error saving response:", error);
-            return response.status(500).json({ message: "Error saving response." });
-        });
+    }
 
     Prueba.updateEstatusPruebaPendiente(request.session.idAspirante, request.session.idGrupo, 2, 'Completada')
-        .then(() => {
-
-        })
         .catch((error) => {
             console.log(error);
         });
