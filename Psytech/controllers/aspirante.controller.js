@@ -1,11 +1,10 @@
-const { request, response } = require("express");
 const FormatoEntrevista = require('../models/formatoDeEntrevista.model');
 const Genero = require('../models/generos.model');
 const EstadoCivil = require('../models/estadoCivil.model');
 const Familiar = require('../models/formularioFamiliares.model');
 const ConsultarPruebas = require("../models/consultarPruebas.model");
 const PruebaColores = require('../models/prueba.model');
-const PruebaOtis = require('../models/prueba.model');
+const PruebaModel = require('../models/prueba.model');
 const OpcionOtis = require('../models/opcionOtis.model.js');
 const Aspirante = require('../models/aspirante.model');
 const Terman = require('../models/terman.model');
@@ -14,9 +13,6 @@ const respuestasTerman = require('../models/respuestasTerman.model');
 const { Resend } = require('resend');
 const resend = new Resend(process.env.RESEND_API_KEY);
 const Usuario = require('../models/usuario.model');
-
-// Middlewares de apoyo
-const calificarSerieTerman = require("../middleware/calificarTerman.js");
 
 //hartman requires
 const PruebaHartman = require('../models/prueba.model');
@@ -262,14 +258,17 @@ exports.postFormularioFamiliares = (request, response, next) => {
 exports.getIntruccionesOtis = async (req, res) => {
     try {
         const idAspirante = req.session.idAspirante;
-        const idPrueba = 5;
+        const idPrueba = PruebaModel.TEST_IDS.OTIS;
 
         if (!req.session.idGrupo) {
-            const [rows] = await PruebaOtis.getGrupoPrueba(idAspirante, idPrueba);
+            const [rows] = await PruebaModel.getGrupoPrueba(idAspirante, idPrueba);
             if (rows.length === 0) {
                 return res.status(400).send('No se encontró grupo para este aspirante y prueba.');
             }
             req.session.idGrupo = rows[0].idGrupo;
+        }
+        if (!canAspiranteTakeTest(idAspirante, req.session.idGrupo, idPrueba)) {
+            return res.redirect('/aspirante/mis-pruebas');
         }
 
         const idGrupo = req.session.idGrupo;
@@ -289,7 +288,7 @@ exports.postInstruccionesOtis = async (req, res) => {
     const { idAspirante, idGrupo, idPrueba } = req.body;
 
     try {
-        const [rows] = await PruebaOtis.verificarExistencia(idAspirante, idGrupo, idPrueba);
+        const [rows] = await PruebaModel.verificarExistencia(idAspirante, idGrupo, idPrueba);
 
         if (rows.length === 0) {
             await db.execute(
@@ -298,7 +297,7 @@ exports.postInstruccionesOtis = async (req, res) => {
                 [idAspirante, idGrupo, idPrueba]
             );
         } else {
-            await PruebaOtis.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, 3);
+            await PruebaModel.updateEstatusPrueba(idAspirante, idGrupo, idPrueba, 3);
         }
 
         res.redirect('/aspirante/datos-personales-otis');
@@ -312,7 +311,7 @@ exports.postInstruccionesOtis = async (req, res) => {
 exports.getInstruccionesColores = async (req, res) => {
     try {
         const idAspirante = req.session.idAspirante;
-        const idPrueba = 6;
+        const idPrueba = PruebaModel.TEST_IDS.COLORS;
 
         if (!req.session.idGrupo) {
             const [rows] = await PruebaColores.getGrupoPrueba(idAspirante, idPrueba);
@@ -320,6 +319,9 @@ exports.getInstruccionesColores = async (req, res) => {
                 return res.status(400).send('No se encontró grupo para este aspirante y prueba.');
             }
             req.session.idGrupo = rows[0].idGrupo;
+        }
+        if (!canAspiranteTakeTest(idAspirante, req.session.idGrupo, idPrueba)) {
+            return res.redirect('/aspirante/mis-pruebas');
         }
 
         const idGrupo = req.session.idGrupo;
@@ -361,7 +363,7 @@ exports.postInstruccionesColores = async (req, res) => {
 exports.getInstruccionesHartman = async (req, res) => {
     try {
         const idAspirante = req.session.idAspirante;
-        const idPrueba = 3;
+        const idPrueba = PruebaModel.TEST_IDS.HARTMAN;
 
         if (!req.session.idGrupo) {
             const [rows] = await PruebaHartman.getGrupoPrueba(idAspirante, idPrueba);
@@ -369,6 +371,9 @@ exports.getInstruccionesHartman = async (req, res) => {
                 return res.status(400).send('No se encontró grupo para este aspirante y prueba.');
             }
             req.session.idGrupo = rows[0].idGrupo;
+        }
+        if (!canAspiranteTakeTest(idAspirante, req.session.idGrupo, idPrueba)) {
+            return res.redirect('/aspirante/mis-pruebas');
         }
 
         const idGrupo = req.session.idGrupo;
@@ -408,10 +413,16 @@ exports.postInstruccionesHartman = async (req, res) => {
 
 // Formulario datos personales
 exports.getDatosPersonalesOtis = (request, response, next) => {
+    if (!canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS.OTIS)) {
+        return response.redirect('/aspirante/mis-pruebas');
+    }
     response.render('Aspirantes/datosPersonalesOtis');
 };
 
 exports.getDatosPersonalesColores = (request, response, next) => {
+    if (!canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS.COLORS)) {
+        return response.redirect('/aspirante/mis-pruebas');
+    }
     response.render('Aspirantes/datosPersonalesColores');
 };
 
@@ -443,8 +454,8 @@ exports.getPruebaOtis = (request, response, next) => {
 //Obtener las areas, preguntas y opciones
 exports.obtenerPreguntas = async (req, res, next) => {
     try {
-        const [areasDB] = await PruebaOtis.getAreaOtis();
-        const [preguntasDB] = await PruebaOtis.getPreguntasOtis();
+        const [areasDB] = await PruebaModel.getAreaOtis();
+        const [preguntasDB] = await PruebaModel.getPreguntasOtis();
         const [opcionesDB] = await OpcionOtis.fetchAll();
 
         const preguntas = preguntasDB.map(pregunta => {
@@ -485,19 +496,22 @@ exports.getPruebaOtis = (request, response, next) => {
         return response.redirect('/aspirante/datos-personales-otis');
     }
 
-    const idPrueba = 5;
+    const idPrueba = PruebaModel.TEST_IDS.OTIS;
 
     // Obtener el idGrupo y idPrueba por la sesión
-    PruebaOtis.getGrupoPrueba(request.session.idAspirante, idPrueba)
-        .then(([rows, fieldData]) => {
+    PruebaModel.getGrupoPrueba(request.session.idAspirante, idPrueba)
+        .then(async ([rows, fieldData]) => {
             if (rows.length > 0) {
                 request.session.idGrupo = rows[0].idGrupo;
                 request.session.idPrueba = idPrueba;
-            } else {
+                if (!canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, idPrueba)) {
+                    request.session.mensaje = 'La prueba OTIS no se encuentra disponible.';
+                    response.redirect('/aspirante/mis-pruebas');
+                }
             }
 
             // Función para obtener las preguntas del model
-            return PruebaOtis.getPreguntasOtis();
+            return PruebaModel.getPreguntasOtis();
         })
         .then(([rows, fieldData]) => {
             const preguntas = rows;
@@ -565,7 +579,7 @@ exports.postGuardarRespuestas = async (request, response) => {
         };
 
         // Guardar datos personales
-        await PruebaOtis.saveDatosPersonales(
+        await PruebaModel.saveDatosPersonales(
             idAspirante,
             idGrupo,
             idPrueba,
@@ -573,7 +587,7 @@ exports.postGuardarRespuestas = async (request, response) => {
         );
 
         // Verificar si ya existe el registro en aspirantesGruposPruebas
-        const [rows] = await PruebaOtis.verificarExistencia(
+        const [rows] = await PruebaModel.verificarExistencia(
             idAspirante,
             idGrupo,
             idPrueba
@@ -586,7 +600,7 @@ exports.postGuardarRespuestas = async (request, response) => {
                 [idAspirante, idGrupo, idPrueba]
             );
         } else {
-            await PruebaOtis.updateEstatusPrueba(
+            await PruebaModel.updateEstatusPrueba(
                 idAspirante,
                 idGrupo,
                 idPrueba
@@ -621,7 +635,8 @@ exports.getPruebaColores = (request, response, next) => {
         return response.redirect('/aspirante/datos-personales-colores');
     }
 
-    const idPrueba = 6;
+    const idPrueba = PruebaModel.TEST_IDS.COLORS;
+
 
     // Obtener el idGrupo aspirante y prueba
     PruebaColores.getGrupoPrueba(request.session.idAspirante, idPrueba)
@@ -629,7 +644,10 @@ exports.getPruebaColores = (request, response, next) => {
             if (rows.length > 0) {
                 // Guardar el idGrupo
                 request.session.idGrupo = rows[0].idGrupo;
-            } else {
+            }
+            if (!canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, idPrueba)) {
+                request.session.mensaje = 'La prueba Colores no se encuentra disponible.';
+                return response.redirect('/aspirante/mis-pruebas');
             }
 
             // Continuar con colores
@@ -797,6 +815,9 @@ exports.getRespuestasEnviadas = (request, response, next) => {
 // Controladores para prueba Terman
 
 exports.getResponderTerman = (req, res, next) => {
+    if (!canAspiranteTakeTest(req.session.idAspirante, req.session.idGrupo, PruebaModel.TEST_IDS.TERMAN)) {
+        return res.redirect('/aspirante/mis-pruebas');
+    }
     res.render("Aspirantes/responderTerman", {
         title: "Responder Terman"
     });
@@ -918,13 +939,16 @@ exports.postRespuestaTerman = async (req, res, next) => {
  */
 exports.getHartmanFase1 = async (request, response, next) => {
     request.session.tiempoInicio = Date.now();
-    const idPrueba = 3;
+    const idPrueba = PruebaModel.TEST_IDS.HARTMAN;
     const fasePregunta = 1;
 
     try {
         const grupo = await hartman.getGrupoPrueba(request.session.idAspirante, idPrueba);
         if (!grupo || grupo.length === 0) {
             return response.status(400).send("No estás asignado a ningún grupo para esta prueba.");
+        }
+        if (!canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, idPrueba)) {
+            return response.redirect('/aspirante/mis-pruebas');
         }
 
         request.session.idGrupo = grupo[0].idGrupo;
@@ -990,6 +1014,9 @@ exports.postHartmanFase1 = (request, response, next) => {
  */
 exports.getHartmanFase2 = async (request, response, next) => {
     try {
+        if (!canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS.HARTMAN)) {
+            return response.redirect('/aspirante/mis-pruebas');
+        }
         tiempoInicio = Date.now();
         const fasePregunta = 2;
         const [rows] = await hartman.fetchFase1(fasePregunta);
@@ -1075,7 +1102,7 @@ exports.postHartmanFase2 = async (request, response, next) => {
 // 16PF y Kostick //
 ////////////////////
 exports.get_instrucciones = (request, response, next) => {
-    PruebaOtis.fetchOneByName(request.params.idPrueba).then(([rows]) => {
+    PruebaModel.fetchOneByName(request.params.idPrueba).then(([rows]) => {
         response.render("Aspirantes/instruccionesPruebas", {
             prueba: rows[0]
         });
@@ -1088,6 +1115,9 @@ exports.getDatosPersonalesKostick = (request, response, next) => {
     Prueba.getGrupoPrueba(request.session.idAspirante, 1)
         .then(([rows, fieldData]) => {
             request.session.idGrupo = rows[0].idGrupo;
+            if (!canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS.KOSTICK)) {
+                return response.redirect('/aspirante/mis-pruebas');
+            }
             Prueba.updateEstatusPruebaPendiente(request.session.idAspirante, request.session.idGrupo, 1, 'En progreso')
                 .then(() => {
                     response.render('Aspirantes/datosPersonalesKostick');
@@ -1125,6 +1155,9 @@ exports.getDatosPersonales16PF = (request, response, next) => {
     Prueba.getGrupoPrueba(request.session.idAspirante, 2)
         .then(([rows, fieldData]) => {
             request.session.idGrupo = rows[0].idGrupo;
+            if (!canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS['16PF'])) {
+                return response.redirect('/aspirante/mis-pruebas');
+            }
             Prueba.updateEstatusPruebaPendiente(request.session.idAspirante, request.session.idGrupo, 2, 'En progreso')
                 .then(() => {
                     Genero.fetchAll()
