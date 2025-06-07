@@ -39,14 +39,14 @@ exports.getPost = async (request, response) => {
 
         request.session.usuario = usuario;
 
-        // Enviar correo con Resend
-        await resend.emails.send({
-            from: 'psytech@pruebas.psicodx.com',
-            to: [usuarioId.correo],
-            subject: 'Tu código OTP para ingresar',
-            html: `<h2>¡Hola ${usuario}!</h2><p>Tu código OTP es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos. Unicamente se puede usar una sola vez.</p>`
-        });
-
+        if (process.env.NODE_ENV !== 'develop') {
+            await resend.emails.send({
+                from: 'psytech@pruebas.psicodx.com',
+                to: [usuarioId.correo],
+                subject: 'Tu código OTP para ingresar',
+                html: `<h2>¡Hola ${usuario}!</h2><p>Tu código OTP es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos. Unicamente se puede usar una sola vez.</p>`
+            });
+        }
         console.log('codigoOTP:', codigoOTP);
         response.redirect('/otp');
     } catch (error) {

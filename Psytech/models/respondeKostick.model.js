@@ -36,6 +36,20 @@ module.exports = class RespondeKostick {
           idGrupo: this.idGrupo,
           idAspirante: this.idAspirante,
         };
+      }).catch(err => {
+      if (err.code === 'ER_DUP_ENTRY') {
+        return db.execute(
+          'UPDATE respondekostick SET idOpcionKostick = ?, tiempo = ? WHERE idPreguntaKostick = ? AND idGrupo = ? AND idAspirante = ?',
+          [this.idOpcionKostick, this.tiempo, this.idPreguntaKostick, this.idGrupo, this.idAspirante]
+        ).then(() => {
+          return {
+            idPreguntaKostick: this.idPreguntaKostick,
+            idGrupo: this.idGrupo,
+            idAspirante: this.idAspirante
+          };
+        });
+      }
+      throw err;
       });
   }
 
