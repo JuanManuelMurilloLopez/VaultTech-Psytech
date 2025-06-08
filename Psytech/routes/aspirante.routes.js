@@ -38,8 +38,6 @@ router.post('/prueba-otis', controller.postPruebaOtis);
 router.post('/guardar-selecciones-otis', controller.postGuardarRespuestas);
 router.get('/prueba-completada', controller.getPruebaCompletada);
 
-//router.get('/instrucciones-hartman', controller.get_instrucciones_hartman);
-
 router.get('/instrucciones-colores', controller.getInstruccionesColores);
 router.post('/instrucciones-colores', controller.postInstruccionesColores);
 router.get('/datos-personales-colores', controller.getDatosPersonalesColores);

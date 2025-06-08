@@ -199,7 +199,7 @@
 
     // Función para entregar prueba Kostick
     function entregar(event) {
-      event.preventDefault();
+      event?.preventDefault();
 
       const endTime = Date.now();
       const timeTaken = endTime - startTime;
@@ -368,8 +368,8 @@
 
 
     // Función para entregar prueba 16PF
-    function entregar1(event) {
-      event.preventDefault();
+    function entregar1(event, outOfTime = false) {
+      event?.preventDefault();
 
       const endTime = Date.now();
       const timeTaken = endTime - startTime;
@@ -384,7 +384,7 @@
 
       if (respuestaSeleccionada) {
         idOpcion16PF = respuestaSeleccionada.value;
-      } else if (!respuestaSeleccionada) {
+      } else if (!respuestaSeleccionada && !outOfTime) {
         alert("Por favor selecciona una opción antes de continuar");
         return;
       }
@@ -401,6 +401,7 @@
         idAspirante,
         idPregunta16PF,
         tiempo,
+        outOfTime,
       };
       fetch(`/aspirante/pruebaCompletada1`, {
         method: "POST",
@@ -454,7 +455,7 @@
 
         // Redireccionar después de un breve tiempo
         setTimeout(() => {
-          window.location.href = "/prueba-completada";
+          window.location.href = "/aspirante/prueba-completada";
         }, 2000);
       }
     }, 1000);

@@ -1,0 +1,5 @@
+Psytech/node_modules
+Psytech/sql
+Psytech/logs
+*/**/*.pdf
+Psytech/public/excel/

@@ -71,3 +71,75 @@ exports.generarCorreoEntrevistaGrupalCancelada = (fecha, hora, enlace) => (
     </footer>
 </body>`
 );
+
+exports.generarCorreoEntrevista1on1 = (fecha, horaInicio, horaFin, enlace, psicologaNombre) => (
+    `<body>
+    <div>
+        <p>
+            Le enviamos un cordial saludo y por este medio le informamos que ha sido programada una <strong>entrevista individual virtual</strong> como parte del proceso de evaluación psicológica del posgrado al que ha aplicado.<br>
+            <br>
+            <strong>Psicóloga asignada:</strong> ${psicologaNombre}<br>
+            Fecha: ${fecha} <br>
+            Hora: ${horaInicio} - ${horaFin} <br>
+            Enlace para ingresar a la sesión: <a href="${enlace}">${enlace}</a> <br>
+            <br>
+            Le solicitamos conectarse a la plataforma de videollamada en el horario indicado. Es importante que cuente con buena conexión a internet y mantener la cámara encendida durante toda la sesión.<br>
+            <br>
+            En caso de que presente algún inconveniente con el enlace o tenga complicaciones para conectarse, por favor envíe un mensaje a través del botón de soporte dentro del sistema, y nos pondremos en contacto para ayudarle.
+        </p>
+    </div>
+    <footer>
+        <strong>
+            ATENTAMENTE. <br>
+            Equipo de Psicólogas PSICODX <br>
+        </strong>
+    </footer>
+</body>`
+);
+
+exports.generarCorreoEntrevista1on1Modificada = (fecha, horaInicio, horaFin, enlace, psicologaNombre) => (
+    `<body>
+    <div>
+        <p>
+            Le informamos que su <strong>entrevista individual virtual</strong> ha sido modificada.<br>
+            <br>
+            <strong>Psicóloga asignada:</strong> ${psicologaNombre}<br>
+            Fecha: ${fecha} <br>
+            Hora: ${horaInicio} - ${horaFin} <br>
+            Enlace para ingresar a la sesión: <a href="${enlace}">${enlace}</a> <br>
+            <br>
+            Le solicitamos conectarse a la plataforma de videollamada en el horario indicado. Es importante que cuente con buena conexión a internet y mantener la cámara encendida durante toda la sesión.<br>
+            <br>
+            En caso de que presente algún inconveniente con el enlace o tenga complicaciones para conectarse, por favor envíe un mensaje a través del botón de soporte dentro del sistema, y nos pondremos en contacto para ayudarle.
+        </p>
+    </div>
+    <footer>
+        <strong>
+            ATENTAMENTE. <br>
+            Equipo de Psicólogas PSICODX <br>
+        </strong>
+    </footer>
+</body>`
+);
+
+exports.generarCorreoEntrevista1on1Cancelada = (fecha, horaInicio, horaFin, enlace, psicologaNombre) => (
+    `<body>
+    <div>
+        <p>
+            Le informamos que su <strong>entrevista individual virtual</strong> ha sido cancelada.<br>
+            <br>
+            <strong>Psicóloga asignada:</strong> ${psicologaNombre}<br>
+            Fecha: ${fecha} <br>
+            Hora: ${horaInicio} - ${horaFin} <br>
+            <br>
+            Si tiene alguna duda, por favor envíe un mensaje a través del botón de soporte dentro del sistema, y nos pondremos en contacto para ayudarle.
+        </p>
+    </div>
+    <footer>
+        <strong>
+            ATENTAMENTE. <br>
+            Equipo de Psicólogas PSICODX <br>
+        </strong>
+    </footer>
+</body>`
+);

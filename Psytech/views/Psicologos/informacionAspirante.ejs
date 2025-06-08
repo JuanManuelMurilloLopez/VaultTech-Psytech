@@ -162,7 +162,30 @@
             <div>
                 <h4>Entrevista Individual</h4>
                 <hr>
-                <div class="d-flex align-items-center">
+                <% if (meeting1on1) { %>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Entrevista agendada</h5>
+                            <p class="mb-1"><strong>Título:</strong> <%= meeting1on1.titulo %></p>
+                            <p class="mb-1"><strong>Fecha:</strong> <%= meeting1on1.fecha %></p>
+                            <p class="mb-1"><strong>Hora:</strong> <%= meeting1on1.horaInicio %> - <%= meeting1on1.horaFin %></p>
+                            <p class="mb-1"><strong>Psicóloga asignada:</strong> <%= meeting1on1.idPsicologo %></p>
+                            <p class="mb-1"><strong>Enlace:</strong> <a href="<%= meeting1on1.link %>" target="_blank"><%= meeting1on1.link %></a></p>
+                            <div class="mt-2">
+                                <a href="/psicologo/editar-1on1-meeting/<%= meeting1on1.idReunion %>/<%= idGrupo %>/<%= aspirante %>/<%= idInstitucion %>" class="btn btn-primary btn-sm">Editar</a>
+                                <form action="/psicologo/eliminar-1on1-meeting/<%= meeting1on1.idReunion %>/<%= idGrupo %>/<%= aspirante %>/<%= idInstitucion %>" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta entrevista?');">
+                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div class="alert alert-info">
+                        <p>No hay entrevista individual agendada para este aspirante.</p>
+                        <a href="/psicologo/crear-1on1-meeting/<%= idGrupo %>/<%= aspirante %>/<%= idInstitucion %>" class="btn btn-solicitar-docs">Agendar Entrevista Individual</a>
+                    </div>
+                <% } %>
+                <div class="d-flex align-items-center mt-3">
                     <img class="document-icon" src="/images/document.svg" alt="ícono de documento">
                     <p class="document-titulo">Formato de entrevista</p>
                     <% if (formatoEntrevista.length > 0) { %>

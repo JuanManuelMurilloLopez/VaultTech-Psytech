@@ -14,6 +14,7 @@ const FormatoEntrevista = require('../models/formatoDeEntrevista.model.js');
 const Familiar = require('../models/formularioFamiliares.model.js');
 const Psicologo = require('../models/psicologo.model');
 const { generarCorreoEntrevistaGrupal, generarCorreoEntrevistaGrupalModificada, generarCorreoEntrevistaGrupalCancelada } = require('../util/correoEntrevistaGrupal');
+const { generarCorreoEntrevista1on1, generarCorreoEntrevista1on1Modificada, generarCorreoEntrevista1on1Cancelada } = require('../util/correoEntrevistaGrupal');
 
 // Modelos terman
 const respuestasTermanModel = require('../models/respuestasTerman.model.js');
@@ -633,15 +634,22 @@ exports.postActualizarEstatusGrupo = (request, response, next) => {
 
 exports.getAspirante = (request, response, next) => {
     Aspirante.getInformacionAspirante(request.params.idAspirante)
-        .then(([rows, fieldData]) => {
+        .then(async ([rows, fieldData]) => {
             const informacionAspirante = rows[0];
+            // Fetch 1on1 meeting for this aspirante in this group
+            let meeting1on1 = null;
+            try {
+                const [meetingRows] = await Reuniones.fetch1on1ByAspirante(request.params.idGrupo, request.params.idAspirante);
+                meeting1on1 = meetingRows && meetingRows.length > 0 ? meetingRows[0] : null;
+            } catch (err) {
+                console.error('Error fetching 1on1 meeting:', err);
+            }
             Aspirante.getMisPruebas(request.params.idAspirante, request.params.idGrupo)
                 .then(([rows, fieldData]) => {
                     const informacionPruebas = rows;
                     Aspirante.getFormatoEntrevista(request.params.idAspirante, request.params.idGrupo)
                         .then(([rows, fieldData]) => {
                             const formatoEntrevista = rows;
-
 
                             // NUEVAS LIANES PARA NOTIFICACIONES
                             const mensaje = request.session.mensaje;
@@ -654,7 +662,8 @@ exports.getAspirante = (request, response, next) => {
                                 formatoEntrevista: formatoEntrevista || [],
                                 aspirante: request.params.idAspirante || null,
                                 idInstitucion: request.params.idInstitucion || null,
-                                mensaje: mensaje
+                                mensaje: mensaje,
+                                meeting1on1
                             })
                         })
                         .catch((error) => {
@@ -1892,7 +1901,7 @@ exports.get_respuestasA = (request, response, next) => {
     Aspirante.getInformacionAspirante(idAspirante).then(([datosAspirante, fieldData]) => {
         Aspirante.fetchGrupo(idAspirante).then(([rows, fieldData]) => {
             Grupo.fetchOne(request.params.idGrupo).then(([grupoRows, fieldData]) => {
-                if (idPrueba == 1) {
+                if (idPrueba == Prueba.TEST_IDS.KOSTICK) {
                     ResultadosKostick.fetchAll(request.params.idGrupo, request.params.idAspirante).then(
                         ([resultados, fieldData]) => {
                             InterpretacionKostick.fetchAll()
@@ -2625,3 +2634,189 @@ exports.PostEliminarInstitucion = (request, response, next) => {
         console.log(error);
     });
 }
+
+// Show form to create a 1on1 meeting for an aspirante in a group
+exports.getCrear1on1Meeting = async (req, res, next) => {
+    try {
+        const { idGrupo, idAspirante, idInstitucion } = req.params;
+        // Get aspirante info
+        const [aspiranteRows] = await Aspirante.getInformacionAspirante(idAspirante);
+        // Get all psicologos (for selection)
+        const [psicologos] = await Psicologo.fetchAll();
+        // Default psicologo is current user
+        const currentUser = req.session.user;
+        res.render('Psicologos/crear1on1Meeting', {
+            idGrupo,
+            idAspirante,
+            idInstitucion,
+            aspirante: aspiranteRows[0],
+            psicologos,
+            defaultPsicologo: currentUser
+        });
+    } catch (error) {
+        console.error('Error mostrando formulario de creación de 1on1:', error);
+        res.status(500).send('Error mostrando formulario de creación de 1on1');
+    }
+};
+
+// Handle POST to create a 1on1 meeting
+exports.postCrear1on1Meeting = async (req, res, next) => {
+    try {
+        const { idGrupo, idAspirante, idInstitucion } = req.params;
+        const { titulo, fecha, horaInicio, horaFin, link, idPsicologo } = req.body;
+        const creadaPor = req.session.user;
+        await Reuniones.create({
+            tipo: '1on1',
+            idGrupo,
+            idAspirante,
+            idPsicologo,
+            titulo,
+            fecha,
+            horaInicio,
+            horaFin,
+            link,
+            creadaPor
+        });
+        // Send email to aspirant
+        try {
+            const [[aspiranteRows], [psicologaRows]] = await Promise.all([
+                Aspirante.getInformacionAspirante(idAspirante),
+                Psicologo.fetchOne(idPsicologo)
+            ]);
+            const aspirante = aspiranteRows[0];
+            const psicologa = psicologaRows[0];
+            const subject = 'Entrevista individual programada - Proceso de admisión al posgrado';
+            const html = generarCorreoEntrevista1on1(fecha, horaInicio, horaFin, link, `${psicologa.nombreUsuario} ${psicologa.apellidoPaterno} ${psicologa.apellidoMaterno}`);
+            await sendEmail(aspirante.correo, subject, undefined, html);
+        } catch (err) {
+            console.error('Error enviando correo de creación de 1on1:', err);
+        }
+        res.redirect(`/psicologo/aspirantes/${idAspirante}/${idGrupo}/${idInstitucion}`);
+    } catch (error) {
+        console.error('Error creando 1on1 meeting:', error);
+        res.status(500).send('Error creando 1on1 meeting');
+    }
+};
+
+// Show form to edit an existing 1on1 meeting
+exports.getEditar1on1Meeting = async (req, res, next) => {
+    try {
+        const { idReunion, idGrupo, idAspirante, idInstitucion } = req.params;
+        const [[meetingRows], [aspiranteRows], [psicologos]] = await Promise.all([
+            Reuniones.fetchById(idReunion),
+            Aspirante.getInformacionAspirante(idAspirante),
+            Psicologo.fetchAll()
+        ]);
+        res.render('Psicologos/editar1on1Meeting', {
+            idGrupo,
+            idAspirante,
+            idInstitucion,
+            meeting: meetingRows[0],
+            aspirante: aspiranteRows[0],
+            psicologos
+        });
+    } catch (error) {
+        console.error('Error mostrando formulario de edición de 1on1:', error);
+        res.status(500).send('Error mostrando formulario de edición de 1on1');
+    }
+};
+
+// Handle POST to update a 1on1 meeting
+exports.postEditar1on1Meeting = async (req, res, next) => {
+    try {
+        const { idReunion, idGrupo, idAspirante, idInstitucion } = req.params;
+        const { titulo, fecha, horaInicio, horaFin, link, idPsicologo } = req.body;
+        await Reuniones.update(idReunion, { titulo, fecha, horaInicio, horaFin, link });
+        // Optionally update psicologo if changed
+        if (idPsicologo) {
+            await Reuniones.fetchById(idReunion).then(([rows]) => {
+                if (rows[0].idPsicologo !== idPsicologo) {
+                    return db.execute('UPDATE reuniones SET idPsicologo = ? WHERE idReunion = ?', [idPsicologo, idReunion]);
+                }
+            });
+        }
+        // Send email to aspirant
+        try {
+            const [[aspiranteRows], [psicologaRows]] = await Promise.all([
+                Aspirante.getInformacionAspirante(idAspirante),
+                Psicologo.fetchOne(idPsicologo)
+            ]);
+            const aspirante = aspiranteRows[0];
+            const psicologa = psicologaRows[0];
+            const subject = 'Entrevista individual modificada - Proceso de admisión al posgrado';
+            const html = generarCorreoEntrevista1on1Modificada(fecha, horaInicio, horaFin, link, `${psicologa.nombreUsuario} ${psicologa.apellidoPaterno} ${psicologa.apellidoMaterno}`);
+            await sendEmail(aspirante.correo, subject, undefined, html);
+        } catch (err) {
+            console.error('Error enviando correo de modificación de 1on1:', err);
+        }
+        res.redirect(`/psicologo/aspirantes/${idAspirante}/${idGrupo}/${idInstitucion}`);
+    } catch (error) {
+        console.error('Error actualizando 1on1 meeting:', error);
+        res.status(500).send('Error actualizando 1on1 meeting');
+    }
+};
+
+// Handle POST to delete a 1on1 meeting
+exports.postEliminar1on1Meeting = async (req, res, next) => {
+    try {
+        const { idReunion, idGrupo, idAspirante, idInstitucion } = req.params;
+        // Fetch meeting info before deleting
+        let meeting = null;
+        try {
+            const [meetingRows] = await Reuniones.fetchById(idReunion);
+            meeting = meetingRows[0];
+        } catch (err) {
+            console.error('Error obteniendo info de 1on1 para email de cancelación:', err);
+        }
+        await Reuniones.delete(idReunion);
+        // Send email to aspirant
+        if (meeting) {
+            try {
+                const [[aspiranteRows], [psicologaRows]] = await Promise.all([
+                    Aspirante.getInformacionAspirante(idAspirante),
+                    Psicologo.fetchOne(meeting.idPsicologo)
+                ]);
+                const aspirante = aspiranteRows[0];
+                const psicologa = psicologaRows[0];
+                const subject = 'Entrevista individual cancelada - Proceso de admisión al posgrado';
+                const html = generarCorreoEntrevista1on1Cancelada(meeting.fecha, meeting.horaInicio, meeting.horaFin, meeting.link, `${psicologa.nombreUsuario} ${psicologa.apellidoPaterno} ${psicologa.apellidoMaterno}`);
+                await sendEmail(aspirante.correo, subject, undefined, html);
+            } catch (err) {
+                console.error('Error enviando correo de cancelación de 1on1:', err);
+            }
+        }
+        res.redirect(`/psicologo/aspirantes/${idAspirante}/${idGrupo}/${idInstitucion}`);
+    } catch (error) {
+        console.error('Error eliminando 1on1 meeting:', error);
+        res.status(500).send('Error eliminando 1on1 meeting');
+    }
+};
+
+// Show all meetings (group + 1on1) for a group
+exports.getGroupMeetingsOverview = async (req, res, next) => {
+    try {
+        const { idGrupo } = req.params;
+        const [meetings] = await Reuniones.fetchAllByGroup(idGrupo);
+        res.render('Psicologos/groupMeetingsOverview', {
+            idGrupo,
+            meetings
+        });
+    } catch (error) {
+        console.error('Error mostrando overview de reuniones de grupo:', error);
+        res.status(500).send('Error mostrando overview de reuniones de grupo');
+    }
+};
+
+// Show all 1on1 meetings for the current psicologa
+exports.getMy1on1Meetings = async (req, res, next) => {
+    try {
+        const idPsicologo = req.session.user;
+        const [meetings] = await Reuniones.fetchAll1on1ByPsicologo(idPsicologo);
+        res.render('Psicologos/my1on1Meetings', {
+            meetings
+        });
+    } catch (error) {
+        console.error('Error mostrando mis 1on1 meetings:', error);
+        res.status(500).send('Error mostrando mis 1on1 meetings');
+    }
+};
