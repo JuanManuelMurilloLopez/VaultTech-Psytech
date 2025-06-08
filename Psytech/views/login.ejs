@@ -26,7 +26,7 @@
                 <label for="usuario" class="form-label">Usuario</label>
                 <div class="input-login">
                     <img src="/images/user.svg" alt="icono de usuario" class="icon">
-                    <input type="text" id="usuario" name="usuario" class="form-control" required>
+                    <input type="text" id="usuario" name="usuario" class="form-control" required value="<%= typeof email !== 'undefined' ? email : '' %>">
                 </div>
             </div>
             

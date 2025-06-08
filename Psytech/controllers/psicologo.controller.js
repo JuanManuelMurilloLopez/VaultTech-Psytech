@@ -41,7 +41,7 @@ const xlsx = require('xlsx');
 const fs = require('fs');
 const path = require('path');
 const Usuario = require('../models/usuario.model.js');
-const { error } = require('console');
+const { getLoginUrl } = require('../util/loginUrl');
 
 const { Resend } = require('resend');
 
@@ -727,6 +727,8 @@ exports.postImportarAspirantes = (request, response, next) => {
                                             console.log(error);
                                             return resolve();
                                         }
+                                        const loginUrl = getLoginUrl(aspirante.correo);
+                                        htmlContent = htmlContent.replace('${loginUrl}', loginUrl);
 
                                         resend.emails.send({
                                             from: 'psytech@pruebas.psicodx.com',
@@ -816,6 +818,8 @@ exports.postRegistrarAspirantes = (request, response, next) => {
                                             console.log(error);
                                             return;
                                         }
+                                        const loginUrl = getLoginUrl(request.body.correo);
+                                        htmlContent = htmlContent.replace('${loginUrl}', loginUrl);
                                         resend.emails.send({
                                             from: 'psytech@pruebas.psicodx.com',
                                             to: [request.body.correo],

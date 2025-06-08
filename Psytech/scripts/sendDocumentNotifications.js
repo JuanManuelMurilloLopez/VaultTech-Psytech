@@ -1,8 +1,8 @@
-const cron = require('node-cron');
 const { Resend } = require('resend');
 const db = require('../util/database');
 const path = require('path');
 const fs = require('fs');
+const { getLoginUrl } = require('../util/loginUrl');
 
 class DocumentNotificationService {
   constructor() {
@@ -99,6 +99,7 @@ class DocumentNotificationService {
 
   createEmailTemplate(aspirante) {
     const documentosFaltantes = [];
+    const loginUrl = getLoginUrl(aspirante.correo);
     if (!aspirante.cv) documentosFaltantes.push('CV');
     if (!aspirante.kardex) documentosFaltantes.push('Kardex');
     
@@ -147,7 +148,7 @@ class DocumentNotificationService {
                 
                 <p>Para subir tus documentos, ingresa al sistema PsyTech con tu usuario y contraseña.</p>
                 
-                <a href="${process.env.FRONTEND_URL || 'https://vaulttech.psicodx.com/'}" class="btn">Acceder al Sistema</a>
+                <a href="${loginUrl}" class="btn">Acceder al Sistema</a>
                 
                 <p>Si tienes alguna duda o problema para subir los documentos, no dudes en contactar a soporte.</p>
                 

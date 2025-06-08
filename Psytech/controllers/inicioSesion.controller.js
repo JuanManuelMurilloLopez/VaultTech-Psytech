@@ -6,7 +6,8 @@ const { Resend } = require('resend');
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 exports.getLogin = (request, response, next) => {
-    response.render('login');
+    const email = request.query.email || '';
+    response.render('login', { email });
 };
 
 exports.getOtp = (request, response, next) => {
