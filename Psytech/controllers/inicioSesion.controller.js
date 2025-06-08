@@ -43,15 +43,14 @@ exports.getPost = async (request, response) => {
             await resend.emails.send({
                 from: 'psytech@pruebas.psicodx.com',
                 to: [usuarioId.correo],
-                subject: 'Tu código OTP para ingresar',
-                html: `<h2>¡Hola ${usuario}!</h2><p>Tu código OTP es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos. Unicamente se puede usar una sola vez.</p>`
+                subject: 'Tu código de acceso',
+                html: `<h2>¡Hola ${usuario}!</h2><p>Tu código de acceso es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos. Unicamente se puede usar una sola vez.</p>`
             });
         }
-        console.log('codigoOTP:', codigoOTP);
         response.redirect('/otp');
     } catch (error) {
         console.error('Error en postLogin:', error);
-        response.send('<script>alert("Error al generar o enviar el OTP"); window.location.href = "/login";</script>');
+        response.send('<script>alert("Error al generar o enviar el código de acceso"); window.location.href = "/login";</script>');
     }
 };
 
@@ -73,7 +72,7 @@ exports.verificarOTP = async (request, response) => {
         const otpData = await OTP.obtenerOTP(usuarioId);
 
         if ((!otpData || otpData.codigo !== parseInt(otp)) && !process.env.NODE_ENV === 'develop') {
-            return response.send('<script>alert("OTP incorrecto o vencido"); window.location.href = "/otp";</script>');
+            return response.send('<script>alert("Código de acceso incorrecto o vencido"); window.location.href = "/otp";</script>');
         }
 
         await OTP.usarOTP(otpData?.idOTP);
@@ -102,8 +101,8 @@ exports.verificarOTP = async (request, response) => {
         }
 
     } catch (error) {
-        console.error('Error al verificar OTP:', error);
-        response.send('<script>alert("Error al verificar OTP"); window.location.href = "/otp";</script>');
+        console.error('Error al verificar código de acceso:', error);
+        response.send('<script>alert("Error al verificar código de acceso"); window.location.href = "/otp";</script>');
     }
 };
 
@@ -131,17 +130,15 @@ exports.reenviarOtp = async (request, response) => {
             await resend.emails.send({
                 from: 'psytech@pruebas.psicodx.com',
                 to: [usuarioId.correo],
-                subject: 'Tu nuevo código OTP',
-                html: `<h2>¡Hola ${usuario}!</h2><p>Tu nuevo código OTP es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos.</p>`
+                subject: 'Tu nuevo código de acceso',
+                html: `<h2>¡Hola ${usuario}!</h2><p>Tu nuevo código de acceso es: <strong>${codigoOTP}</strong></p><p>Este código es válido por 5 minutos.</p>`
             });
         }
 
-        console.log('Nuevo OTP reenviado:', codigoOTP);
         return response.send('<script>alert("Nuevo código enviado a tu correo."); window.location.href = "/otp";</script>');
 
     } catch (error) {
-        console.error('Error al reenviar OTP:', error);
-        return response.send('<script>alert("Error al reenviar el código OTP"); window.location.href = "/otp";</script>');
+        return response.send('<script>alert("Error al reenviar el código de acceso"); window.location.href = "/otp";</script>');
     }
 };
 
