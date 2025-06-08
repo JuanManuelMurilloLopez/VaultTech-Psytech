@@ -123,7 +123,6 @@
     color: #990202;
     background: #ffd6d6;
     border-radius: 10px;
-
 }
 
 .btn{
@@ -134,7 +133,8 @@
     background: #C30101;
     border-radius: 20px;
     padding: 2px 32px;
-    margin-left: 60px;
+    margin-left: 0; 
+    border: none; 
 }
 
 .btn-danger:hover{
@@ -149,7 +149,8 @@
     padding: 2px 32px;
     background: var(--secondary);
     color: var(--font-secondary);
-    margin-left: 40px;
+    margin-left: 0; 
+    text-decoration: none; 
 }
 
 .btn-color--third{
@@ -165,11 +166,10 @@
 }
 
 .btn-color--secondary:hover{
-    background: #0e2945;;
+    background: #0e2945;
     color: var(--font-secondary);
 }
 
-/* Estilos para notificaciones de documentos */
 /* Estilos para notificaciones de documentos */
 .notification-section {
     background: #f8f9fa;
@@ -228,4 +228,19 @@
 .notification-section p {
     font-weight: 400;
     margin-bottom: 8px;
+}
+
+
+/* Contenedor datos personales */
+.datos-personales-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.botones-accion {
+    display: flex;
+    gap: 15px; 
+    align-items: center;
 }

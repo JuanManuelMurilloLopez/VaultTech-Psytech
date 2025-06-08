@@ -291,6 +291,7 @@ exports.getEditarInstitucion = (request, response, next) => {
                     response.render('Psicologos/editarInstitucion', {
                         institucion: institucion || null,
                         tiposInstitucion: tiposInstitucion || [],
+                        idInstitucion: request.params.idInstitucion || null,
                         error: ""
                     })
                 })
@@ -2556,6 +2557,83 @@ exports.deleteGroupMeeting = async (req, res) => {
         res.redirect(`/psicologo/informacion-grupos/${idGrupo}/${req.params.idInstitucion}`);
     }
 };
+
+function eliminarAspirante(idAspirante, idGrupo){
+    return Aspirante.desactivarAspirante(idAspirante)
+    .then(() => {
+        return Aspirante.eliminarDeGrupo(idAspirante, idGrupo);
+    })
+    .catch((error) => {
+        console.log(error)
+    });
+}
+
+exports.postEliminarAspirante = (request,response, next) => {
+
+    eliminarAspirante(request.params.idAspirante, request.params.idGrupo)
+    .then(() => {
+        response.redirect('/psicologo/informacion-grupos/' + request.params.idGrupo + "/" + request.params.idInstitucion);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+function eliminarGrupo(idGrupo){
+    return Grupo.getAspirantes(idGrupo)
+    .then(([rows, fieldData]) => {
+        const aspirantes = rows;
+        const promesas = aspirantes.map(aspirante => {
+            return eliminarAspirante(aspirante.idAspirante, idGrupo);
+        });
+
+        return Promise.all(promesas);
+    })
+    .then(() => {
+        return Grupo.eliminarGrupo(idGrupo);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+exports.postEliminarGrupo = (request, response, next) => {
+    eliminarGrupo(request.params.idGrupo)
+    .then(() => {
+        response.redirect('/psicologo/grupos/' + request.params.idInstitucion);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+function eliminarInstitucion(idInstitucion){
+    return Grupo.fetchAllInstitucion(idInstitucion)
+    .then(([rows, fieldData]) => {
+        const grupos = rows;
+        const promesas = grupos.map(grupo => {
+            return eliminarGrupo(grupo.idGrupo);
+        })
+
+        return Promise.all(promesas);
+    })
+    .then(() => {
+        return Institucion.eliminarInstitucion(idInstitucion);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+exports.PostEliminarInstitucion = (request, response, next) => {
+    eliminarInstitucion(request.params.idInstitucion)
+    .then(() => {
+        response.redirect('/psicologo/catalogo-instituciones');
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
 
 // Show form to create a 1on1 meeting for an aspirante in a group
 exports.getCrear1on1Meeting = async (req, res, next) => {
