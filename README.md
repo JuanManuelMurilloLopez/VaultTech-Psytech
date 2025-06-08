@@ -1,6 +1,7 @@
 # VaultTech PsyTech
 
 ## TODO
+- Mejorar manejo de varios grupos por un aspirante
 - Investigar problema al terminar 16PF
 - Mejorar pantalla después de subir documentos
 - Hacer timer más visible

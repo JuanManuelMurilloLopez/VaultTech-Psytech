@@ -36,12 +36,15 @@
                                 missingDocs.push('Kardex'); const fechaLimiteDate=new Date(fechaLimite); const hoy=new
                                 Date(); const diasRestantes=Math.ceil((fechaLimiteDate - hoy) / (1000 * 60 * 60 * 24));
                                 %>
-                                <% if (missingDocs.length> 0 || pruebasPendientes> 0) { %>
+                                <% if (missingDocs.length> 0 || pruebasPendientes> 0 || !formatoEntrevistaCompleto) { %>
                                     <div class="alert alert-warning text-center fs-6" role="alert">
                                         <p>
                                             <% if (missingDocs.length> 0) { %>Documentos pendientes: <%=
                                                     missingDocs.join(', ') %>.<br> <a href="/aspirante/cargar-expedientes" class="mt-2">Subir documentos</a> <br> <% } %>
                                             <% if (pruebasPendientes> 0) { %>Tienes <%= pruebasPendientes %> pruebas pendientes.<br> <% } %>
+                                            <% if (!formatoEntrevistaCompleto) { %>
+                                                Formato de entrevista pendiente: <a href="/aspirante/formato-entrevista">Completar formato</a>.<br>
+                                            <% } %>
                                             Tienes <%= diasRestantes %> días restantes para completar este requisito (fecha límite: <%= fechaLimiteDate.getDate() %>/<%= fechaLimiteDate.getMonth()+1 %>/<%= fechaLimiteDate.getFullYear() %>).
 
                                             <br>

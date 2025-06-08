@@ -69,6 +69,14 @@ exports.postSoporte = async (req, res) => {
 //Rutas del portal de los Aspirantes
 exports.getPruebas = async (request, response) => {
     const [aspirante] = await Aspirante.getInformacionAspirante(request.session.idAspirante);
+    // Get the aspirante's group (assuming first group is the main one)
+    const [grupos] = await Aspirante.fetchGrupo(request.session.idAspirante);
+    let idGrupo = grupos && grupos.length > 0 ? grupos[0].idGrupo : null;
+    let formatoEntrevistaCompleto = false;
+    if (idGrupo) {
+        const [respuestasFormato] = await Aspirante.getFormatoEntrevista(request.session.idAspirante, idGrupo);
+        formatoEntrevistaCompleto = respuestasFormato.length === 51;
+    }
     ConsultarPruebas.fetchAll(request.session.idAspirante)
         .then(([rows, fieldData]) => {
             const pruebas = rows;
@@ -81,7 +89,8 @@ exports.getPruebas = async (request, response) => {
                     return acc;
                 }, new Date()),
                 aspirante: aspirante[0],
-                pruebasPendientes: pruebas.filter(prueba => !['Completada', 'Vencide'].includes(prueba.nombreEstatus)).length
+                pruebasPendientes: pruebas.filter(prueba => !['Completada', 'Vencide'].includes(prueba.nombreEstatus)).length,
+                formatoEntrevistaCompleto // pass to view
             });
 
         })
