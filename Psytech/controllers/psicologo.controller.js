@@ -1900,7 +1900,7 @@ exports.get_respuestasA = (request, response, next) => {
     Aspirante.getInformacionAspirante(idAspirante).then(([datosAspirante, fieldData]) => {
         Aspirante.fetchGrupo(idAspirante).then(([rows, fieldData]) => {
             Grupo.fetchOne(request.params.idGrupo).then(([grupoRows, fieldData]) => {
-                if (idPrueba == 1) {
+                if (idPrueba == Prueba.TEST_IDS.KOSTICK) {
                     ResultadosKostick.fetchAll(request.params.idGrupo, request.params.idAspirante).then(
                         ([resultados, fieldData]) => {
                             InterpretacionKostick.fetchAll()

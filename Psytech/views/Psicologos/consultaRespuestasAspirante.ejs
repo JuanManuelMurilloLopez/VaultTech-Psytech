@@ -663,7 +663,7 @@ if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valo
 
 <script class="grafica">
     console.log("Valores en vista:");
-    const valores = <%- (typeof valores !== 'undefined' && valores) ? JSON.stringify(valores) : '{}' %>;              
+    const valores = <%- (typeof valores !== 'undefined' && valores) ? JSON.stringify(valores) : '{}' %>;
     console.log(valores);
     const ctx = document.getElementById("graph").getContext("2d");
     const prueba = <%- JSON.stringify(prueba) %>;
@@ -725,10 +725,10 @@ if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valo
                 {
                     label: "Gráfico de Resultados Kostick",
                     data: [
-                        valores.C, valores.D, valores.R, valores.O, valores.B,
-                        valores.S, valores.X, valores.V, valores.T, valores.I,
-                        valores.P, valores.L, valores.A, valores.G, valores.N,
-                        valores.W, valores.F, valores.K, valores.E, valores.Z
+                        valores.C * 10, valores.D * 10, valores.R * 10, valores.O * 10, valores.B * 10,
+                        valores.S * 10, valores.X * 10, valores.V * 10, valores.T * 10, valores.I * 10,
+                        valores.P * 10, valores.L * 10, valores.A * 10, valores.G * 10, valores.N * 10,
+                        valores.W * 10, valores.F * 10, valores.K * 10, valores.E * 10, valores.Z * 10
                     ],
                     backgroundColor: [
                         "rgba(173, 216, 230, 0.7)", "rgba(173, 216, 230, 0.7)", "rgba(173, 216, 230, 0.7)",
@@ -764,6 +764,11 @@ if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valo
                         title: {
                             display: true,
                             text: "Valores"
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
                         }
                     },
                     x: {
@@ -781,8 +786,8 @@ if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valo
                         annotations: {
                             line1: {
                                 type: 'line',
-                                yMin: 4,
-                                yMax: 4,
+                                yMin: 40,
+                                yMax: 40,
                                 borderColor: 'rgb(255, 0, 0, 0.5)',
                                 borderWidth: 2,
                                 borderDash: [6, 6],
@@ -794,8 +799,8 @@ if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valo
                             },
                             line2: {
                                 type: 'line',
-                                yMin: 6,
-                                yMax: 6,
+                                yMin: 60,
+                                yMax: 60,
                                 borderColor: 'rgb(255, 0, 0, 0.5)',
                                 borderWidth: 2,
                                 borderDash: [6, 6]
@@ -846,8 +851,8 @@ if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valo
                         ctx.restore();
 
                         // Dibujamos manualmente las líneas si no usamos el plugin de anotaciones
-                        const y4 = chart.scales.y.getPixelForValue(4);
-                        const y6 = chart.scales.y.getPixelForValue(6);
+                        const y4 = chart.scales.y.getPixelForValue(40);
+                        const y6 = chart.scales.y.getPixelForValue(60);
                         const chartArea = chart.chartArea;
 
                         ctx.save();
@@ -1874,7 +1879,7 @@ if (valores.N >= 7 || valores.N <= 2 || valores.G >= 7 || valores.G <= 2 || valo
                   max: 100,
                   ticks: {
                     callback: function(value) {
-                      return value === 0 ? '' : value;
+                      return value === 0 ? '' : value + '%';
                     }
                   },
                   title: {
