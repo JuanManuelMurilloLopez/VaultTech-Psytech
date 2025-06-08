@@ -1,4 +1,10 @@
-# VaultTech-Nombre-del-Proyecto-
+# VaultTech PsyTech
+
+## TODO
+- Investigar problema al terminar 16PF
+- Mejorar pantalla después de subir documentos
+- Hacer timer más visible
+- Barra de progreso de pruebas
 
 ## Video Avance 2
 
