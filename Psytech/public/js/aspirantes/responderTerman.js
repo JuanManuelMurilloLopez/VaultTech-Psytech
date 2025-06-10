@@ -301,11 +301,12 @@ function mostrarPregunta(tipo, pregunta, desdeCallback) {
     }
 
     if (tipo === "doubleText") {
+        const pattern = pregunta.numeroPregunta === 5 ? "[0-9/]*" : "[0-9.\\/]*"
         contenido += `
             <div id="serie10-input">
-                <input type="text" id="respuestaTextoA" placeholder="[ número 1 ]" pattern="[0-9.\\/]*" inputmode="decimal" autocomplete="off">
+                <input type="text" id="respuestaTextoA" placeholder="[ número 1 ]" pattern="${pattern}" inputmode="decimal" autocomplete="off">
                 <span class="separador"> - </span>
-                <input type="text" id="respuestaTextoB" placeholder="[ número 2 ]" pattern="[0-9.\\/]*" inputmode="decimal" autocomplete="off">
+                <input type="text" id="respuestaTextoB" placeholder="[ número 2 ]" pattern="${pattern}" inputmode="decimal" autocomplete="off">
             </div>
         `;
     }
