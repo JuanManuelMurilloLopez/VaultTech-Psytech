@@ -279,9 +279,9 @@ exports.getIntruccionesOtis = async (req, res) => {
             }
             req.session.idGrupo = rows[0].idGrupo;
         }
-        if (!await canAspiranteTakeTest(idAspirante, req.session.idGrupo, idPrueba)) {
-            return res.redirect('/aspirante/mis-pruebas');
-        }
+        // if (!await canAspiranteTakeTest(idAspirante, req.session.idGrupo, idPrueba)) {
+        //     return res.redirect('/aspirante/mis-pruebas');
+        // }
 
         const idGrupo = req.session.idGrupo;
 
@@ -332,9 +332,9 @@ exports.getInstruccionesColores = async (req, res) => {
             }
             req.session.idGrupo = rows[0].idGrupo;
         }
-        if (!await canAspiranteTakeTest(idAspirante, req.session.idGrupo, idPrueba)) {
-            return res.redirect('/aspirante/mis-pruebas');
-        }
+        // if (!await canAspiranteTakeTest(idAspirante, req.session.idGrupo, idPrueba)) {
+        //     return res.redirect('/aspirante/mis-pruebas');
+        // }
 
         const idGrupo = req.session.idGrupo;
 
@@ -384,9 +384,9 @@ exports.getInstruccionesHartman = async (req, res) => {
             }
             req.session.idGrupo = rows[0].idGrupo;
         }
-        if (!await canAspiranteTakeTest(idAspirante, req.session.idGrupo, idPrueba)) {
-            return res.redirect('/aspirante/mis-pruebas');
-        }
+        // if (!await canAspiranteTakeTest(idAspirante, req.session.idGrupo, idPrueba)) {
+        //     return res.redirect('/aspirante/mis-pruebas');
+        // }
 
         const idGrupo = req.session.idGrupo;
 
@@ -513,10 +513,10 @@ exports.getPruebaOtis = (request, response, next) => {
             if (rows.length > 0) {
                 request.session.idGrupo = rows[0].idGrupo;
                 request.session.idPrueba = idPrueba;
-                if (! await canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, idPrueba)) {
-                    request.session.mensaje = 'La prueba OTIS no se encuentra disponible.';
-                    return response.redirect('/aspirante/mis-pruebas');
-                }
+                // if (! await canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, idPrueba)) {
+                //     request.session.mensaje = 'La prueba OTIS no se encuentra disponible.';
+                //     return response.redirect('/aspirante/mis-pruebas');
+                // }
             }
 
             // Función para obtener las preguntas del model
@@ -820,9 +820,9 @@ exports.getRespuestasEnviadas = (request, response, next) => {
 // Controladores para prueba Terman
 
 exports.getResponderTerman = async (req, res, next) => {
-    if (!await canAspiranteTakeTest(req.session.idAspirante, req.session.idGrupo, PruebaModel.TEST_IDS.TERMAN)) {
-        return res.redirect('/aspirante/mis-pruebas');
-    }
+    // if (!await canAspiranteTakeTest(req.session.idAspirante, req.session.idGrupo, PruebaModel.TEST_IDS.TERMAN)) {
+    //     return res.redirect('/aspirante/mis-pruebas');
+    // }
     res.render("Aspirantes/responderTerman", {
         title: "Responder Terman"
     });
@@ -1114,9 +1114,9 @@ exports.getDatosPersonalesKostick = (request, response, next) => {
     Prueba.getGrupoPrueba(request.session.idAspirante, 1)
         .then(async ([rows, fieldData]) => {
             request.session.idGrupo = rows[0].idGrupo;
-            if (!await canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS.KOSTICK)) {
-                return response.redirect('/aspirante/mis-pruebas');
-            }
+            // if (!await canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS.KOSTICK)) {
+            //     return response.redirect('/aspirante/mis-pruebas');
+            // }
             Prueba.updateEstatusPruebaPendiente(request.session.idAspirante, request.session.idGrupo, 1, 'En progreso')
                 .then(() => {
                     response.render('Aspirantes/datosPersonalesKostick');
@@ -1154,9 +1154,9 @@ exports.getDatosPersonales16PF = (request, response, next) => {
     Prueba.getGrupoPrueba(request.session.idAspirante, 2)
         .then(async ([rows, fieldData]) => {
             request.session.idGrupo = rows[0].idGrupo;
-            if (!await canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS['16PF'])) {
-                return response.redirect('/aspirante/mis-pruebas');
-            }
+            // if (!await canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS['16PF'])) {
+            //     return response.redirect('/aspirante/mis-pruebas');
+            // }
             Prueba.updateEstatusPruebaPendiente(request.session.idAspirante, request.session.idGrupo, 2, 'En progreso')
                 .then(() => {
                     Genero.fetchAll()
