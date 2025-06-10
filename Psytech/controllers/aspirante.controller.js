@@ -654,10 +654,6 @@ exports.getPruebaColores = (request, response, next) => {
                 // Guardar el idGrupo
                 request.session.idGrupo = rows[0].idGrupo;
             }
-            if (!await canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, idPrueba)) {
-                request.session.mensaje = 'La prueba Colores no se encuentra disponible.';
-                return response.redirect('/aspirante/mis-pruebas');
-            }
 
             // Continuar con colores
             return PruebaColores.fetchColores();
