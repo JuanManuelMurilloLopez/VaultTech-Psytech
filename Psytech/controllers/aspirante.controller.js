@@ -429,9 +429,9 @@ exports.getDatosPersonalesOtis = (request, response, next) => {
 };
 
 exports.getDatosPersonalesColores = async (request, response, next) => {
-    if (!await canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS.COLORS)) {
-        return response.redirect('/aspirante/mis-pruebas');
-    }
+    // if (!await canAspiranteTakeTest(request.session.idAspirante, request.session.idGrupo, PruebaModel.TEST_IDS.COLORS)) {
+    //     return response.redirect('/aspirante/mis-pruebas');
+    // }
     response.render('Aspirantes/datosPersonalesColores');
 };
 
