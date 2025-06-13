@@ -736,6 +736,9 @@ exports.postImportarAspirantes = (request, response, next) => {
                                             subject: 'Bienvenido, accede a tus pruebas psicométricas y psicológicas de admisión al posgrado',
                                             html: htmlContent
                                         })
+                                            .then(() => {
+                                                return new Promise(resolve => setTimeout(resolve, 500));
+                                            })
                                             .then(() => resolve())
                                             .catch((error) => {
                                                 console.log(error);
