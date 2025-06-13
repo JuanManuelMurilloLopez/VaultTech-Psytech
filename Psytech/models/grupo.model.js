@@ -121,7 +121,7 @@ module.exports = class Grupo {
     }
 
     static existe(nombreGrupo) {
-        return db.execute('SELECT * FROM grupos WHERE nombreGrupo = ?', [nombreGrupo]);
+        return db.execute('SELECT * FROM grupos WHERE nombreGrupo = ? and eliminado = 0', [nombreGrupo]);
     }
 
     saveGrupo() {
