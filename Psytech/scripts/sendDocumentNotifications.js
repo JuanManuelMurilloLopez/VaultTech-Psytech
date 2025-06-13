@@ -210,6 +210,7 @@ class DocumentNotificationService {
       
       for (const aspirante of aspirantes) {
         const result = await this.sendNotification(aspirante);
+        await new Promise(resolve => setTimeout(resolve, 500));
         if (result) {
           sent++;
         } else {

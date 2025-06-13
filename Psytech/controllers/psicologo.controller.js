@@ -2481,15 +2481,11 @@ exports.createGroupMeeting = async (req, res) => {
         // Send email to all aspirantes in group
         const [aspirantesRows] = await Grupo.getAspirantes(idGrupo);
         const emails = aspirantesRows.map(a => a.correo).filter(Boolean);
-        const emailPromises = [];
         let emailStatus = null;
-        if (emails.length > 0) {
+        try {
             const subject = `Aplicación grupal de prueba psicométrica - Proceso de admisión al posgrado`;
             const html = generarCorreoEntrevistaGrupal(fecha, horaInicio, horaFin, link);
-            emailPromises.push(sendEmail(emails, subject, undefined, html));
-        }
-        try {
-            await Promise.all(emailPromises);
+            await sendEmail(emails, subject, undefined, html);
             emailStatus = { type: 'success', message: 'Se enviaron correos a todos los aspirantes del grupo.' };
         } catch (e) {
             emailStatus = { type: 'error', message: 'Error al enviar correos a los aspirantes del grupo.' };
