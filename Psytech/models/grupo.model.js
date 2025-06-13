@@ -75,6 +75,7 @@ module.exports = class Grupo {
                                 usuarios.apellidoPaterno, 
                                 usuarios.apellidoMaterno, 
                                 usuarios.estatusUsuario,
+                                usuarios.correo,
                                 aspirantes.idAspirante, aspirantes.cv,
                                 aspirantes.kardex, 
                                 COUNT(idPrueba) as pruebasAsignadas,

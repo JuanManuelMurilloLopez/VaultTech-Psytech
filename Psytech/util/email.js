@@ -3,6 +3,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 exports.sendEmail = async (to, subject, text, html) => {
     if (process.env.NODE_ENV === 'develop') {
+        console.log(`Sending email to: ${to} with subject: ${subject}`);
         return;
     }
     const response = await resend.emails.send({

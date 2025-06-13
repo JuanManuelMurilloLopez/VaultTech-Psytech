@@ -2480,7 +2480,7 @@ exports.createGroupMeeting = async (req, res) => {
         if (emails.length > 0) {
             const subject = `Aplicación grupal de prueba psicométrica - Proceso de admisión al posgrado`;
             const html = generarCorreoEntrevistaGrupal(fecha, horaInicio, horaFin, link);
-            emailPromises.push(sendEmail(emails, subject, text, html));
+            emailPromises.push(sendEmail(emails, subject, undefined, html));
         }
         try {
             await Promise.all(emailPromises);
@@ -2491,6 +2491,7 @@ exports.createGroupMeeting = async (req, res) => {
         req.session.meetingEmailStatus = emailStatus;
         res.redirect(`/psicologo/informacion-grupos/${idGrupo}/${req.params.idInstitucion}`);
     } catch (err) {
+        console.error('Error al crear la reunión:', err);
         req.session.meetingEmailStatus = { type: 'error', message: 'Error al crear la reunión.' };
         res.status(500).send('Error al crear la reunión');
     }
