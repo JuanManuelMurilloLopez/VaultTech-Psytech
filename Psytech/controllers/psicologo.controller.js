@@ -1356,12 +1356,14 @@ function filtrarParejasArtificiales(paresF1, paresF2, parejasNaturalesYDisociada
 
 function obtenerInterpretacion(zona1, zona2, pareja) {
     if (zona1 === 'N/A' || zona2 === 'N/A') {
-        return 'Interpretación no disponible para esta combinación.';
+        // return 'Interpretación no disponible para esta combinación.';
+        return '';
     }
 
     const numeros = pareja.match(/\d+/g);
     if (!numeros || numeros.length !== 2) {
-        return 'Interpretación no disponible para esta combinación.';
+        // return 'Interpretación no disponible para esta combinación.';
+        return '';
     }
 
     const parejaNormalizada = `${numeros[0]}-${numeros[1]}`;
@@ -1373,7 +1375,8 @@ function obtenerInterpretacion(zona1, zona2, pareja) {
     } else if (interpretaciones[claveInvertida]) {
         return interpretaciones[claveInvertida];
     } else {
-        return 'Interpretación no disponible para esta combinación.';
+        // return 'Interpretación no disponible para esta combinación.';
+        return '';
     }
 }
 
@@ -1400,8 +1403,8 @@ function obtenerParejasClasificadas(seleccionesFase1, seleccionesFase2) {
                 return {
                     ...p,
                     texto: {
-                        fase1: 'Interpretación no disponible para esta combinación.',
-                        fase2: 'Interpretación no disponible para esta combinación.'
+                        fase1: '',
+                        fase2: ''
                     }
                 };
             }
@@ -1493,8 +1496,8 @@ exports.getAnalisisColores = async (request, response, next) => {
                     return {
                         ...p,
                         texto: {
-                            fase1: 'Interpretación no disponible para esta combinación.',
-                            fase2: 'Interpretación no disponible para esta combinación.'
+                            fase1: '',
+                            fase2: ''
                         }
                     };
                 }
