@@ -11,8 +11,6 @@ async function calificarSerieTerman(idSerie, idAspirante, idGrupo, respuestas) {
         await calificacionesModel.save();
     }
 
-    console.log("Llego a calificarTerman")
-
     // 2. Traer calificación actual
     const calificacion = await calificacionesModel.fetchCalificacionById(idAspirante, idGrupo);
     const idCalificacionTerman = calificacion[0].idCalificacionTerman;
@@ -480,11 +478,13 @@ function calcularRangoSerie(idSerie, puntaje) {
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 function calcularRangoCI(puntaje) {
-    if (puntaje >= 120) return 'Genio';
-    if (puntaje >= 111 && puntaje <= 119) return 'Superior';
-    if (puntaje >= 80 && puntaje <= 110) return 'Término medio';
-    if (puntaje >= 62 && puntaje <= 79) return 'Inferior al término medio';
-    if (puntaje >= 0 && puntaje <= 61) return 'Inferior';
+    if (puntaje >= 140) return 'Sobresaliente';
+    if (puntaje >= 120 && puntaje <= 139) return 'Superior';
+    if (puntaje >= 110 && puntaje <= 119) return 'Término Medio Alto';
+    if (puntaje >= 90 && puntaje <= 109) return 'Normal';
+    if (puntaje >= 80 && puntaje <= 89) return 'Término Medio Bajo';
+    if (puntaje >= 70 && puntaje <= 79) return 'Inferior';
+    if (puntaje >= 0 && puntaje <= 69) return 'Deficiente';
     return 'Sin rango definido';
 }
 
