@@ -37,9 +37,57 @@
                     <%= analisisHartman[0].apellidoMaternoAspirante %>
                 </h4>
             </div>
+            <!-- Tabla de respuestas -->
+            <div class="row mb-5">
+                <!-- Tabla Parte 1: Frases -->
+                <div class="col-md-6">
+                    <h5 class="fw-semibold mb-3">Parte 1: Frases</h5>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm align-middle text-center table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Orden</th>
+                                    <th>Respuesta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% for(let i = 0; i < respuestas.fase1.length; i++) { %>
+                                    <tr>
+                                        <td><%= i + 1 %></td>
+                                        <td><%= respuestas.fase1[i].idPreguntaHartman %></td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
+                <!-- Tabla Parte 2: Citas -->
+                <div class="col-md-6">
+                    <h5 class="fw-semibold mb-3">Parte 2: Citas</h5>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm align-middle text-center table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Orden</th>
+                                    <th>Respuesta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% for(let i = 0; i < respuestas.fase2.length; i++) { %>
+                                    <tr>
+                                        <td><%= i + 1 %></td>
+                                        <td><%= respuestas.fase2[i].idPreguntaHartman - 18 %></td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+             
             <!-- Card con datos y grafica -->
-            <div class="card shadow-sm mb-5">
+            <div class="card shadow-sm mb-5 d-none">
                 <div class="card-body">
                     <div class="chart-container">
                         <div class="text-center mb-3">
