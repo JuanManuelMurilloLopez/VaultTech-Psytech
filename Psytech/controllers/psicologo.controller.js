@@ -33,6 +33,7 @@ const InterpretacionKostick = require('../models/interpretacionKostick.js');
 const Interpretaciones16PF = require('../models/interpretacion16PF.model.js');
 const RespondeKostick = require('../models/respondeKostick.model.js');
 const Responde16PF = require('../models/responde16pf.model.js');
+const Hartman = require('../models/hartman.model.js');
 
 const PreguntaKostick = require('../models/preguntasKostick.model.js');
 const Pregunta16PF = require('../models/preguntas16pf.model.js');
@@ -1619,6 +1620,14 @@ exports.getAnalisisHartman = async (request, response, next) => {
     const { idGrupo, idAspirante, idInstitucion } = request.params;
 
     try {
+        const respuestas = await Hartman.getRespuestasUsuario(idAspirante, idGrupo);
+        const respuestasFase1 = respuestas
+            .filter(respuesta => respuesta.idPreguntaHartman >= 1 && respuesta.idPreguntaHartman <= 18)
+            .sort((a, b) => Number(a.respuestaAbierta) - Number(b.respuestaAbierta));
+        const respuestasFase2 = respuestas
+            .filter(respuesta => respuesta.idPreguntaHartman >= 19 && respuesta.idPreguntaHartman <= 36)
+            .sort((a, b) => Number(a.respuestaAbierta) - Number(b.respuestaAbierta));
+
         const [rows] = await consultaResultados.fetchHartmanAspirante(idAspirante, idGrupo);
 
         if (!rows || rows.length === 0) {
@@ -1676,7 +1685,11 @@ exports.getAnalisisHartman = async (request, response, next) => {
             analisisHartman: rows,
             idGrupo,
             idAspirante,
-            idInstitucion
+            idInstitucion,
+            respuestas: {
+                fase1: respuestasFase1,
+                fase2: respuestasFase2
+            }
         });
 
 
