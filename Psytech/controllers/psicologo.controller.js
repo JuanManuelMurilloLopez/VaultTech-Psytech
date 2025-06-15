@@ -2196,7 +2196,7 @@ exports.getCuadernilloTerman = async (request, response, next) => {
                                         ? respuestaAspirante.some(r => r.idOpcionTerman === preguntaOpcion.idOpcionTerman)
                                         : preguntaOpcion.idSerieTerman === 10
                                             ? respuestaAspirante !== ''
-                                            : respuestaAspirante.idOpcionTerman === preguntaOpcion.idOpcionTerman
+                                            : respuestaAspirante?.idOpcionTerman === preguntaOpcion.idOpcionTerman
                                 });
 
                                 if (preguntaOpcion.idSerieTerman === 4) {
