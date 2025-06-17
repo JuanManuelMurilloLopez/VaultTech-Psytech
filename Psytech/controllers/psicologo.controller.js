@@ -2212,7 +2212,7 @@ exports.getCuadernilloTerman = async (request, response, next) => {
                                     pregunta.contestada = respuestaAspirante.respuestaAbierta !== '';
                                     pregunta.esCorrecta = respuestaAspirante.respuestaAbierta === preguntaOpcion.descripcionTerman;
                                     pregunta.tiempoRespuesta = respuestaAspirante.tiempoRespuesta;
-                                } else if (respuestaAspirante.idOpcionTerman === preguntaOpcion.idOpcionTerman) {
+                                } else if (respuestaAspirante?.idOpcionTerman === preguntaOpcion.idOpcionTerman) {
                                     pregunta.tiempoRespuesta = respuestaAspirante.tiempoRespuesta;
                                     pregunta.contestada = true;
                                     pregunta.esCorrecta = preguntaOpcion.esCorrecta === 1;
