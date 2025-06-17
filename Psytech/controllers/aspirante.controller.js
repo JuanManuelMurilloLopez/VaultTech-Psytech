@@ -546,10 +546,10 @@ const db = require('../util/database');
 const { v4: uuidv4 } = require('uuid');
 
 exports.postGuardarRespuestas = async (request, response) => {
-
     const idAspirante = request.session.idAspirante;
     const idGrupo = request.session.idGrupo;
     const idPrueba = request.session.idPrueba;
+    console.log(`postGuardarRespuestas ${idAspirante} ${idGrupo} ${idPrueba}`);
 
     // Si no se encuentra el idAspirante
     if (!request.session.idAspirante) {
@@ -557,6 +557,7 @@ exports.postGuardarRespuestas = async (request, response) => {
     }
 
     const respuestas = request.body;
+    console.log(`respuestas ${respuestas.length}`);
 
     try {
         // Armar el array de valores para insertar
@@ -577,6 +578,7 @@ exports.postGuardarRespuestas = async (request, response) => {
             VALUES ?`,
             [values]
         );
+        console.log(`respuestas insertadas ${values.length}`);
 
         // Obtener datos personales desde sesión
         const datosPersonales = request.session.datosPersonalesOtis || {
@@ -594,6 +596,7 @@ exports.postGuardarRespuestas = async (request, response) => {
             idPrueba,
             datosPersonales
         );
+        console.log(`datos personales guardados`);
 
         // Verificar si ya existe el registro en aspirantesGruposPruebas
         const [rows] = await PruebaModel.verificarExistencia(
@@ -601,6 +604,7 @@ exports.postGuardarRespuestas = async (request, response) => {
             idGrupo,
             idPrueba
         );
+        console.log(`verificarExistencia ${rows.length}`);
 
         if (rows.length === 0) {
             await db.execute(
@@ -608,12 +612,14 @@ exports.postGuardarRespuestas = async (request, response) => {
                 VALUES (?, ?, ?, 2)`,
                 [idAspirante, idGrupo, idPrueba]
             );
+            console.log(`aspirantesgrupospruebas insertado`);
         } else {
             await PruebaModel.updateEstatusPrueba(
                 idAspirante,
                 idGrupo,
                 idPrueba
             );
+            console.log(`aspirantesgrupospruebas actualizado`);
         }
 
     } catch (error) {
