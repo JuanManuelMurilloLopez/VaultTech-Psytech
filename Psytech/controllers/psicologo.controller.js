@@ -2203,7 +2203,7 @@ exports.getCuadernilloTerman = async (request, response, next) => {
                                 });
 
                                 if (preguntaOpcion.idSerieTerman === 4) {
-                                    if (respuestaAspirante.every(r => pregunta.opciones.find(o => o.idOpcionTerman === r.idOpcionTerman)?.esCorrecta)) {
+                                    if (respuestaAspirante?.every(r => pregunta.opciones.find(o => o.idOpcionTerman === r.idOpcionTerman)?.esCorrecta)) {
                                         pregunta.tiempoRespuesta = respuestaAspirante[0].tiempoRespuesta;
                                         pregunta.contestada = true;
                                         pregunta.esCorrecta = true;
@@ -2212,23 +2212,23 @@ exports.getCuadernilloTerman = async (request, response, next) => {
                                         pregunta.esCorrecta = false;
                                     }
                                 } else if (preguntaOpcion.idSerieTerman === 10) {
-                                    pregunta.contestada = respuestaAspirante.respuestaAbierta !== '';
-                                    pregunta.esCorrecta = respuestaAspirante.respuestaAbierta === preguntaOpcion.descripcionTerman;
-                                    pregunta.tiempoRespuesta = respuestaAspirante.tiempoRespuesta;
+                                    pregunta.contestada = respuestaAspirante?.respuestaAbierta !== '';
+                                    pregunta.esCorrecta = respuestaAspirante?.respuestaAbierta === preguntaOpcion.descripcionTerman;
+                                    pregunta.tiempoRespuesta = respuestaAspirante?.tiempoRespuesta;
                                 } else if (respuestaAspirante?.idOpcionTerman === preguntaOpcion.idOpcionTerman) {
                                     pregunta.tiempoRespuesta = respuestaAspirante.tiempoRespuesta;
                                     pregunta.contestada = true;
                                     pregunta.esCorrecta = preguntaOpcion.esCorrecta === 1;
                                 }
                                 if (preguntaOpcion.idSerieTerman == 4) {
-                                    pregunta.contestada = respuestaAspirante.length > 0;
+                                    pregunta.contestada = respuestaAspirante?.length > 0;
                                 } else if (preguntaOpcion.idSerieTerman == 5) {
-                                    pregunta.contestada = respuestaAspirante.respuestaAbierta !== '0';
+                                    pregunta.contestada = respuestaAspirante?.respuestaAbierta !== '0';
                                 } else if (preguntaOpcion.idSerieTerman == 10) {
-                                    pregunta.contestada = respuestaAspirante.respuestaAbierta !== '';
-                                    pregunta.respuestaAbierta = respuestaAspirante.respuestaAbierta;
+                                    pregunta.contestada = respuestaAspirante?.respuestaAbierta !== '';
+                                    pregunta.respuestaAbierta = respuestaAspirante?.respuestaAbierta;
                                 } else {
-                                    pregunta.contestada = respuestaAspirante.idOpcionTerman !== null;
+                                    pregunta.contestada = respuestaAspirante?.idOpcionTerman !== null;
                                 }
 
                                 if (!pregunta.contestada) {
