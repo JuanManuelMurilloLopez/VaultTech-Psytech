@@ -2116,15 +2116,18 @@ exports.getCuadernillo16PF = (request, response, next) => {
                                 });
                         })
                         .catch((error) => {
-                            console.log(error);
+                            console.error('Error al obtener respuestas de la prueba 16PF:', error);
+                            console.error('Stack trace:', error.stack);
                         });
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.error('Error al obtener preguntas y opciones de la prueba 16PF:', error);
+                    console.error('Stack trace:', error.stack);
                 });
         })
         .catch((error) => {
-            console.log(error);
+            console.error('Error al obtener información del aspirante en la prueba 16PF:', error);
+            console.error('Stack trace:', error.stack);
         });
 }
 
@@ -2246,14 +2249,19 @@ exports.getCuadernilloTerman = async (request, response, next) => {
                                 grupo: request.params.idGrupo || null,
                                 idInstitucion: request.params.idInstitucion || null,
                             });
+                        }).catch((error) => {
+                            console.error('Error al obtener respuestas de la prueba Terman:', error);
+                            console.error('Stack trace:', error.stack);
                         })
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.error('Error al obtener tiempo total de la prueba Terman:', error);
+                    console.error('Stack trace:', error.stack);
                 })
         })
         .catch((error) => {
-            console.log(error);
+            console.error('Error al obtener información del aspirante en la prueba Terman:', error);
+            console.error('Stack trace:', error.stack);
         })
 }
 
@@ -2273,15 +2281,18 @@ exports.postReiniciarOtis = (request, response, next) => {
                             exports.getAspirante(request, response, next);
                         })
                         .catch((error) => {
-                            console.log(error);
+                            console.error('Error al actualizar el estatus de la prueba Otis:', error);
+                            console.error('Stack trace:', error.stack);
                         });
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.error('Error al eliminar respuestas de la prueba Otis:', error);
+                    console.error('Stack trace:', error.stack);
                 });
         })
         .catch((error) => {
-            console.log(error);
+            console.error('Error al eliminar datos personales de la prueba Otis:', error);
+            console.error('Stack trace:', error.stack);
         });
 }
 
@@ -2301,15 +2312,18 @@ exports.postReiniciarColores = (request, response, next) => {
                             exports.getAspirante(request, response, next);
                         })
                         .catch((error) => {
-                            console.log(error);
+                            console.error('Error al actualizar el estatus de la prueba Colores:', error);
+                            console.error('Stack trace:', error.stack);
                         });
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.error('Error al eliminar respuestas de la prueba Colores:', error);
+                    console.error('Stack trace:', error.stack);
                 });
         })
         .catch((error) => {
-            console.log(error);
+            console.error('Error al eliminar datos personales de la prueba Colores:', error);
+            console.error('Stack trace:', error.stack);
         });
 }
 
