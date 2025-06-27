@@ -2511,7 +2511,7 @@ exports.createGroupMeeting = async (req, res) => {
         let emailStatus = null;
         try {
             const subject = `Aplicación grupal de prueba psicométrica - Proceso de admisión al posgrado`;
-            const html = generarCorreoEntrevistaGrupal(fecha, horaInicio, horaFin, link);
+            const html = generarCorreoEntrevistaGrupal(fecha, horaInicio, link);
             await sendEmail(emails, subject, undefined, html);
             emailStatus = { type: 'success', message: 'Se enviaron correos a todos los aspirantes del grupo.' };
         } catch (e) {
@@ -2539,7 +2539,7 @@ exports.updateGroupMeeting = async (req, res) => {
         let emailStatus = null;
         if (emails.length > 0) {
             const subject = `Aplicación grupal de prueba psicométrica actualizada`;
-            const html = generarCorreoEntrevistaGrupalModificada(fecha, horaInicio, horaFin, link);
+            const html = generarCorreoEntrevistaGrupalModificada(fecha, horaInicio, link);
             emailPromises.push(sendEmail(emails, subject, undefined, html));
         }
         try {
@@ -2574,7 +2574,7 @@ exports.deleteGroupMeeting = async (req, res) => {
         let emailStatus = null;
         if (emails.length > 0 && meeting) {
             const subject = `Aplicación grupal de prueba psicométrica cancelada`;
-            const html = generarCorreoEntrevistaGrupalCancelada(meeting.fecha, meeting.horaInicio, meeting.horaFin, meeting.link);
+            const html = generarCorreoEntrevistaGrupalCancelada(meeting.fecha, meeting.horaInicio, meeting.link);
             emailPromises.push(sendEmail(emails, subject, undefined, html));
         }
         try {
