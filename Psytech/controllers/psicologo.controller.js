@@ -694,6 +694,8 @@ exports.postImportarAspirantes = (request, response, next) => {
     const hojaExcel = archivoExcel.Sheets[archivoExcel.SheetNames[0]];
     const JSONAspirantes = xlsx.utils.sheet_to_json(hojaExcel, { defval: "" });
 
+    const loginUrl = getLoginUrl('');
+    const correosAspirantes = [];
     const promesas = JSONAspirantes.map(aspirante => {
         return Pais.findPais(aspirante.paisOrigen)
             .then(([rows, fieldData]) => {
@@ -717,42 +719,41 @@ exports.postImportarAspirantes = (request, response, next) => {
                     .then(() => nuevoAspirante.getIdAspirante(request.params.idGrupo))
                     .then(([rows]) => {
                         const idAspirante = rows[0].idAspirante;
+                        correosAspirantes.push(aspirante.correo);
                         return Grupo.getInformacionGruposPruebas(request.params.idGrupo)
                             .then(([pruebas]) => {
                                 const vincularPruebas = pruebas.map(prueba => nuevoAspirante.vincularPrueba(idAspirante, request.params.idGrupo, prueba));
                                 return Promise.all(vincularPruebas);
-                            }).then(() => {
-                                return new Promise((resolve, reject) => {
-                                    fs.readFile(correoHtmlPath, 'utf8', (error, htmlContent) => {
-                                        if (error) {
-                                            console.log(error);
-                                            return resolve();
-                                        }
-                                        const loginUrl = getLoginUrl(aspirante.correo);
-                                        htmlContent = htmlContent.replace('${loginUrl}', loginUrl);
-
-                                        resend.emails.send({
-                                            from: 'psytech@pruebas.psicodx.com',
-                                            to: [aspirante.correo],
-                                            subject: 'Bienvenido, accede a tus pruebas psicométricas y psicológicas de admisión al posgrado',
-                                            html: htmlContent
-                                        })
-                                            .then(() => {
-                                                return new Promise(resolve => setTimeout(resolve, 500));
-                                            })
-                                            .then(() => resolve())
-                                            .catch((error) => {
-                                                console.log(error);
-                                                resolve();
-                                            });
-                                    })
-                                })
                             });
                     });
             });
     });
 
     Promise.all(promesas)
+        .then(() => {
+            // Send bulk email to all aspirantes
+            return new Promise((resolve, reject) => {
+                fs.readFile(correoHtmlPath, 'utf8', (error, htmlContent) => {
+                    if (error) {
+                        console.log(error);
+                        return resolve();
+                    }
+                    htmlContent = htmlContent.replace('${loginUrl}', loginUrl);
+
+                    resend.emails.send({
+                        from: 'psytech@pruebas.psicodx.com',
+                        to: correosAspirantes,
+                        subject: 'Bienvenido, accede a tus pruebas psicométricas y psicológicas de admisión al posgrado',
+                        html: htmlContent
+                    })
+                        .then(() => resolve())
+                        .catch((error) => {
+                            console.log(error);
+                            resolve();
+                        });
+                });
+            });
+        })
         .then(() => {
             //Eliminamos el archivo subido
             fs.unlink(request.files['excelAspirantes'][0].path, (error) => {
